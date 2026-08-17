@@ -1,4 +1,4 @@
-﻿"""ILP squad and XI selection. Strategy is applied via projected utility, not post-hoc weights."""
+"""ILP squad and XI selection. Strategy is applied via projected utility, not post-hoc weights."""
 from __future__ import annotations
 
 from engine.models import Player, PlayerProjection, Snapshot, SquadSolution
@@ -17,15 +17,25 @@ def solve_squad(
     snapshot: Snapshot,
     projections: list[PlayerProjection],
     strategy: str,
+    must_include: set[int] | None = None,
+    must_exclude: set[int] | None = None,
 ) -> SquadSolution:
     rules = snapshot.squad
     by_id = _index(projections)
+    include = must_include or set()
+    exclude = must_exclude or set()
     eligible = [
         p
         for p in snapshot.players
-        if p.can_select and p.id in by_id and by_id[p.id].horizon_utility > -20
+        if p.id not in exclude
+        and p.id in by_id
+        and (p.can_select or p.id in include)
+        and (p.id in include or by_id[p.id].horizon_utility > -20)
     ]
     ids = [p.id for p in eligible]
+    missing = include - set(ids)
+    if missing:
+        raise RuntimeError(f"must_include not eligible: {sorted(missing)}")
     cost = {p.id: p.now_cost for p in eligible}
     pos = {p.id: p.position for p in eligible}
     team = {p.id: p.team_id for p in eligible}
@@ -52,6 +62,8 @@ def solve_squad(
         prob += n_start <= rules.max_play[pcode], f"max_{pcode}"
     for tid in {team[i] for i in ids}:
         prob += pulp.lpSum(x[i] for i in ids if team[i] == tid) <= rules.team_limit, f"club_{tid}"
+    for i in include:
+        prob += x[i] == 1, f"lock_{i}"
 
     status = prob.solve(pulp.PULP_CBC_CMD(msg=False, timeLimit=25))
     chosen_ids = [i for i in ids if x[i].value() and x[i].value() > 0.5]

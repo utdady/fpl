@@ -93,6 +93,7 @@ class Player:
     bonus: int
     goals: int
     assists_n: int
+    total_points: int
     games_hint: int
     pen_order: int | None
     corners_order: int | None

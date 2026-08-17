@@ -1,4 +1,4 @@
-﻿"""Live FPL API ingest with a timestamped on-disk snapshot."""
+"""Live FPL API ingest with a timestamped on-disk snapshot."""
 from __future__ import annotations
 
 import json
@@ -153,6 +153,7 @@ def parse_snapshot(bootstrap: dict, fixtures: list, as_of: datetime) -> Snapshot
                 bonus=int(e.get("bonus") or 0),
                 goals=int(e.get("goals_scored") or 0),
                 assists_n=int(e.get("assists") or 0),
+                total_points=int(e.get("total_points") or 0),
                 games_hint=games_hint,
                 pen_order=_i(e.get("penalties_order")),
                 corners_order=_i(e.get("corners_and_indirect_freekicks_order")),
