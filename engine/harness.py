@@ -187,6 +187,43 @@ def gw_actuals(season: str, gw: int) -> dict[int, dict]:
   return out
 
 
+
+
+def gw_xp(season: str, gw: int) -> dict[int, float]:
+    """Official xP from Vaastav GW file. Benchmark only; possible timing leakage."""
+    path = season_dir(season) / "gws" / f"gw{gw}.csv"
+    if not path.exists():
+        return {}
+    return {_i(r["element"]): _f(r.get("xP")) for r in _read_csv(path) if r.get("element")}
+
+
+def prior_points_by_element(season: str) -> dict[int, int]:
+    prev = PREV_SEASON.get(season)
+    if not prev:
+        return {}
+    id_code = _id_code_map(season)
+    by_code = prior_stats_by_code(prev)
+    out: dict[int, int] = {}
+    for eid, code in id_code.items():
+        stats = by_code.get(code)
+        if stats:
+            out[eid] = stats.total_points
+    return out
+
+
+def prior_pp90_by_element(season: str, min_minutes: int = 900) -> dict[int, float]:
+    prev = PREV_SEASON.get(season)
+    if not prev:
+        return {}
+    id_code = _id_code_map(season)
+    by_code = prior_stats_by_code(prev)
+    out: dict[int, float] = {}
+    for eid, code in id_code.items():
+        stats = by_code.get(code)
+        if stats and stats.minutes >= min_minutes:
+            out[eid] = stats.total_points / (stats.minutes / 90.0)
+    return out
+
 def _per90(total: float, minutes: int) -> float:
     if minutes < 1:
         return 0.0

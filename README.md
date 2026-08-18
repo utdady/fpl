@@ -33,3 +33,11 @@ python -m engine.harness_run --season 2025-26 --gw 1 --score
 
 See docs/HARNESS_SPEC.md for as-of-T rules and validation gates.
 See ROADMAP.md for the full version ladder.
+
+Rolling evaluation and B0-B3 comparison:
+
+`ash
+python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --skip-existing --skip-validate
+python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --score --skip-existing
+python -m engine.harness_compare --season 2025-26 --from-gw 1 --to-gw 38
+`
