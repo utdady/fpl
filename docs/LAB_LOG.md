@@ -8,6 +8,46 @@ Production V1 (`v1.0-gw1-baseline`) stays frozen until a gated experiment says o
 
 ---
 
+## Two freezes (pre-registered 2026-08-18, before E008/E009)
+
+**Production freeze** — V1.0 projection, minutes, fixtures, coefficients, optimizer, objective. Generates the Friday team.
+
+**Research calendar** — Historical Lab, E008, E009, conditional MAE, decomposition, V2 spec. May run anytime. Informs **post-GW1** development only.
+
+> Research can change our beliefs before GW1. It cannot change the frozen experiment.
+
+### Friday default squad (timestamped before E008/E009)
+
+Default = V1 balanced 15 from the freeze snapshot (`engine.audit` 2026-08-18 09:17 UTC / `records/gw01_v1.0.csv` projections).
+
+- **Guehi: IN** (V1 selected him). No `must_exclude`.
+- **Haaland: OUT** (V1 did not select him). No `must_include`.
+- **Human overlay: none.**
+
+If E009 is ugly, that is V2 evidence. It does not exclude Guehi on Thursday.
+
+### E008 / E009 authority
+
+| May modify | May NOT modify | May inform |
+|---|---|---|
+| Hypotheses, V2 priorities, post-GW1 plan | V1.0 production code | Already-scoped human lock/exclude **only if written before these queries** (none were) |
+| | Frozen `records/gw01_v1.0.csv` | |
+| | Friday default squad | |
+
+Pre-registered leakage flag: **Spearman(xP, actual) > 0.70**, from xP vs actual only, never from V1 scores.
+
+| Finding | Friday |
+|---|---|
+| H0a strong | No change. B0 is not a V2 gate. |
+| H0a weak | No change. V2 signal only. |
+| **H0a weak and H0b strong** | **No change.** Ship frozen V1. That is the experiment. |
+| E009 ugly / Guehi-type general | No change to code or default 15. |
+
+H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks survived the `V1_GW1` counterfactual, not the 36→34 median shift alone.
+
+
+---
+
 ## How to add a future test
 
 1. Copy the template below into **Queued**, assign the next `E0xx` id.
@@ -42,9 +82,11 @@ Production V1 (`v1.0-gw1-baseline`) stays frozen until a gated experiment says o
 | **H-audit-bench** | Equal 15-man sum undervalues premiums vs bench | supported (qualitative) | Pre-fix Haaland exclusion; `BENCH_WEIGHT=0.12` |
 | **H-audit-guehi** | New-club minutes/role is a large LOO driver | supported (qualitative) | Guehi Δ ≈ 1.94, third-largest |
 | **H-audit-haaland** | Forcing Haaland costs ~5 objective vs diversified 15 | supported (V1 objective) | Lock Δ = −4.86 vs baseline 15 |
-| **H0** | Evaluation contamination / leaky B0 / anomalous weeks dominate decision *means* | **supported** | 2025/26 median V1 beats B0; B0 xP tracks actuals on blow-up GWs; 2024/25 B0 median ~97 |
-| **H1** | Projection error (minutes, rates, fixtures) is the main *clean-week* problem | **open** | GW2 V1 XI had several 0-minute starters; not yet quantified across seasons |
-| **H2** | 6-GW squad objective vs GW-N scoreboard explains the B0 gap | **weak** | `V1_GW1` vs `V1_6GW` ≈ +2 pts/GW; blow-ups unchanged |
+| **H0** | Evaluation contamination / leaky B0 / anomalous weeks dominate decision *means* | **supported** | E007 medians; E008 |
+| **H0a** | Vaastav xP has post-deadline / near-oracle information on some GWs | **supported** (esp. 2024/25) | E008: 10/38 GWs 2025/26 and **34/38** 2024/25 have Spearman(xP,actual)>0.70; flagged set includes 2025/26 blow-ups GW2–6,8,9 |
+| **H0b** | Historical V1 is missing legitimate pre-deadline minutes/availability | **supported at XI layer** | E009: V1 XI 0-min slots 29% (2025/26) / 16% (2024/25) |
+| **H1** | Projection *rate* error (xG/xA/fixture) is the main clean-week problem | **not first lever** | E009: MAE minutes>=60 is *higher* than <60 (variance among those who play); XI blanks are the sharper miss |
+| **H2** | 6-GW squad objective vs GW-N scoreboard explains the B0 gap | **weak / not the primary lever** | Blow-up weeks survived `V1_GW1`; 36→34 median on n=33 is not killing evidence |
 | **H3** | Small μ errors × ILP × budget cause large XI jumps | **open** | Compatible with H0/H1; not isolated |
 | **H-v1-naive** | V1 beats last-season points and naive pp90 at decision level | **supported** (with horizon=1 compare caveat) | E006 XI+Cap |
 | **H-v1-xp** | V1 beats official xP (B0) at player MAE and XI+Cap | **not supported as stated** | E006 B0 wins means; E007 shows means are misleading and B0 may leak |
@@ -187,41 +229,81 @@ Production V1 (`v1.0-gw1-baseline`) stays frozen until a gated experiment says o
 
 - **Verdict:**
   - **H0 supported.** Do not let E006 decision *means* pick V2A vs V2B.
-  - **H2 weak** for this scoreboard: GW-myopic squad does not fix blow-ups.
+  - **H2 weak / not the primary lever:** blow-up weeks survived `V1_GW1`. Do not treat 36→34 as a formal reject.
   - **H1/H3 still open.** Next work is minutes/availability and B0-xP-vs-actual correlation by GW — still no production V1 change.
   - Hindsight “86% squad” is vs god-mode 15, **not** the B0 gap. Do not quote it as “optimizer is the B0 problem.”
 - **Artifacts:** `records/historical/{season}/decision_gw.csv`, `decision_decomp.csv`; `docs/V2_INVESTIGATION.md`
-- **Follow-up:** E008 B0 leakage bound; E009 V1 zero-minute XI audit
+- **Follow-up:** E008/E009 completed same day; see below
 
 ---
 
-## Queued
-
 ### E008 — B0 xP vs actual correlation by GW
-- **Date:** —
-- **Status:** queued
-- **Hypothesis:** H0 (leakage)
-- **Question:** On which GWs is Vaastav `xP` so correlated with actual points that B0 is a near-oracle?
-- **Method:** Spearman(xP, actual) per GW; flag GWs with r above a pre-registered threshold (propose 0.70). Do **not** exclude those GWs from V1 metrics using V1 scores.
+- **Date:** 2026-08-18
+- **Status:** completed (observational; after Friday-squad pre-registration above)
+- **Hypothesis:** H0a
+- **Question:** On which GWs is Vaastav `xP` so correlated with actuals that B0 is a near-oracle?
+- **Method:** `python -m engine.obs --season …`. Spearman(xP, actual) per GW. Flag **pre-registered** at r > 0.70 from xP vs actual only.
 - **Seasons / GWs:** both, 1–38
-- **Metrics:** per-GW Spearman; share of GWs above threshold
-- **Results:** —
-- **Verdict:** —
-- **Artifacts:** proposed `records/historical/{season}/b0_leakage.csv`
-- **Follow-up:** if many GWs exceed threshold, stop using B0 XI+Cap as a V2 gate
+- **Metrics:** per-GW Spearman, MAE, bias; count of flagged GWs
+- **Results:**
 
-### E009 — V1 XI players with 0 actual minutes
-- **Date:** —
-- **Status:** queued
-- **Hypothesis:** H1 (minutes / availability)
-- **Question:** What fraction of V1 XI slots (clean GWs) go to players who played 0 minutes, and is that predicted p_start high?
-- **Method:** join `decision_decomp.csv` where `in_v1_xi=1` to actual minutes; report rates vs B0 XI
-- **Seasons / GWs:** both, CLEAN only for headline; ALL as sensitivity
-- **Metrics:** % XI slots with 0 minutes; mean p_start of those slots
-- **Results:** —
-- **Verdict:** —
-- **Artifacts:** proposed `records/historical/{season}/minutes_miss.csv`
-- **Follow-up:** if high, V2A minutes/role is first investment
+  | Season | Flagged (r>0.70) | Spearman mean / median | min / max | Flagged GWs include blow-ups? |
+  |---|---|---|---|---|
+  | 2025/26 | **10/38** | 0.555 / 0.484 | 0.435 / 0.829 | Yes: 2, 3, 4, 5, 6, 8, 9 (+24, 29, 38) |
+  | 2024/25 | **34/38** | 0.718 / 0.747 | 0.364 / 0.813 | Almost the whole season |
+
+- **Verdict:** **H0a supported.** 2024/25 B0 is not a competitive baseline. 2025/26 is two-regime: ordinary GWs look like a normal predictor; the E007 blow-up weeks are exactly the high-Spearman set. Stop using B0 XI+Cap as a V2 *gate*. Still usable as an upper-bound diagnostic. **Friday squad unchanged** (pre-registered).
+- **Artifacts:** `records/historical/{season}/b0_leakage.csv`
+- **Follow-up:** reconstruct non-leaky official xP only if needed post-GW1; do not chase B0 for Friday
+
+### E009 — Minutes calibration, XI 0-min, conditional MAE
+- **Date:** 2026-08-18
+- **Status:** completed (observational)
+- **Hypothesis:** H0b / H1 minutes vs rates; Guehi-type vs general
+- **Question:** Is V1 p_start calibrated, do XI slots go to 0-minute players, and is that a new-club effect? Is MAE among 60+ minute players the rate bottleneck?
+- **Method:** `python -m engine.obs`. Player-level tables from frozen `gw{nn}_v1.0.csv`. New-club = different/missing prior-season team via Vaastav `code`. XI 0-min from `decision_decomp.csv` + `gw_actuals`.
+- **Seasons / GWs:** both, 1–38
+- **Metrics:** start% and 0-min% by p_start bucket; XI 0-min rate; MAE | minutes>=60 vs <60
+
+- **Results — p_start calibration (all players):**
+
+  2025/26
+
+  | P(start) | n | actual start% | 0-min% | avg pts |
+  |---|---|---|---|---|
+  | 0.90–1.00 | 773 | 79.4 | 18.6 | 2.92 |
+  | 0.80–0.90 | 962 | 74.4 | 19.5 | 2.93 |
+  | 0.70–0.80 | 227 | 46.3 | 37.9 | 2.15 |
+  | 0.60–0.70 | 1455 | 67.0 | 20.2 | 2.84 |
+  | <0.60 | 25921 | 23.3 | 66.7 | 0.93 |
+
+  2024/25 0.90–1.00: start 83.9%, 0-min 14.4%.
+
+- **New-club vs established (2025/26, p_start 0.90–1.00):** established start **75.9%** (0-min 23.1%); new-club start **81.6%** (0-min 15.8%). Guehi-type is **not** a general new-club overconfidence at the top bucket.
+
+- **V1 XI 0-minute slots:**
+
+  | | 2025/26 | 2024/25 |
+  |---|---|---|
+  | ALL | 122/418 = **29.2%** | 69/418 = 16.5% |
+  | CLEAN | 115/363 = **31.7%** | 65/341 = 19.1% |
+  | new-club slots | 28.4% | 21.7% |
+  | established slots | 30.2% | 12.6% |
+
+- **Conditional MAE:**
+
+  | | 2025/26 MAE | 2024/25 MAE |
+  |---|---|---|
+  | minutes >= 60 | 2.662 (n=7709) | 2.423 (n=7718) |
+  | minutes < 60 | 0.544 (n=21629) | 0.631 (n=19513) |
+
+  Higher MAE among those who played is expected (real point variance). It does **not** mean “fix xG first.” The decision-level miss is XI blanks.
+
+- **Verdict:** **H0b supported at the XI layer** (~30% of 2025/26 V1 XI slots played 0 minutes). Top-bucket p_start is overconfident (~80% start when we claim 90%+). Not specifically a new-club epidemic. V2A first target after GW1: **minutes/availability feeding the 15**, not optimizer, not Guehi-only. **Friday: Guehi stays; no minutes.py change.**
+- **Artifacts:** `records/historical/{season}/minutes_cal.csv`
+- **Follow-up:** post-GW1 minutes model (role/availability). Do not retune before deadline.
+
+## Queued
 
 ### E010 — Live 2026/27 GW1 score
 - **Date:** after GW1 results (deadline 2026-08-21 17:30 UTC)
@@ -253,14 +335,14 @@ Production V1 (`v1.0-gw1-baseline`) stays frozen until a gated experiment says o
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-18:
+As of 2026-08-18 (after E008/E009, overlay still empty):
 
-1. Live V1 is frozen and GW1 predictions are captured.
-2. Historical harness GW1 gates passed on 2024/25 and 2025/26.
-3. V1 beats naive baselines on E006 XI+Cap; it does **not** beat B0 on E006 *means*.
-4. E007: those means are the wrong statistic. On 2025/26, **median** V1 XI+Cap beats B0. Blow-up weeks are structurally clean and look like leaky xP plus V1 minutes misses.
-5. `V1_GW1` is not a production change and does not close blow-ups (**H2 weak**).
-6. **Next:** E008 and E009. Still **no production V1 change**.
+1. Production freeze intact. Friday default = V1 15 (Guehi IN, Haaland OUT, no overlay).
+2. **H0a supported** — do not use B0 XI+Cap as a V2 gate (especially 2024/25).
+3. **H0b supported at XI** — ~30% of 2025/26 V1 XI slots were 0-minute; not a general new-club p_start bug.
+4. **H2** remains weak / not the primary lever.
+5. Next V2A (post-GW1): minutes/availability. Optimizer frozen.
+6. Next live: E010 after GW1 results. Still **no production V1 change**.
 
 ---
 
@@ -279,4 +361,6 @@ python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --skip-exis
 python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --score --skip-existing
 python -m engine.harness_compare --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_decomp --season 2025-26 --from-gw 1 --to-gw 38
+python -m engine.obs --season 2025-26
+python -m engine.obs --season 2024-25
 ```

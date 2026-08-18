@@ -52,3 +52,7 @@ python -m engine.harness_decomp --season 2024-25 --from-gw 1 --to-gw 38
 See docs/V2_INVESTIGATION.md.
 
 Experiment log: docs/LAB_LOG.md
+
+Observational E008/E009 (does not change V1):
+
+    python -m engine.obs --season 2025-26
