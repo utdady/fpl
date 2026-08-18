@@ -1,5 +1,7 @@
 ﻿# FPL Model Roadmap
 
+**Experiment log:** `docs/LAB_LOG.md` (hypotheses, completed tests, queued tests).
+
 **Core methodology:**
 
 > FREEZE → CAPTURE → MEASURE → DIAGNOSE → IMPROVE → BACKTEST → FREEZE
