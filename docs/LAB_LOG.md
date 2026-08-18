@@ -1,8 +1,8 @@
-﻿# Experiment Log
+# Experiment Log
 
 Living record of hypotheses, tests, and results. **Append new experiments; do not rewrite old verdicts.** If a later test overturns an earlier one, add a new row and link back.
 
-Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`, `docs/V2_SPEC.md`.
+Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`, `docs/V2_SPEC.md`, `docs/FORMAL.md`.
 
 Production V1 (`v1.0-gw1-baseline`) stays frozen until a gated experiment says otherwise.
 
@@ -331,6 +331,19 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Artifacts:** —
 - **Follow-up:** after V2 investigation chooses V2A/V2B
 
+### E012 — Evaluation-integrity property tests
+- **Date:** after GW1 (not before)
+- **Status:** queued
+- **Hypothesis:** evaluation protocol is independent of model predictions
+- **Question:** Do `evaluation_status`, `LeakFlag`, and nested regret keep their stated dependencies?
+- **Method:** property tests in Python first (see `docs/FORMAL.md`). Shuffle/replace V1 predictions; recompute labels. Then optional Lean core. Not a V2 gate.
+- **Seasons / GWs:** historical 2024/25 + 2025/26 tables already written
+- **Metrics:** status labels identical after prediction shuffle; LeakFlag identical after V1 mutation; R_total = R_squad + R_XI + R_cap vs named oracle; shared feasible set F
+- **Results:** —
+- **Verdict:** —
+- **Artifacts:** `docs/FORMAL.md`; tests to be added post-GW1
+- **Follow-up:** Lean `formal/` only after the property tests exist. Do not block V2A-M.
+
 ---
 
 ## Current call (do not skip this when adding tests)
@@ -343,6 +356,7 @@ As of 2026-08-18 (after E008/E009, overlay still empty):
 4. **H2** remains weak / not the primary lever.
 5. Next V2A (post-GW1): minutes/availability. Optimizer frozen.
 6. Next live: E010 after GW1 results. Still **no production V1 change**.
+7. Formal integrity is post-GW1 (`docs/FORMAL.md`, E012). Not a V2 gate. No Lean before deadline.
 
 ---
 

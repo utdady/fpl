@@ -1,4 +1,4 @@
-﻿# Historical Harness Specification
+# Historical Harness Specification
 
 > **A backtest result is not evidence until the harness has demonstrated that the
 > prediction snapshot contains only information available at that point in time.**
@@ -66,6 +66,29 @@ Required seasons:
 Season-end `players_raw.csv` is **never** used as a GW1 snapshot. End-of-season
 `now_cost`, `minutes`, and `total_points` contain future information. Opening
 prices come from `gws/gw1.csv` `value`.
+
+### Type-level cutoff vs provenance
+
+Two different claims. Both are required. Neither implies the other.
+
+| Layer | What it guarantees | What it does not |
+|---|---|---|
+| **Provenance / reconstruction** (this document, validation gates, E008) | The column was built from sources allowed at T | That a later Python function refuses extra fields |
+| **Type-level cutoff** (`docs/FORMAL.md`, post-GW1) | A predictor of `Snapshot T` has no parameter for actuals at T or later | That allowed fields (e.g. B0 `xP`) were themselves pre-deadline |
+
+A well-typed snapshot can still contain contaminated `xP`. A reconstructed
+snapshot can still be passed to a function that also reads future files.
+Use both.
+
+Do not collapse prediction cutoff with evaluation-time flags:
+
+| Artifact | May depend on | Must not depend on |
+|---|---|---|
+| Prediction from `Snapshot T` | fields permitted at cutoff T | actuals at T or later; post-deadline columns |
+| `LeakFlag` (E008) | B0 `xP` and actuals | V1 / V2 / challenger scores |
+| `evaluation_status` | fixtures, integrity, structure, optionally `LeakFlag` | model error, MAE, XI+Cap, regret |
+
+`LeakFlag` is evaluation-time. It may see actuals. Prediction may not.
 
 ---
 

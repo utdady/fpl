@@ -1,4 +1,4 @@
-﻿# V2 Investigation Spec
+# V2 Investigation Spec
 
 **Production V1 stays frozen until these outputs exist.**
 
@@ -47,6 +47,10 @@ HINDSIGHT  + substitutions
 
 Those appear as `inspect_v1_lt_15` / `inspect_b0_gt_80` (descriptive only).
 
+This circular-exclusion rule is the first formal invariant: changing model
+predictions must not flip `evaluation_status`. See `docs/FORMAL.md`. Property
+tests are queued as E012 (post-GW1, not a V2 gate).
+
 DGWs/BGWs are **flagged**, not excluded, unless scoring is wrong.
 
 ---
@@ -66,6 +70,9 @@ R_total = R_squad + R_XI + R_cap
 **B0 gap:** `P(B0 XI+cap) − P(V1 XI+cap)` plus player substitutions.
 
 Never collapse these into one metric.
+
+The additive identity names this nested oracle. It is not an accounting of the
+B0 gap. See `docs/FORMAL.md`.
 
 ---
 

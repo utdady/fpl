@@ -32,6 +32,7 @@ python -m engine.harness_run --season 2025-26 --gw 1 --score
 `
 
 See docs/HARNESS_SPEC.md for as-of-T rules and validation gates.
+See docs/FORMAL.md for evaluation-integrity invariants (post-GW1, not a V2 gate).
 See ROADMAP.md for the full version ladder.
 
 Rolling evaluation and B0-B3 comparison:

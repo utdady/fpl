@@ -1,4 +1,4 @@
-﻿# V2 Research Spec
+# V2 Research Spec
 
 **Governing rule:** A model at version N+1 earns its place only by beating N on
 out-of-sample MAE / Spearman rank correlation on realized GW points.
@@ -231,3 +231,4 @@ measured:
 - A model that beats V1 on squad appearance but not on out-of-sample metrics is discarded.
 - The harness must be validated on historical seasons before being trusted on live 2026/27 data.
 - As-of-T discipline is non-negotiable: a feature using post-deadline information voids the experiment.
+- Formal integrity (`docs/FORMAL.md`) is not a V2 gate. V2 earns its place empirically. Lean / property tests start after GW1 (E012) and check that the compare still measures the same question.

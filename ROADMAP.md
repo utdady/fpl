@@ -1,4 +1,4 @@
-﻿# FPL Model Roadmap
+# FPL Model Roadmap
 
 **Experiment log:** `docs/LAB_LOG.md` (hypotheses, completed tests, queued tests).
 
@@ -155,6 +155,7 @@ python -m engine.capture --gw 1 --score
 **Prerequisite for V2:** Harness validation must pass on both 2025/26 and 2024/25.
 
 See docs/HARNESS_SPEC.md for field provenance, gates, and test ladder.
+See docs/FORMAL.md for post-GW1 evaluation invariants (not a V2 gate).
 
 ---
 
@@ -276,6 +277,10 @@ flowchart LR
 
 Every new version must answer: **what measurable weakness in the previous model
 am I fixing, and did fixing it actually improve out-of-sample performance?**
+
+Formal integrity (`docs/FORMAL.md`) is **not** a version gate. It checks that
+the compare still measures the same question. Lean / property tests start after
+GW1 (E012). They do not block V2A-M.
 
 ---
 
