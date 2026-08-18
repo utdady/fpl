@@ -1,21 +1,35 @@
-﻿# FPL V1
+# FPL V1
 
 Projection-first Fantasy Premier League squad picker for 2026/27.
 
 The projection engine is the brain. The ILP optimizer is the decision layer.
 
-```bash
+`ash
 python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 python fpl.py --horizon 6 --strategy balanced
-```
+`
 
-Strategies: `safe`, `balanced`, `aggressive`.
+Strategies: safe, alanced, ggressive.
 
-Interrogate a squad without changing the model:
+## Live track (2026/27)
 
-```bash
-python -m engine.audit --strategy balanced
-```
+`ash
+python fpl.py --refresh
+python -m engine.audit --refresh
+python -m engine.capture --gw 1          # freeze before deadline
+python -m engine.capture --gw 1 --score  # score after results
+`
 
-Live data comes from the official FPL API (timestamped cache in `.cache/fpl`). Historical dumps are not used in V1.
+## Historical lab (2024/25 + 2025/26)
+
+Vaastav data is cloned automatically on first use into data/vaastav/.
+
+`ash
+python -m engine.harness_validate --season 2025-26 --gw 1
+python -m engine.harness_run --season 2025-26 --gw 1
+python -m engine.harness_run --season 2025-26 --gw 1 --score
+`
+
+See docs/HARNESS_SPEC.md for as-of-T rules and validation gates.
+See ROADMAP.md for the full version ladder.

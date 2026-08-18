@@ -74,7 +74,8 @@ CAPTURE → MEASURE → DIAGNOSE → IMPROVE → BACKTEST → GATE"]
 | Version | Main problem | Success criterion | Prerequisite | Status |
 |---|---|---|---|---|
 | **V1** | Transparent baseline | Works, legal, reproducible | None | ✅ Frozen GW1 2026/27 |
-| **V1.5** | No prediction history | GW1 predictions captured before results | V1 | 🔄 Build now |
+| **V1.5** | No prediction history | GW1 predictions captured before results | V1 | ✅ Active |
+| **Historical Lab** | No validated backtest | Harness passes on 2024/25 + 2025/26 | V1.5 | 🔄 In progress |
 | **V2** | Projection quality | Lower MAE / higher Spearman vs V1 | Validated harness | ⏳ |
 | **V3** | Uncalibrated uncertainty | Better calibration / lower ECE | V2 | ⏳ |
 | **V4** | Independence assumption | Better portfolio/risk decisions | V3 distributions | ⏳ |
@@ -116,7 +117,7 @@ CAPTURE → MEASURE → DIAGNOSE → IMPROVE → BACKTEST → GATE"]
 
 ### V1.5 — Prediction capture 🔄
 
-**Status:** Building now. Must exist before GW1 kickoff.
+**Status:** Active. GW1 frozen to records/gw01_v1.0.csv.
 
 **What it does:**
 - Serialises frozen projections to `records/gw{N:02d}_v1.0.csv` before results land
@@ -134,6 +135,24 @@ python -m engine.capture --gw 1
 # After results are published — score it
 python -m engine.capture --gw 1 --score
 ```
+
+
+
+---
+
+### Historical Lab — As-of-T backtesting 🔄
+
+**Status:** Harness implemented. GW1 validated and scored on 2025/26 and 2024/25.
+
+**What it does:**
+- Reconstructs Snapshot(as_of=GW_N) from Vaastav with strict information cutoff
+- Validates no leakage before any freeze (engine.harness_validate)
+- Writes predictions to records/historical/{season}/gw{nn}_v1.0.csv (same schema as live)
+- Scores with shared metrics in engine/metrics.py
+
+**Prerequisite for V2:** Harness validation must pass on both 2025/26 and 2024/25.
+
+See docs/HARNESS_SPEC.md for field provenance, gates, and test ladder.
 
 ---
 
@@ -272,6 +291,12 @@ FRI 21 AUG (deadline 17:30 UTC)
 
 AFTER GW1 RESULTS
   engine.capture --gw 1 --score    <- score the frozen prediction
-  begin harness validation on 2024/25
-  begin V2 research
+
+PARALLEL (Historical Lab)
+  engine.harness_validate --season 2025-26 --gw 1
+  engine.harness_run --season 2025-26 --gw 1 --score
+  engine.harness_validate --season 2024-25 --gw 1
+  engine.harness_run --season 2024-25 --gw 1 --score
+  rolling GW1-38 for both seasons
+  B0-B3 comparison -> then V2 research
 ```
