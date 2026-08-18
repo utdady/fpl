@@ -41,3 +41,12 @@ python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --skip-exis
 python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --score --skip-existing
 python -m engine.harness_compare --season 2025-26 --from-gw 1 --to-gw 38
 `
+
+Decision-error decomposition (V2 investigation; does not change V1):
+
+`ash
+python -m engine.harness_decomp --season 2025-26 --from-gw 1 --to-gw 38
+python -m engine.harness_decomp --season 2024-25 --from-gw 1 --to-gw 38
+`
+
+See docs/V2_INVESTIGATION.md.

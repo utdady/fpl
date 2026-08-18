@@ -170,21 +170,36 @@ def gw_prices(season: str, gw: int) -> dict[int, int]:
 
 
 def gw_actuals(season: str, gw: int) -> dict[int, dict]:
-  path = season_dir(season) / "gws" / f"gw{gw}.csv"
-  if not path.exists():
-    return {}
-  out = {}
-  for row in _read_csv(path):
-    eid = _i(row.get("element"), 0)
-    if not eid:
-      continue
-    mins = _i(row.get("minutes"))
-    out[eid] = {
-      "actual_points": _i(row.get("total_points")),
-      "actual_minutes": mins,
-      "did_start": int(mins >= 45),
-    }
-  return out
+    """Per-player GW actuals. Multiple rows (DGW) are summed; identical dupes collapse."""
+    path = season_dir(season) / "gws" / f"gw{gw}.csv"
+    if not path.exists():
+        return {}
+    out: dict[int, dict] = {}
+    seen_fx: dict[int, set] = {}
+    for row in _read_csv(path):
+        eid = _i(row.get("element"), 0)
+        if not eid:
+            continue
+        fx = row.get("fixture") or ""
+        seen_fx.setdefault(eid, set())
+        if fx and fx in seen_fx[eid]:
+            continue
+        if fx:
+            seen_fx[eid].add(fx)
+        mins = _i(row.get("minutes"))
+        pts = _i(row.get("total_points"))
+        cur = out.get(eid)
+        if cur is None:
+            out[eid] = {
+                "actual_points": pts,
+                "actual_minutes": mins,
+                "did_start": int(mins >= 45),
+            }
+        else:
+            cur["actual_points"] += pts
+            cur["actual_minutes"] += mins
+            cur["did_start"] = int(cur["did_start"] or mins >= 45)
+    return out
 
 
 

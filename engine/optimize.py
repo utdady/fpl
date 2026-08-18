@@ -19,7 +19,9 @@ def solve_squad(
     strategy: str,
     must_include: set[int] | None = None,
     must_exclude: set[int] | None = None,
+    objective: str = "horizon",
 ) -> SquadSolution:
+    """objective: 'horizon' (production V1) or 'next' (diagnostic GW-myopic squad)."""
     rules = snapshot.squad
     by_id = _index(projections)
     include = must_include or set()
@@ -39,7 +41,12 @@ def solve_squad(
     cost = {p.id: p.now_cost for p in eligible}
     pos = {p.id: p.position for p in eligible}
     team = {p.id: p.team_id for p in eligible}
-    util = {p.id: by_id[p.id].horizon_utility for p in eligible}
+    if objective not in {"horizon", "next"}:
+        raise ValueError(f"unknown objective {objective!r}")
+    if objective == "next":
+        util = {p.id: by_id[p.id].next_utility for p in eligible}
+    else:
+        util = {p.id: by_id[p.id].horizon_utility for p in eligible}
 
     prob = pulp.LpProblem("fpl_squad", pulp.LpMaximize)
     x = pulp.LpVariable.dicts("x", ids, 0, 1, pulp.LpInteger)
