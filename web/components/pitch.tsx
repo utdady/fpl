@@ -15,17 +15,20 @@ export function Pitch({
   players,
   season,
   gw,
+  bench = [],
 }: {
   players: CellPlayer[];
   season: string;
   gw: number;
+  bench?: CellPlayer[];
 }) {
   const [selected, setSelected] = useState<number | null>(null);
   const rows = POSITIONS.map((pos) => players.filter((p) => p.pos === pos)).filter(
     (row) => row.length > 0,
   );
 
-  const active = players.find((p) => p.id === selected) ?? null;
+  const roster = [...players, ...bench];
+  const active = roster.find((p) => p.id === selected) ?? null;
 
   return (
     <>
@@ -41,6 +44,17 @@ export function Pitch({
           ))}
         </div>
       </div>
+
+      {bench.length > 0 && (
+        <div className="mt-3">
+          <div className="label-xs mb-2">Bench</div>
+          <div className="flex flex-wrap gap-2">
+            {bench.map((player) => (
+              <PlayerCell key={player.id} player={player} compact onSelect={setSelected} />
+            ))}
+          </div>
+        </div>
+      )}
 
       <PlayerDrawer
         player={active}

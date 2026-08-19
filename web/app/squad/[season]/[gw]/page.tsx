@@ -3,9 +3,10 @@ import { notFound } from "next/navigation";
 
 import { GwStrip, SeasonTabs } from "@/components/gw-strip";
 import { Pitch, XiList } from "@/components/pitch";
+import { StrategyBoard } from "@/components/strategy-board";
 import { Section } from "@/components/ui/section";
 import { Stat, StatRow } from "@/components/ui/stat";
-import { getDecisions, getLabSeasons, getManifest } from "@/lib/data";
+import { getAllSeasons, getDecisions, getLabSeasons, getManifest, getStrategies } from "@/lib/data";
 import { dec, formation, seasonLabel, signed } from "@/lib/format";
 import { buildXi } from "@/lib/squad";
 
@@ -21,11 +22,12 @@ export default async function SquadPage({
 }: {
   params: Promise<{ season: string; gw: string }>;
 }) {
-  const { season, gw: gwParam } = await params;
-  const gw = Number(gwParam);
-  const manifest = await getManifest();
-  const seasons = await getLabSeasons();
-  const meta = manifest.seasons.find((s) => s.season === season);
+          const { season, gw: gwParam } = await params;
+          const gw = Number(gwParam);
+          const manifest = await getManifest();
+          const labSeasons = await getLabSeasons();
+          const seasons = await getAllSeasons();
+          const meta = manifest.seasons.find((s) => s.season === season);
   // Range-check before touching any season file: a gameweek that never existed is
   // a 404, not an empty board, and the guard keeps the on-demand render reading
   // nothing but the manifest.
@@ -33,7 +35,21 @@ export default async function SquadPage({
 
   // A season can exist in the manifest without an eleven: the live season is a
   // prediction pool only. That is a state to explain, not a missing page.
-  if (!seasons.includes(season)) {
+  if (!labSeasons.includes(season)) {
+    let strategies = null;
+    try {
+      strategies = await getStrategies(season);
+    } catch {
+      strategies = null;
+    }
+    if (strategies) {
+      return (
+        <div className="space-y-5">
+          <Header season={season} seasons={seasons} />
+          <StrategyBoard season={season} data={strategies} />
+        </div>
+      );
+    }
     return (
       <div className="space-y-5">
         <Header season={season} seasons={seasons} />
@@ -171,8 +187,9 @@ function Header({ season, seasons }: { season: string; seasons: string[] }) {
         <h1 className="text-xl font-semibold tracking-tight">XI board</h1>
         <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-muted">
           The frozen V1 eleven for every scored gameweek, beside the official-xP eleven
-          and the hindsight oracle. The bench and the full fifteen are not persisted, so
-          this is an eleven.
+          and the hindsight oracle. The live season is a re-solved fifteen (safe /
+          balanced / aggressive) from the cached snapshot; historical boards remain an
+          eleven because the bench was never persisted.
         </p>
       </div>
       <SeasonTabs seasons={seasons} current={season} basePath="squad" />

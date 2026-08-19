@@ -11,6 +11,7 @@ import { SeasonTabs } from "@/components/gw-strip";
 import { Legend, Section } from "@/components/ui/section";
 import { Stat, StatRow } from "@/components/ui/stat";
 import {
+  getAllSeasons,
   getCompare,
   getDecisions,
   getLabSeasons,
@@ -30,11 +31,12 @@ export async function generateStaticParams() {
 export default async function LabPage({ params }: { params: Promise<{ season: string }> }) {
   const { season } = await params;
   const manifest = await getManifest();
-  const seasons = await getLabSeasons();
+  const labSeasons = await getLabSeasons();
+  const seasons = await getAllSeasons();
   if (!manifest.seasons.some((s) => s.season === season)) notFound();
 
   // The live season is in the manifest but has no realized points to score against.
-  if (!seasons.includes(season)) {
+  if (!labSeasons.includes(season)) {
     return (
       <div className="space-y-5">
         <div className="flex flex-wrap items-end justify-between gap-4">

@@ -19,6 +19,7 @@ export type CellPlayer = {
   pts: number | null;
   mins: number | null;
   captain?: boolean;
+  vice?: boolean;
   /** Live-season extras, absent for historical seasons. */
   chanceNext?: number | null;
   owned?: number | null;
@@ -61,6 +62,14 @@ export function PlayerCell({
             title="Captain"
           >
             C
+          </span>
+        )}
+        {player.vice && !player.captain && (
+          <span
+            className="absolute -top-1.5 -left-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-model/50 text-[9px] font-bold text-model"
+            title="Vice captain"
+          >
+            V
           </span>
         )}
 

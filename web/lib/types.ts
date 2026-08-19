@@ -228,3 +228,42 @@ export type Fixture = {
 };
 
 export type Fixtures = { season: string; fixtures: Fixture[] };
+
+export type StrategyKey = "safe" | "balanced" | "aggressive";
+
+export type StrategyPlayer = {
+  id: number;
+  name: string;
+  pos: Position;
+  cost: number;
+  team: number;
+  teamCode: string | null;
+  mu: number | null;
+  sigma: number | null;
+  p_start: number | null;
+  p10: number | null;
+  xi: boolean;
+  bench: boolean;
+  captain: boolean;
+  vice: boolean;
+};
+
+export type StrategySquad = {
+  strategy: StrategyKey;
+  cost: number;
+  bank: number;
+  next_xi_mu: number;
+  horizon_utility: number;
+  captain: string;
+  vice: string;
+  players: StrategyPlayer[];
+};
+
+export type Strategies = {
+  season: string;
+  gw: number;
+  horizon: number;
+  snapshot_as_of: string | null;
+  caveats: string[];
+  squads: Record<StrategyKey, StrategySquad>;
+};

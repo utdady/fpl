@@ -13,6 +13,7 @@ import type {
   Panel,
   Predictions,
   Scores,
+  Strategies,
   Teams,
   Xi,
 } from "./types";
@@ -59,8 +60,17 @@ export async function getTeamCodes(season: string): Promise<Record<number, strin
   return Object.fromEntries(Object.entries(codes).map(([id, code]) => [Number(id), code]));
 }
 
+export const getStrategies = (season: string) =>
+  readJson<Strategies>(`season/${season}/strategies.json`);
+
 /** Historical seasons that have both a Lab and an XI board. */
 export async function getLabSeasons(): Promise<string[]> {
   const manifest = await getManifest();
   return manifest.seasons.filter((s) => s.has_lab).map((s) => s.season);
+}
+
+/** Every season in the export, including the live prediction-only season. */
+export async function getAllSeasons(): Promise<string[]> {
+  const manifest = await getManifest();
+  return manifest.seasons.map((s) => s.season);
 }

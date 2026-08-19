@@ -25,7 +25,7 @@ export function GwStrip({
   const statusOf = new Map(decisions.map((d) => [d.gw, d.status]));
 
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-nowrap gap-0.5 overflow-x-auto pb-0.5">
       {gws.map((gw) => {
         const status = statusOf.get(gw);
         const active = gw === current;
@@ -35,7 +35,7 @@ export function GwStrip({
             href={`/${basePath}/${season}/${gw}`}
             title={status ? `GW${gw} — ${status}` : `GW${gw}`}
             className={clsx(
-              "tnum relative w-8 rounded border py-1 text-center text-[11px] transition-colors",
+              "tnum relative w-7 shrink-0 rounded border py-0.5 text-center text-[10px] transition-colors",
               active
                 ? "border-model bg-model/15 text-model"
                 : "border-edge text-muted hover:border-edge-bright hover:text-ink",

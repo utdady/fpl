@@ -15,11 +15,12 @@ export function SiteNav({ manifest }: { manifest: Manifest }) {
   const links = [
     { href: "/", label: "Pool", match: (p: string) => p === "/" },
     {
-      href: `/squad/${latest}/1`,
+      href: `/squad/${manifest.live_season}/1`,
       label: "XI board",
       match: (p: string) => p.startsWith("/squad"),
     },
     { href: `/lab/${latest}`, label: "Lab", match: (p: string) => p.startsWith("/lab") },
+    { href: "/teams", label: "Teams", match: (p: string) => p.startsWith("/teams") },
     { href: "/audit", label: "Audit", match: (p: string) => p.startsWith("/audit") },
   ];
 

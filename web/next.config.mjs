@@ -10,7 +10,10 @@ const nextConfig = {
    * even though they work under `next start`.
    */
   outputFileTracingIncludes: {
-    "/squad/[season]/[gw]": ["./public/data/manifest.json"],
+    "/squad/[season]/[gw]": [
+      "./public/data/manifest.json",
+      "./public/data/season/*/strategies.json",
+    ],
     "/lab/[season]": ["./public/data/manifest.json"],
   },
 };
