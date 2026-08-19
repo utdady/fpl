@@ -279,7 +279,17 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
   2024/25 0.90–1.00: start 83.9%, 0-min 14.4%.
 
-- **New-club vs established (2025/26, p_start 0.90–1.00):** established start **75.9%** (0-min 23.1%); new-club start **81.6%** (0-min 15.8%). Guehi-type is **not** a general new-club overconfidence at the top bucket.
+- **New-club vs established (p_start 0.90–1.00, player-GW rows):**
+
+  | Season | split | n | start% | 0-min% |
+  |---|---|---:|---:|---:|
+  | 2025/26 | established | 299 | 75.9 | 23.1 |
+  | 2025/26 | new_club | 474 | 81.6 | 15.8 |
+  | 2024/25 | established | 361 | 79.5 | 19.1 |
+  | 2024/25 | new_club | 249 | 90.4 | 7.6 |
+
+  Comparison is **confounded** (selection into high p_start bucket differs by group). n is large enough in 2025/26 that naive readings can mislead; it does **not** identify transfer status as the cause. **No generic new-club prior in V2A-M v1.** Guehi stays a human GW1 decision / post-GW1 case study.
+
 
 - **V1 XI 0-minute slots:**
 
@@ -299,11 +309,45 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
   Higher MAE among those who played is expected (real point variance). It does **not** mean “fix xG first.” The decision-level miss is XI blanks.
 
-- **Verdict:** **H0b supported at the XI layer** (~30% of 2025/26 V1 XI slots played 0 minutes). Top-bucket p_start is overconfident (~80% start when we claim 90%+). Not specifically a new-club epidemic. V2A first target after GW1: **minutes/availability feeding the 15**, not optimizer, not Guehi-only. **Friday: Guehi stays; no minutes.py change.**
+- **Verdict:** **H0b supported at the XI layer** (~30% of 2025/26 V1 XI slots played 0 minutes). Top-bucket p_start is overconfident (~80% start when we claim 90%+). New-club split **unresolved/confounded** — cite only with n (see table above). V2A-M first target after GW1: **minutes/availability feeding the 15**, not optimizer, not Guehi-only. **Friday: Guehi stays; no minutes.py change.**
 - **Artifacts:** `records/historical/{season}/minutes_cal.csv`
 - **Follow-up:** post-GW1 minutes model (role/availability). Do not retune before deadline.
+- **Output:** obs.py prints explicit tail-bucket n summary (established vs new_club) on every run.
 
 ## Queued
+
+### E013 - Four-season robustness panel
+- **Date:** 2026-08-19 (pre-registered); full panel run same day (research calendar; **does not** change Friday control)
+- **Status:** completed
+- **Hypothesis:** H0a, H0b, H2, H-v1-naive - qualitative verdicts reproduce across regimes
+- **Question:** Do B0 leakage, high-`p_start` overconfidence, XI blanks, and weak horizon mismatch hold on 2022/23 and 2023/24?
+- **Method:** Extended `SUPPORTED_SEASONS` to 2022-2025. Per season: E003 -> E005 -> E006 -> E007 -> E008/E009. Logistic cal fit on `p_start >= 0.60`. Synthesis via `scripts/e013_synthesis.py`.
+- **Seasons / GWs:** 2022/23, 2023/24, 2024/25, 2025/26 x GW1-38 (2022/23 GW7 missing Vaastav actuals; decomp n=37)
+- **Caveats:**
+  - 2022/23 prior season (2021/22) has no `expected_goals` in Vaastav - harness uses goals/assists as rate proxy for GW1 reconstruction only
+  - V1 DC scoring in projections; older seasons lack DC in Vaastav actuals - player MAE less comparable; minutes/XI gates still valid
+  - E006 `xi_points` already includes captain double-count; compare column uses `xi_points` mean
+
+- **Synthesis table:**
+
+  | Season | B0* flagged GWs | Tail n | Start% @ >=0.90 | XI 0-min % (ALL) | V1_GW1-V1 mean (CLEAN) | V1 XI+Cap | B1 | B2 | V1>B1 | V1>B2 | alpha / beta (p>=0.60) | P@0.90 fit |
+  |---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---:|---:|
+  | 2022/23 | 33/38 | 563 | 84.0 | 27.0 | -0.48 | 45.1 | 43.6 | 36.9 | yes | yes | 0.646 / 0.261 | 77.2 |
+  | 2023/24 | 31/38 | 645 | 78.5 | 25.1 | +1.63 | 44.4 | 36.8 | 33.0 | yes | yes | 0.568 / 0.242 | 75.0 |
+  | 2024/25 | 34/38 | 610 | 83.9 | 16.5 | +2.55 | 45.2 | 43.4 | 37.4 | yes | yes | 0.680 / 0.205 | 75.6 |
+  | 2025/26 | 10/38 | 773 | 79.4 | 29.2 | +1.45 | 36.3 | 32.6 | 28.9 | yes | yes | 0.330 / 0.414 | 77.6 |
+
+- **Verdict (qualitative panel):**
+  - **H0a supported** - B0 flagged in all four seasons (10-34/38 GWs). Never a V2 gate.
+  - **H0b supported** - tail `p_start >= 0.90` actual start 78-84% (not 90%+); XI 0-min 16-29% all seasons. Logistic beta << 1 everywhere -> **nonlinear / bucket recalibration**, not a single multiplicative shrinkage.
+  - **H2 weak** - `V1_GW1 - V1` +1.5 to +2.6 pts/GW on CLEAN in 2023-2025; 2022/23 ~ 0. Not the primary lever.
+  - **H-v1-naive supported** - V1 XI+Cap beats B1 and B2 all four seasons.
+  - **New-club prior** - still unresolved/confounded; cite with n only.
+  - **V2A-M justification:** high-confidence start overprediction is stable across four regimes; target minutes/availability, not optimizer or transfer status.
+
+- **Artifacts:** `records/historical/{2022-23,2023-24}/` full harness set; `minutes_cal_fit.csv` on all four seasons; `scripts/e013_synthesis.py`
+- **Follow-up:** implement V2A-M post-GW1 using this panel as gate evidence. Friday squad unchanged.
+
 
 ### E010 — Live 2026/27 GW1 score
 - **Date:** after GW1 results (deadline 2026-08-21 17:30 UTC)
@@ -377,4 +421,7 @@ python -m engine.harness_compare --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_decomp --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.obs --season 2025-26
 python -m engine.obs --season 2024-25
+python -m engine.obs --season 2023-24
+python -m engine.obs --season 2022-23
+python scripts/e013_synthesis.py  # regenerate panel table
 ```

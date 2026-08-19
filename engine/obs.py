@@ -10,6 +10,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import math
 import csv
 import statistics
 from pathlib import Path
@@ -138,25 +139,164 @@ def _bucket(p: float) -> str:
     return "<0.60"
 
 
-def _cal_table(rows: list[dict], label: str) -> None:
-    print(f"  P(start) calibration — {label}")
-    print(f"  {'bucket':12} {'n':>6} {'start%':>8} {'0min%':>8} {'avg pts':>8}")
+def _bucket_stats(rows: list[dict]) -> dict[str, dict[str, float | int]]:
     by: dict[str, list] = {b[0]: [] for b in BUCKETS}
     for r in rows:
         ps = safe_float(r.get("p_start"))
         if ps is None:
             continue
         by[_bucket(ps)].append(r)
+    out: dict[str, dict[str, float | int]] = {}
     for name, _, _ in BUCKETS:
         grp = by[name]
         if not grp:
-            print(f"  {name:12} {0:6}")
+            out[name] = {"n": 0}
             continue
         n = len(grp)
         starts = sum(1 for r in grp if int(float(r.get("did_start") or 0)))
         zmin = sum(1 for r in grp if float(r.get("actual_minutes") or 0) == 0)
         pts = [float(r.get("actual_points") or 0) for r in grp]
-        print(f"  {name:12} {n:6} {100*starts/n:7.1f}% {100*zmin/n:7.1f}% {statistics.mean(pts):8.2f}")
+        out[name] = {
+            "n": n,
+            "start_pct": 100 * starts / n,
+            "zero_min_pct": 100 * zmin / n,
+            "avg_pts": statistics.mean(pts),
+        }
+    return out
+
+
+def _cal_table(rows: list[dict], label: str) -> dict[str, dict[str, float | int]]:
+    print(f"  P(start) calibration - {label}")
+    print(f"  {'bucket':12} {'n':>6} {'start%':>8} {'0min%':>8} {'avg pts':>8}")
+    stats = _bucket_stats(rows)
+    for name, _, _ in BUCKETS:
+        s = stats[name]
+        n = int(s.get("n", 0))
+        if n == 0:
+            print(f"  {name:12} {0:6}")
+            continue
+        print(
+            f"  {name:12} {n:6} {s['start_pct']:7.1f}% {s['zero_min_pct']:7.1f}% {s['avg_pts']:8.2f}"
+        )
+    print()
+    return stats
+
+
+def _tail_bucket_compare(
+    est_stats: dict[str, dict[str, float | int]],
+    neu_stats: dict[str, dict[str, float | int]],
+) -> None:
+    """Explicit n next to established vs new-club tail-bucket percentages."""
+    bucket = "0.90-1.00"
+    print("  Tail bucket (0.90-1.00) - established vs new-club (player-GW rows, not unique players):")
+    for label, stats in [("established", est_stats), ("new_club", neu_stats)]:
+        s = stats.get(bucket, {"n": 0})
+        n = int(s.get("n", 0))
+        if n == 0:
+            print(f"    {label:12} n={n:4}  (empty)")
+            continue
+        print(
+            f"    {label:12} n={n:4}  start={s['start_pct']:5.1f}%  0min={s['zero_min_pct']:5.1f}%  "
+            f"avg_pts={s['avg_pts']:.2f}"
+        )
+    print("  Do not cite tail-bucket percentages without these n values; selection into the bucket is confounded.")
+    print()
+
+def _clip_prob(p: float, eps: float = 1e-6) -> float:
+    return min(max(p, eps), 1.0 - eps)
+
+
+def _logit(p: float) -> float:
+    p = _clip_prob(p)
+    return math.log(p / (1.0 - p))
+
+
+def _sigmoid(z: float) -> float:
+    if z >= 0:
+        ez = math.exp(-z)
+        return 1.0 / (1.0 + ez)
+    ez = math.exp(z)
+    return ez / (1.0 + ez)
+
+
+def _logistic_cal_fit(
+    rows: list[dict],
+    min_p: float = 0.60,
+) -> dict[str, float | int]:
+    """Fit logit(P(start)) = alpha + beta * logit(p_start) on p_start >= min_p.
+
+    Newton-Raphson, 2 parameters. Decision-relevant subset only — low-confidence
+    bench rows would dominate a global fit.
+    """
+    xs: list[float] = []
+    ys: list[float] = []
+    for r in rows:
+        ps = safe_float(r.get("p_start"))
+        if ps is None or ps < min_p:
+            continue
+        if r.get("did_start") in (None, ""):
+            continue
+        xs.append(_logit(ps))
+        ys.append(float(int(float(r["did_start"]))))
+    n = len(xs)
+    if n < 20:
+        return {"n": n, "min_p": min_p, "alpha": float("nan"), "beta": float("nan"),
+                "converged": 0, "iters": 0}
+
+    # Start near identity: alpha=0, beta=1
+    alpha, beta = 0.0, 1.0
+    converged = 0
+    iters = 0
+    for iters in range(1, 41):
+        g0 = g1 = 0.0
+        h00 = h01 = h11 = 0.0
+        for x, y in zip(xs, ys):
+            eta = alpha + beta * x
+            p = _sigmoid(eta)
+            w = p * (1.0 - p)
+            # gradient of negative log-likelihood
+            g0 += p - y
+            g1 += (p - y) * x
+            h00 += w
+            h01 += w * x
+            h11 += w * x * x
+        det = h00 * h11 - h01 * h01
+        if abs(det) < 1e-12:
+            break
+        da = (h11 * g0 - h01 * g1) / det
+        db = (h00 * g1 - h01 * g0) / det
+        alpha -= da
+        beta -= db
+        if abs(da) < 1e-8 and abs(db) < 1e-8:
+            converged = 1
+            break
+    return {
+        "n": n,
+        "min_p": min_p,
+        "alpha": alpha,
+        "beta": beta,
+        "converged": converged,
+        "iters": iters,
+    }
+
+
+def _print_cal_fit(fit: dict[str, float | int], label: str) -> None:
+    n = int(fit.get("n", 0))
+    print(f"  Logistic cal fit - {label} (p_start >= {fit.get('min_p', 0.60)}):")
+    if n < 20 or fit.get("alpha") != fit.get("alpha"):
+        print(f"    n={n}  (insufficient for fit)")
+        print()
+        return
+    alpha = float(fit["alpha"])
+    beta = float(fit["beta"])
+    # Implied actual rate at model p=0.90
+    p90 = _sigmoid(alpha + beta * _logit(0.90))
+    print(f"    n={n}  alpha={alpha:.4f}  beta={beta:.4f}  converged={int(fit['converged'])}")
+    print(f"    at model p=0.90 -> fitted P(start)={100*p90:.1f}%")
+    if abs(beta - 1.0) < 0.15 and alpha < -0.05:
+        print("    read: roughly uniform overconfidence (beta~1, alpha<0) -> multiplicative shrinkage candidate")
+    elif beta < 0.85:
+        print("    read: compressed / nonlinear (beta<1) -> prefer bucket recalibration over single shrinkage")
     print()
 
 
@@ -188,8 +328,11 @@ def run_e009(season: str, new_ids: set[int]) -> None:
     _cal_table(scored, "all players")
     est = [r for r in scored if int(r["player_id"]) not in new_ids]
     neu = [r for r in scored if int(r["player_id"]) in new_ids]
-    _cal_table(est, "established club (same team code as prior season)")
-    _cal_table(neu, "new club / no prior-season team")
+    est_stats = _cal_table(est, "established club (same team code as prior season)")
+    neu_stats = _cal_table(neu, "new club / no prior-season team")
+    _tail_bucket_compare(est_stats, neu_stats)
+    fit_all = _logistic_cal_fit(scored, min_p=0.60)
+    _print_cal_fit(fit_all, "all players")
     _conditional_mae(scored, "all players")
     _conditional_mae(est, "established")
     _conditional_mae(neu, "new club")
@@ -266,6 +409,33 @@ def run_e009(season: str, new_ids: set[int]) -> None:
                     "avg_pts": round(pts, 3),
                 })
     print(f"  wrote {out}")
+
+    fit_path = Path("records") / "historical" / season / "minutes_cal_fit.csv"
+    with fit_path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(
+            f,
+            fieldnames=["season", "split", "min_p", "n", "alpha", "beta", "converged", "iters", "p90_fitted"],
+        )
+        w.writeheader()
+        for split, grp in [("all", scored), ("established", est), ("new_club", neu)]:
+            fit = _logistic_cal_fit(grp, min_p=0.60)
+            alpha = fit.get("alpha")
+            beta = fit.get("beta")
+            p90 = ""
+            if isinstance(alpha, float) and alpha == alpha and isinstance(beta, float) and beta == beta:
+                p90 = round(100 * _sigmoid(float(alpha) + float(beta) * _logit(0.90)), 2)
+            w.writerow({
+                "season": season,
+                "split": split,
+                "min_p": fit.get("min_p", 0.60),
+                "n": fit.get("n", 0),
+                "alpha": round(float(alpha), 6) if isinstance(alpha, float) and alpha == alpha else "",
+                "beta": round(float(beta), 6) if isinstance(beta, float) and beta == beta else "",
+                "converged": fit.get("converged", 0),
+                "iters": fit.get("iters", 0),
+                "p90_fitted": p90,
+            })
+    print(f"  wrote {fit_path}")
     print()
 
 

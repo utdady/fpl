@@ -27,9 +27,9 @@ from engine.scoring import DC_THRESHOLD, GC_BUCKET, SAVES_BUCKET
 
 VAASTAV_REPO = Path("data/vaastav")
 VAASTAV_ROOT = VAASTAV_REPO / "data"
-SUPPORTED_SEASONS = ("2024-25", "2025-26")
-SEASON_LABEL = {"2024-25": "2024/25", "2025-26": "2025/26", "2023-24": "2023/24"}
-PREV_SEASON = {"2025-26": "2024-25", "2024-25": "2023-24"}
+SUPPORTED_SEASONS = ("2022-23", "2023-24", "2024-25", "2025-26")
+SEASON_LABEL = {"2022-23": "2022/23", "2023-24": "2023/24", "2024-25": "2024/25", "2025-26": "2025/26"}
+PREV_SEASON = {"2025-26": "2024-25", "2024-25": "2023-24", "2023-24": "2022-23", "2022-23": "2021-22"}
 POS_TO_ID = {v: k for k, v in POS_BY_ID.items()}
 
 
@@ -124,8 +124,12 @@ def aggregate_gw_stats(season: str, through_gw: int | None = None) -> dict[int, 
     merged = season_dir(season) / "gws" / "merged_gw.csv"
     if not merged.exists():
         return {}
+    rows = _read_csv(merged)
+    # Pre-xG seasons (e.g. 2021/22) lack expected_* columns; use goals/assists as rates.
+    has_xg = bool(rows) and "expected_goals" in rows[0]
+    has_starts = bool(rows) and "starts" in rows[0]
     acc: dict[int, PlayerAgg] = defaultdict(PlayerAgg)
-    for row in _read_csv(merged):
+    for row in rows:
         gw = _i(row.get("GW") or row.get("round"), 0)
         if through_gw is not None and gw > through_gw:
             continue
@@ -135,17 +139,26 @@ def aggregate_gw_stats(season: str, through_gw: int | None = None) -> dict[int, 
         a = acc[eid]
         mins = _i(row.get("minutes"))
         a.minutes += mins
-        a.starts += _i(row.get("starts"))
-        a.goals += _i(row.get("goals_scored"))
-        a.assists += _i(row.get("assists"))
+        if has_starts:
+            a.starts += _i(row.get("starts"))
+        elif mins >= 60:
+            a.starts += 1
+        goals = _i(row.get("goals_scored"))
+        assists = _i(row.get("assists"))
+        a.goals += goals
+        a.assists += assists
         a.bonus += _i(row.get("bonus"))
         a.yellow += _i(row.get("yellow_cards"))
         a.red += _i(row.get("red_cards"))
         a.saves += _i(row.get("saves"))
         a.total_points += _i(row.get("total_points"))
-        a.xg += _f(row.get("expected_goals"))
-        a.xa += _f(row.get("expected_assists"))
-        a.xgc += _f(row.get("expected_goals_conceded"))
+        if has_xg:
+            a.xg += _f(row.get("expected_goals"))
+            a.xa += _f(row.get("expected_assists"))
+            a.xgc += _f(row.get("expected_goals_conceded"))
+        else:
+            a.xg += float(goals)
+            a.xa += float(assists)
         if "defensive_contribution" in row:
             a.dc += _f(row.get("defensive_contribution"))
     return dict(acc)
