@@ -1,10 +1,8 @@
 "use client";
 
 import {
-  Bar,
   CartesianGrid,
   ComposedChart,
-  Legend,
   Line,
   ReferenceArea,
   ResponsiveContainer,
@@ -49,6 +47,13 @@ export function DecisionChart({
   const oracle = new Map(decisions.map((d) => [d.gw, d.oracle]));
   for (const row of data) row.oracle = oracle.get(row.gw as number) ?? null;
 
+  // The domain is padded by half a gameweek so the shaded bands are not clipped,
+  // which leaves the auto ticks free to invent a gameweek past the last one.
+  const gws = data.map((row) => row.gw as number);
+  const ticks = [
+    ...new Set([gws[0], ...gws.filter((gw) => gw % 10 === 0), gws[gws.length - 1]]),
+  ].sort((a, b) => a - b);
+
   return (
     <ResponsiveContainer width="100%" height={260}>
       <ComposedChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -18 }}>
@@ -62,14 +67,18 @@ export function DecisionChart({
             fillOpacity={0.09}
           />
         ))}
-        <XAxis dataKey="gw" {...AXIS} />
+        <XAxis
+          dataKey="gw"
+          type="number"
+          // Half a gameweek of padding so the shaded band for the first and last
+          // flagged week is inside the domain rather than clipped away.
+          domain={([min, max]) => [min - 0.5, max + 0.5]}
+          ticks={ticks}
+          allowDecimals={false}
+          {...AXIS}
+        />
         <YAxis {...AXIS} />
         <Tooltip {...chartTooltip} />
-        <Legend
-          wrapperStyle={{ fontSize: 11, paddingTop: 6 }}
-          iconType="plainline"
-          iconSize={10}
-        />
         <Line
           type="monotone"
           dataKey="oracle"
@@ -91,7 +100,6 @@ export function DecisionChart({
             opacity={m.key === "B3_v1" || m.key === "B0_xp" ? 1 : 0.6}
           />
         ))}
-        <Bar dataKey="__none" fill="transparent" />
       </ComposedChart>
     </ResponsiveContainer>
   );

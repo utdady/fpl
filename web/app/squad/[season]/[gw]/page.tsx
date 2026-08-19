@@ -25,7 +25,11 @@ export default async function SquadPage({
   const gw = Number(gwParam);
   const manifest = await getManifest();
   const seasons = await getLabSeasons();
-  if (!manifest.seasons.some((s) => s.season === season) || !Number.isFinite(gw)) notFound();
+  const meta = manifest.seasons.find((s) => s.season === season);
+  // Range-check before touching any season file: a gameweek that never existed is
+  // a 404, not an empty board, and the guard keeps the on-demand render reading
+  // nothing but the manifest.
+  if (!meta || !Number.isFinite(gw) || gw < 1 || gw > meta.gws) notFound();
 
   // A season can exist in the manifest without an eleven: the live season is a
   // prediction pool only. That is a state to explain, not a missing page.

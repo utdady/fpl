@@ -33,6 +33,7 @@ export const getTeams = () => readJson<Teams>("teams.json");
 export const getLivePlayers = () => readJson<LivePlayers>("players.json");
 export const getFixtures = () => readJson<Fixtures>("fixtures.json");
 export const getPanel = () => readJson<Panel>("panel.json");
+/** Season to team id to FPL short code. */
 export const getHistoricalTeams = () =>
   readJson<Record<string, Record<string, string>>>("teams_historical.json");
 
@@ -54,35 +55,8 @@ export async function getTeamCodes(season: string): Promise<Record<number, strin
     return Object.fromEntries(teams.map((t) => [t.id, t.code]));
   }
   const historical = await getHistoricalTeams();
-  const names = historical[season] ?? {};
-  return Object.fromEntries(
-    Object.entries(names).map(([id, name]) => [Number(id), shortCode(name)]),
-  );
-}
-
-const CODE_OVERRIDES: Record<string, string> = {
-  "Manchester City": "MCI",
-  "Manchester Utd": "MUN",
-  "Manchester United": "MUN",
-  "Newcastle Utd": "NEW",
-  "Nott'm Forest": "NFO",
-  "Nottingham Forest": "NFO",
-  "Sheffield Utd": "SHU",
-  "Tottenham Hotspur": "TOT",
-  "West Ham United": "WHU",
-  "Wolverhampton Wanderers": "WOL",
-  "Leicester City": "LEI",
-  "Leeds United": "LEE",
-  Brighton: "BHA",
-  Spurs: "TOT",
-  Wolves: "WOL",
-};
-
-function shortCode(name: string): string {
-  if (CODE_OVERRIDES[name]) return CODE_OVERRIDES[name];
-  const words = name.split(/\s+/).filter(Boolean);
-  if (words.length >= 3) return words.map((w) => w[0]).join("").slice(0, 3).toUpperCase();
-  return name.slice(0, 3).toUpperCase();
+  const codes = historical[season] ?? {};
+  return Object.fromEntries(Object.entries(codes).map(([id, code]) => [Number(id), code]));
 }
 
 /** Historical seasons that have both a Lab and an XI board. */

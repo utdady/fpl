@@ -2,7 +2,6 @@
 
 import {
   CartesianGrid,
-  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -30,7 +29,6 @@ export function DriftChart({ scores }: { scores: Scores }) {
         <YAxis yAxisId="mae" domain={[0, "auto"]} {...AXIS} />
         <YAxis yAxisId="rho" orientation="right" domain={[0, 1]} {...AXIS} />
         <Tooltip {...chartTooltip} />
-        <Legend wrapperStyle={{ fontSize: 11, paddingTop: 6 }} iconType="plainline" iconSize={10} />
         <Line
           yAxisId="mae"
           type="monotone"

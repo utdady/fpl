@@ -3,6 +3,7 @@
 import * as HoverCard from "@radix-ui/react-hover-card";
 
 import { calibratedStart, dec, pct, price } from "@/lib/format";
+import { SNAPSHOT_DAY } from "@/lib/snapshot";
 import type { CellPlayer } from "./player-cell";
 
 /**
@@ -19,6 +20,12 @@ export function PlayerHover({
   const observed = calibratedStart(player.pStart);
   const overconfident =
     player.pStart != null && observed != null && player.pStart - observed > 0.08;
+  // Snapshot fields are live-season only. A fit player has chanceNext null rather
+  // than absent, so undefined is what separates the live pool from a record.
+  const fromSnapshot =
+    player.chanceNext !== undefined ||
+    player.owned !== undefined ||
+    player.epNext !== undefined;
 
   return (
     <HoverCard.Root openDelay={250} closeDelay={80}>
@@ -62,6 +69,13 @@ export function PlayerHover({
               color="var(--color-risk)"
             />
           </div>
+
+          {fromSnapshot && SNAPSHOT_DAY && (
+            <p className="mt-1.5 text-[9.5px] leading-relaxed text-faint">
+              Price, ownership and availability are the {SNAPSHOT_DAY} snapshot. No news
+              flag here means none at that date, not none now.
+            </p>
+          )}
 
           {overconfident && (
             <p className="mt-2 text-[10px] leading-relaxed text-risk/85">

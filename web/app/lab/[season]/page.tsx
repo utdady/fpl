@@ -141,6 +141,8 @@ export default async function LabPage({ params }: { params: Promise<{ season: st
               { color: "var(--color-model)", label: "V1" },
               { color: "var(--color-b0)", label: "B0 xP" },
               { color: "var(--color-oracle)", label: "Oracle" },
+              { color: "var(--color-muted)", label: "B1 season pts" },
+              { color: "var(--color-faint)", label: "B2 pp90" },
             ]}
           />
         }
@@ -183,6 +185,14 @@ export default async function LabPage({ params }: { params: Promise<{ season: st
           title="Error across the season"
           subtitle="Late-season improvement is expected: the snapshot accumulates current-season minutes. It is not evidence that preseason V1 is strong."
           source={`records/historical/${season}/scores.csv`}
+          actions={
+            <Legend
+              items={[
+                { color: "var(--color-risk)", label: "MAE" },
+                { color: "var(--color-model)", label: "Spearman" },
+              ]}
+            />
+          }
         >
           <DriftChart scores={scores} />
         </Section>

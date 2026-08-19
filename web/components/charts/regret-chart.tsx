@@ -4,7 +4,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -39,7 +38,6 @@ export function RegretChart({ decisions }: { decisions: DecisionGw[] }) {
         <XAxis dataKey="gw" {...AXIS} />
         <YAxis {...AXIS} />
         <Tooltip {...chartTooltip} />
-        <Legend wrapperStyle={{ fontSize: 11, paddingTop: 6 }} iconType="square" iconSize={9} />
         {PARTS.map((p) => (
           <Bar key={p.key} dataKey={p.key} name={p.label} stackId="r" fill={p.color} />
         ))}

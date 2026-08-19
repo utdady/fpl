@@ -13,6 +13,23 @@ npm run dev
 Re-run the export whenever the engine produces new records. `public/data/` is
 committed as a versioned artifact so Vercel builds need only Node.
 
+## Deploying
+
+Not deployed yet. When it is, two settings are not optional:
+
+1. **Root Directory must be `web`.** The Next app is a subdirectory of the research
+   repo. This cannot be set from `vercel.json`; it lives in the Vercel project
+   settings. Without it the build finds no framework and every route 404s.
+2. **`outputFileTracingIncludes` must stay in `next.config.mjs`.** Every page is
+   prerendered except the live-season notices, which render on demand and read the
+   manifest through a computed path that file tracing cannot follow. Removing the
+   entry gives two routes that pass `next start` locally and throw ENOENT in
+   production.
+
+Re-running `export_ui.py` refreshes the FPL snapshot fields. Do not do it to make
+the display look current: `.cache/fpl/` is gitignored and holds the only copy of
+the snapshot the GW1 audit was computed against.
+
 ## Data layer
 
 | Tier | Source | Contents |
@@ -60,5 +77,8 @@ These are load-bearing, not decoration:
 - B0 is drawn in its own colour and its flagged weeks are shaded. It is an
   upper-bound diagnostic, never a baseline or a ceiling.
 - The regret oracle is named in the chart subtitle.
+- Any FPL availability figure carries the snapshot date beside it. Availability and
+  news move daily, so an undated percentage from a days-old capture reads as
+  current when it is not.
 - No outcome distribution is drawn from mu and sigma alone. FPL points are lumpy
   and a bell curve would assert a shape the model never claimed.

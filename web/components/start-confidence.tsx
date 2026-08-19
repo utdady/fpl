@@ -1,6 +1,7 @@
 "use client";
 
 import { calibratedStart, pct } from "@/lib/format";
+import { SNAPSHOT_DAY } from "@/lib/snapshot";
 
 /**
  * Three opinions on whether this player starts, side by side:
@@ -55,6 +56,15 @@ export function StartConfidence({
           </div>
         ))}
       </div>
+
+      {fpl !== undefined && SNAPSHOT_DAY && (
+        <p className="mt-2 text-[10px] leading-relaxed text-faint">
+          {fpl === null
+            ? `No FPL doubt was recorded at the ${SNAPSHOT_DAY} snapshot. That is not the same as none now.`
+            : `FPL availability is from the ${SNAPSHOT_DAY} snapshot, not live.`}{" "}
+          Check the official site before a deadline.
+        </p>
+      )}
 
       {overconfident && (
         <p className="mt-2.5 border-l-2 border-risk/40 pl-2.5 text-[10.5px] leading-relaxed text-muted">

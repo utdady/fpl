@@ -12,6 +12,7 @@ import {
   getTeamCodes,
 } from "@/lib/data";
 import { seasonLabel } from "@/lib/format";
+import { SNAPSHOT_DAY } from "@/lib/snapshot";
 
 export default async function PoolPage() {
   const manifest = await getManifest();
@@ -76,7 +77,7 @@ export default async function PoolPage() {
           <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-muted">
             The frozen V1 prediction pool. Projections come from the record captured
             before the deadline; prices, ownership and availability come from the cached
-            FPL snapshot.
+            FPL snapshot{SNAPSHOT_DAY ? ` of ${SNAPSHOT_DAY}` : ""} and are not live.
           </p>
         </div>
         {latestLab && (

@@ -249,8 +249,14 @@ def export_live_metadata() -> dict:
 
 
 def historical_team_map(season: str) -> dict[str, str]:
-    rows = read_csv(VAASTAV / "master_team_list.csv")
-    return {r["team"]: r["team_name"] for r in rows if r.get("season") == season}
+    """Team id to FPL short code, matching the live season's teams.json.
+
+    Read from the per-season teams.csv, not master_team_list.csv: the master list
+    stops at 2023-24, and the display names it does carry cannot be abbreviated
+    safely because "Man City" and "Man Utd" collapse to the same three letters.
+    """
+    rows = read_csv(VAASTAV / season / "teams.csv")
+    return {r["id"]: r["short_name"] for r in rows}
 
 
 # --------------------------------------------------------------------------
