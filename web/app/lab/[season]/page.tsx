@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { DecisionChart } from "@/components/charts/decision-chart";
@@ -14,6 +15,7 @@ import {
   getDecisions,
   getLabSeasons,
   getLeakage,
+  getManifest,
   getMinutes,
   getPanel,
   getScores,
@@ -27,8 +29,34 @@ export async function generateStaticParams() {
 
 export default async function LabPage({ params }: { params: Promise<{ season: string }> }) {
   const { season } = await params;
+  const manifest = await getManifest();
   const seasons = await getLabSeasons();
-  if (!seasons.includes(season)) notFound();
+  if (!manifest.seasons.some((s) => s.season === season)) notFound();
+
+  // The live season is in the manifest but has no realized points to score against.
+  if (!seasons.includes(season)) {
+    return (
+      <div className="space-y-5">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h1 className="text-xl font-semibold tracking-tight">Lab · {seasonLabel(season)}</h1>
+          <SeasonTabs seasons={seasons} current={season} basePath="lab" />
+        </div>
+        <Section
+          title={`Nothing to evaluate for ${seasonLabel(season)}`}
+          subtitle="The lab scores projections against realized points. This season has no scored gameweeks yet, so there is no error, no leakage flag and no regret to decompose."
+          source={`records/historical/${season}/ (absent)`}
+        >
+          <p className="text-[12px] leading-relaxed text-muted">
+            The frozen projections for this season are on the{" "}
+            <Link href="/" className="text-model underline decoration-model/40 underline-offset-2">
+              prediction pool
+            </Link>
+            . Pick a completed season above.
+          </p>
+        </Section>
+      </div>
+    );
+  }
 
   const [compare, decisions, leakage, minutes, scores, panel] = await Promise.all([
     getCompare(season),

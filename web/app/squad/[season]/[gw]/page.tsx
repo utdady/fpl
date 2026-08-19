@@ -1,10 +1,11 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { GwStrip, SeasonTabs } from "@/components/gw-strip";
 import { Pitch, XiList } from "@/components/pitch";
 import { Section } from "@/components/ui/section";
 import { Stat, StatRow } from "@/components/ui/stat";
-import { getDecisions, getLabSeasons } from "@/lib/data";
+import { getDecisions, getLabSeasons, getManifest } from "@/lib/data";
 import { dec, formation, seasonLabel, signed } from "@/lib/format";
 import { buildXi } from "@/lib/squad";
 
@@ -22,8 +23,33 @@ export default async function SquadPage({
 }) {
   const { season, gw: gwParam } = await params;
   const gw = Number(gwParam);
+  const manifest = await getManifest();
   const seasons = await getLabSeasons();
-  if (!seasons.includes(season) || !Number.isFinite(gw)) notFound();
+  if (!manifest.seasons.some((s) => s.season === season) || !Number.isFinite(gw)) notFound();
+
+  // A season can exist in the manifest without an eleven: the live season is a
+  // prediction pool only. That is a state to explain, not a missing page.
+  if (!seasons.includes(season)) {
+    return (
+      <div className="space-y-5">
+        <Header season={season} seasons={seasons} />
+        <Section
+          title={`No eleven for ${seasonLabel(season)}`}
+          subtitle="The XI board reads the decision decomposition, which exists only for scored seasons."
+          source={`records/historical/${season}/ (absent)`}
+          caveats={[manifest.caveats.live_pool]}
+        >
+          <p className="text-[12px] leading-relaxed text-muted">
+            The frozen projections for this season are on the{" "}
+            <Link href="/" className="text-model underline decoration-model/40 underline-offset-2">
+              prediction pool
+            </Link>
+            . Pick a scored season above for an eleven.
+          </p>
+        </Section>
+      </div>
+    );
+  }
 
   const [{ v1, b0, caveats, availableGws }, decisions] = await Promise.all([
     buildXi(season, gw),
