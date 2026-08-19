@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/*
+ * Colour law. Every series in every chart obeys this, so a reader never has to
+ * ask whether a number is a prediction or an outcome:
+ *   model   cyan     V1 projection output (mu, sigma, p_start, P10+)
+ *   actual  green    realized points and minutes
+ *   risk    magenta  blanks, zero-minute slots, leakage flags, warnings
+ *   b0      violet   Vaastav xP, deliberately not cyan since it is not our model
+ *   oracle  amber    god-mode hindsight ceiling
+ */
+@theme {
+  --color-void: #0a0410;
+  --color-panel: #130a1c;
+  --color-raised: #1b1026;
+  --color-edge: #2a1a38;
+  --color-edge-bright: #3d2a50;
+
+  --color-plum: #38003c;
+  --color-plum-deep: #3d195b;
+
+  --color-ink: #f4eef8;
+  --color-muted: #9d8fae;
+  --color-faint: #6b5c7b;
+
+  --color-model: #04f5ff;
+  --color-actual: #00ff87;
+  --color-risk: #e90052;
+  --color-b0: #a78bfa;
+  --color-oracle: #ffb703;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background:
+      radial-gradient(
+        ellipse 90% 55% at 50% -10%,
+        color-mix(in oklab, var(--color-plum) 55%, transparent),
+        transparent
+      ),
+      var(--color-void);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Data must never shift width while streaming or hovering. */
+  table,
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-model) 30%, transparent);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-edge-bright) transparent;
+  }
+}
+
+@utility panel {
+  border: 1px solid var(--color-edge);
+  background: color-mix(in oklab, var(--color-panel) 88%, transparent);
+  border-radius: 0.75rem;
+}
+
+@utility label-xs {
+  font-size: 0.625rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
