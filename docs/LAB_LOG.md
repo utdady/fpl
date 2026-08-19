@@ -339,11 +339,12 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Verdict (qualitative panel):**
   - **H0a supported** - B0 flagged in all four seasons (10-34/38 GWs). Never a V2 gate.
-  - **H0b supported** - tail `p_start >= 0.90` actual start 78-84% (not 90%+); XI 0-min 16-29% all seasons. Logistic beta << 1 everywhere -> **nonlinear / bucket recalibration**, not a single multiplicative shrinkage.
-  - **H2 weak** - `V1_GW1 - V1` +1.5 to +2.6 pts/GW on CLEAN in 2023-2025; 2022/23 ~ 0. Not the primary lever.
+  - **H0b supported** - `p90_fitted` (actual start rate at model >= 0.90) is ~75-78% across all four seasons; that is the stable headline, not the raw alpha/beta parameters which trade off against each other. Logistic beta << 1 everywhere -> nonlinear tail compression; prefer bucket recalibration over a single multiplicative shrink. **alpha/beta are diagnostic appendix only.**
+  - **2024/25 XI 0-min (16.5%) is an outlier** vs the other three seasons (25-29%), not the low end of a continuum. Cause unexplained (fewer transfer disruptions? DGW mix?). V2A-M gates should evaluate all four seasons individually, not assume a 16-29% uniform range.
+  - **H2 weak / indistinguishable from noise** - `V1_GW1 - V1` is +1.5 to +2.6 pts/GW (CLEAN) in 2023-2025 but **-0.48 in 2022/23**. Inconsistent sign across seasons = no stable directional effect; this is the correct reason to shelve the horizon objective, not rounding the negative case to zero.
   - **H-v1-naive supported** - V1 XI+Cap beats B1 and B2 all four seasons.
-  - **New-club prior** - still unresolved/confounded; cite with n only.
-  - **V2A-M justification:** high-confidence start overprediction is stable across four regimes; target minutes/availability, not optimizer or transfer status.
+  - **New-club prior** - still unresolved/confounded; cite with n only; alpha/beta split-level fits show sign flips (e.g. 2022/23 established beta~1.0 vs new_club beta~-0.04) confirming those parameters are noise-sensitive and should never inform design decisions.
+  - **V2A-M justification (canonical statement):** V1's repeatable weakness is upper-tail playing-time overconfidence, which propagates into XI blank selections; it is not currently supported as generic transfer mispricing or an optimizer-objective failure. Stable evidence: p90_fitted ~75-78%, XI 0-min elevated in 3/4 seasons. Target minutes/availability.
 
 - **Artifacts:** `records/historical/{2022-23,2023-24}/` full harness set; `minutes_cal_fit.csv` on all four seasons; `scripts/e013_synthesis.py`
 - **Follow-up:** implement V2A-M post-GW1 using this panel as gate evidence. Friday squad unchanged.
@@ -392,16 +393,17 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-18 (after E008/E009, overlay still empty):
+As of 2026-08-19 (after E013 four-season panel; production freeze intact):
 
-1. Production freeze intact. Friday default = V1 15 (Guehi IN, Haaland OUT, no overlay).
-2. **H0a supported** — do not use B0 XI+Cap as a V2 gate (especially 2024/25).
-3. **H0b supported at XI** — ~30% of 2025/26 V1 XI slots were 0-minute; not a general new-club p_start bug.
-4. **H2** remains weak / not the primary lever.
-5. Next V2A (post-GW1): minutes/availability. Optimizer frozen.
-6. Next live: E010 after GW1 results. Still **no production V1 change**.
-7. Formal integrity is post-GW1 (`docs/FORMAL.md`, E012). Not a V2 gate. No Lean before deadline.
-
+1. **Production freeze intact.** GW1 squad = V1 balanced 15 (Guehi IN, Haaland OUT, no overlay). No production-code changes before deadline.
+2. **H0a supported** - B0 flagged in all four seasons; never a V2 gate.
+3. **H0b supported** - `p90_fitted` ~75-78% across four seasons; stable metric for V2A-M. 2024/25 XI 0-min 16.5% is an outlier vs other three seasons (25-29%) - cause unexplained; do not smooth into a range.
+4. **H2 weak / indistinguishable from noise** - inconsistent sign across seasons (including -0.48 in 2022/23); no stable justification for changing the horizon objective.
+5. **V2A-M is the next experiment (post-GW1):** minutes/availability only; same rates, fixtures, ILP, objective. Gates: p90_fitted improvement, XI 0-min reduction, XI+cap vs V1 - evaluated on all four seasons individually.
+6. **E013 complete** - four-season robustness panel. alpha/beta columns are diagnostic appendix only; `p90_fitted` leads.
+7. **Next live:** E010 after GW1 results. `python -m engine.capture --gw 1 --score`
+8. **E012 / formal integrity:** post-GW1. Property tests first. Not a V2A-M gate. No Lean before deadline.
+9. **Research ladder:** V2A-M -> V2B (multi-season rates) -> V2C (role transition) -> V2D (fixture coefficients). Each rung beats the preceding control out-of-sample before being retained.
 ---
 
 ## Index of commands

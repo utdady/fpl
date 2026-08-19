@@ -144,7 +144,7 @@ python -m engine.capture --gw 1 --score
 
 ### Historical Lab — As-of-T backtesting 🔄
 
-**Status:** Harness implemented. GW1 validated and scored on 2025/26 and 2024/25.
+**Status:** Complete. Four-season E013 robustness panel: 2022/23, 2023/24, 2024/25, 2025/26.
 
 **What it does:**
 - Reconstructs Snapshot(as_of=GW_N) from Vaastav with strict information cutoff
@@ -152,19 +152,33 @@ python -m engine.capture --gw 1 --score
 - Writes predictions to records/historical/{season}/gw{nn}_v1.0.csv (same schema as live)
 - Scores with shared metrics in engine/metrics.py
 
-**Prerequisite for V2:** Harness validation must pass on both 2025/26 and 2024/25.
+**Prerequisite for V2:** Met. Harness validated and rolling evaluation complete on all four seasons.
 
 See docs/HARNESS_SPEC.md for field provenance, gates, and test ladder.
 See docs/FORMAL.md for post-GW1 evaluation invariants (not a V2 gate).
 
 ---
 
-### V2 — Projection improvement ⏳
+### V2 - Projection improvement
 
-**Prerequisite:** Harness validated on 2024/25 (does running V1 methodology on
-approximated inputs produce plausible results before looking at actuals?).
+**Prerequisite:** Met. Four-season harness panel complete. V2A-M is the first experiment.
 
-**Components (each gated independently):**
+**Research ladder (each rung beats the preceding control out-of-sample before being retained):**
+
+```text
+V1.0 (frozen control)
+  -> V2A-M  minutes / availability model only
+  -> V2B    multi-season rate priors (B4)
+  -> V2C    role-transition / transfer-specific minutes (B5)
+  -> V2D    learned fixture coefficients (B6)
+```
+
+**V2A-M - Minutes / availability (first experiment)**
+Gate evidence from E013: `p90_fitted` ~75-78% at model >= 0.90 (stable, four seasons); XI 0-min rate 16-29% (2024/25 is an outlier at 16.5% vs ~27% other three seasons - evaluate separately).
+Success: (1) improved `p90_fitted` calibration, (2) lower XI 0-min rate on all four seasons, (3) higher XI+cap vs V1. Guardrail: MAE_60+.
+**Constraint:** no generic new-club prior in v1; alpha/beta fit parameters are diagnostic appendix only.
+
+**B4 - Multi-season shrinkage prior (V2B)**
 
 **B4 — Multi-season shrinkage prior**
 Replace cost priors with a weighted blend of 2023/24 / 2024/25 / 2025/26 per-90
@@ -172,8 +186,8 @@ rates. Weights proportional to minutes. Success: lower MAE than V1 on 2025/26 GW
 
 **B5 — Role-transition minutes model**
 Detect club changes via Vaastav per-GW history. Discount start prior by new-club
-positional depth (count of teammates with ≥ 1800 mins). Canonical test: Guehi.
-Success: better-calibrated p_start for new-club players.
+positional depth (count of teammates with ≥ 1800 mins). Note: generic new-club transfer status remains unresolved/confounded (E013). V2C targets the residual after V2A-M demonstrates general calibration improvement.
+Success: better-calibrated p_start for new-club players, conditional on V2A-M already running.
 
 **B6 — Learned fixture coefficients**
 Replace hand-set ATK/CONCEDE with a Poisson GLM fitted from historical match data.
@@ -287,23 +301,19 @@ GW1 (E012). They do not block V2A-M.
 ## Operational sequence for 2026/27 GW1
 
 ```
-TODAY (Tue 18 Aug)
-  fpl.py --refresh          <- live price/news update
-  engine.audit --refresh    <- refreshed leave-one-out + alternatives
-  Human judgment: Guehi, Haaland/Fernandes/Saka portfolio
-  engine.capture --gw 1     <- freeze projection BEFORE deadline
+COMPLETED (pre-deadline, 2026-08-18/19)
+  engine.audit --refresh    <- GW1 audit (Guehi IN, Haaland OUT decided)
+  engine.capture --gw 1     <- GW1 prediction frozen to records/gw01_v1.0.csv
+  E008/E009/E013            <- four-season research panel complete
 
 FRI 21 AUG (deadline 17:30 UTC)
-  Lock FPL squad
+  Lock FPL squad: V1 balanced 15, Guehi IN, Haaland OUT, no overlay
 
 AFTER GW1 RESULTS
-  engine.capture --gw 1 --score    <- score the frozen prediction
+  engine.capture --gw 1 --score    <- E010: score the frozen prediction
 
-PARALLEL (Historical Lab)
-  engine.harness_validate --season 2025-26 --gw 1
-  engine.harness_run --season 2025-26 --gw 1 --score
-  engine.harness_validate --season 2024-25 --gw 1
-  engine.harness_run --season 2024-25 --gw 1 --score
-  rolling GW1-38 for both seasons
-  B0-B3 comparison -> then V2 research
+POST-GW1 (research resumes)
+  docs sync (ROADMAP / V2_SPEC to reflect E013 findings)
+  V2A-M implementation and four-season validation
+  E012 property tests (parallel, not blocking V2A-M)
 ```
