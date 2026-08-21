@@ -57,7 +57,7 @@ export function PoolTable({
   const [position, setPosition] = useState<Position | "ALL">("ALL");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<number | null>(null);
-  const [limit, setLimit] = useState(60);
+  const [limit, setLimit] = useState(20);
   const [liveOn, setLiveOn] = useState(false);
   const live = useLive(gw, liveOn);
 
@@ -140,7 +140,7 @@ export function PoolTable({
       {visible.length > limit && (
         <button
           type="button"
-          onClick={() => setLimit(limit + 100)}
+          onClick={() => setLimit(limit + 20)}
           className="mt-3 w-full rounded-md border border-edge py-2 text-[11.5px] text-muted transition-colors hover:border-edge-bright hover:text-ink"
         >
           Show more ({visible.length - limit} remaining)

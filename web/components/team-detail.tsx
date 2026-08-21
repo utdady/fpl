@@ -325,6 +325,11 @@ function ComparePanel({
   const edge = gwEdge(mineBundle.picks, rivalPicks, byId);
   const overlap = squadOverlap(mineBundle.picks, rivalPicks);
   const vsMine = notesVsMine(rivalPicks, mineBundle.picks, byId, (n) => dec(n, 1));
+  const notes = [
+    ...vsMine.startGaps,
+    ...vsMine.onlyThem.map((n) => `Only them: ${n}`),
+    ...vsMine.onlyMe.map((n) => `Only you: ${n}`),
+  ];
   const nameOf = (pid: number | null) =>
     pid == null ? "—" : (byId.get(pid)?.name ?? `#${pid}`);
 
@@ -396,17 +401,18 @@ function ComparePanel({
           </p>
         </div>
 
-        <div>
-          <div className="label-xs mb-2">Notes vs my team</div>
-          <NotesList
-            items={[
-              ...vsMine.startGaps,
-              ...vsMine.onlyThem.map((n) => `Only them: ${n}`),
-              ...vsMine.onlyMe.map((n) => `Only you: ${n}`),
-            ]}
-            empty="Squads look aligned on the frozen pool snapshot."
-          />
-        </div>
+        <details className="group rounded-md border border-edge bg-raised/30">
+          <summary className="cursor-pointer list-none px-3 py-2 text-[12px] text-muted marker:content-none [&::-webkit-details-marker]:hidden">
+            <span className="font-medium text-ink">Notes vs my team</span>
+            <span className="tnum ml-2 text-[11px] text-faint">{notes.length}</span>
+          </summary>
+          <div className="border-t border-edge px-3 py-3">
+            <NotesList
+              items={notes}
+              empty="Squads look aligned on the frozen pool snapshot."
+            />
+          </div>
+        </details>
       </div>
     </Section>
   );
