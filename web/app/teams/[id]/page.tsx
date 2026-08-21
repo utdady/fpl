@@ -1,8 +1,14 @@
-import { TeamTracker, type PoolPlayer } from "@/components/team-tracker";
+import { TeamDetail } from "@/components/team-detail";
 import { getLivePlayers, getManifest, getPredictions, getStrategies, getTeamCodes } from "@/lib/data";
-import type { StrategyKey } from "@/lib/types";
+import type { PoolPlayer } from "@/components/team-tracker";
 
-export default async function TeamsPage() {
+export default async function TeamDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id: raw } = await params;
+  const id = Number(raw);
   const manifest = await getManifest();
   const season = manifest.live_season;
   const [predictions, live, codes] = await Promise.all([
@@ -20,11 +26,11 @@ export default async function TeamsPage() {
   }
 
   const gw = predictions.gws[0] ?? 1;
-  const pool: PoolPlayer[] = Object.entries(predictions.players).map(([id, series]) => {
+  const pool: PoolPlayer[] = Object.entries(predictions.players).map(([pid, series]) => {
     const i = series.gw.indexOf(gw);
-    const meta = live.players[id];
+    const meta = live.players[pid];
     return {
-      id: Number(id),
+      id: Number(pid),
       name: series.name,
       pos: series.pos,
       teamCode: codes[series.team] ?? null,
@@ -35,23 +41,19 @@ export default async function TeamsPage() {
     };
   });
 
+  if (!Number.isInteger(id) || id <= 0) {
+    return (
+      <p className="text-[13px] text-risk">Invalid entry ID.</p>
+    );
+  }
+
   return (
-    <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight">Teams</h1>
-        <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-muted">
-          Track public FPL entries by ID. Mark yours, preview the pitch, then open a
-          team for Notes vs V1 or rival compare (overlap, xP gap, this-GW edge).
-          Scores use the frozen V1 pool — not live FPL xP.
-        </p>
-      </div>
-      <TeamTracker
-        gw={gw}
-        season={season}
-        pool={pool}
-        balancedIds={balancedIds}
-        strategy={"balanced" as StrategyKey}
-      />
-    </div>
+    <TeamDetail
+      id={id}
+      gw={gw}
+      season={season}
+      pool={pool}
+      balancedIds={balancedIds}
+    />
   );
 }

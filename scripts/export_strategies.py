@@ -9,6 +9,7 @@ re-runs the same ILP the audit CLI uses (horizon=6) against .cache/fpl.
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from datetime import datetime, timezone
@@ -33,8 +34,8 @@ CAVEAT = (
 )
 
 
-def main() -> int:
-    snapshot = load_snapshot(refresh=False)
+def export_strategies(*, refresh: bool) -> int:
+    snapshot = load_snapshot(refresh=refresh)
     nxt = snapshot.next_event()
     teams = {tid: t.short_name for tid, t in snapshot.teams.items()}
     as_of = snapshot.as_of.isoformat() if snapshot.as_of else None
@@ -91,10 +92,24 @@ def main() -> int:
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(f"[strategies] wrote {dest}")
+    print(f"[strategies] snapshot_as_of={as_of}  gw={nxt.id}")
     for key, squad in squads.items():
         xi = [p["name"] for p in squad["players"] if p["xi"]]
         print(f"  {key}: C {squad['captain']}  XI {', '.join(xi)}")
     return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Re-solve safe/balanced/aggressive for the live UI board."
+    )
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Force a fresh FPL API fetch (ignores the 30-minute cache TTL).",
+    )
+    args = parser.parse_args()
+    return export_strategies(refresh=args.refresh)
 
 
 if __name__ == "__main__":

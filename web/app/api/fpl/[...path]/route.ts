@@ -20,6 +20,7 @@ const ALLOWED: { pattern: RegExp; revalidate: number }[] = [
   { pattern: /^entry\/\d+$/, revalidate: 300 },
   { pattern: /^entry\/\d+\/event\/\d{1,2}\/picks$/, revalidate: 300 },
   { pattern: /^entry\/\d+\/history$/, revalidate: 300 },
+  { pattern: /^entry\/\d+\/transfers$/, revalidate: 300 },
   { pattern: /^element-summary\/\d+$/, revalidate: 600 },
 ];
 

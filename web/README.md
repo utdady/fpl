@@ -30,6 +30,42 @@ Re-running `export_ui.py` refreshes the FPL snapshot fields. Do not do it to mak
 the display look current: `.cache/fpl/` is gitignored and holds the only copy of
 the snapshot the GW1 audit was computed against.
 
+## Live strategy board refresh
+
+`/squad/2026-27/1` reads `public/data/season/2026-27/strategies.json`, which is a
+**re-solve** of the ILP against `.cache/fpl/`, not the frozen `records/gw01_v1.0.csv`.
+To keep the board in sync with a fresh FPL bootstrap:
+
+```bash
+# one-shot (ignore cadence)
+.venv\Scripts\python.exe scripts\refresh_strategies.py --force
+
+# or just the exporter
+.venv\Scripts\python.exe scripts\export_strategies.py --refresh
+```
+
+**Cadence** (`scripts/refresh_strategies.py`, default `--auto` behaviour):
+
+| Window | How often it actually exports |
+|---|---|
+| Within 12h of the next GW deadline | at most every 45 minutes |
+| Otherwise | at most once per ~23 hours |
+
+Point Windows Task Scheduler at an **hourly** tick; the script no-ops when the
+gap has not elapsed. Example (run from the repo root):
+
+```text
+Program:  C:\Users\addyb\fpl\.venv\Scripts\python.exe
+Arguments: scripts\refresh_strategies.py
+Start in:  C:\Users\addyb\fpl
+Trigger:   hourly
+```
+
+The stamp is `.cache/fpl/strategies_refresh.json`. This never writes `records/`
+or `engine/`. For a Vercel deploy you still need to commit or rebuild so the
+new JSON ships; locally `next dev` picks it up on the next request.
+
+
 ## Data layer
 
 | Tier | Source | Contents |

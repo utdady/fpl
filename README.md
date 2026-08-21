@@ -59,3 +59,11 @@ Project methods (encyclopedia): docs/PROJECT.md
 Observational E008/E009 (does not change V1):
 
     python -m engine.obs --season 2025-26
+
+Live strategy board (UI re-solve, not a freeze):
+
+```bash
+.venv\Scripts\python.exe scripts\refresh_strategies.py --force
+```
+
+See web/README.md for the daily / deadline-day Task Scheduler cadence.
