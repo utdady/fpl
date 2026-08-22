@@ -1,9 +1,11 @@
 /**
  * Squad overlap, XI+C xP, and this-GW win chance under independent Normal totals.
- * Uses frozen V1 μ/σ only — not live FPL xP.
+ * Pre-deadline: frozen V1 μ/σ. During GW: locked live points + projected remainder.
  */
 
+import { liveDisplay } from "./live-display";
 import type { FplPick } from "./fpl-entry";
+import type { LiveStat } from "./use-live";
 import type { Position } from "./types";
 
 export type ComparePoolPlayer = {
@@ -11,6 +13,7 @@ export type ComparePoolPlayer = {
   name: string;
   pos: Position;
   teamCode: string | null;
+  teamId?: number | null;
   cost: number | null;
   mu: number | null;
   sigma: number | null;
@@ -77,26 +80,190 @@ export type GwEdge = {
   rival: SquadTotals;
 };
 
+export type GwEdgeBreakdown = {
+  locked: number;
+  projectedMu: number;
+  projectedSigma: number | null;
+  lockedCount: number;
+  pendingCount: number;
+};
+
+export type GwEdgeExtended = GwEdge & {
+  live: boolean;
+  mineBreakdown: GwEdgeBreakdown;
+  rivalBreakdown: GwEdgeBreakdown;
+  mineDisplay: SquadTotals;
+  rivalDisplay: SquadTotals;
+};
+
+type XiLiveTotals = GwEdgeBreakdown & { mu: number; sigma: number | null };
+
+function slotLocked(
+  stat: LiveStat | undefined,
+  fixtureFinished: boolean,
+): stat is LiveStat {
+  if (!stat) return false;
+  return liveDisplay(stat, fixtureFinished).tone !== "pending";
+}
+
+function slotPoints(stat: LiveStat, fixtureFinished: boolean): number {
+  const display = liveDisplay(stat, fixtureFinished);
+  return display.points ?? 0;
+}
+
+/** XI + captain with live locked slots and projected remainder. */
+function xiCaptainTotalsLive(
+  picks: FplPick[],
+  byId: Map<number, ComparePoolPlayer>,
+  liveStats: Map<number, LiveStat>,
+  fixtureFinishedByTeam: Map<number, boolean>,
+): XiLiveTotals {
+  const xi = xiPicks(picks);
+  let locked = 0;
+  let muRem = 0;
+  let varRem = 0;
+  let sigmaOk = true;
+  let lockedCount = 0;
+  let pendingCount = 0;
+
+  for (const p of xi) {
+    const player = byId.get(p.element);
+    const mult = p.is_captain ? 2 : 1;
+    const stat = liveStats.get(p.element);
+    const fixtureFinished =
+      player?.teamId != null
+        ? (fixtureFinishedByTeam.get(player.teamId) ?? false)
+        : false;
+
+    if (slotLocked(stat, fixtureFinished)) {
+      locked += mult * slotPoints(stat, fixtureFinished);
+      lockedCount++;
+      continue;
+    }
+
+    pendingCount++;
+    const m = player?.mu;
+    const s = player?.sigma;
+    if (m == null) sigmaOk = false;
+    else muRem += mult * m;
+    if (s == null) sigmaOk = false;
+    else varRem += mult * mult * s * s;
+  }
+
+  const projectedSigma =
+    pendingCount === 0 ? 0 : sigmaOk ? Math.sqrt(varRem) : null;
+
+  return {
+    locked,
+    projectedMu: muRem,
+    projectedSigma,
+    lockedCount,
+    pendingCount,
+    mu: locked + muRem,
+    sigma: projectedSigma,
+  };
+}
+
+function edgeFromTotals(mine: XiLiveTotals, rival: XiLiveTotals, live: boolean): GwEdgeExtended {
+  const d = mine.mu - rival.mu;
+  const mineSigma = mine.projectedSigma;
+  const rivalSigma = rival.projectedSigma;
+
+  let pMineAhead: number | null = null;
+  let sigmaD: number | null = null;
+
+  if (mine.pendingCount === 0 && rival.pendingCount === 0) {
+    pMineAhead = d > 0 ? 1 : d < 0 ? 0 : 0.5;
+    sigmaD = 0;
+  } else if (mineSigma != null && rivalSigma != null) {
+    sigmaD = Math.sqrt(mineSigma * mineSigma + rivalSigma * rivalSigma);
+    if (sigmaD === 0) {
+      pMineAhead = d > 0 ? 1 : d < 0 ? 0 : 0.5;
+    } else {
+      pMineAhead = normalCdf(d / sigmaD);
+    }
+  }
+
+  const toSquad = (t: XiLiveTotals): SquadTotals => ({
+    mu: t.mu,
+    sigma: t.sigma,
+    complete: t.pendingCount === 0,
+  });
+
+  const breakdown = (t: XiLiveTotals): GwEdgeBreakdown => ({
+    locked: t.locked,
+    projectedMu: t.projectedMu,
+    projectedSigma: t.projectedSigma,
+    lockedCount: t.lockedCount,
+    pendingCount: t.pendingCount,
+  });
+
+  return {
+    pMineAhead,
+    d,
+    sigmaD,
+    mine: toSquad(mine),
+    rival: toSquad(rival),
+    live,
+    mineBreakdown: breakdown(mine),
+    rivalBreakdown: breakdown(rival),
+    mineDisplay: toSquad(mine),
+    rivalDisplay: toSquad(rival),
+  };
+}
+
 export function gwEdge(
   minePicks: FplPick[],
   rivalPicks: FplPick[],
   byId: Map<number, ComparePoolPlayer>,
-): GwEdge {
+): GwEdgeExtended {
   const mine = xiCaptainTotals(minePicks, byId);
   const rival = xiCaptainTotals(rivalPicks, byId);
   const d = mine.mu - rival.mu;
-  if (mine.sigma == null || rival.sigma == null || mine.sigma + rival.sigma === 0) {
-    return { pMineAhead: null, d, sigmaD: null, mine, rival };
+  let pMineAhead: number | null = null;
+  let sigmaD: number | null = null;
+  if (mine.sigma != null && rival.sigma != null && mine.sigma + rival.sigma !== 0) {
+    sigmaD = Math.sqrt(mine.sigma * mine.sigma + rival.sigma * rival.sigma);
+    if (sigmaD !== 0) pMineAhead = normalCdf(d / sigmaD);
   }
-  const sigmaD = Math.sqrt(mine.sigma * mine.sigma + rival.sigma * rival.sigma);
-  if (sigmaD === 0) return { pMineAhead: null, d, sigmaD, mine, rival };
+
+  const emptyBreakdown = (totals: SquadTotals): GwEdgeBreakdown => ({
+    locked: 0,
+    projectedMu: totals.mu,
+    projectedSigma: totals.sigma,
+    lockedCount: 0,
+    pendingCount: 11,
+  });
+
   return {
-    pMineAhead: normalCdf(d / sigmaD),
+    pMineAhead,
     d,
     sigmaD,
     mine,
     rival,
+    live: false,
+    mineBreakdown: emptyBreakdown(mine),
+    rivalBreakdown: emptyBreakdown(rival),
+    mineDisplay: mine,
+    rivalDisplay: rival,
   };
+}
+
+export function gwEdgeLive(
+  minePicks: FplPick[],
+  rivalPicks: FplPick[],
+  byId: Map<number, ComparePoolPlayer>,
+  liveStats: Map<number, LiveStat>,
+  fixtureFinishedByTeam: Map<number, boolean>,
+): GwEdgeExtended {
+  if (liveStats.size === 0) {
+    return gwEdge(minePicks, rivalPicks, byId);
+  }
+
+  const mine = xiCaptainTotalsLive(minePicks, byId, liveStats, fixtureFinishedByTeam);
+  const rival = xiCaptainTotalsLive(rivalPicks, byId, liveStats, fixtureFinishedByTeam);
+  const live = mine.lockedCount > 0 || rival.lockedCount > 0;
+  return edgeFromTotals(mine, rival, live);
 }
 
 export type Overlap = {

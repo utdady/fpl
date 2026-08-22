@@ -5,8 +5,11 @@ import { useEffect, useMemo, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
 import { EntryPitch } from "./entry-pitch";
+import { GwEdgeBar } from "./gw-edge-panel";
 import { Section } from "./ui/section";
-import { fetchEntryBundle, type FplEntry } from "@/lib/fpl-entry";
+import { fetchEntryBundle, type FplEntry, type FplPick } from "@/lib/fpl-entry";
+import { LiveProvider } from "@/lib/live-context";
+import { useGwEdge } from "@/lib/use-gw-edge";
 import {
   addEntry,
   loadTracked,
@@ -26,12 +29,14 @@ export function TeamTracker({
   season,
   pool,
   balancedIds: _balancedIds,
+  liveEnabled = false,
 }: {
   gw: number;
   season: string;
   pool: PoolPlayer[];
   balancedIds: number[];
   strategy: StrategyKey;
+  liveEnabled?: boolean;
 }) {
   // null until localStorage is read — never persist the empty initial state
   // (that race wiped saved entry IDs on first paint).
@@ -39,6 +44,10 @@ export function TeamTracker({
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [names, setNames] = useState<Record<number, string>>({});
+  const [baselinePicks, setBaselinePicks] = useState<FplPick[]>([]);
+
+  const byId = useMemo(() => new Map(pool.map((p) => [p.id, p])), [pool]);
+  const compareId = state?.compareId ?? null;
 
   useEffect(() => {
     setState(loadTracked());
@@ -48,6 +57,25 @@ export function TeamTracker({
     if (state == null) return;
     saveTracked(state);
   }, [state]);
+
+  useEffect(() => {
+    if (compareId == null) {
+      setBaselinePicks([]);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const bundle = await fetchEntryBundle(compareId, gw);
+        if (!cancelled) setBaselinePicks(bundle.picksOpen ? bundle.picks : []);
+      } catch {
+        if (!cancelled) setBaselinePicks([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [compareId, gw]);
 
   function add() {
     const id = Number(draft.trim());
@@ -69,7 +97,8 @@ export function TeamTracker({
   }
 
   return (
-    <div className="space-y-5">
+    <LiveProvider gw={gw} enabled={liveEnabled}>
+      <div className="space-y-5">
       <Section
         title="Saved entries"
         subtitle="IDs stay in this browser. Mark Mine for compare baseline. The FPL API is public; you do not log in."
@@ -130,6 +159,9 @@ export function TeamTracker({
             gw={gw}
             season={season}
             pool={pool}
+            byId={byId}
+            baselinePicks={baselinePicks}
+            liveEnabled={liveEnabled}
             isMine={state.mine.includes(id)}
             onMine={(mine) => patch(setMine(state, id, mine))}
             onRemove={() => patch(removeEntry(state, id))}
@@ -137,7 +169,8 @@ export function TeamTracker({
           />
         ))}
       </ul>
-    </div>
+      </div>
+    </LiveProvider>
   );
 }
 
@@ -146,6 +179,9 @@ function TrackedRow({
   gw,
   season,
   pool,
+  byId,
+  baselinePicks,
+  liveEnabled,
   isMine,
   onMine,
   onRemove,
@@ -155,6 +191,9 @@ function TrackedRow({
   gw: number;
   season: string;
   pool: PoolPlayer[];
+  byId: Map<number, ComparePoolPlayer>;
+  baselinePicks: FplPick[];
+  liveEnabled: boolean;
   isMine: boolean;
   onMine: (mine: boolean) => void;
   onRemove: () => void;
@@ -203,6 +242,16 @@ function TrackedRow({
         <div className="tnum text-[11px] text-muted">{subtitle}</div>
       </div>
 
+      {!isMine && picksOpen && picks.length > 0 && baselinePicks.length > 0 && (
+        <TrackedRowEdge
+          minePicks={baselinePicks}
+          rivalPicks={picks}
+          byId={byId}
+          liveEnabled={liveEnabled}
+          rivalLabel={(entry?.name ?? "Them").split(" ")[0] ?? "Them"}
+        />
+      )}
+
       <label className="flex cursor-pointer items-center gap-1.5 text-[11px] text-muted">
         <input
           type="checkbox"
@@ -249,4 +298,21 @@ function TrackedRow({
       </button>
     </li>
   );
+}
+
+function TrackedRowEdge({
+  minePicks,
+  rivalPicks,
+  byId,
+  liveEnabled,
+  rivalLabel,
+}: {
+  minePicks: FplPick[];
+  rivalPicks: FplPick[];
+  byId: Map<number, ComparePoolPlayer>;
+  liveEnabled: boolean;
+  rivalLabel: string;
+}) {
+  const edge = useGwEdge(minePicks, rivalPicks, byId, liveEnabled);
+  return <GwEdgeBar edge={edge} rivalLabel={rivalLabel} />;
 }

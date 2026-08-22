@@ -13,7 +13,7 @@ const UPSTREAM = "https://fantasy.premierleague.com/api";
 const ALLOWED: { pattern: RegExp; revalidate: number }[] = [
   // Prices, ownership and injury news. Changes at most a few times a day.
   { pattern: /^bootstrap-static$/, revalidate: 600 },
-  { pattern: /^fixtures$/, revalidate: 600 },
+  { pattern: /^fixtures$/, revalidate: 60 },
   // In-play points. The only endpoint that needs to be near-live.
   { pattern: /^event\/\d{1,2}\/live$/, revalidate: 60 },
   // A manager's own squad.
@@ -22,10 +22,12 @@ const ALLOWED: { pattern: RegExp; revalidate: number }[] = [
   { pattern: /^entry\/\d+\/history$/, revalidate: 300 },
   { pattern: /^entry\/\d+\/transfers$/, revalidate: 300 },
   { pattern: /^element-summary\/\d+$/, revalidate: 600 },
+  { pattern: /^leagues-classic\/\d+\/standings$/, revalidate: 120 },
+  { pattern: /^leagues-h2h\/\d+\/standings$/, revalidate: 120 },
 ];
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ path: string[] }> },
 ) {
   const { path } = await params;
@@ -40,7 +42,8 @@ export async function GET(
   }
 
   try {
-    const upstream = await fetch(`${UPSTREAM}/${route}/`, {
+    const qs = new URL(request.url).search;
+    const upstream = await fetch(`${UPSTREAM}/${route}/${qs}`, {
       headers: { "User-Agent": "fpl-model/1.0 (research viewer)" },
       next: { revalidate: rule.revalidate },
     });

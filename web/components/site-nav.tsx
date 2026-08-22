@@ -6,9 +6,11 @@ import clsx from "clsx";
 
 import type { Manifest } from "@/lib/types";
 import { seasonLabel } from "@/lib/format";
+import { useSession } from "@/lib/use-session";
 
 export function SiteNav({ manifest }: { manifest: Manifest }) {
   const pathname = usePathname();
+  const session = useSession();
   const labSeasons = manifest.seasons.filter((s) => s.has_lab).map((s) => s.season);
   const latest = labSeasons.at(-1) ?? manifest.live_season;
 
@@ -21,6 +23,8 @@ export function SiteNav({ manifest }: { manifest: Manifest }) {
     },
     { href: `/lab/${latest}`, label: "Lab", match: (p: string) => p.startsWith("/lab") },
     { href: "/teams", label: "Teams", match: (p: string) => p.startsWith("/teams") },
+    { href: "/me", label: "My team", match: (p: string) => p.startsWith("/me") },
+    { href: "/leagues", label: "Leagues", match: (p: string) => p.startsWith("/leagues") },
     { href: "/audit", label: "Audit", match: (p: string) => p.startsWith("/audit") },
   ];
 
@@ -33,7 +37,7 @@ export function SiteNav({ manifest }: { manifest: Manifest }) {
         </span>
       </Link>
 
-      <nav className="flex items-center gap-1">
+      <nav className="flex flex-wrap items-center gap-1">
         {links.map((link) => {
           const active = link.match(pathname);
           return (
@@ -54,7 +58,19 @@ export function SiteNav({ manifest }: { manifest: Manifest }) {
       </nav>
 
       <div className="ml-auto flex items-center gap-3">
-        <span className="label-xs">Research viewer</span>
+        {session.loggedIn ? (
+          <Link
+            href="/me"
+            className="max-w-[12rem] truncate text-[12px] text-model"
+            title={session.name ?? ""}
+          >
+            {session.name ?? session.playerName ?? "Signed in"}
+          </Link>
+        ) : (
+          <Link href="/me" className="text-[12px] text-muted hover:text-ink">
+            Sign in
+          </Link>
+        )}
         <span
           className="rounded border border-edge px-1.5 py-0.5 font-mono text-[10px] text-muted"
           title="Latest season with a full evaluation panel"

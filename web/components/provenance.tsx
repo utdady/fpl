@@ -17,7 +17,7 @@ export function Provenance({ manifest }: { manifest: Manifest }) {
       <span>exported {day(generated_at)}</span>
       <span>snapshot {day(snapshot_as_of)}</span>
       <span className="ml-auto max-w-md text-right leading-relaxed">
-        Read-only viewer over frozen records. Not a recommendation product.
+        Frozen records stay read-only. Live FPL writes use your session.
       </span>
     </footer>
   );

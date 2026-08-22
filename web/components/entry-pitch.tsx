@@ -16,6 +16,7 @@ function toCell(
     name: p?.name ?? `#${pick.element}`,
     pos: (p?.pos ?? "MID") as Position,
     teamCode: p?.teamCode ?? null,
+    teamId: p?.teamId ?? null,
     cost: p?.cost ?? null,
     mu: p?.mu ?? null,
     sigma: p?.sigma ?? null,
@@ -59,5 +60,7 @@ export function EntryPitch({
       </p>
     );
   }
-  return <Pitch players={xi} bench={bench} season={season} gw={gw} />;
+  return (
+    <Pitch players={xi} bench={bench} season={season} gw={gw} />
+  );
 }

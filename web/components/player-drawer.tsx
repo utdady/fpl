@@ -6,7 +6,9 @@ import { useEffect, useState } from "react";
 import { StartConfidence } from "./start-confidence";
 import { TrackRecord } from "./charts/track-record";
 import { Field } from "./ui/stat";
-import { dec, pct, price, seasonLabel } from "@/lib/format";
+import { dec, pct, price, seasonLabel, signed } from "@/lib/format";
+import { useLiveContext, useLiveDisplay } from "@/lib/live-context";
+import { liveToneClass } from "@/lib/live-display";
 import type { PlayerSeries, Predictions } from "@/lib/types";
 import type { CellPlayer } from "./player-cell";
 
@@ -33,6 +35,11 @@ export function PlayerDrawer({
   onClose: () => void;
 }) {
   const [series, setSeries] = useState<PlayerSeries | null>(null);
+  const liveRaw = useLiveDisplay(player?.id ?? -1, player?.teamId);
+  const live = player != null ? liveRaw : null;
+  const liveCtx = useLiveContext();
+  const liveDelta =
+    live?.points != null && player?.mu != null ? live.points - player.mu : null;
 
   useEffect(() => {
     if (!player) {
@@ -73,7 +80,7 @@ export function PlayerDrawer({
                   </Dialog.Close>
                 </div>
 
-                <div className="mt-4 flex items-end gap-5">
+                <div className="mt-4 flex flex-wrap items-end gap-5">
                   <div>
                     <div className="label-xs">Projected</div>
                     <div className="tnum text-3xl leading-none font-semibold text-model">
@@ -83,7 +90,21 @@ export function PlayerDrawer({
                       ± {dec(player.sigma, 2)}
                     </div>
                   </div>
-                  {player.pts != null && (
+                  {live != null && (
+                    <div>
+                      <div className="label-xs">Live</div>
+                      <div
+                        className={`tnum text-3xl leading-none font-semibold ${liveToneClass(live.tone)}`}
+                      >
+                        {live.label}
+                      </div>
+                      <div className="tnum mt-1 text-[11px] text-muted">
+                        {live.minutes != null ? `${live.minutes}'` : "Not started"}
+                        {liveDelta != null ? ` · ${signed(liveDelta, 1)} vs xP` : ""}
+                      </div>
+                    </div>
+                  )}
+                  {live == null && player.pts != null && (
                     <div>
                       <div className="label-xs">Actual</div>
                       <div
@@ -105,6 +126,15 @@ export function PlayerDrawer({
                     </div>
                   </div>
                 </div>
+                {live != null && (
+                  <p className="mt-2 text-[10px] leading-relaxed text-faint">
+                    In-play points via FPL live feed
+                    {liveCtx?.fetchedAt
+                      ? ` · updated ${liveCtx.fetchedAt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
+                      : ""}
+                    . Not final until the gameweek ends.
+                  </p>
+                )}
               </header>
 
               <div className="space-y-6 px-5 py-5">

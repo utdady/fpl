@@ -66,7 +66,7 @@ export function Pitch({
   );
 }
 
-function PitchMarkings() {
+export function PitchMarkings() {
   return (
     <div
       className="pointer-events-none absolute inset-0"

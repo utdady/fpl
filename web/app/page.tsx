@@ -44,6 +44,7 @@ export default async function PoolPage() {
       name: series.name,
       pos: series.pos,
       teamCode: codes[series.team] ?? null,
+      teamId: series.team,
       cost: i >= 0 ? (series.cost[i] ?? null) : null,
       mu: i >= 0 ? (series.mu[i] ?? null) : null,
       sigma: i >= 0 ? (series.sigma[i] ?? null) : null,

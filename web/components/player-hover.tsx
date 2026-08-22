@@ -2,7 +2,9 @@
 
 import * as HoverCard from "@radix-ui/react-hover-card";
 
-import { calibratedStart, dec, pct, price } from "@/lib/format";
+import { calibratedStart, dec, pct, price, signed } from "@/lib/format";
+import { useLiveDisplay } from "@/lib/live-context";
+import { liveToneClass } from "@/lib/live-display";
 import { SNAPSHOT_DAY } from "@/lib/snapshot";
 import type { CellPlayer } from "./player-cell";
 
@@ -26,6 +28,9 @@ export function PlayerHover({
     player.chanceNext !== undefined ||
     player.owned !== undefined ||
     player.epNext !== undefined;
+  const live = useLiveDisplay(player.id, player.teamId);
+  const liveDelta =
+    live?.points != null && player.mu != null ? live.points - player.mu : null;
 
   return (
     <HoverCard.Root openDelay={250} closeDelay={80}>
@@ -45,6 +50,7 @@ export function PlayerHover({
               </div>
             </div>
             <div className="text-right">
+              <div className="label-xs">xP</div>
               <div className="tnum text-xl leading-none font-semibold text-model">
                 {dec(player.mu, 2)}
               </div>
@@ -53,6 +59,32 @@ export function PlayerHover({
               </div>
             </div>
           </div>
+
+          {live != null && (
+            <div className="mt-2.5 flex items-end justify-between gap-3 rounded-md border border-edge bg-raised/40 px-2.5 py-2">
+              <div>
+                <div className="label-xs">Live</div>
+                <div className={`tnum text-lg leading-none font-semibold ${liveToneClass(live.tone)}`}>
+                  {live.label}
+                </div>
+                {live.minutes != null && (
+                  <div className="tnum mt-0.5 text-[10px] text-faint">{live.minutes}&apos;</div>
+                )}
+              </div>
+              {liveDelta != null && (
+                <div className="text-right">
+                  <div className="label-xs">vs xP</div>
+                  <div
+                    className={`tnum text-lg leading-none font-semibold ${
+                      liveDelta >= 0 ? "text-actual" : "text-risk"
+                    }`}
+                  >
+                    {signed(liveDelta, 1)}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="mt-3 space-y-1.5">
             <Bar label="V1 p(start)" value={player.pStart} color="var(--color-model)" />
@@ -88,7 +120,7 @@ export function PlayerHover({
             <Mini label="P(10+)" value={pct(player.p10, 1)} />
             {player.epNext != null && <Mini label="FPL ep" value={dec(player.epNext, 1)} />}
             {player.owned != null && <Mini label="Owned" value={`${player.owned}%`} />}
-            {player.pts != null && (
+            {live == null && player.pts != null && (
               <Mini
                 label="Actual"
                 value={String(player.pts)}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { EntryPitch } from "./entry-pitch";
+import { GwEdgePanel } from "./gw-edge-panel";
 import { Section } from "./ui/section";
 import { dec, price } from "@/lib/format";
 import {
@@ -15,13 +16,14 @@ import {
   type FplTransfer,
 } from "@/lib/fpl-entry";
 import {
-  gwEdge,
   notesVsMine,
   notesVsV1,
   squadOverlap,
   xiCaptainTotals,
   type ComparePoolPlayer,
 } from "@/lib/team-compare";
+import { LiveProvider } from "@/lib/live-context";
+import { useGwEdge } from "@/lib/use-gw-edge";
 import {
   loadTracked,
   saveTracked,
@@ -35,12 +37,14 @@ export function TeamDetail({
   season,
   pool,
   balancedIds,
+  liveEnabled = false,
 }: {
   id: number;
   gw: number;
   season: string;
   pool: ComparePoolPlayer[];
   balancedIds: number[];
+  liveEnabled?: boolean;
 }) {
   const [tracked, setTracked] = useState<TrackedState | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -142,9 +146,23 @@ export function TeamDetail({
     picksOpen && picks.length
       ? notesVsV1(picks, pool, balancedIds, bank, (n) => dec(n, 1), (n) => price(n))
       : null;
+  const v1NoteItems =
+    v1Notes == null
+      ? []
+      : [
+          ...v1Notes.startNotes.map((n) => `Start: ${n}`),
+          ...v1Notes.upgrades.map((n) => `Transfer: ${n}`),
+          ...v1Notes.inBalanced.slice(0, 6).map(
+            (pid) => `In V1 balanced 15, not here: ${byId.get(pid)?.name ?? pid}`,
+          ),
+          ...v1Notes.notBalanced.slice(0, 6).map(
+            (pid) => `Here, not in V1 balanced 15: ${byId.get(pid)?.name ?? pid}`,
+          ),
+        ];
 
   return (
-    <div className="space-y-5">
+    <LiveProvider gw={gw} enabled={liveEnabled}>
+      <div className="space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <Link href="/teams" className="text-[11px] text-muted hover:text-ink">
@@ -210,26 +228,23 @@ export function TeamDetail({
 
           {picksOpen && picks.length > 0 && (
             <Section title="Pitch" subtitle="Live FPL picks scored with frozen V1 μ." source={`api/entry/${id}/event/.../picks`}>
-              <EntryPitch picks={picks} pool={pool} season={season} gw={gw} />
+              <EntryPitch
+                picks={picks}
+                pool={pool}
+                season={season}
+                gw={gw}
+              />
             </Section>
           )}
 
           {isMine && v1Notes && (
-            <Section title="Notes vs V1" subtitle="Not advice to hit confirm." source="frozen predictions + V1 balanced 15">
-              <NotesList
-                items={[
-                  ...v1Notes.startNotes.map((n) => `Start: ${n}`),
-                  ...v1Notes.upgrades.map((n) => `Transfer: ${n}`),
-                  ...v1Notes.inBalanced.slice(0, 6).map(
-                    (pid) => `In V1 balanced 15, not here: ${byId.get(pid)?.name ?? pid}`,
-                  ),
-                  ...v1Notes.notBalanced.slice(0, 6).map(
-                    (pid) => `Here, not in V1 balanced 15: ${byId.get(pid)?.name ?? pid}`,
-                  ),
-                ]}
-                empty="No obvious xP gap against the frozen pool at this snapshot."
-              />
-            </Section>
+            <CollapsibleNotes
+              title="Notes vs V1"
+              subtitle="Not advice to hit confirm."
+              items={v1NoteItems}
+              empty="No obvious xP gap against the frozen pool at this snapshot."
+              source="frozen predictions + V1 balanced 15"
+            />
           )}
 
           {!isMine && (
@@ -240,6 +255,8 @@ export function TeamDetail({
               compareId={compareId}
               hasMine={!!tracked?.mine.length}
               byId={byId}
+              liveEnabled={liveEnabled}
+              rivalName={entry?.name ?? `Entry ${id}`}
             />
           )}
 
@@ -275,7 +292,8 @@ export function TeamDetail({
           )}
         </>
       )}
-    </div>
+      </div>
+    </LiveProvider>
   );
 }
 
@@ -286,6 +304,8 @@ function ComparePanel({
   compareId,
   hasMine,
   byId,
+  liveEnabled,
+  rivalName,
 }: {
   rivalPicks: FplPick[];
   rivalOpen: boolean;
@@ -293,6 +313,8 @@ function ComparePanel({
   compareId: number | null;
   hasMine: boolean;
   byId: Map<number, ComparePoolPlayer>;
+  liveEnabled: boolean;
+  rivalName: string;
 }) {
   if (!hasMine || compareId == null) {
     return (
@@ -322,9 +344,36 @@ function ComparePanel({
     );
   }
 
-  const edge = gwEdge(mineBundle.picks, rivalPicks, byId);
-  const overlap = squadOverlap(mineBundle.picks, rivalPicks);
-  const vsMine = notesVsMine(rivalPicks, mineBundle.picks, byId, (n) => dec(n, 1));
+  return (
+    <ComparePanelReady
+      rivalPicks={rivalPicks}
+      minePicks={mineBundle.picks}
+      mineName={mineBundle.entry.name}
+      rivalName={rivalName}
+      byId={byId}
+      liveEnabled={liveEnabled}
+    />
+  );
+}
+
+function ComparePanelReady({
+  rivalPicks,
+  minePicks,
+  mineName,
+  rivalName,
+  byId,
+  liveEnabled,
+}: {
+  rivalPicks: FplPick[];
+  minePicks: FplPick[];
+  mineName: string;
+  rivalName: string;
+  byId: Map<number, ComparePoolPlayer>;
+  liveEnabled: boolean;
+}) {
+  const edge = useGwEdge(minePicks, rivalPicks, byId, liveEnabled);
+  const overlap = squadOverlap(minePicks, rivalPicks);
+  const vsMine = notesVsMine(rivalPicks, minePicks, byId, (n) => dec(n, 1));
   const notes = [
     ...vsMine.startGaps,
     ...vsMine.onlyThem.map((n) => `Only them: ${n}`),
@@ -336,7 +385,7 @@ function ComparePanel({
   return (
     <Section
       title="Compare"
-      subtitle={`vs your ${mineBundle.entry.name} · frozen V1 μ/σ · this GW only`}
+      subtitle={`vs your ${mineName} · ${edge.live ? "live + projected" : "frozen V1 μ/σ"} · this GW only`}
       source="entry picks + predictions.json"
     >
       <div className="space-y-4 text-[12px]">
@@ -355,16 +404,16 @@ function ComparePanel({
         </p>
 
         <p className="tnum text-muted">
-          XI+C xP: them{" "}
-          <span className="text-model">{dec(edge.rival.mu, 1)}</span>
-          {edge.rival.sigma != null ? (
-            <span className="text-faint"> ± {dec(edge.rival.sigma, 1)}</span>
+          XI+C total: {rivalName}{" "}
+          <span className="text-model">{dec(edge.rivalDisplay.mu, 1)}</span>
+          {edge.rivalDisplay.sigma != null && edge.rivalDisplay.sigma > 0 ? (
+            <span className="text-faint"> ± {dec(edge.rivalDisplay.sigma, 1)}</span>
           ) : null}
           {" · "}
           you{" "}
-          <span className="text-model">{dec(edge.mine.mu, 1)}</span>
-          {edge.mine.sigma != null ? (
-            <span className="text-faint"> ± {dec(edge.mine.sigma, 1)}</span>
+          <span className="text-model">{dec(edge.mineDisplay.mu, 1)}</span>
+          {edge.mineDisplay.sigma != null && edge.mineDisplay.sigma > 0 ? (
+            <span className="text-faint"> ± {dec(edge.mineDisplay.sigma, 1)}</span>
           ) : null}
           {" · "}
           gap{" "}
@@ -374,45 +423,17 @@ function ComparePanel({
           </span>
         </p>
 
-        <div className="rounded-md border border-edge bg-raised/40 px-3 py-2.5">
-          <div className="label-xs mb-1">GW edge</div>
-          {edge.pMineAhead != null ? (
-            <p className="tnum text-[13px] text-ink">
-              P(you score more this GW) ≈{" "}
-              <span className="text-model">{(edge.pMineAhead * 100).toFixed(0)}%</span>
-              {edge.sigmaD != null && (
-                <span className="ml-2 text-[11px] text-faint">
-                  μ gap {dec(edge.d, 1)} · σ_D {dec(edge.sigmaD, 1)}
-                </span>
-              )}
-            </p>
-          ) : (
-            <p className="text-muted">
-              Gap only (missing σ on one or both XIs):{" "}
-              <span className="tnum text-ink">
-                {edge.d >= 0 ? "+" : ""}
-                {dec(edge.d, 1)}
-              </span>
-            </p>
-          )}
-          <p className="mt-1.5 text-[11px] leading-relaxed text-faint">
-            Independent Normal on XI+C totals from the frozen pool — not live FPL xP,
-            not season title odds. Captain contributes 2μ and 4σ².
-          </p>
-        </div>
+        <GwEdgePanel
+          edge={edge}
+          mineLabel="You"
+          rivalLabel={rivalName.split(" ")[0] ?? "Them"}
+        />
 
-        <details className="group rounded-md border border-edge bg-raised/30">
-          <summary className="cursor-pointer list-none px-3 py-2 text-[12px] text-muted marker:content-none [&::-webkit-details-marker]:hidden">
-            <span className="font-medium text-ink">Notes vs my team</span>
-            <span className="tnum ml-2 text-[11px] text-faint">{notes.length}</span>
-          </summary>
-          <div className="border-t border-edge px-3 py-3">
-            <NotesList
-              items={notes}
-              empty="Squads look aligned on the frozen pool snapshot."
-            />
-          </div>
-        </details>
+        <CollapsibleNotes
+          title="Notes vs my team"
+          items={notes}
+          empty="Squads look aligned on the frozen pool snapshot."
+        />
       </div>
     </Section>
   );
@@ -445,6 +466,40 @@ function OverlapCol({
         )}
       </ul>
     </div>
+  );
+}
+
+function CollapsibleNotes({
+  title,
+  subtitle,
+  items,
+  empty,
+  source,
+}: {
+  title: string;
+  subtitle?: string;
+  items: string[];
+  empty: string;
+  source?: string;
+}) {
+  return (
+    <details className="group rounded-md border border-edge bg-raised/30">
+      <summary className="cursor-pointer list-none px-3 py-2 text-[12px] text-muted marker:content-none [&::-webkit-details-marker]:hidden">
+        <span className="font-medium text-ink">{title}</span>
+        <span className="tnum ml-2 text-[11px] text-faint">{items.length}</span>
+      </summary>
+      <div className="border-t border-edge px-3 py-3">
+        {subtitle && (
+          <p className="mb-2 text-[11px] leading-relaxed text-muted">{subtitle}</p>
+        )}
+        <NotesList items={items} empty={empty} />
+        {source && (
+          <p className="mt-3 font-mono text-[10px] text-faint">
+            source: <span className="text-muted">{source}</span>
+          </p>
+        )}
+      </div>
+    </details>
   );
 }
 

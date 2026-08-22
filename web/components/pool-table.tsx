@@ -5,8 +5,10 @@ import clsx from "clsx";
 
 import { PlayerDrawer } from "./player-drawer";
 import { PlayerHover } from "./player-hover";
+import { LiveToggle } from "./live-toggle";
 import { POSITIONS, calibratedStart, dec, difficultyColor, pct, price } from "@/lib/format";
-import { useLive, type LiveStat } from "@/lib/use-live";
+import { LiveProvider, useLiveDisplay } from "@/lib/live-context";
+import { liveToneClass } from "@/lib/live-display";
 import type { Position } from "@/lib/types";
 import type { CellPlayer } from "./player-cell";
 
@@ -15,6 +17,7 @@ export type PoolRow = {
   name: string;
   pos: Position;
   teamCode: string | null;
+  teamId: number | null;
   cost: number | null;
   mu: number | null;
   sigma: number | null;
@@ -59,7 +62,6 @@ export function PoolTable({
   const [selected, setSelected] = useState<number | null>(null);
   const [limit, setLimit] = useState(20);
   const [liveOn, setLiveOn] = useState(false);
-  const live = useLive(gw, liveOn);
 
   const visible = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -72,8 +74,9 @@ export function PoolTable({
   const active = rows.find((r) => r.id === selected) ?? null;
 
   return (
-    <div>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+    <LiveProvider gw={gw} enabled={liveOn}>
+      <div>
+        <div className="mb-3 flex flex-wrap items-center gap-2">
         <div className="flex gap-1">
           {(["ALL", ...POSITIONS] as const).map((pos) => (
             <button
@@ -97,7 +100,7 @@ export function PoolTable({
           placeholder="Search player"
           className="ml-auto w-44 rounded-md border border-edge bg-void/60 px-2.5 py-1.5 text-[12px] outline-none placeholder:text-faint focus:border-edge-bright"
         />
-        <LiveToggle on={liveOn} onChange={setLiveOn} status={live.status} at={live.fetchedAt} />
+        <LiveToggle on={liveOn} onChange={setLiveOn} />
       </div>
 
       <div className="overflow-x-auto">
@@ -126,12 +129,7 @@ export function PoolTable({
           </thead>
           <tbody>
             {visible.slice(0, limit).map((row) => (
-              <Row
-                key={row.id}
-                row={row}
-                onSelect={setSelected}
-                live={liveOn ? (live.stats.get(row.id) ?? null) : undefined}
-              />
+              <Row key={row.id} row={row} onSelect={setSelected} showLive={liveOn} />
             ))}
           </tbody>
         </table>
@@ -153,68 +151,21 @@ export function PoolTable({
         gw={gw}
         onClose={() => setSelected(null)}
       />
-    </div>
-  );
-}
-
-function LiveToggle({
-  on,
-  onChange,
-  status,
-  at,
-}: {
-  on: boolean;
-  onChange: (next: boolean) => void;
-  status: ReturnType<typeof useLive>["status"];
-  at: Date | null;
-}) {
-  const label =
-    status === "loading"
-      ? "connecting"
-      : status === "error"
-        ? "unavailable"
-        : status === "ready" && at
-          ? at.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-          : "off";
-
-  return (
-    <button
-      type="button"
-      onClick={() => onChange(!on)}
-      title="Fetches in-play points through the server proxy, refreshed every 60 seconds"
-      className={clsx(
-        "flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[11px] transition-colors",
-        on
-          ? status === "error"
-            ? "border-risk/50 text-risk"
-            : "border-actual/50 text-actual"
-          : "border-edge text-muted hover:border-edge-bright hover:text-ink",
-      )}
-    >
-      <span
-        className={clsx(
-          "h-1.5 w-1.5 rounded-full",
-          on && status === "ready" && "animate-pulse bg-actual",
-          on && status === "loading" && "animate-pulse bg-muted",
-          on && status === "error" && "bg-risk",
-          !on && "bg-faint",
-        )}
-      />
-      Live
-      <span className="tnum text-faint">{label}</span>
-    </button>
+      </div>
+    </LiveProvider>
   );
 }
 
 function Row({
   row,
   onSelect,
-  live,
+  showLive,
 }: {
   row: PoolRow;
   onSelect: (id: number) => void;
-  live?: LiveStat | null;
+  showLive: boolean;
 }) {
+  const live = useLiveDisplay(row.id, row.teamId);
   const observed = calibratedStart(row.pStart);
   const overconfident = row.pStart != null && observed != null && row.pStart - observed > 0.08;
 
@@ -267,14 +218,16 @@ function Row({
       <td className="tnum py-1.5 pr-3 text-right text-faint">
         {row.owned == null ? "—" : `${row.owned}%`}
       </td>
-      {live !== undefined && (
+      {showLive && (
         <td className="tnum py-1.5 text-right">
           {live == null ? (
             <span className="text-faint">—</span>
           ) : (
-            <span className={live.minutes === 0 ? "text-risk" : "text-actual"}>
-              {live.points}
-              <span className="ml-1 text-[10px] text-faint">{live.minutes}&apos;</span>
+            <span className={liveToneClass(live.tone)}>
+              {live.label}
+              {live.minutes != null && (
+                <span className="ml-1 text-[10px] text-faint">{live.minutes}&apos;</span>
+              )}
             </span>
           )}
         </td>
@@ -290,6 +243,7 @@ function toCell(row: PoolRow): CellPlayer {
     pos: row.pos,
     cost: row.cost,
     teamCode: row.teamCode,
+    teamId: row.teamId,
     mu: row.mu,
     sigma: row.sigma,
     pStart: row.pStart,

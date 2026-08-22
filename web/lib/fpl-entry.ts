@@ -1,5 +1,21 @@
 /** Shared FPL entry types + fetch via the local proxy. */
 
+export type FplLeague = {
+  id: number;
+  name: string;
+  short_name?: string | null;
+  league_type?: string;
+  scoring?: string;
+  rank?: number | null;
+  entry_rank?: number | null;
+  entry_last_rank?: number | null;
+  start_event?: number;
+  entry_can_admin?: boolean;
+  entry_can_leave?: boolean;
+  code_privacy?: string;
+  has_cup?: boolean;
+};
+
 export type FplEntry = {
   id: number;
   name: string;
@@ -9,6 +25,10 @@ export type FplEntry = {
   summary_overall_rank?: number;
   last_deadline_bank?: number;
   current_event?: number;
+  leagues?: {
+    classic?: FplLeague[];
+    h2h?: FplLeague[];
+  };
 };
 
 export type FplPick = {

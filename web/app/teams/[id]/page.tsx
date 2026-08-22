@@ -1,5 +1,6 @@
 import { TeamDetail } from "@/components/team-detail";
-import { getLivePlayers, getManifest, getPredictions, getStrategies, getTeamCodes } from "@/lib/data";
+import { getFixtures, getLivePlayers, getManifest, getPredictions, getStrategies, getTeamCodes } from "@/lib/data";
+import { isGwInProgress } from "@/lib/gw-live";
 import type { PoolPlayer } from "@/components/team-tracker";
 
 export default async function TeamDetailPage({
@@ -11,10 +12,11 @@ export default async function TeamDetailPage({
   const id = Number(raw);
   const manifest = await getManifest();
   const season = manifest.live_season;
-  const [predictions, live, codes] = await Promise.all([
+  const [predictions, live, codes, fixtures] = await Promise.all([
     getPredictions(season),
     getLivePlayers(),
     getTeamCodes(season),
+    getFixtures(),
   ]);
 
   let balancedIds: number[] = [];
@@ -26,6 +28,7 @@ export default async function TeamDetailPage({
   }
 
   const gw = predictions.gws[0] ?? 1;
+  const liveEnabled = isGwInProgress(fixtures.fixtures, gw);
   const pool: PoolPlayer[] = Object.entries(predictions.players).map(([pid, series]) => {
     const i = series.gw.indexOf(gw);
     const meta = live.players[pid];
@@ -34,6 +37,7 @@ export default async function TeamDetailPage({
       name: series.name,
       pos: series.pos,
       teamCode: codes[series.team] ?? null,
+      teamId: series.team,
       cost: i >= 0 ? (series.cost[i] ?? meta?.cost ?? null) : (meta?.cost ?? null),
       mu: i >= 0 ? (series.mu[i] ?? null) : null,
       sigma: i >= 0 ? (series.sigma[i] ?? null) : null,
@@ -54,6 +58,7 @@ export default async function TeamDetailPage({
       season={season}
       pool={pool}
       balancedIds={balancedIds}
+      liveEnabled={liveEnabled}
     />
   );
 }

@@ -4,6 +4,8 @@ import clsx from "clsx";
 
 import { PlayerHover } from "./player-hover";
 import { dec, price } from "@/lib/format";
+import { useLiveDisplay } from "@/lib/live-context";
+import { liveBadgeClass } from "@/lib/live-display";
 import type { Position } from "@/lib/types";
 
 export type CellPlayer = {
@@ -12,6 +14,7 @@ export type CellPlayer = {
   pos: Position;
   cost: number | null;
   teamCode: string | null;
+  teamId?: number | null;
   mu: number | null;
   sigma: number | null;
   pStart: number | null;
@@ -36,13 +39,18 @@ export function PlayerCell({
   player,
   onSelect,
   compact = false,
+  selected = false,
 }: {
   player: CellPlayer;
   onSelect?: (id: number) => void;
   compact?: boolean;
+  selected?: boolean;
 }) {
   const blank = isBlank(player);
   const scored = player.pts != null;
+  const live = useLiveDisplay(player.id, player.teamId);
+  const showLive = live != null;
+  const showActual = !showLive && scored;
 
   return (
     <PlayerHover player={player}>
@@ -53,6 +61,7 @@ export function PlayerCell({
           "group relative flex w-[104px] flex-col items-stretch rounded-lg border bg-panel/80 px-2 pt-2 pb-1.5 text-left transition-all",
           "hover:-translate-y-0.5 hover:border-edge-bright hover:bg-raised",
           blank ? "border-risk/45" : "border-edge",
+          selected && "border-model/70 ring-1 ring-model",
           compact && "w-[92px]",
         )}
       >
@@ -75,7 +84,22 @@ export function PlayerCell({
 
         <div className="flex items-center justify-between gap-1">
           <span className="label-xs">{player.teamCode ?? player.pos}</span>
-          {scored && (
+          {showLive && (
+            <span
+              className={clsx(
+                "tnum rounded px-1 text-[10px] font-semibold",
+                liveBadgeClass(live.tone),
+              )}
+              title={
+                live.minutes == null
+                  ? "Fixture not started"
+                  : `${live.minutes} minutes · in-play`
+              }
+            >
+              {live.label}
+            </span>
+          )}
+          {showActual && (
             <span
               className={clsx(
                 "tnum rounded px-1 text-[10px] font-semibold",
@@ -104,7 +128,12 @@ export function PlayerCell({
           </span>
         </div>
 
-        {blank && (
+        {showLive && live.tone === "blank" && (
+          <span className="mt-1 text-[9.5px] tracking-wide text-risk uppercase">
+            0 min
+          </span>
+        )}
+        {!showLive && blank && (
           <span className="mt-1 text-[9.5px] tracking-wide text-risk uppercase">
             0 min
           </span>
