@@ -73,9 +73,9 @@ export function SiteNav({ manifest }: { manifest: Manifest }) {
         )}
         <span
           className="rounded border border-edge px-1.5 py-0.5 font-mono text-[10px] text-muted"
-          title="Latest season with a full evaluation panel"
+          title="Live prediction season"
         >
-          {seasonLabel(latest)}
+          {seasonLabel(manifest.live_season)}
         </span>
       </div>
     </header>
