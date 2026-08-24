@@ -24,7 +24,6 @@ export function SiteNav({ manifest }: { manifest: Manifest }) {
     { href: `/lab/${latest}`, label: "Lab", match: (p: string) => p.startsWith("/lab") },
     { href: "/teams", label: "Teams", match: (p: string) => p.startsWith("/teams") },
     { href: "/me", label: "My team", match: (p: string) => p.startsWith("/me") },
-    { href: "/leagues", label: "Leagues", match: (p: string) => p.startsWith("/leagues") },
     { href: "/audit", label: "Audit", match: (p: string) => p.startsWith("/audit") },
   ];
 

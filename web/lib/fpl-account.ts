@@ -57,6 +57,20 @@ export type BootstrapElement = {
   can_select?: boolean;
   chance_of_playing_this_round: number | null;
   selected_by_percent: string;
+  transfers_in_event?: number;
+  transfers_out_event?: number;
+  event_points?: number;
+};
+
+export type BootstrapEvent = {
+  id: number;
+  name: string;
+  deadline_time: string | null;
+  is_current: boolean;
+  is_next: boolean;
+  finished: boolean;
+  average_entry_score?: number | null;
+  highest_score?: number | null;
 };
 
 export type BootstrapTeam = {
@@ -68,6 +82,8 @@ export type BootstrapTeam = {
 export type BootstrapStatic = {
   elements: BootstrapElement[];
   teams: BootstrapTeam[];
+  events?: BootstrapEvent[];
+  total_players?: number;
 };
 
 export async function readAccountSession(): Promise<AccountSession> {

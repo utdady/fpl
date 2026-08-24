@@ -24,6 +24,7 @@ const ALLOWED: { pattern: RegExp; revalidate: number }[] = [
   { pattern: /^element-summary\/\d+$/, revalidate: 600 },
   { pattern: /^leagues-classic\/\d+\/standings$/, revalidate: 120 },
   { pattern: /^leagues-h2h\/\d+\/standings$/, revalidate: 120 },
+  { pattern: /^dream-team\/\d{1,2}$/, revalidate: 300 },
 ];
 
 export async function GET(

@@ -77,14 +77,18 @@ function xiPositions(
     .map((p) => byElement.get(p.element)?.pos ?? "MID");
 }
 
+export type ManageView = "status" | "pick-team" | "transfers";
+
 export function ManageTeam({
   pool,
   season,
   gw,
+  view,
 }: {
   pool: ComparePoolPlayer[];
   season: string;
   gw: number;
+  view: ManageView;
 }) {
   const session = useSession();
   const [team, setTeam] = useState<MyTeam | null>(null);
@@ -103,6 +107,25 @@ export function ManageTeam({
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
 
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem("fpl.armed-chip");
+      if (stored) setChipPlay(stored);
+    } catch {
+      /* private mode */
+    }
+  }, []);
+
+  function armChip(name: string | null) {
+    setChipPlay(name);
+    try {
+      if (name) sessionStorage.setItem("fpl.armed-chip", name);
+      else sessionStorage.removeItem("fpl.armed-chip");
+    } catch {
+      /* private mode */
+    }
+  }
+
   const load = useCallback(async (opts?: { keepChip?: boolean }) => {
     if (!session.loggedIn) return;
     setLoadError(null);
@@ -117,7 +140,7 @@ export function ManageTeam({
     setTeam(teamRes.data);
     setPicks(teamRes.data.picks ?? []);
     setPending([]);
-    if (!opts?.keepChip) setChipPlay(null);
+    if (!opts?.keepChip) armChip(null);
     setSelected(null);
     if (bootRes.ok) {
       setBoot({ elements: bootRes.data.elements, teams: bootRes.data.teams });
@@ -354,7 +377,7 @@ export function ManageTeam({
       return;
     }
     setNotice(chip ? `${CHIP_LABEL[chip] ?? chip} saved` : "Lineup saved");
-    setChipPlay(null);
+    armChip(null);
     await load();
   }
 
@@ -380,7 +403,7 @@ export function ManageTeam({
         : "Transfers confirmed",
     );
     const keepChip = chipPlay === "bboost" || chipPlay === "3xc";
-    if (!keepChip) setChipPlay(null);
+    if (!keepChip) armChip(null);
     await load({ keepChip });
   }
 
@@ -391,7 +414,7 @@ export function ManageTeam({
 
   function confirmChip() {
     if (!pendingChipName) return;
-    setChipPlay(pendingChipName);
+    armChip(pendingChipName);
     setConfirm(null);
     setNotice(`${CHIP_LABEL[pendingChipName] ?? pendingChipName} armed — save lineup or transfers to play it`);
   }
@@ -447,165 +470,203 @@ export function ManageTeam({
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">{session.name ?? "My team"}</h1>
-          <p className="mt-1 text-[12px] text-muted">
-            {session.playerName}
-            {nextEvent?.deadline_time
-              ? ` · deadline ${nextEvent.deadline_time.replace("T", " ").slice(0, 16)} UTC`
-              : ""}
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => void load()}
-            className="rounded-md border border-edge px-3 py-1.5 text-[12px] text-muted hover:text-ink"
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            onClick={() => void session.logout()}
-            className="rounded-md border border-edge px-3 py-1.5 text-[12px] text-muted hover:text-risk"
-          >
-            Sign out
-          </button>
-        </div>
-      </div>
-
-      <Section title="Bank and transfers" source="fantasy.premierleague.com/api/my-team/{id}/">
-        <StatRow>
-          <Stat label="Bank" value={price(bank)} />
-          <Stat label="Squad value" value={price(team.transfers.value)} />
-          <Stat
-            label="Free transfers"
-            value={wcActive ? "Unlimited" : String(Number.isFinite(ftsLeft) ? ftsLeft : 0)}
-          />
-          <Stat
-            label="Hit"
-            value={hit ? `−${hit}` : "0"}
-            tone={hit ? "risk" : "actual"}
-            note={`${formation} XI`}
-          />
-        </StatRow>
-      </Section>
-
-      <div className="flex flex-wrap gap-2">
-        {(team.chips ?? []).map((chip) => {
-          const available = chip.status_for_entry === "available";
-          const active = chip.status_for_entry === "active" || chipPlay === chip.name;
-          return (
-            <button
-              key={chip.name}
-              type="button"
-              disabled={!available && !active}
-              onClick={() => available && requestChip(chip.name)}
-              className={`rounded-full border px-3 py-1 text-[11px] ${
-                active
-                  ? "border-oracle/60 bg-oracle/15 text-oracle"
-                  : available
-                    ? "border-edge text-ink hover:border-edge-bright"
-                    : "border-edge/50 text-faint"
-              }`}
-            >
-              {CHIP_LABEL[chip.name] ?? chip.name}
-              {active ? " · on" : available ? "" : " · used"}
-            </button>
-          );
-        })}
+      <div>
+        <h1 className="text-xl font-semibold tracking-tight">{session.name ?? "My team"}</h1>
+        <p className="mt-1 text-[12px] text-muted">
+          {session.playerName}
+          {nextEvent?.deadline_time
+            ? ` · deadline ${nextEvent.deadline_time.replace("T", " ").slice(0, 16)} UTC`
+            : ""}
+        </p>
       </div>
 
       {notice && <p className="text-[12px] text-actual">{notice}</p>}
       {error && <p className="text-[12px] text-risk">{error}</p>}
-      {formationError && lineupDirty && (
-        <p className="text-[12px] text-risk">{formationError}</p>
-      )}
-      {clubError && <p className="text-[12px] text-risk">{clubError}</p>}
 
-      <p className="text-[12px] text-muted">
-        Tap two players to swap. Captain stays in the XI. Tap a starter, then Transfer
-        out, to replace them.
-      </p>
+      {view === "status" && (
+        <>
+          <Section title="Bank and transfers" source="fantasy.premierleague.com/api/my-team/{id}/">
+            <StatRow>
+              <Stat label="Bank" value={price(bank)} />
+              <Stat label="Squad value" value={price(team.transfers.value)} />
+              <Stat
+                label="Free transfers"
+                value={wcActive ? "Unlimited" : String(Number.isFinite(ftsLeft) ? ftsLeft : 0)}
+              />
+              <Stat
+                label="Hit"
+                value={hit ? `−${hit}` : "0"}
+                tone={hit ? "risk" : "actual"}
+                note={`${formation} XI`}
+              />
+            </StatRow>
+          </Section>
 
-      <ManagePitch
-        xi={cells.xi}
-        bench={cells.bench}
-        selected={selected}
-        onSelect={onSelect}
-      />
+          <Section title="Chips" subtitle="One-shot for this half. Arm here, then save on Pick Team or Transfers.">
+            <div className="flex flex-wrap gap-2">
+              {(team.chips ?? []).map((chip) => {
+                const available = chip.status_for_entry === "available";
+                const active = chip.status_for_entry === "active" || chipPlay === chip.name;
+                return (
+                  <button
+                    key={chip.name}
+                    type="button"
+                    disabled={!available && !active}
+                    onClick={() => available && requestChip(chip.name)}
+                    className={`rounded-full border px-3 py-1 text-[11px] ${
+                      active
+                        ? "border-oracle/60 bg-oracle/15 text-oracle"
+                        : available
+                          ? "border-edge text-ink hover:border-edge-bright"
+                          : "border-edge/50 text-faint"
+                    }`}
+                  >
+                    {CHIP_LABEL[chip.name] ?? chip.name}
+                    {active ? " · on" : available ? "" : " · used"}
+                  </button>
+                );
+              })}
+            </div>
+          </Section>
 
-      {selectedPick && (
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => setCaptain(selectedPick.element)}
-            className="rounded-md bg-model/15 px-3 py-1.5 text-[12px] text-model"
-          >
-            Captain
-          </button>
-          <button
-            type="button"
-            onClick={() => setVice(selectedPick.element)}
-            className="rounded-md border border-edge px-3 py-1.5 text-[12px]"
-          >
-            Vice
-          </button>
-          <button
-            type="button"
-            onClick={() => setPickerFor(selectedPick)}
-            className="rounded-md border border-edge px-3 py-1.5 text-[12px]"
-          >
-            Transfer out
-          </button>
-          <button
-            type="button"
-            onClick={() => setSelected(null)}
-            className="rounded-md px-3 py-1.5 text-[12px] text-muted"
-          >
-            Clear
-          </button>
-        </div>
-      )}
-
-      {pending.length > 0 && (
-        <Section title="Pending transfers">
-          <ul className="space-y-1.5 text-[12px]">
-            {pending.map((t) => (
-              <li key={`${t.element_out}-${t.element_in}`} className="flex justify-between gap-3">
-                <span>
-                  {elements.get(t.element_out)?.web_name ?? t.element_out}
-                  <span className="text-faint"> → </span>
-                  {elements.get(t.element_in)?.web_name ?? t.element_in}
-                </span>
-                <span className="tnum text-muted">
-                  {price(t.purchase_price - t.selling_price)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Section>
+          <ManagePitch xi={cells.xi} bench={cells.bench} selected={null} onSelect={() => {}} />
+        </>
       )}
 
-      <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          disabled={busy || Boolean(formationError) || pending.length > 0 || (!lineupDirty && !picksChip)}
-          onClick={() => void savePicks(picksChip)}
-          className="rounded-md bg-model/15 px-4 py-2 text-[13px] text-model disabled:opacity-40"
-        >
-          Save lineup
-        </button>
-        <button
-          type="button"
-          disabled={busy || pending.length === 0 || Boolean(clubError)}
-          onClick={requestTransfers}
-          className="rounded-md border border-edge px-4 py-2 text-[13px] disabled:opacity-40"
-        >
-          Confirm transfers{hit > 0 ? ` (−${hit})` : ""}
-        </button>
-      </div>
+      {view === "pick-team" && (
+        <>
+          {formationError && lineupDirty && (
+            <p className="text-[12px] text-risk">{formationError}</p>
+          )}
+          <p className="text-[12px] text-muted">
+            Tap two players to swap XI and bench. Captain stays in the XI. Transfers live under
+            the Transfers tab.
+          </p>
+
+          <ManagePitch
+            xi={cells.xi}
+            bench={cells.bench}
+            selected={selected}
+            onSelect={onSelect}
+          />
+
+          {selectedPick && (
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setCaptain(selectedPick.element)}
+                className="rounded-md bg-model/15 px-3 py-1.5 text-[12px] text-model"
+              >
+                Captain
+              </button>
+              <button
+                type="button"
+                onClick={() => setVice(selectedPick.element)}
+                className="rounded-md border border-edge px-3 py-1.5 text-[12px]"
+              >
+                Vice
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className="rounded-md px-3 py-1.5 text-[12px] text-muted"
+              >
+                Clear
+              </button>
+            </div>
+          )}
+
+          <button
+            type="button"
+            disabled={busy || Boolean(formationError) || (!lineupDirty && !picksChip)}
+            onClick={() => void savePicks(picksChip)}
+            className="rounded-md bg-model/15 px-4 py-2 text-[13px] text-model disabled:opacity-40"
+          >
+            Save lineup
+          </button>
+        </>
+      )}
+
+      {view === "transfers" && (
+        <>
+          <Section title="Budget">
+            <StatRow>
+              <Stat label="Bank" value={price(bank)} />
+              <Stat
+                label="Free transfers"
+                value={wcActive ? "Unlimited" : String(Number.isFinite(ftsLeft) ? ftsLeft : 0)}
+              />
+              <Stat
+                label="Hit"
+                value={hit ? `−${hit}` : "0"}
+                tone={hit ? "risk" : "actual"}
+              />
+            </StatRow>
+          </Section>
+
+          {clubError && <p className="text-[12px] text-risk">{clubError}</p>}
+          <p className="text-[12px] text-muted">
+            Tap a player, then Transfer out. Replacements are sorted by V1 μ.
+          </p>
+
+          <ManagePitch
+            xi={cells.xi}
+            bench={cells.bench}
+            selected={selected}
+            onSelect={(id) => {
+              setError(null);
+              setSelected((prev) => (prev === id ? null : id));
+            }}
+          />
+
+          {selectedPick && (
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setPickerFor(selectedPick)}
+                className="rounded-md bg-model/15 px-3 py-1.5 text-[12px] text-model"
+              >
+                Transfer out
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className="rounded-md px-3 py-1.5 text-[12px] text-muted"
+              >
+                Clear
+              </button>
+            </div>
+          )}
+
+          {pending.length > 0 && (
+            <Section title="Pending transfers">
+              <ul className="space-y-1.5 text-[12px]">
+                {pending.map((t) => (
+                  <li key={`${t.element_out}-${t.element_in}`} className="flex justify-between gap-3">
+                    <span>
+                      {elements.get(t.element_out)?.web_name ?? t.element_out}
+                      <span className="text-faint"> → </span>
+                      {elements.get(t.element_in)?.web_name ?? t.element_in}
+                    </span>
+                    <span className="tnum text-muted">
+                      {price(t.purchase_price - t.selling_price)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
+
+          <button
+            type="button"
+            disabled={busy || pending.length === 0 || Boolean(clubError)}
+            onClick={requestTransfers}
+            className="rounded-md border border-edge px-4 py-2 text-[13px] disabled:opacity-40"
+          >
+            Confirm transfers{hit > 0 ? ` (−${hit})` : ""}
+          </button>
+        </>
+      )}
 
       <Dialog.Root open={pickerFor != null} onOpenChange={(open) => !open && setPickerFor(null)}>
         <Dialog.Portal>

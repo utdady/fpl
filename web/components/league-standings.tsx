@@ -36,9 +36,11 @@ type StandingsPayload = {
 export function LeagueStandings({
   leagueId,
   kind,
+  basePath = "/me/leagues",
 }: {
   leagueId: number;
   kind: "classic" | "h2h";
+  basePath?: string;
 }) {
   const session = useSession();
   const [page, setPage] = useState(1);
@@ -99,7 +101,7 @@ export function LeagueStandings({
   return (
     <div className="space-y-5">
       <div>
-        <Link href="/leagues" className="text-[11px] text-muted hover:text-ink">
+        <Link href={basePath} className="text-[11px] text-muted hover:text-ink">
           ← Leagues
         </Link>
         <h1 className="mt-2 text-xl font-semibold tracking-tight">

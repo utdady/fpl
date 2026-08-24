@@ -55,7 +55,19 @@ function inspectPaste(raw: string): {
   }
 }
 
-export function LoginForm({ onLoggedIn }: { onLoggedIn: () => void }) {
+export function LoginForm({
+  onLoggedIn,
+  onCancel,
+  title = "Sign in to FPL",
+  submitLabel = "Sign in",
+  className = "panel mx-auto max-w-lg space-y-4 p-5",
+}: {
+  onLoggedIn: () => void;
+  onCancel?: () => void;
+  title?: string;
+  submitLabel?: string;
+  className?: string;
+}) {
   const [token, setToken] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -90,15 +102,27 @@ export function LoginForm({ onLoggedIn }: { onLoggedIn: () => void }) {
   }
 
   return (
-    <form onSubmit={submit} className="panel mx-auto max-w-lg space-y-4 p-5">
-      <div>
-        <h2 className="text-[15px] font-semibold tracking-tight">Sign in to FPL</h2>
-        <p className="mt-1 text-[12px] leading-relaxed text-muted">
-          Paste the <span className="text-ink">full</span>{" "}
-          <code className="text-ink">oidc.user</code> JSON (starts with{" "}
-          <code className="text-ink">{"{"}</code>). A bare refresh token will not
-          work — FPL rotates it in the background.
-        </p>
+    <form onSubmit={submit} className={className}>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h2 className="text-[15px] font-semibold tracking-tight">{title}</h2>
+          <p className="mt-1 text-[12px] leading-relaxed text-muted">
+            Paste the <span className="text-ink">full</span>{" "}
+            <code className="text-ink">oidc.user</code> JSON (starts with{" "}
+            <code className="text-ink">{"{"}</code>). A bare refresh token will not
+            work — FPL rotates it in the background.
+          </p>
+        </div>
+        {onCancel ? (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="shrink-0 rounded-md px-2 py-1 text-[12px] text-muted hover:text-ink"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        ) : null}
       </div>
 
       <label className="block">
@@ -172,13 +196,24 @@ export function LoginForm({ onLoggedIn }: { onLoggedIn: () => void }) {
 
       {error && <p className="text-[12px] text-risk">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={busy || !inspection.ok}
-        className="w-full rounded-md bg-model/15 px-3 py-2 text-[13px] font-medium text-model disabled:opacity-50"
-      >
-        {busy ? "Signing in…" : "Sign in"}
-      </button>
+      <div className="flex flex-wrap gap-2">
+        {onCancel ? (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-md border border-edge px-3 py-2 text-[13px] text-muted hover:text-ink"
+          >
+            Cancel
+          </button>
+        ) : null}
+        <button
+          type="submit"
+          disabled={busy || !inspection.ok}
+          className="min-w-[8rem] flex-1 rounded-md bg-model/15 px-3 py-2 text-[13px] font-medium text-model disabled:opacity-50"
+        >
+          {busy ? "Saving…" : submitLabel}
+        </button>
+      </div>
     </form>
   );
 }

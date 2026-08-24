@@ -42,7 +42,7 @@ function LeagueCards({
             >
               <div className="min-w-0 flex-1">
                 <Link
-                  href={`/leagues/${league.id}?kind=${kind}`}
+                  href={`/me/leagues/${league.id}?kind=${kind}`}
                   className="truncate text-[13px] font-medium text-ink hover:text-model"
                 >
                   {league.name}

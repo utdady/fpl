@@ -1,5 +1,5 @@
-import { LeagueBoard } from "@/components/league-board";
+import { redirect } from "next/navigation";
 
-export default function LeaguesPage() {
-  return <LeagueBoard />;
+export default function LeaguesRedirect() {
+  redirect("/me/leagues");
 }
