@@ -350,18 +350,44 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Follow-up:** implement V2A-M post-GW1 using this panel as gate evidence. Friday squad unchanged.
 
 
-### E010 — Live 2026/27 GW1 score
-- **Date:** after GW1 results (deadline 2026-08-21 17:30 UTC)
-- **Status:** queued
-- **Hypothesis:** live control is scoreable
-- **Question:** What is frozen V1’s player-level scorecard on real GW1?
-- **Method:** `python -m engine.capture --gw 1 --score`
-- **Seasons / GWs:** 2026/27 GW1
-- **Metrics:** MAE, RMSE, bias, Spearman, ECE
-- **Results:** —
-- **Verdict:** —
-- **Artifacts:** `records/gw01_v1.0.csv`, `records/scores.csv`
-- **Follow-up:** do not retune V1 from one GW
+### E010 - Live 2026/27 GW1 score
+- **Date:** 2026-08-25
+- **Status:** completed
+- **Hypothesis:** live control is scoreable; do not retune V1 from one GW
+- **Question:** What is frozen V1's player-level scorecard on real GW1, and did the Friday 15 / Guehi decision look like the historical failure modes?
+- **Method:** `python -m engine.capture --gw 1 --score` against FPL `event/1/live/`. Squad reconstruction from frozen mus + freeze-time costs via `solve_squad` (eligibility from post-deadline cache; composition matches pre-reg: Guehi IN, Haaland OUT).
+- **Seasons / GWs:** 2026/27 GW1 (n=590)
+
+- **Results - player scorecard:**
+
+  | Metric | Live GW1 | Hist GW1 2025/26 | Hist GW1 2024/25 |
+  |---|---:|---:|---:|
+  | MAE | **1.621** | 1.440 | 1.260 |
+  | RMSE | 2.682 | 2.448 | 2.101 |
+  | Bias | +0.047 | +0.430 | +0.361 |
+  | Spearman | **0.481** | 0.385 | 0.367 |
+  | p_start ECE | 0.113 | 0.095 | 0.127 |
+  | p_10 ECE | 0.016 | 0.014 | 0.009 |
+
+- **Results - P(start) calibration (live GW1):**
+
+  | bucket | n | start% | 0min% |
+  |---|---:|---:|---:|
+  | 0.90-1.00 | 60 | 85.0 | 11.7 |
+  | 0.80-0.90 | 44 | 65.9 | 18.2 |
+  | 0.60-0.70 | 56 | 50.0 | 23.2 |
+  | <0.60 | 425 | 25.4 | 60.7 |
+
+  Top bucket (85%) is within / slightly above the E013 four-season band (~78-84%). One GW is not a recalibration.
+
+- **Results - reconstructed V1 XI+Cap:** XI 37 + Saka C 9 = **46**. XI 0-min slots **3/11 = 27.3%** (Martinez, Gyokeres, Welbeck) - sits in the 25-29% historical cluster, not the 2024/25 outlier. Enzo: model p_start=0.90, actual 25 minutes (classic upper-tail miss inside the XI).
+
+- **Guehi case study (one week, not a model rule):** Guéhi started, 90 minutes, **10 points**. Haaland (OUT of Friday 15) started 90 minutes but scored only **2**. Neither outcome authorizes a transfer prior or a production change - E013 already forbids that leap. Panel validates the *category*; E010 is one draw from it.
+
+- **Verdict:** Live control is scoreable. Rank skill present (Spearman 0.48). Minutes/XI-blank failure mode appeared on schedule (~27% XI blanks). **Do not retune V1 from GW1.** Next: V2A-M.
+- **Artifacts:** `records/gw01_v1.0.csv` (scored), `records/scores.csv`
+- **Follow-up:** V2A-M implementation; E012 property tests in parallel. No production V1 change.
+
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -393,17 +419,16 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-19 (after E013 four-season panel; production freeze intact):
+As of 2026-08-25 (after E010 live GW1 score):
 
-1. **Production freeze intact.** GW1 squad = V1 balanced 15 (Guehi IN, Haaland OUT, no overlay). No production-code changes before deadline.
-2. **H0a supported** - B0 flagged in all four seasons; never a V2 gate.
-3. **H0b supported** - `p90_fitted` ~75-78% across four seasons; stable metric for V2A-M. 2024/25 XI 0-min 16.5% is an outlier vs other three seasons (25-29%) - cause unexplained; do not smooth into a range.
-4. **H2 weak / indistinguishable from noise** - inconsistent sign across seasons (including -0.48 in 2022/23); no stable justification for changing the horizon objective.
-5. **V2A-M is the next experiment (post-GW1):** minutes/availability only; same rates, fixtures, ILP, objective. Gates: p90_fitted improvement, XI 0-min reduction, XI+cap vs V1 - evaluated on all four seasons individually.
-6. **E013 complete** - four-season robustness panel. alpha/beta columns are diagnostic appendix only; `p90_fitted` leads.
-7. **Next live:** E010 after GW1 results. `python -m engine.capture --gw 1 --score`
-8. **E012 / formal integrity:** post-GW1. Property tests first. Not a V2A-M gate. No Lean before deadline.
-9. **Research ladder:** V2A-M -> V2B (multi-season rates) -> V2C (role transition) -> V2D (fixture coefficients). Each rung beats the preceding control out-of-sample before being retained.
+1. **E010 complete.** Frozen V1 GW1: MAE 1.621, Spearman 0.481, XI+Cap 46, XI 0-min 3/11 (27.3%). Guehi 10 pts / 90 min. **Do not retune V1 from one GW.**
+2. **Production V1 remains the control.** No code, optimizer, minutes, or fixture changes from GW1 results alone.
+3. **H0b still the target.** Live GW1 XI blanks (27.3%) land in the E013 25-29% cluster. Top-bucket start 85% (n=60) - one week, not a recalibration.
+4. **Guehi case study closed for this week** - he started and scored; that does not authorize a new-club prior (E013).
+5. **Next experiment: V2A-M** - minutes/availability only; four-season gates (`p90_fitted`, XI 0-min, XI+cap vs V1). Then docs already synced.
+6. **E012** property tests - parallel, not blocking V2A-M.
+7. **Ladder:** V2A-M -> V2B -> V2C -> V2D. Each rung beats the preceding control out-of-sample.
+
 ---
 
 ## Index of commands
