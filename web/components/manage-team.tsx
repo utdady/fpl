@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { LoginForm } from "./login-form";
 import { ManagePitch } from "./manage-pitch";
+import { PlayerDrawer } from "./player-drawer";
 import { Section } from "./ui/section";
 import { Stat, StatRow } from "./ui/stat";
 import type { CellPlayer } from "./player-cell";
@@ -12,12 +13,13 @@ import {
   accountJson,
   type BootstrapElement,
   type BootstrapStatic,
+  type FplApiFixture,
   type MyTeam,
   type MyTeamPick,
   type PendingTransfer,
 } from "@/lib/fpl-account";
 import { fplFetch } from "@/lib/fpl-entry";
-import { dec, price } from "@/lib/format";
+import { formatDeadline, price } from "@/lib/format";
 import {
   CHIP_LABEL,
   ELEMENT_POS,
@@ -29,6 +31,7 @@ import {
 import type { ComparePoolPlayer } from "@/lib/team-compare";
 import type { Position } from "@/lib/types";
 import { useSession } from "@/lib/use-session";
+import { TransferPickerPanel } from "./transfer-picker";
 
 type EventRow = {
   id: number;
@@ -67,6 +70,17 @@ function swapPicks(picks: MyTeamPick[], a: number, b: number): MyTeamPick[] {
   return ensureCaptainInXi(next);
 }
 
+function canSwapPicks(
+  picks: MyTeamPick[],
+  a: number,
+  b: number,
+  byElement: Map<number, { pos: Position }>,
+): boolean {
+  if (a === b) return false;
+  if (!picks.some((p) => p.element === a) || !picks.some((p) => p.element === b)) return false;
+  return xiLegal(xiPositions(swapPicks(picks, a, b), byElement)) == null;
+}
+
 function xiPositions(
   picks: MyTeamPick[],
   byElement: Map<number, { pos: Position }>,
@@ -94,9 +108,10 @@ export function ManageTeam({
   const [team, setTeam] = useState<MyTeam | null>(null);
   const [picks, setPicks] = useState<MyTeamPick[]>([]);
   const [boot, setBoot] = useState<BootstrapStatic | null>(null);
+  const [fixtures, setFixtures] = useState<FplApiFixture[]>([]);
   const [events, setEvents] = useState<EventRow[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [selected, setSelected] = useState<number | null>(null);
+  const [inspectId, setInspectId] = useState<number | null>(null);
   const [pending, setPending] = useState<PendingTransfer[]>([]);
   const [chipPlay, setChipPlay] = useState<string | null>(null);
   const [pickerFor, setPickerFor] = useState<MyTeamPick | null>(null);
@@ -116,6 +131,18 @@ export function ManageTeam({
     }
   }, []);
 
+  useEffect(() => {
+    if (pickerFor == null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setPickerFor(null);
+        setQuery("");
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [pickerFor]);
+
   function armChip(name: string | null) {
     setChipPlay(name);
     try {
@@ -129,9 +156,10 @@ export function ManageTeam({
   const load = useCallback(async (opts?: { keepChip?: boolean }) => {
     if (!session.loggedIn) return;
     setLoadError(null);
-    const [teamRes, bootRes] = await Promise.all([
+    const [teamRes, bootRes, fixturesRes] = await Promise.all([
       accountJson<MyTeam>("/api/account/team"),
       fplFetch<BootstrapStatic & { events?: EventRow[] }>("bootstrap-static"),
+      fplFetch<FplApiFixture[]>("fixtures"),
     ]);
     if (!teamRes.ok) {
       setLoadError(teamRes.error);
@@ -141,11 +169,11 @@ export function ManageTeam({
     setPicks(teamRes.data.picks ?? []);
     setPending([]);
     if (!opts?.keepChip) armChip(null);
-    setSelected(null);
     if (bootRes.ok) {
       setBoot({ elements: bootRes.data.elements, teams: bootRes.data.teams });
       setEvents(bootRes.data.events ?? []);
     }
+    if (fixturesRes.ok) setFixtures(fixturesRes.data);
   }, [session.loggedIn]);
 
   useEffect(() => {
@@ -246,29 +274,30 @@ export function ManageTeam({
     };
   }, [picks, elements, poolById, teams]);
 
-  const selectedPick = picks.find((p) => p.element === selected) ?? null;
+  const inspectPlayer =
+    cells.xi.find((p) => p.id === inspectId) ??
+    cells.bench.find((p) => p.id === inspectId) ??
+    null;
+  const inspectPick = picks.find((p) => p.element === inspectId) ?? null;
   const xiPos = xiPositions(picks, byElement);
   const formation = formationOf(xiPos);
 
-  function onSelect(id: number) {
+  function trySwap(a: number, b: number) {
     setError(null);
-    if (selected == null) {
-      setSelected(id);
-      return;
-    }
-    if (selected === id) {
-      setSelected(null);
-      return;
-    }
-    const next = swapPicks(picks, selected, id);
+    if (a === b) return;
+    const next = swapPicks(picks, a, b);
     const err = xiLegal(xiPositions(next, byElement));
     if (err) {
       setError(err);
-      setSelected(null);
       return;
     }
     setPicks(next);
-    setSelected(null);
+    setInspectId(null);
+  }
+
+  function openInspect(id: number) {
+    setError(null);
+    setInspectId(id);
   }
 
   function setCaptain(id: number) {
@@ -351,8 +380,8 @@ export function ManageTeam({
     ]);
     setPicks(nextPicks);
     setPickerFor(null);
+    setInspectId(null);
     setQuery("");
-    setSelected(null);
     setError(null);
   }
 
@@ -437,7 +466,6 @@ export function ManageTeam({
       .slice(0, 80);
   }, [pickerFor, boot, elements, picks, query, poolById]);
 
-  void season;
 
   if (session.loading) {
     return <p className="text-[12px] text-muted">Checking FPL session…</p>;
@@ -475,7 +503,7 @@ export function ManageTeam({
         <p className="mt-1 text-[12px] text-muted">
           {session.playerName}
           {nextEvent?.deadline_time
-            ? ` · deadline ${nextEvent.deadline_time.replace("T", " ").slice(0, 16)} UTC`
+            ? ` · deadline ${formatDeadline(nextEvent.deadline_time)}`
             : ""}
         </p>
       </div>
@@ -502,7 +530,7 @@ export function ManageTeam({
             </StatRow>
           </Section>
 
-          <Section title="Chips" subtitle="One-shot for this half. Arm here, then save on Pick Team or Transfers.">
+          <Section title="Chips" subtitle="One-shot for this half. Arm here or on Pick Team / Transfers, then save.">
             <div className="flex flex-wrap gap-2">
               {(team.chips ?? []).map((chip) => {
                 const available = chip.status_for_entry === "available";
@@ -512,7 +540,10 @@ export function ManageTeam({
                     key={chip.name}
                     type="button"
                     disabled={!available && !active}
-                    onClick={() => available && requestChip(chip.name)}
+                    onClick={() => {
+                      if (chipPlay === chip.name) armChip(null);
+                      else if (available) requestChip(chip.name);
+                    }}
                     className={`rounded-full border px-3 py-1 text-[11px] ${
                       active
                         ? "border-oracle/60 bg-oracle/15 text-oracle"
@@ -535,108 +566,202 @@ export function ManageTeam({
 
       {view === "pick-team" && (
         <>
+          <div className="rounded-xl border border-edge bg-raised/40 px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="min-w-0">
+                <div className="label-xs text-faint">Picking for</div>
+                <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h2 className="text-[17px] font-semibold tracking-tight">
+                    {nextEvent?.name ?? `Gameweek ${eventId}`}
+                  </h2>
+                  {nextEvent?.deadline_time ? (
+                    <span className="tnum text-[12px] text-muted">
+                      Deadline {formatDeadline(nextEvent.deadline_time)}
+                    </span>
+                  ) : null}
+                </div>
+                <p className="mt-1 text-[11px] text-faint">
+                  Cards show V1 xP for GW {gw}
+                  {gw !== eventId ? ` (model horizon; lineup is for GW ${eventId})` : ""}.
+                  Drag to swap (green = valid · red = illegal). Click a player for details,
+                  captain, and vice.
+                </p>
+              </div>
+              <button
+                type="button"
+                disabled={busy || Boolean(formationError) || (!lineupDirty && !picksChip)}
+                onClick={() => void savePicks(picksChip)}
+                className="shrink-0 rounded-md bg-model/15 px-4 py-2 text-[13px] text-model disabled:opacity-40"
+              >
+                {busy
+                  ? "Saving…"
+                  : picksChip
+                    ? `Save · ${CHIP_LABEL[picksChip] ?? picksChip}`
+                    : "Save lineup"}
+              </button>
+            </div>
+
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-edge/50 pt-3">
+              <span className="label-xs text-faint">Chip</span>
+              {(team.chips ?? []).map((chip) => {
+                const available = chip.status_for_entry === "available";
+                const active =
+                  chip.status_for_entry === "active" || chipPlay === chip.name;
+                const lineupChip = chip.name === "bboost" || chip.name === "3xc";
+                return (
+                  <button
+                    key={chip.name}
+                    type="button"
+                    disabled={!available && !active}
+                    onClick={() => {
+                      if (chipPlay === chip.name) armChip(null);
+                      else if (available) requestChip(chip.name);
+                    }}
+                    className={`rounded-full border px-3 py-1 text-[11px] ${
+                      active
+                        ? "border-oracle/60 bg-oracle/15 text-oracle"
+                        : available
+                          ? lineupChip
+                            ? "border-edge text-ink hover:border-edge-bright"
+                            : "border-edge/70 text-muted hover:border-edge-bright hover:text-ink"
+                          : "border-edge/50 text-faint"
+                    }`}
+                    title={
+                      lineupChip
+                        ? "Played when you save lineup"
+                        : "Usually saved with transfers; can also save with lineup if no pending transfers"
+                    }
+                  >
+                    {CHIP_LABEL[chip.name] ?? chip.name}
+                    {active ? " · on" : available ? "" : " · used"}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {formationError && lineupDirty && (
             <p className="text-[12px] text-risk">{formationError}</p>
           )}
-          <p className="text-[12px] text-muted">
-            Tap two players to swap XI and bench. Captain stays in the XI. Transfers live under
-            the Transfers tab.
-          </p>
 
           <ManagePitch
             xi={cells.xi}
             bench={cells.bench}
-            selected={selected}
-            onSelect={onSelect}
+            selected={null}
+            onSelect={openInspect}
+            onSwap={trySwap}
+            canSwap={(a, b) => canSwapPicks(picks, a, b, byElement)}
+            planning
           />
 
-          {selectedPick && (
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => setCaptain(selectedPick.element)}
-                className="rounded-md bg-model/15 px-3 py-1.5 text-[12px] text-model"
-              >
-                Captain
-              </button>
-              <button
-                type="button"
-                onClick={() => setVice(selectedPick.element)}
-                className="rounded-md border border-edge px-3 py-1.5 text-[12px]"
-              >
-                Vice
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
-                className="rounded-md px-3 py-1.5 text-[12px] text-muted"
-              >
-                Clear
-              </button>
-            </div>
-          )}
-
-          <button
-            type="button"
-            disabled={busy || Boolean(formationError) || (!lineupDirty && !picksChip)}
-            onClick={() => void savePicks(picksChip)}
-            className="rounded-md bg-model/15 px-4 py-2 text-[13px] text-model disabled:opacity-40"
-          >
-            Save lineup
-          </button>
+          <PlayerDrawer
+            player={inspectPlayer}
+            season={season}
+            gw={gw}
+            onClose={() => setInspectId(null)}
+            actions={
+              inspectPick && inspectPick.position <= 11 ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setCaptain(inspectPick.element)}
+                    className="rounded-md bg-model/15 px-3 py-1.5 text-[12px] text-model"
+                  >
+                    {inspectPick.is_captain ? "Captain ✓" : "Make captain"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVice(inspectPick.element)}
+                    className="rounded-md border border-edge px-3 py-1.5 text-[12px]"
+                  >
+                    {inspectPick.is_vice_captain ? "Vice ✓" : "Make vice"}
+                  </button>
+                </>
+              ) : inspectPick ? (
+                <p className="text-[11px] text-muted">
+                  Captain and vice must start — drag into XI first.
+                </p>
+              ) : null
+            }
+          />
         </>
       )}
 
       {view === "transfers" && (
         <>
-          <Section title="Budget">
-            <StatRow>
-              <Stat label="Bank" value={price(bank)} />
-              <Stat
-                label="Free transfers"
-                value={wcActive ? "Unlimited" : String(Number.isFinite(ftsLeft) ? ftsLeft : 0)}
-              />
-              <Stat
-                label="Hit"
-                value={hit ? `−${hit}` : "0"}
-                tone={hit ? "risk" : "actual"}
-              />
-            </StatRow>
-          </Section>
+          <div className="rounded-xl border border-edge bg-raised/40 px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex flex-wrap gap-x-5 gap-y-2">
+                  <div>
+                    <div className="label-xs text-faint">Bank</div>
+                    <div className="tnum text-[15px] font-semibold">{price(bank)}</div>
+                  </div>
+                  <div>
+                    <div className="label-xs text-faint">Free transfers</div>
+                    <div className="tnum text-[15px] font-semibold">
+                      {wcActive ? "Unlimited" : String(Number.isFinite(ftsLeft) ? ftsLeft : 0)}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="label-xs text-faint">Hit</div>
+                    <div
+                      className={`tnum text-[15px] font-semibold ${hit ? "text-risk" : "text-actual"}`}
+                    >
+                      {hit ? `−${hit}` : "0"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={busy || pending.length === 0 || Boolean(clubError)}
+                onClick={requestTransfers}
+                className="shrink-0 rounded-md bg-model/15 px-4 py-2 text-[13px] text-model disabled:opacity-40"
+              >
+                {busy
+                  ? "Saving…"
+                  : `Confirm transfers${hit > 0 ? ` (−${hit})` : ""}`}
+              </button>
+            </div>
+          </div>
 
           {clubError && <p className="text-[12px] text-risk">{clubError}</p>}
-          <p className="text-[12px] text-muted">
-            Tap a player, then Transfer out. Replacements are sorted by V1 μ.
-          </p>
 
           <ManagePitch
             xi={cells.xi}
             bench={cells.bench}
-            selected={selected}
-            onSelect={(id) => {
-              setError(null);
-              setSelected((prev) => (prev === id ? null : id));
-            }}
+            selected={null}
+            onSelect={openInspect}
+            planning
+            squadBoard
           />
 
-          {selectedPick && (
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => setPickerFor(selectedPick)}
-                className="rounded-md bg-model/15 px-3 py-1.5 text-[12px] text-model"
-              >
-                Transfer out
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
-                className="rounded-md px-3 py-1.5 text-[12px] text-muted"
-              >
-                Clear
-              </button>
-            </div>
-          )}
+          <PlayerDrawer
+            player={inspectPlayer}
+            season={season}
+            gw={gw}
+            modal={pickerFor == null}
+            onClose={() => {
+              setInspectId(null);
+              setPickerFor(null);
+              setQuery("");
+            }}
+            actions={
+              inspectPick ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPickerFor(inspectPick);
+                    setQuery("");
+                  }}
+                  className="rounded-md bg-model/15 px-3 py-1.5 text-[12px] text-model"
+                >
+                  Transfer out
+                </button>
+              ) : null
+            }
+          />
 
           {pending.length > 0 && (
             <Section title="Pending transfers">
@@ -656,63 +781,25 @@ export function ManageTeam({
               </ul>
             </Section>
           )}
-
-          <button
-            type="button"
-            disabled={busy || pending.length === 0 || Boolean(clubError)}
-            onClick={requestTransfers}
-            className="rounded-md border border-edge px-4 py-2 text-[13px] disabled:opacity-40"
-          >
-            Confirm transfers{hit > 0 ? ` (−${hit})` : ""}
-          </button>
         </>
       )}
 
-      <Dialog.Root open={pickerFor != null} onOpenChange={(open) => !open && setPickerFor(null)}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-40 bg-void/70" />
-          <Dialog.Content className="fixed inset-x-4 top-[6vh] z-50 mx-auto flex max-h-[88vh] max-w-lg flex-col overflow-hidden rounded-xl border border-edge bg-panel p-4 shadow-xl outline-none">
-            <div className="mb-3 flex items-start justify-between gap-3">
-              <Dialog.Title className="text-[14px] font-medium">
-                Replace {pickerFor ? (elements.get(pickerFor.element)?.web_name ?? "") : ""}
-              </Dialog.Title>
-              <Dialog.Close className="text-[11px] text-muted hover:text-ink">Close</Dialog.Close>
-            </div>
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search"
-              className="mb-3 rounded-md border border-edge bg-raised px-2.5 py-1.5 text-[13px] outline-none focus:border-edge-bright"
-            />
-            <ul className="min-h-0 flex-1 space-y-px overflow-y-auto">
-              {pickerList.map(({ el, mu, pStart }) => (
-                <li key={el.id}>
-                  <button
-                    type="button"
-                    onClick={() => applyTransfer(el)}
-                    className="flex w-full items-baseline justify-between gap-3 rounded px-2 py-1.5 text-left hover:bg-raised"
-                  >
-                    <span className="min-w-0">
-                      <span className="text-[13px] text-ink">{el.web_name}</span>
-                      <span className="ml-2 text-[11px] text-faint">
-                        {teams.get(el.team)?.short_name}
-                        {el.status !== "a" ? ` · ${el.status}` : ""}
-                      </span>
-                    </span>
-                    <span className="tnum shrink-0 text-[12px]">
-                      <span className="text-muted">{price(el.now_cost)}</span>
-                      <span className="ml-2 font-semibold text-model">{dec(mu < 0 ? null : mu, 1)}</span>
-                      <span className="ml-2 text-faint">
-                        {pStart == null ? "" : `${Math.round(pStart * 100)}%`}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+      {pickerFor != null && (
+        <TransferPickerPanel
+          outgoingName={elements.get(pickerFor.element)?.web_name ?? "player"}
+          rows={pickerList}
+          query={query}
+          onQueryChange={setQuery}
+          onClose={() => {
+            setPickerFor(null);
+            setQuery("");
+          }}
+          onPick={applyTransfer}
+          fixtures={fixtures}
+          teams={teams}
+          fromGw={eventId}
+        />
+      )}
 
       <Dialog.Root open={confirm != null} onOpenChange={(open) => !open && setConfirm(null)}>
         <Dialog.Portal>

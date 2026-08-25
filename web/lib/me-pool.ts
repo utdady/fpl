@@ -17,10 +17,10 @@ export async function loadMePool(): Promise<{
     getFixtures(),
   ]);
 
-  const gw = predictions.gws[0] ?? 1;
-  const liveEnabled = isGwInProgress(fixtures.fixtures, gw);
+  const modelGw = predictions.gws[0] ?? 1;
+  const liveEnabled = isGwInProgress(fixtures.fixtures, modelGw);
   const pool: ComparePoolPlayer[] = Object.entries(predictions.players).map(([id, series]) => {
-    const i = series.gw.indexOf(gw);
+    const i = series.gw.indexOf(modelGw);
     const meta = live.players[id];
     return {
       id: Number(id),
@@ -35,5 +35,5 @@ export async function loadMePool(): Promise<{
     };
   });
 
-  return { season, gw, liveEnabled, pool };
+  return { season, gw: modelGw, liveEnabled, pool };
 }

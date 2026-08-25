@@ -56,10 +56,38 @@ export type BootstrapElement = {
   news: string;
   can_select?: boolean;
   chance_of_playing_this_round: number | null;
+  chance_of_playing_next_round?: number | null;
   selected_by_percent: string;
+  form?: string;
+  points_per_game?: string;
+  total_points?: number;
+  event_points?: number;
+  bonus?: number;
+  ict_index?: string;
+  influence?: string;
+  creativity?: string;
+  threat?: string;
   transfers_in_event?: number;
   transfers_out_event?: number;
-  event_points?: number;
+  cost_change_event?: number;
+  cost_change_start?: number;
+};
+
+/** Raw fixture row from fantasy.premierleague.com/api/fixtures/ */
+export type FplApiFixture = {
+  event: number | null;
+  team_h: number;
+  team_a: number;
+  team_h_difficulty: number;
+  team_a_difficulty: number;
+  finished: boolean;
+};
+
+export type UpcomingFixture = {
+  gw: number;
+  opponentCode: string;
+  home: boolean;
+  fdr: number | null;
 };
 
 export type BootstrapEvent = {
@@ -132,4 +160,34 @@ export async function accountJson<T>(
     return { ok: false, status: res.status, error: err };
   }
   return { ok: true, data: json as T };
+}
+
+/** Next `count` gameweeks from `fromGw` for a club, with FDR from that team's perspective. */
+export function upcomingFixturesForTeam(
+  fixtures: FplApiFixture[],
+  teamId: number,
+  teamCodes: Map<number, string>,
+  fromGw: number,
+  count = 3,
+): UpcomingFixture[] {
+  const out: UpcomingFixture[] = [];
+  for (let gw = fromGw; gw < fromGw + count; gw++) {
+    const f = fixtures.find(
+      (row) =>
+        row.event === gw && (row.team_h === teamId || row.team_a === teamId),
+    );
+    if (!f) {
+      out.push({ gw, opponentCode: "—", home: true, fdr: null });
+      continue;
+    }
+    const home = f.team_h === teamId;
+    const oppId = home ? f.team_a : f.team_h;
+    out.push({
+      gw,
+      opponentCode: teamCodes.get(oppId) ?? String(oppId),
+      home,
+      fdr: home ? f.team_h_difficulty : f.team_a_difficulty,
+    });
+  }
+  return out;
 }

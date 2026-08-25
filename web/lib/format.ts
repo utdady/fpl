@@ -15,6 +15,19 @@ export const pct = (value: number | null | undefined, digits = 0) =>
 export const signed = (value: number | null | undefined, digits = 1) =>
   value == null ? "—" : `${value >= 0 ? "+" : ""}${value.toFixed(digits)}`;
 
+/** FPL deadline ISO → local timezone (browser default). */
+export function formatDeadline(iso: string) {
+  return new Date(iso).toLocaleString(undefined, {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZoneName: "short",
+  });
+}
+
 /**
  * Actual start rate observed at each model p_start bucket, from E013's
  * four-season panel. The UI shows this beside every p_start so a high model

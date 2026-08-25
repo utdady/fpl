@@ -15,9 +15,11 @@ import type { CellPlayer } from "./player-cell";
 export function PlayerHover({
   player,
   children,
+  disabled = false,
 }: {
   player: CellPlayer;
   children: React.ReactNode;
+  disabled?: boolean;
 }) {
   const observed = calibratedStart(player.pStart);
   const overconfident =
@@ -33,7 +35,7 @@ export function PlayerHover({
     live?.points != null && player.mu != null ? live.points - player.mu : null;
 
   return (
-    <HoverCard.Root openDelay={250} closeDelay={80}>
+    <HoverCard.Root open={disabled ? false : undefined} openDelay={250} closeDelay={80}>
       <HoverCard.Trigger asChild>{children}</HoverCard.Trigger>
       <HoverCard.Portal>
         <HoverCard.Content

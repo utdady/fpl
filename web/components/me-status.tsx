@@ -13,7 +13,7 @@ import {
   type MyTeamPick,
 } from "@/lib/fpl-account";
 import { fplFetch, type FplEntry, type FplHistoryRow } from "@/lib/fpl-entry";
-import { dec, pct, price } from "@/lib/format";
+import { dec, formatDeadline, pct, price } from "@/lib/format";
 import { ELEMENT_POS } from "@/lib/fpl-rules";
 import type { ComparePoolPlayer } from "@/lib/team-compare";
 import { useSession } from "@/lib/use-session";
@@ -31,18 +31,6 @@ type DreamPick = { element: number; points: number; position: number };
 
 function pad(n: number) {
   return String(n).padStart(2, "0");
-}
-
-function formatDeadline(iso: string) {
-  return new Date(iso).toLocaleString("en-GB", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: "Europe/London",
-  });
 }
 
 function useCountdown(iso: string | null) {

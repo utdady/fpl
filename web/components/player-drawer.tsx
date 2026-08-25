@@ -28,11 +28,16 @@ export function PlayerDrawer({
   season,
   gw,
   onClose,
+  actions,
+  modal = true,
 }: {
   player: CellPlayer | null;
   season: string;
   gw: number;
   onClose: () => void;
+  actions?: React.ReactNode;
+  /** When false, outside UI (e.g. transfer picker) can receive clicks. */
+  modal?: boolean;
 }) {
   const [series, setSeries] = useState<PlayerSeries | null>(null);
   const liveRaw = useLiveDisplay(player?.id ?? -1, player?.teamId);
@@ -58,9 +63,11 @@ export function PlayerDrawer({
   const open = player != null;
 
   return (
-    <Dialog.Root open={open} onOpenChange={(next) => !next && onClose()}>
+    <Dialog.Root open={open} modal={modal} onOpenChange={(next) => !next && onClose()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-void/75 backdrop-blur-sm" />
+        <Dialog.Overlay
+          className={`fixed inset-0 z-40 bg-void/75 backdrop-blur-sm${modal ? "" : " pointer-events-none"}`}
+        />
         <Dialog.Content className="fixed top-0 right-0 z-50 flex h-full w-full max-w-[440px] flex-col overflow-y-auto border-l border-edge bg-panel shadow-2xl outline-none">
           {player && (
             <>
@@ -135,6 +142,7 @@ export function PlayerDrawer({
                     . Not final until the gameweek ends.
                   </p>
                 )}
+                {actions ? <div className="mt-3 flex flex-wrap gap-2">{actions}</div> : null}
               </header>
 
               <div className="space-y-6 px-5 py-5">
