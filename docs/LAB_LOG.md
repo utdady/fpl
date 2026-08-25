@@ -389,6 +389,40 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Follow-up:** V2A-M implementation; E012 property tests in parallel. No production V1 change.
 
 
+### E014 - V2A-M LOSO minutes recalibration
+- **Date:** 2026-08-26
+- **Status:** completed - **REJECT as production replacement**
+- **Hypothesis:** Upper-tail p_start overconfidence is largely a calibration map problem fixable without rates/fixtures/ILP changes
+- **Question:** Does leave-one-season-out bucket remapping of V1 `p_start` improve upper-tail reliability, cut XI 0-min rate, and raise XI+cap vs V1, without hurting MAE_60+?
+- **Method:** `python -m engine.harness_v2am`. LOSO empirical start rate per V1 bucket applied inside `project_all(..., minutes_version=v2am)`. No new-club prior. Production default remains `v1`.
+- **Seasons / GWs:** 2022/23-2025/26, GW1-38
+
+- **Results:**
+
+  | Season | ut_gap V1 | ut_gap V2 | XI0 V1 | XI0 V2 | XI+Cap V1 | XI+Cap V2 | MAE60 V1 | MAE60 V2 |
+  |---|---:|---:|---:|---:|---:|---:|---:|---:|
+  | 2022/23 | 0.101 | **0.035** | 27.0% | 26.3% | 46.4 | **49.1** | 2.665 | 2.634 |
+  | 2023/24 | 0.121 | **0.037** | 25.1% | 27.5% | 44.4 | 44.2 | 2.534 | 2.489 |
+  | 2024/25 | 0.113 | **0.035** | **16.5%** | 21.5% | 45.2 | **47.9** | 2.423 | 2.415 |
+  | 2025/26 | 0.097 | **0.026** | 29.2% | 33.7% | 36.3 | 36.4 | 2.662 | 2.666 |
+
+- **Gate calls:**
+  - Upper-tail gap: **PASS** all four seasons (reliability of confidence labels improves)
+  - XI 0-min: **FAIL** - worse or flat in 3/4 seasons (cheat-block); only trivial help in 2022/23
+  - XI+Cap: **mixed** - clear wins in 2022/23 and 2024/25; flat elsewhere
+  - MAE_60+ guardrail: **PASS** (flat to slightly better)
+
+- **Verdict:** **Reject LOSO bucket recalibration as V2A-M.** Remapping confidence alone does not reduce XI blank selections and can increase them (2024/25 16.5->21.5%, 2025/26 29.2->33.7%). The E013 overconfidence diagnosis stands, but the fix is not a post-hoc probability map - need a **structural** as-of-T minutes/availability model (who gets high base start probability), still without rates/fixtures/ILP/new-club prior. V1 remains production control.
+- **Artifacts:** `records/historical/v2am_loso_summary.csv`; `engine/minutes_v2am.py`; `engine/harness_v2am.py`
+- **Follow-up:** queue E015 V2A-M-v2 structural minutes (recent as-of-T minutes/starts, soften hardcoded 0.90 caps using role evidence only). Do not promote `minutes_version=v2am` to default.
+
+
+### E015 - V2A-M-v2 structural as-of-T minutes (queued)
+- **Status:** queued
+- **Hypothesis:** XI blanks require changing *who* receives high base start probability from as-of-T minutes/starts/role evidence, not only remapping V1 confidence labels
+- **Constraint:** same as E014 - no new-club prior; rates/fixtures/ILP/objective frozen; MAE_60+ guardrail; XI 0-min cheat-block
+- **Follow-up:** design after E014 reject; do not implement until card is pre-registered with exact features
+
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
 - **Status:** queued (blocked on V2B/V5 scope)
@@ -419,15 +453,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-25 (after E010 live GW1 score):
+As of 2026-08-26 (after E014 V2A-M LOSO reject):
 
-1. **E010 complete.** Frozen V1 GW1: MAE 1.621, Spearman 0.481, XI+Cap 46, XI 0-min 3/11 (27.3%). Guehi 10 pts / 90 min. **Do not retune V1 from one GW.**
-2. **Production V1 remains the control.** No code, optimizer, minutes, or fixture changes from GW1 results alone.
-3. **H0b still the target.** Live GW1 XI blanks (27.3%) land in the E013 25-29% cluster. Top-bucket start 85% (n=60) - one week, not a recalibration.
-4. **Guehi case study closed for this week** - he started and scored; that does not authorize a new-club prior (E013).
-5. **Next experiment: V2A-M** - minutes/availability only; four-season gates (`p90_fitted`, XI 0-min, XI+cap vs V1). Then docs already synced.
-6. **E012** property tests - parallel, not blocking V2A-M.
-7. **Ladder:** V2A-M -> V2B -> V2C -> V2D. Each rung beats the preceding control out-of-sample.
+1. **V1 remains production control.** `minutes_version` default stays `v1`. No rates/fixtures/ILP/horizon changes.
+2. **E010 stands.** Rank skill + near-zero bias; XI blanks remain the actionable failure.
+3. **E014 REJECT.** LOSO bucket recalibration improved upper-tail gap but **failed the XI 0-min cheat-block** (worse in 3/4 seasons). Confidence remapping alone is not enough.
+4. **Next:** E015 V2A-M-v2 - structural as-of-T minutes/availability (who earns high base p_start), still no new-club prior, same control stack.
+5. **E012** property tests - still parallel, not blocking.
+6. **Ladder unchanged:** V2A-M (in progress via v2) -> V2B -> V2C -> V2D.
 
 ---
 

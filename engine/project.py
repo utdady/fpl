@@ -7,6 +7,7 @@ import numpy as np
 
 from engine.fixtures import LEAGUE_AVG, player_match_context
 from engine.minutes import build_role_start, minutes_probs
+from engine.minutes_v2am import recalibrate_minutes
 from engine.models import GWProjection, Player, PlayerProjection, Snapshot
 from engine.scoring import GC_BUCKET, SAVES_BUCKET
 
@@ -162,10 +163,13 @@ def project_player_gw(
     strategy: str,
     rng: np.random.Generator,
     role_start: dict[int, float] | None = None,
+    p_start_map: dict[str, float] | None = None,
 ) -> GWProjection:
     scoring = snapshot.scoring
     pos = player.position
     p_start, p_sub, p_60 = minutes_probs(player, gw_offset, role_start)
+    if p_start_map is not None:
+        p_start, p_sub, p_60 = recalibrate_minutes(p_start, p_sub, p_start_map)
     fixtures = [f for f in snapshot.fixtures_for(event_id) if player.team_id in (f.team_h, f.team_a)]
     n = N_SIMS
     if not fixtures or (p_start + p_sub) < 1e-4:
@@ -240,9 +244,17 @@ def project_all(
     horizon: int,
     strategy: str,
     seed: int = 7,
+    minutes_version: str = "v1",
+    p_start_map: dict[str, float] | None = None,
 ) -> list[PlayerProjection]:
     if strategy not in STRATEGIES:
         raise ValueError(f"strategy must be one of {STRATEGIES}")
+    if minutes_version not in {"v1", "v2am"}:
+        raise ValueError("minutes_version must be 'v1' or 'v2am'")
+    if minutes_version == "v2am" and p_start_map is None:
+        raise ValueError("v2am requires a leave-one-season-out p_start_map")
+    if minutes_version == "v1":
+        p_start_map = None
     next_e = snapshot.next_event()
     gw_ids = []
     for e in snapshot.events:
@@ -259,7 +271,9 @@ def project_all(
         h_u = 0.0
         for offset, gw in enumerate(gw_ids):
             gw_rng = np.random.default_rng(rng.integers(0, 2**32 - 1) ^ (player.id * 1009 + gw))
-            pred = project_player_gw(snapshot, player, gw, offset, strategy, gw_rng, role_start)
+            pred = project_player_gw(
+                snapshot, player, gw, offset, strategy, gw_rng, role_start, p_start_map=p_start_map
+            )
             by_gw[gw] = pred
             w = DECAY ** offset
             h_mu += w * pred.mu
