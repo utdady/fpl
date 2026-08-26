@@ -67,7 +67,8 @@ def blend(observed: float, prior: float, minutes: int, n_full: int = 1800) -> fl
     return w * observed + (1.0 - w) * prior
 
 
-def rates_for(player: Player) -> dict[str, float]:
+def rates_for_v1(player: Player) -> dict[str, float]:
+    """Production / E016 control rate path: blend observed xG/xA toward cost priors."""
     xg = blend(player.xg90, cost_prior_xg90(player.position, player.now_cost), player.minutes)
     xa = blend(player.xa90, cost_prior_xa90(player.position, player.now_cost), player.minutes)
     if player.minutes < 450 and player.pen_order == 1:
@@ -103,6 +104,29 @@ def rates_for(player: Player) -> dict[str, float]:
         "y90": max(0.0, min(0.45, y90)),
         "bonus90": max(0.0, min(1.2, bonus90)),
     }
+
+
+def rates_for(player: Player) -> dict[str, float]:
+    """Alias for rates_v1 (backward-compatible name)."""
+    return rates_for_v1(player)
+
+
+def resolve_rates(
+    player: Player,
+    rates_version: str,
+    rates_priors: dict[int, tuple[float, float]] | None,
+) -> dict[str, float]:
+    if rates_version == "v1":
+        return rates_for_v1(player)
+    if rates_version == "v2b":
+        from engine.rates_v2b import rates_for_v2b
+
+        prior = (rates_priors or {}).get(player.id)
+        px = prior[0] if prior else None
+        pa = prior[1] if prior else None
+        return rates_for_v2b(player, px, pa)
+    raise ValueError("rates_version must be 'v1' or 'v2b'")
+
 
 
 def utility(mu: float, sigma: float, p10: float, strategy: str) -> float:
@@ -165,6 +189,8 @@ def project_player_gw(
     rng: np.random.Generator,
     role_start: dict[int, float] | None = None,
     p_start_map: dict[str, float] | None = None,
+    rates_version: str = "v1",
+    rates_priors: dict[int, tuple[float, float]] | None = None,
 ) -> GWProjection:
     scoring = snapshot.scoring
     pos = player.position
@@ -176,7 +202,7 @@ def project_player_gw(
     if not fixtures or (p_start + p_sub) < 1e-4:
         return GWProjection(player.id, event_id, len(fixtures), 0, 0, p_start, p_sub, p_60, 0, 0)
 
-    rates = rates_for(player)
+    rates = resolve_rates(player, rates_version, rates_priors)
     total = np.zeros(n, dtype=np.float64)
     p60_acc = 0.0
     pstart_acc = 0.0
@@ -247,11 +273,14 @@ def project_all(
     seed: int = 7,
     minutes_version: str = "v2am_s",
     p_start_map: dict[str, float] | None = None,
+    rates_version: str = "v1",
 ) -> list[PlayerProjection]:
     if strategy not in STRATEGIES:
         raise ValueError(f"strategy must be one of {STRATEGIES}")
     if minutes_version not in {"v1", "v2am", "v2am_s"}:
         raise ValueError("minutes_version must be 'v1', 'v2am', or 'v2am_s'")
+    if rates_version not in {"v1", "v2b"}:
+        raise ValueError("rates_version must be 'v1' or 'v2b'")
     if minutes_version == "v2am" and p_start_map is None:
         raise ValueError("v2am requires a leave-one-season-out p_start_map")
     if minutes_version != "v2am":
@@ -261,6 +290,16 @@ def project_all(
     for e in snapshot.events:
         if e.id >= next_e.id and len(gw_ids) < horizon:
             gw_ids.append(e.id)
+
+    rates_priors: dict[int, tuple[float, float]] | None = None
+    if rates_version == "v2b":
+        from engine.harness import SEASON_LABEL
+        from engine.rates_v2b import build_rates_priors_for_snapshot
+
+        label_to_season = {v: k for k, v in SEASON_LABEL.items()}
+        season_key = label_to_season.get(snapshot.season_label)
+        if season_key:
+            rates_priors = build_rates_priors_for_snapshot(season_key, snapshot)
 
     rng = np.random.default_rng(seed)
     if minutes_version == "v2am_s":
@@ -288,7 +327,16 @@ def project_all(
         for offset, gw in enumerate(gw_ids):
             gw_rng = np.random.default_rng(rng.integers(0, 2**32 - 1) ^ (player.id * 1009 + gw))
             pred = project_player_gw(
-                snapshot, player, gw, offset, strategy, gw_rng, role_start, p_start_map=p_start_map
+                snapshot,
+                player,
+                gw,
+                offset,
+                strategy,
+                gw_rng,
+                role_start,
+                p_start_map=p_start_map,
+                rates_version=rates_version,
+                rates_priors=rates_priors,
             )
             by_gw[gw] = pred
             w = DECAY ** offset

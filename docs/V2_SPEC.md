@@ -32,33 +32,18 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
-## 0b. V2B - Multi-season rate priors (**OPEN** — E016)
+## 0b. V2B - Multi-season rate priors (**REJECT** — E016)
 
-**Status:** Pre-registered 2026-08-26. Implementation contract locked. Not implemented. See `LAB_LOG.md` E016.
+**Status:** Implemented and evaluated 2026-08-26. **REJECT.** Production `rates_version` remains `"v1"`. See `LAB_LOG.md` E016.
 
 **Scope lock:**
-> **Multi-season rates = the player-level per-90 rate path inside `rates_for`, not fixture strength. ATK/CONCEDE/`attack_mult` remain frozen and are reserved for the later fixture experiment (V2D/B6).**
+> **Multi-season rates = the player-level per-90 rate path inside `rates_for`, not fixture strength. ATK/CONCEDE/`attack_mult` remain frozen (V2D/B6).**
 
-**Versioning (orthogonal):**
-```text
-minutes_version = "v2am_s"     # locked both arms
-rates_version   = "v1" | "v2b"
+**What was tested:** `minutes=v2am_s` × `rates=v1` vs `rates=v2b` (club-matched multi-season xG/xA prior, min 270 mins; else cost prior). Seed fixed. dc/saves/bonus/cards unchanged.
 
-control:   minutes=v2am_s + rates=v1
-treatment: minutes=v2am_s + rates=v2b
-```
-Preserve existing `cost_prior_xg90` / `cost_prior_xa90` for `rates=v1`; do not replace in place.
+**Result:** MAE_60+ and Spearman|60+ improved all four seasons; XI+Cap and XI 0-min **failed** on 2022/23 and 2025/26. Better rate estimates did not survive the decision layer uniformly.
 
-**Surface:** treatment changes **`xg90` / `xa90` priors only**. dc / saves / bonus / cards unchanged in E016.
-
-**As-of-T:** prior seasons / pre-GW information only; **split rate evidence by club stint** (no blind season-wide average across clubs).
-
-**Control:** V2A-M (`v2am_s`) + `rates=v1` + current fixtures/scoring/ILP/objective/horizon + fixed MC seed.  
-**Treatment:** same + `rates=v2b` only.  
-**Not the control:** V1. Report V1 as a separate historical benchmark only.
-
-**Gates (per season):** MAE_60+ (primary); Spearman among mins≥60; XI+Cap non-inferiority; XI 0-min guardrail (must not worsen vs V2A-M).  
-**Locked:** V2A-M minutes knobs, ATK/CONCEDE/`attack_mult`, scoring, ILP, objective, horizon, dc/saves/bonus/cards.
+**Do not promote. Do not retune minutes to compensate.** A successor rates experiment needs a new pre-registered card.
 
 ---
 

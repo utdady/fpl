@@ -465,17 +465,10 @@ playing-time overconfidence propagating into XI blank selections**.
 
 ### V2B gates (E016; per season, not averaged)
 
-**Scope lock:** multi-season rates = `rates_for` player per-90 (`xg90`/`xa90`) only.
-ATK/CONCEDE/`attack_mult` frozen (V2D). dc/saves/bonus/cards unchanged in E016.
-
-**Active control:** `minutes=v2am_s` + `rates=v1`.  
-**Treatment:** `minutes=v2am_s` + `rates=v2b`. **Not** judged by beating V1 alone.
-Fixed MC seed both arms; club-stint split for transfer rate history.
-
-1. MAE among minutes ≥ 60 (primary).
-2. Spearman among minutes ≥ 60.
-3. XI+Cap non-inferiority (prefer improvement).
-4. XI 0-min must not worsen vs V2A-M (guardrail).
+**E016 REJECT.** Club-matched multi-season `xg90`/`xa90` prior improved MAE_60+ and
+Spearman|60+ on all four seasons but failed XI+Cap and XI 0-min on 2022/23 and
+2025/26. Production remains `rates_version=v1`. Do not retune V2A-M minutes to
+compensate. A successor rates experiment needs a new pre-registered card.
 
 ---
 
@@ -498,7 +491,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E010** | Score live 2026/27 GW1 | completed (V1 measurement) |
 | **E014** | LOSO p_start remap | **REJECT** |
 | **E015** | Structural as-of-T minutes (`v2am_s`) | **PASS** → promoted (`v2am-s-baseline`) |
-| **E016** | V2B multi-season rates vs V2A-M control | **queued** / pre-registered |
+| **E016** | V2B multi-season rates vs V2A-M control | **REJECT** (MAE/Sp OK; Cap/XI0 fail 2/4) |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 
