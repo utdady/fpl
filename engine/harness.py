@@ -164,6 +164,35 @@ def aggregate_gw_stats(season: str, through_gw: int | None = None) -> dict[int, 
     return dict(acc)
 
 
+
+def recent_minutes_by_element(
+    season: str,
+    as_of_gw: int,
+    window: int = 4,
+) -> dict[int, int]:
+    """Minutes in GWs (as_of_gw-window) .. (as_of_gw-1), as-of-T only.
+
+    Empty if as_of_gw <= 1. Used by E015 structural minutes.
+    """
+    if as_of_gw <= 1:
+        return {}
+    from_gw = max(1, as_of_gw - window)
+    through_gw = as_of_gw - 1
+    merged = season_dir(season) / "gws" / "merged_gw.csv"
+    if not merged.exists():
+        return {}
+    acc: dict[int, int] = defaultdict(int)
+    for row in _read_csv(merged):
+        gw = _i(row.get("GW") or row.get("round"), 0)
+        if gw < from_gw or gw > through_gw:
+            continue
+        eid = _i(row.get("element"), 0)
+        if not eid:
+            continue
+        acc[eid] += _i(row.get("minutes"))
+    return dict(acc)
+
+
 def prior_stats_by_code(prev_season: str) -> dict[int, PlayerAgg]:
     id_code = _id_code_map(prev_season)
     agg = aggregate_gw_stats(prev_season)

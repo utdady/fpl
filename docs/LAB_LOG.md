@@ -417,11 +417,50 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Follow-up:** queue E015 V2A-M-v2 structural minutes (recent as-of-T minutes/starts, soften hardcoded 0.90 caps using role evidence only). Do not promote `minutes_version=v2am` to default.
 
 
-### E015 - V2A-M-v2 structural as-of-T minutes (queued)
-- **Status:** queued
-- **Hypothesis:** XI blanks require changing *who* receives high base start probability from as-of-T minutes/starts/role evidence, not only remapping V1 confidence labels
-- **Constraint:** same as E014 - no new-club prior; rates/fixtures/ILP/objective frozen; MAE_60+ guardrail; XI 0-min cheat-block
-- **Follow-up:** design after E014 reject; do not implement until card is pre-registered with exact features
+
+### E014b - XI movement diagnostic (post-E014)
+- **Date:** 2026-08-26
+- **Status:** completed
+- **Question:** Is E014's XI-blank regression concentrated or diffuse across buckets/roles?
+- **Method:** `scripts/e014_xi_movement.py` — per GW, V1 XI (decision_decomp) vs V2A-M remap XI; tag leavers/entrants by V1 p_start bucket, position, blank outcome.
+- **Results (blank rate among movers):**
+
+  | Season | Left blank% | Entered blank% | Dominant enter bucket |
+  |---|---:|---:|---|
+  | 2022/23 | 22.8 | **20.9** | 0.60-0.70 (72) |
+  | 2023/24 | 18.5 | **24.7** | 0.60-0.70 (82) |
+  | 2024/25 | 16.9 | **30.5** | 0.60-0.70 (47) + low |
+  | 2025/26 | 20.3 | **33.6** | 0.60-0.70 (67) |
+
+- **Verdict:** **Concentrated.** Remap systematically ejects **0.80-0.90** players who mostly played, and inserts **0.60-0.70** players who blank more. 2022/23 is the exception (entered blanks ~ left blanks) — explains why XI0 was flat there while Cap rose. LOSO map is also non-monotonic (0.60-0.70 empirical > 0.70-0.80), which promotes the mid bucket into XI contention. E015 must not repeat post-hoc bucket remap; change *who earns* high base start via as-of-T recent form.
+- **Artifacts:** `records/historical/e014_xi_movement.csv`
+
+### E015 - V2A-M-v2 structural as-of-T minutes
+- **Date:** 2026-08-26 (pre-registered from E014b; eval completed same day)
+- **Status:** completed - **PASS / retain as V2A-M candidate** (production default still `v1` until explicit promote)
+- **Hypothesis:** Soft-capping season-total 0.90 claims and demoting cold recent-4 players reduces XI blanks without post-hoc remap
+- **Method:** `python -m engine.harness_v2am_s` (`minutes_version=v2am_s`). Fixed rules: max base 0.85; if as_of_gw>4, cold cap 0.55 / hot floor 0.72 from last-4-GW minutes. No new-club prior. No bucket remap.
+- **Seasons / GWs:** 2022/23-2025/26, GW1-38
+
+- **Results:**
+
+  | Season | ut_gap V1 | ut_gap V2 | XI0 V1 | XI0 V2 | XI+Cap V1 | XI+Cap V2 | MAE60 V1 | MAE60 V2 | XI0 gate |
+  |---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+  | 2022/23 | 0.101 | **0.046** | 27.0% | **11.5%** | 46.4 | **57.1** | 2.665 | 2.576 | PASS |
+  | 2023/24 | 0.121 | **0.041** | 25.1% | **11.0%** | 44.4 | **53.7** | 2.534 | 2.482 | PASS |
+  | 2024/25 | 0.113 | **0.068** | 16.5% | **10.5%** | 45.2 | **56.6** | 2.423 | 2.400 | PASS |
+  | 2025/26 | 0.097 | **0.031** | 29.2% | **14.1%** | 36.3 | **50.4** | 2.662 | 2.572 | PASS |
+
+- **Gate calls:**
+  - XI 0-min hard non-inferiority: **PASS all four** (and large improvements, including the 2024/25 outlier season)
+  - Upper-tail gap: **PASS** all four (model no longer claims >=0.90 by design; honesty via p>=0.75 gap)
+  - XI+Cap: **PASS** all four (+7 to +14 pts/GW mean)
+  - MAE_60+ guardrail: **PASS** all four (slightly better)
+
+- **Verdict:** **E015 PASS.** Structural as-of-T recent form + soft max addresses the E014 failure mode (no mid-bucket promotion via non-monotonic remap). V2A-M candidate = `minutes_version=v2am_s`. **Do not silently change live default** — promote in a separate explicit step after review.
+- **Artifacts:** `records/historical/v2am_s_summary.csv`; `engine/minutes_struct.py`; `engine/harness_v2am_s.py`; `records/historical/e014_xi_movement.csv`
+- **Follow-up:** optional promote `project_all` default / live capture to `v2am_s`; E012 still parallel; V2B rates still gated behind V2A-M freeze.
+
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -453,14 +492,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-26 (after E014 V2A-M LOSO reject):
+As of 2026-08-26 (after E015 PASS):
 
-1. **V1 remains production control.** `minutes_version` default stays `v1`. No rates/fixtures/ILP/horizon changes.
-2. **E010 stands.** Rank skill + near-zero bias; XI blanks remain the actionable failure.
-3. **E014 REJECT.** LOSO bucket recalibration improved upper-tail gap but **failed the XI 0-min cheat-block** (worse in 3/4 seasons). Confidence remapping alone is not enough.
-4. **Next:** E015 V2A-M-v2 - structural as-of-T minutes/availability (who earns high base p_start), still no new-club prior, same control stack.
-5. **E012** property tests - still parallel, not blocking.
-6. **Ladder unchanged:** V2A-M (in progress via v2) -> V2B -> V2C -> V2D.
+1. **E015 PASS.** Structural as-of-T minutes (`v2am_s`) cuts XI 0-min roughly in half on all four seasons, lifts XI+Cap, improves upper-tail gap, MAE_60+ OK.
+2. **Production default still `minutes_version=v1`.** Promote `v2am_s` only via explicit decision (next freeze candidate).
+3. **E014 REJECT stands** (remap). **E014b** showed failure was concentrated: eject 0.80-0.90 players who played, insert 0.60-0.70 who blanked.
+4. **E010 live GW1** unchanged as measurement; do not retune from one GW.
+5. **Next:** review/promote V2A-M freeze; then V2B (rates) only after that. E012 parallel.
+6. **Invariant:** rates/fixtures/scoring/ILP/objective/horizon still frozen unless a new experiment says otherwise.
 
 ---
 

@@ -8,6 +8,7 @@ import numpy as np
 from engine.fixtures import LEAGUE_AVG, player_match_context
 from engine.minutes import build_role_start, minutes_probs
 from engine.minutes_v2am import recalibrate_minutes
+from engine.minutes_struct import RECENT_WINDOW, build_role_start_struct
 from engine.models import GWProjection, Player, PlayerProjection, Snapshot
 from engine.scoring import GC_BUCKET, SAVES_BUCKET
 
@@ -249,11 +250,11 @@ def project_all(
 ) -> list[PlayerProjection]:
     if strategy not in STRATEGIES:
         raise ValueError(f"strategy must be one of {STRATEGIES}")
-    if minutes_version not in {"v1", "v2am"}:
-        raise ValueError("minutes_version must be 'v1' or 'v2am'")
+    if minutes_version not in {"v1", "v2am", "v2am_s"}:
+        raise ValueError("minutes_version must be 'v1', 'v2am', or 'v2am_s'")
     if minutes_version == "v2am" and p_start_map is None:
         raise ValueError("v2am requires a leave-one-season-out p_start_map")
-    if minutes_version == "v1":
+    if minutes_version != "v2am":
         p_start_map = None
     next_e = snapshot.next_event()
     gw_ids = []
@@ -262,7 +263,22 @@ def project_all(
             gw_ids.append(e.id)
 
     rng = np.random.default_rng(seed)
-    role_start = build_role_start(snapshot.players)
+    if minutes_version == "v2am_s":
+        # Historical snapshots carry season_label like "2025/26"; live may not map.
+        from engine.harness import SEASON_LABEL, recent_minutes_by_element
+        label_to_season = {v: k for k, v in SEASON_LABEL.items()}
+        season_key = label_to_season.get(snapshot.season_label)
+        as_of_gw = next_e.id
+        recent: dict[int, int] = {}
+        apply_recent = False
+        if season_key and as_of_gw > RECENT_WINDOW:
+            recent = recent_minutes_by_element(season_key, as_of_gw, window=RECENT_WINDOW)
+            apply_recent = True
+        role_start = build_role_start_struct(
+            snapshot.players, recent_minutes=recent, apply_recent=apply_recent
+        )
+    else:
+        role_start = build_role_start(snapshot.players)
     out: list[PlayerProjection] = []
     for player in snapshot.players:
         by_gw = {}
