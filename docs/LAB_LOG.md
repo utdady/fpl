@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E016 REJECT — rates stay v1; successor V2B card or E012; minutes locked.
+**Active research question:** E016 REJECT + E016b concentrated (club-prior μ promotion → XI blanks in FAIL seasons). Successor V2B card next; minutes locked.
 
 ---
 
@@ -525,9 +525,33 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
   - Spearman|60+: **PASS all four**
   - XI+Cap non-inferiority: **FAIL** 2022/23 and 2025/26
   - XI 0-min guardrail: **FAIL** 2022/23 and 2025/26
-- **Verdict:** **REJECT** this `rates_v2b` treatment for production. Player-level rate skill improved under the frozen minutes stack, but the decision layer regressed in 2/4 seasons (XI blanks up; XI+Cap down). Same failure *category* as E014: better inputs ≠ automatic better ILP selections. Do not retune minutes to compensate. Do not promote.
+- **Verdict:** **REJECT** this `rates_v2b` treatment for production. Player-level rate skill improved under the frozen minutes stack, but the decision layer regressed in 2/4 seasons (XI blanks up; XI+Cap down). Instance of the **signal–selection gap** (same category as E014): better component metrics ≠ automatic better ILP selections. Do not retune minutes to compensate. Do not promote.
 - **Artifacts:** `records/historical/v2b_rates_summary.csv`; `engine/rates_v2b.py`; `engine/harness_v2b.py`; `rates_version` on `project_all` (default remains `v1`)
-- **Follow-up:** keep `rates_version=v1` as production. Next V2B attempt needs a new pre-registered card (e.g. different prior construction / shrinkage / eligibility), not silent knob turns. E012 parallel. Fixtures still V2D.
+- **Follow-up:** E016b movement diagnostic → then successor rates card if warranted. E012 parallel. Fixtures still V2D.
+
+### E016b - XI movement diagnostic (post-E016)
+- **Date:** 2026-08-26
+- **Status:** completed
+- **Question:** Is E016's Cap/XI0 regression concentrated or diffuse? Who enters/leaves when rates flip under frozen `v2am_s`?
+- **Method:** `scripts/e016_xi_movement.py` — per GW, control XI (`rates=v1`) vs treatment XI (`rates=v2b`); tag leavers/entrants by position, p_start, `mu_delta`, `had_club_prior`, blank outcome. Seed=7 both arms.
+- **Results (blank% among movers):**
+
+  | Season | E016 gate | n swaps | left blank% | entered blank% | entered had_prior% | mean μΔ entered |
+  |---|---|---:|---:|---:|---:|---:|
+  | 2022/23 | FAIL | 109 | 12.8 | **16.5** | 95.4 | **+0.79** |
+  | 2023/24 | PASS | 61 | 9.8 | **8.2** | 98.4 | +0.47 |
+  | 2024/25 | PASS | 68 | 11.8 | **10.3** | 94.1 | +0.54 |
+  | 2025/26 | FAIL | 66 | 7.6 | **16.7** | 93.9 | +0.44 |
+
+- **Mechanism:**
+  - Treatment **systematically inserts club-prior players** (entered prior% ~94–98% vs left ~58–78%) with large positive μ lifts.
+  - Not an E014b-style mid-bucket remap: both arms' movers sit mostly in **0.70–0.80** p_start (minutes locked).
+  - **FAIL seasons** = entered blank% > left blank% (replacements blank more than ejectees). **PASS seasons** = entered blank% ≤ left blank%.
+  - 2025/26 also MID-heavy (37 MID left → 42 entered; DEF 17→11). 2022/23 has the largest swap volume (109).
+- **Verdict:** **Concentrated.** `rates_v2b` preferentially promotes multi-season club-history attackers/mids via μ boost; when those replacements blank more than the players they displace, Cap/XI0 fail. PASS seasons show the same promotion pattern but with *better* replacement blank rates — so the rates axis isn't dead, but a successor must constrain **who is allowed to receive / how strongly the prior lifts μ into XI contention**, not just reblend.
+- **Artifacts:** `records/historical/e016_xi_movement.csv`; `scripts/e016_xi_movement.py`
+- **Follow-up:** pre-register successor V2B card targeting this mechanism (e.g. prior strength cap, shrink harder into current form, or eligibility gates) — do not silent-retune E016.
+
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
 - **Status:** queued (blocked on V2B/V5 scope)
@@ -558,14 +582,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-26 (after E016 REJECT):
+As of 2026-08-26 (after E016b):
 
 1. **V2A-M FROZEN + PRODUCTION.** `minutes_version=v2am_s`. Do not retune.
-2. **Rates production stays `rates_version=v1`.** E016 multi-season club prior **REJECT** — MAE/Sp improved 4/4 but XI+Cap and XI0 failed 2022/23 and 2025/26.
-3. **V1 = permanent historical control.** Separate lane.
-4. **Live 2026** validates frozen `v2am_s` (+ rates_v1). Not a retune signal.
-5. **Next:** new V2B card if pursuing rates again (do not silently retune E016); or E012 parallel; fixtures remain V2D. Do not reopen minutes to “fix” rates.
-6. **Invariant:** minutes / fixtures / scoring / ILP / objective locked unless a new pre-registered experiment says otherwise.
+2. **E016 REJECT; rates stay `v1`.** Signal–selection gap: MAE/Sp up, Cap/XI0 fail 2/4.
+3. **E016b: concentrated.** Entrants ≈ club-prior + large μΔ; FAIL seasons have entered blank% > left blank%; PASS seasons reverse that. Not an E014 mid-bucket remap.
+4. **Next:** successor V2B card aimed at prior→XI promotion mechanism (new card, not silent retune). E012 parallel. Fixtures = V2D.
+5. **Live 2026** validates `v2am_s` + `rates_v1`.
+6. **Invariant:** minutes / fixtures / ILP / objective locked unless a new pre-registered experiment says otherwise.
 
 ---
 
