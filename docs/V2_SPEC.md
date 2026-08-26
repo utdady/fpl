@@ -43,7 +43,27 @@ production is V2A-M) is an appendix, not a pass.
 
 **Result:** MAE_60+ and Spearman|60+ improved all four seasons; XI+Cap and XI 0-min **failed** on 2022/23 and 2025/26. Better rate estimates did not survive the decision layer uniformly.
 
-**Do not promote. Do not retune minutes to compensate.** A successor rates experiment needs a new pre-registered card.
+**Do not promote. Do not retune minutes to compensate.**
+
+---
+
+## 0c. V2B-d - Prior→XI promotion dampening (**OPEN** — E017)
+
+**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E017.
+
+**Why:** E016b showed FAIL seasons are driven by **large club-prior μ lifts** into the XI (entered blank% > left blank%), not by p_start bucket remap. Signal–selection gap: rate skill without safe selection.
+
+**Control:** `minutes=v2am_s` + `rates=v1`  
+**Treatment:** `minutes=v2am_s` + `rates=v2b_d`
+
+**Pinned knobs:**
+- `prior = (1−α)·cost_prior + α·club_prior` with **α = 0.50** (xg90 and xa90)
+- `MIN_CLUB_MINUTES = 270` (else cost prior only)
+- Club-stint split; seed=7; dc/saves/bonus/cards / ATK/CONCEDE locked
+
+**Dampener acts on the prior inside `rates_for`, not a post-hoc XI freeze.**
+
+**Gates:** same as E016 (MAE_60+, Spearman|60+, XI+Cap non-inferiority, XI 0-min non-worsening), all four seasons.
 
 ---
 

@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E016 REJECT + E016b concentrated (club-prior μ promotion → XI blanks in FAIL seasons). Successor V2B card next; minutes locked.
+**Active research question:** E017 prior→XI dampening pre-registered (`rates=v2b_d`, α=0.50). E016 REJECT stands; minutes locked.
 
 ---
 
@@ -550,7 +550,53 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
   - 2025/26 also MID-heavy (37 MID left → 42 entered; DEF 17→11). 2022/23 has the largest swap volume (109).
 - **Verdict:** **Concentrated.** `rates_v2b` preferentially promotes multi-season club-history attackers/mids via μ boost; when those replacements blank more than the players they displace, Cap/XI0 fail. PASS seasons show the same promotion pattern but with *better* replacement blank rates — so the rates axis isn't dead, but a successor must constrain **who is allowed to receive / how strongly the prior lifts μ into XI contention**, not just reblend.
 - **Artifacts:** `records/historical/e016_xi_movement.csv`; `scripts/e016_xi_movement.py`
-- **Follow-up:** pre-register successor V2B card targeting this mechanism (e.g. prior strength cap, shrink harder into current form, or eligibility gates) — do not silent-retune E016.
+- **Follow-up:** E017 pre-registered (prior→XI promotion dampening).
+
+### E017 - V2B prior→XI promotion dampening (pre-registered)
+- **Date:** 2026-08-27 (from E016b; **not started**)
+- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
+- **Hypothesis:** Large club-prior–driven μ lifts are an unreliable XI promotion signal. Dampening how strongly the multi-season club prior can replace the cost prior reduces Cap/XI0 failures while preserving most of E016's MAE/Sp gains.
+- **Question:** Under frozen `v2am_s`, does a **half-strength** club prior (`rates=v2b_d`) clear E016's decision gates without giving back the player-level rate improvements?
+
+- **Evidence (E016b):** Entrants were ~94–98% club-prior with mean μΔ +0.44 to +0.79. FAIL seasons had entered blank% > left blank%; PASS seasons did not. Mechanism is **magnitude of prior-driven lift**, not identity / p_start buckets (minutes locked).
+
+- **Scope lock:**
+  > Same as E016: player-level `xg90`/`xa90` inside `rates_for` only. ATK/CONCEDE/`attack_mult` frozen (V2D). dc/saves/bonus/cards unchanged. **Dampener acts on the prior fed into blend — not a post-hoc “freeze the XI” rule.**
+
+- **Versioning:**
+  ```text
+  minutes_version = "v2am_s"              # both arms
+  rates_version   = "v1" | "v2b" | "v2b_d"
+
+  control:   minutes=v2am_s + rates=v1
+  treatment: minutes=v2am_s + rates=v2b_d
+  ```
+  `v2b` remains the rejected full club prior (appendix / ablation only). Do not use V1 minutes as pass/fail control.
+
+- **Pinned treatment knobs (do not retune mid-run):**
+  | Knob | Value | Role |
+  |---|---|---|
+  | `α` (club prior mix) | **0.50** | `prior = (1−α)·cost_prior + α·club_prior` for xg90 and xa90 |
+  | `MIN_CLUB_MINUTES` | **270** | unchanged from E016; below this → cost prior only |
+  | Surface | **xg90, xa90 only** | dc/saves/bonus/cards locked |
+  | Club-stint split | **yes** | same as E016; no blind cross-club average |
+  | MC seed | **7** | fixed both arms |
+
+- **What this is not:** changing α after peeking; capping XI membership vs control; retuning V2A-M minutes; touching fixtures.
+
+- **Method (planned):** extend `rates_version` with `v2b_d`; harness parallel to `harness_v2b` (control `v1` vs treatment `v2b_d`). Optional ablation: report `v2b` column for reference only — not a gate.
+- **Seasons / GWs:** 2022/23–2025/26, GW1–38
+- **Metrics / gates (same as E016; per season, not averaged):**
+  1. **MAE_60+** — primary: treatment ≤ control (prefer improvement)
+  2. **Spearman|60+** — non-inferiority; prefer improvement
+  3. **XI+Cap** — non-inferiority every season
+  4. **XI 0-min** — must not worsen vs control on any season
+- **Secondary diagnostic (not a gate):** mean |μΔ| / entered blank% among XI movers vs E016b (expect smaller lifts and FAIL-season blank gap closing)
+- **Cheat-blocks:** no minutes retune; no ATK/CONCEDE change; beating V1 alone ≠ pass; beating raw `v2b` alone ≠ pass; no post-hoc α search; no bundling `strategies.json`
+- **Results:** —
+- **Verdict:** —
+- **Artifacts:** —
+- **Follow-up sequence:** implement `v2b_d` → fixed-seed four-season harness → interpret → promote only if all gates PASS. E012 parallel.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -582,14 +628,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-26 (after E016b):
+As of 2026-08-27 (E017 pre-registered):
 
 1. **V2A-M FROZEN + PRODUCTION.** `minutes_version=v2am_s`. Do not retune.
-2. **E016 REJECT; rates stay `v1`.** Signal–selection gap: MAE/Sp up, Cap/XI0 fail 2/4.
-3. **E016b: concentrated.** Entrants ≈ club-prior + large μΔ; FAIL seasons have entered blank% > left blank%; PASS seasons reverse that. Not an E014 mid-bucket remap.
-4. **Next:** successor V2B card aimed at prior→XI promotion mechanism (new card, not silent retune). E012 parallel. Fixtures = V2D.
+2. **Rates production stays `rates=v1`.** E016 REJECT; E016b concentrated (club-prior μ promotion).
+3. **E017 contract locked.** Control = `v2am_s` + `rates=v1`. Treatment = `v2am_s` + `rates=v2b_d` with **α=0.50** club/cost prior mix. Same E016 gates. Dampen prior→μ, do not freeze XI post-hoc.
+4. **Next implement:** `rates_version=v2b_d` + harness → four-season eval. E012 parallel.
 5. **Live 2026** validates `v2am_s` + `rates_v1`.
-6. **Invariant:** minutes / fixtures / ILP / objective locked unless a new pre-registered experiment says otherwise.
+6. **Invariant:** minutes / fixtures / ILP / objective locked; no silent α search.
 
 ---
 

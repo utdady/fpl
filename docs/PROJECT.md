@@ -463,12 +463,13 @@ E015 passed all four seasons; production default is now `v2am_s`. Do not retune.
 Canonical statement (E013): V1's repeatable weakness was **upper-tail
 playing-time overconfidence propagating into XI blank selections**.
 
-### V2B gates (E016; per season, not averaged)
+### V2B gates (E016 REJECT; E017 OPEN)
 
-**E016 REJECT.** Club-matched multi-season `xg90`/`xa90` prior improved MAE_60+ and
-Spearman|60+ on all four seasons but failed XI+Cap and XI 0-min on 2022/23 and
-2025/26. Production remains `rates_version=v1`. Do not retune V2A-M minutes to
-compensate. A successor rates experiment needs a new pre-registered card.
+**E016 REJECT.** Full club prior improved MAE/Sp but failed Cap/XI0 on 2/4 (signal–selection gap).
+
+**E017 (pre-registered):** dampen prior→XI promotion via `rates=v2b_d`,
+`prior = 0.5·cost + 0.5·club` (α=0.50). Same gates vs `v2am_s` + `rates=v1`.
+Do not post-hoc freeze XI; do not silent-search α.
 
 ---
 
@@ -492,6 +493,8 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E014** | LOSO p_start remap | **REJECT** |
 | **E015** | Structural as-of-T minutes (`v2am_s`) | **PASS** → promoted (`v2am-s-baseline`) |
 | **E016** | V2B multi-season rates vs V2A-M control | **REJECT** (MAE/Sp OK; Cap/XI0 fail 2/4) |
+| **E016b** | XI movers under rates_v2b | **concentrated** (club-prior μ promotion) |
+| **E017** | V2B-d prior→XI dampening (α=0.50) | **queued** / pre-registered |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 
