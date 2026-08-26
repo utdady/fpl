@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E017 REJECT (α=0.50 not enough / wrong structure). Rates stay v1; no α search; minutes locked.
+**Active research question:** E017b concentrated (prior+cold recent blanks in FAIL seasons). E018 form-gate card next; rates stay v1.
 
 ---
 
@@ -573,7 +573,32 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Gate calls:** MAE_60+ and Spearman|60+ **PASS all four**; XI+Cap and XI 0-min **FAIL** 2022/23 and 2025/26 (same seasons as E016).
 - **Verdict:** **REJECT.** Right lever *direction* (dampen prior→XI lifts) but **α=0.50 is not enough** to clear decision gates — or half-mix is the wrong structure for the residual failure. Per pre-registration: **no post-hoc α search**. Signal–selection gap persists at reduced magnitude. Production rates stay `v1`.
 - **Artifacts:** `records/historical/v2b_d_rates_summary.csv`; `engine/harness_v2b_d.py`; `rates_version=v2b_d` in `engine/rates_v2b.py` / `project.py`
-- **Follow-up:** If pursuing rates again, a **new** card must change structure (e.g. eligibility / current-form gate / different prior), not grid α. E012 parallel. Minutes locked. Fixtures = V2D.
+- **Follow-up:** E017b entrant-profile diagnostic → then structural eligibility card if concentrated.
+
+### E017b - FAIL vs PASS entrant profiles (post-E017)
+- **Date:** 2026-08-27
+- **Status:** completed
+- **Question:** Do FAIL-season XI entrants under `rates_v2b` share an identifiable profile that PASS-season entrants lack?
+- **Method:** `scripts/e017_entrant_profile.py` — `v2am_s` + `rates=v1` vs `rates=v2b` (max contrast). Tag leavers/entrants with recent-4 minutes, season minutes, club prior, new-club, μΔ, blank. Contrast FAIL (2022/23, 2025/26) vs PASS (2023/24, 2024/25).
+- **Results (entered only):**
+
+  | Split | n | blank% | prior% | new_club% | recent4&lt;90% | season&lt;450% | mean recent4 | mean μΔ |
+  |---|---:|---:|---:|---:|---:|---:|---:|---:|
+  | FAIL | 175 | **16.6** | 94.9 | **65.7** | **18.3** | **41.7** | 244 | **0.66** |
+  | PASS | 129 | 9.3 | 96.1 | 45.7 | 10.9 | 33.3 | 274 | 0.51 |
+
+- **Smoking gun (entered + had club prior):**
+
+  | Cell | FAIL n / blank% | PASS n / blank% |
+  |---|---|---|
+  | prior + recent4 &lt; 90 | **30 / 43.3%** | 14 / 7.1% |
+  | prior + recent4 ≥ 90 | 136 / 10.3% | 110 / 9.1% |
+  | prior + season mins &lt; 450 | **72 / 29.2%** | 42 / 7.1% |
+  | prior + season mins ≥ 450 | 94 / 6.4% | 82 / 9.8% |
+
+- **Verdict:** **Concentrated.** FAIL seasons promote the same prior machinery into a **cold / thin-form** subgroup that blanks heavily (43% when prior + recent4&lt;90). Warm-form prior entrants in FAIL seasons look like PASS (~10% blank). New-club share is higher in FAIL but is a weaker blank separator than recent/season minutes. Supports an **eligibility / current-form gate** before club-prior weight — not another global α.
+- **Artifacts:** `records/historical/e017_entrant_profile.csv`; `scripts/e017_entrant_profile.py`
+- **Follow-up:** pre-register E018 (structural): withhold or fully damp club prior unless recent-4 / season-minutes thresholds are met; pin thresholds from this diagnostic before code.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -605,14 +630,13 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (after E017 REJECT):
+As of 2026-08-27 (after E017b):
 
-1. **V2A-M FROZEN + PRODUCTION.** `minutes_version=v2am_s`. Do not retune.
-2. **Rates production stays `rates=v1`.** E016 and E017 both REJECT (same FAIL seasons 22/23 + 25/26).
-3. **E017 dosage note:** α=0.50 halved μΔ and cut swaps vs E016b, but Cap/XI0 still fail — **no α grid search**. Next rates card must change structure if pursued.
-4. **Live 2026** validates `v2am_s` + `rates_v1`.
-5. **Next:** E012 parallel, or a structurally new V2B card (not α tweaks). Fixtures = V2D.
-6. **Invariant:** minutes / fixtures / ILP / objective locked.
+1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1`.
+2. **E016/E017 REJECT.** Global α dampening insufficient.
+3. **E017b concentrated.** FAIL entrants: prior + cold recent4 blank **43%** vs ~10% when recent4≥90. Form eligibility is the natural next structure.
+4. **Next:** pre-register E018 current-form gate on club prior (pin thresholds from E017b). E012 parallel.
+5. **Invariant:** no α search; minutes/fixtures/ILP locked.
 
 ---
 

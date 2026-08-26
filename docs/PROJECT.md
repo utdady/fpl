@@ -493,6 +493,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E016** | V2B multi-season rates vs V2A-M control | **REJECT** (MAE/Sp OK; Cap/XI0 fail 2/4) |
 | **E016b** | XI movers under rates_v2b | **concentrated** (club-prior μ promotion) |
 | **E017** | V2B-d prior→XI dampening (α=0.50) | **REJECT** (same FAIL seasons; dosage↓ but gates fail) |
+| **E017b** | FAIL vs PASS entrant profiles | **concentrated** (prior+cold recent → 43% blank) |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 
