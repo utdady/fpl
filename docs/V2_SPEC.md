@@ -1,11 +1,12 @@
 # V2 Research Spec
 
-**Governing rule:** A model at version N+1 earns its place only by beating N on
-out-of-sample MAE / Spearman rank correlation on realized GW points.
-Better-looking squads do not count.
+**Governing rule:** A model at version N+1 earns its place only by beating **N**
+(the best earned model so far) on pre-registered out-of-sample gates.
+Better-looking squads do not count. Beating an obsolete ancestor (e.g. V1 while
+production is V2A-M) is an appendix, not a pass.
 
-**Starting point:** `v1.0-gw1-baseline` — frozen before the 2026/27 GW1 deadline.
-Never overwrite it; treat it as the permanent control.
+**Permanent historical control:** `v1.0-gw1-baseline` — never overwrite.
+**Current production / active research control:** `v2am-s-baseline` (V2A-M).
 
 ---
 
@@ -13,13 +14,13 @@ Never overwrite it; treat it as the permanent control.
 
 **Status:** Frozen as production default after E015 PASS (2026-08-26). Tag: `v2am-s-baseline`.
 **Implementation:** `minutes_version="v2am_s"` (`engine/minutes_struct.py`).
-**Permanent control:** V1 (`v1.0-gw1-baseline`); historical harnesses pin `minutes_version="v1"`.
+**Permanent historical control:** V1 (`v1.0-gw1-baseline`); historical harnesses pin `minutes_version="v1"`.
 
 **What shipped:**
 - Soft max base `p_start` **0.85** (never 0.90 from season totals alone)
 - After GW4: last-4-GW minutes — cold cap **0.55** / hot floor **0.72**
 - No new-club prior; no bucket remap (E014 REJECT)
-- Rates / fixtures / scoring / ILP / objective / horizon unchanged
+- Rates / fixtures / scoring / ILP / objective / horizon unchanged at freeze time
 
 **Evidence base that justified the experiment (E013):**
 - `p90_fitted` ~75-78% at model >= 0.90; XI 0-min elevated (16.5% outlier in 2024/25; ~25-29% elsewhere)
@@ -27,7 +28,20 @@ Never overwrite it; treat it as the permanent control.
 
 **E015 gate result (all four seasons PASS):** XI 0-min roughly halved; XI+Cap up; upper-tail gap improved; MAE_60+ OK.
 
-**Do not retune these knobs.** Next research lever is **V2B (rates)**. Live 2026 validates `v2am_s`; do not treat V1 GW1 as evidence for this stack.
+**Do not retune these knobs.** Live 2026 validates `v2am_s` prospectively — not a retune signal.
+
+---
+
+## 0b. V2B - Multi-season rate priors (**OPEN** — E016)
+
+**Status:** Pre-registered 2026-08-26. Not implemented. See `LAB_LOG.md` E016.
+
+**Control:** V2A-M (`v2am_s`) + current rates + current fixtures/scoring/ILP/objective/horizon.  
+**Treatment:** same stack + multi-season rate improvement only (`rates_for` / prior path).  
+**Not the control:** V1. Report V1 as a separate historical benchmark only.
+
+**Gates (per season):** MAE_60+ (primary); Spearman among mins≥60; XI+Cap non-inferiority; XI 0-min guardrail (must not worsen vs V2A-M).  
+**Locked:** V2A-M minutes knobs, fixtures, scoring, ILP, objective, horizon.
 
 ---
 
@@ -128,9 +142,10 @@ Already run: 3/15 overlap. Backward-looking, no fixture or minutes adjustment.
 
 Already run: 2/15 overlap. Floors tiny samples; still attacker-biased.
 
-### B3 — V1 (frozen baseline)
+### B3 — V1 (permanent historical baseline)
 
-The control. Every B4+ must beat this on out-of-sample metrics before being trusted.
+Permanent historical control (`v1.0-gw1-baseline`). Still reported as a benchmark
+lane. **Not** the active pass/fail control for V2B+ — that is V2A-M (`v2am_s`).
 
 Confirmed finding: Haaland's exclusion from the balanced ILP is not a V1
 fixture-model artifact. Official ep_next through the same ILP also excludes him.
@@ -138,17 +153,22 @@ It is a portfolio-allocation decision at £15.5m. Forcing him in costs 4.86
 objective points and swaps out Fernandes + Saka + structure, not just cheap
 forwards.
 
-### B4 — V1 + multi-season shrinkage prior
+### B4 — V2B multi-season shrinkage prior (E016)
 
-**What changes:** `cost_prior_xg90` / `cost_prior_xa90` in `project.py` replaced
-by a weighted blend of 2023/24, 2024/25, 2025/26 per-90 rates. Weights proportional
-to minutes in each season. Players with >= 2700 minutes last season receive
-near-zero shrinkage; players with zero current-season minutes receive near-full
-shrinkage toward their multi-season average.
+**Control:** V2A-M (`v2am_s`) + current `rates_for` cost-prior blend.  
+**Treatment:** same + multi-season rate prior only.
 
-**What does not change:** ATK, CONCEDE, BENCH_WEIGHT, optimizer, build_role_start.
+**What changes:** `cost_prior_xg90` / `cost_prior_xa90` / `rates_for` path in
+`project.py` — minutes-weighted blend of prior seasons' per-90 rates. Players with
+large current-season minutes receive near-zero shrinkage; thin samples receive
+fuller shrinkage toward the multi-season average.
 
-**Validation target:** lower MAE / higher Spearman than B3 on 2025/26 GW1–10.
+**What does not change:** V2A-M minutes knobs, ATK, CONCEDE, BENCH_WEIGHT,
+optimizer, objective, horizon.
+
+**Validation target:** beat V2A-M control on E016 gates (MAE_60+, Spearman|60+,
+XI+Cap non-inferiority, XI 0-min guardrail) on all four seasons. V1 comparison
+is appendix only.
 
 **Key risk:** season-average per-90 stats for mid-season transfers are misleading.
 Split by club-stint before averaging, or treat mid-season transfers separately.

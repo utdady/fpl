@@ -178,11 +178,10 @@ Implementation: `minutes_version=v2am_s` — soft max 0.85; cold 0.55 / hot 0.72
 E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+ all PASS.
 **Do not retune.** Production default = `v2am_s`. V1 remains permanent historical control (harnesses pin `minutes_version=v1`).
 
-**B4 - Multi-season shrinkage prior (V2B)**
-
-**B4 — Multi-season shrinkage prior**
-Replace cost priors with a weighted blend of 2023/24 / 2024/25 / 2025/26 per-90
-rates. Weights proportional to minutes. Success: lower MAE than V1 on 2025/26 GW1–10.
+**V2B / B4 — Multi-season shrinkage prior (OPEN — E016)**
+**Control:** V2A-M (`v2am_s`) + current rates (not V1).  
+**Treatment:** multi-season per-90 shrinkage in `rates_for` only. Minutes/fixtures/ILP/objective locked.
+Success: E016 gates vs V2A-M on all four seasons (MAE_60+ primary; XI+Cap non-inferiority; XI 0-min guardrail). V1 is a separate historical benchmark only.
 
 **B5 — Role-transition minutes model**
 Detect club changes via Vaastav per-GW history. Discount start prior by new-club
@@ -316,5 +315,6 @@ POST-GW1 (research)
   E010 live GW1 score (V1 control measurement)
   E014 REJECT (LOSO remap); E014b diagnostic; E015 PASS (structural minutes)
   V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
-  NEXT: V2B rates; E012 property tests (parallel; minutes layer locked)
+  E016 V2B pre-registered (control = V2A-M, not V1); implement next
+  E012 property tests (parallel; minutes layer locked)
 ```

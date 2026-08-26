@@ -4,15 +4,17 @@ Living record of hypotheses, tests, and results. **Append new experiments; do no
 
 Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`, `docs/V2_SPEC.md`, `docs/FORMAL.md`.
 
-Production V1 (`v1.0-gw1-baseline`) stays frozen until a gated experiment says otherwise.
+**Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
+**Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
+**Active research question:** V2B rates (E016), control = V2A-M not V1.
 
 ---
 
 ## Two freezes (pre-registered 2026-08-18, before E008/E009)
 
-**Production freeze** — V1.0 projection, minutes, fixtures, coefficients, optimizer, objective. Generates the Friday team.
+**Production freeze (GW1 era)** — V1.0 projection, minutes, fixtures, coefficients, optimizer, objective. Generated the Friday GW1 team. Superseded for *live* production by `v2am-s-baseline` after E015; V1 remains the permanent historical benchmark.
 
-**Research calendar** — Historical Lab, E008, E009, conditional MAE, decomposition, V2 spec. May run anytime. Informs **post-GW1** development only.
+**Research calendar** — Historical Lab, E008, E009, conditional MAE, decomposition, V2 spec. May run anytime. Informed **post-GW1** development.
 
 > Research can change our beliefs before GW1. It cannot change the frozen experiment.
 
@@ -467,8 +469,42 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Decision:** Explicit promote after E015 four-season PASS. Not a new experiment.
 - **Code:** `project_all(..., minutes_version="v2am_s")` default. Historical control harnesses (`harness_run`, `harness_compare`, `harness_decomp`) pin `minutes_version="v1"`. Tag: `v2am-s-baseline`.
 - **Frozen knobs (do not retune):** soft max 0.85; cold cap 0.55; hot floor 0.72; recent window 4 GWs post-GW4; no new-club prior; no bucket remap.
-- **Invariant:** V1 (`v1.0-gw1-baseline`) remains permanent historical control. Live 2026 validates `v2am_s`; do not treat V1 GW1 as evidence for the new stack. Rates / fixtures / scoring / ILP / objective / horizon stay frozen.
-- **Next:** V2B (rates). E012 parallel.
+- **Invariant:** V1 (`v1.0-gw1-baseline`) remains permanent historical control. Live 2026 validates `v2am_s`; do not treat V1 GW1 as evidence for the new stack. Rates / fixtures / scoring / ILP / objective / horizon stay frozen until E016.
+- **Next:** E016 V2B (rates). E012 parallel.
+
+
+### E016 - V2B multi-season rate priors (pre-registered)
+- **Date:** 2026-08-26 (opened after V2A-M promote; **not started**)
+- **Status:** queued / pre-registered
+- **Hypothesis:** Better per-90 rate estimates (multi-season shrinkage) improve player-level and decision-level outcomes while the entire V2A-M minutes stack stays fixed
+- **Question:** Can rate improvements raise realized FPL decisions vs the earned production model (`v2am_s`), without reopening minutes / fixtures / ILP / objective / horizon?
+
+- **Control (active research control):**
+  ```text
+  V2A-M (v2am_s minutes)
+  + current rates (cost-prior blend in rates_for)
+  + current fixtures / scoring / ILP / objective / horizon
+  ```
+- **Treatment:**
+  ```text
+  same everything
+  + multi-season rate prior only (B4 / rates_for path)
+  ```
+- **Historical benchmark (separate lane):** V1 (`minutes_version=v1`, original rates). Report as appendix; **do not** use V1 as the V2B pass/fail control — that would confound minutes gains with rate gains.
+
+- **Method (planned):** harness comparing control vs treatment with `minutes_version=v2am_s` on both arms; rates version flag TBD (`v1` vs `v2b`). Four seasons individually (2022/23–2025/26). No minutes knob changes. No new-club minutes prior. No fixture / ILP / objective changes.
+- **Candidate treatment (from V2_SPEC B4; subject to as-of-T discipline):** replace single-season / cost-prior shrinkage with minutes-weighted multi-season per-90 blend; near-zero shrink when current-season minutes are large; fuller shrink when thin. Mid-season club changes must not silently average across stints.
+- **Seasons / GWs:** 2022/23–2025/26, GW1–38 (same panel discipline as E015)
+- **Metrics / gates (pre-registered; evaluate per season, not averaged):**
+  1. **MAE_60+** — primary rate gate: treatment ≤ control (prefer strict improvement)
+  2. **Spearman** among players with minutes ≥ 60 — non-inferiority; prefer improvement
+  3. **XI+Cap** — decision gate: non-inferiority every season; prefer improvement
+  4. **XI 0-min** — guardrail: must not worsen vs control on any season (minutes locked; selection shift only)
+- **Cheat-blocks:** do not retune V2A-M knobs (0.85 / 0.55 / 0.72 / window-4); do not claim pass from beating V1 alone; do not change fixtures/ILP/objective in the same experiment
+- **Results:** —
+- **Verdict:** —
+- **Artifacts:** —
+- **Follow-up:** implement rates versioning + harness only after this card stays unchanged; E012 remains parallel and non-blocking
 
 
 ### E011 — Test C: full-season decision simulation
@@ -501,14 +537,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-26 (after V2A-M promote):
+As of 2026-08-26 (E016 V2B opened):
 
-1. **V2A-M FROZEN.** Production default = `minutes_version=v2am_s` (E015). Tag `v2am-s-baseline`.
-2. **V1 = permanent historical control** (`v1.0-gw1-baseline`). Historical harnesses pin `minutes_version="v1"`. Do not rewrite control records under the new default.
-3. **Do not retune V2A-M** (0.85 / 0.55 / 0.72 / window-4 / no new-club / no remap). Live 2026 is a validation stream for `v2am_s`, not a reason to reopen minutes.
-4. **E014 REJECT stands.** E010 V1 GW1 scorecard unchanged as V1 measurement.
-5. **Next:** **V2B (rates only).** Minutes layer locked. E012 parallel.
-6. **Invariant:** rates/fixtures/scoring/ILP/objective/horizon still frozen unless a new experiment says otherwise.
+1. **V2A-M FROZEN + PRODUCTION.** `minutes_version=v2am_s` (`v2am-s-baseline`). Do not retune knobs.
+2. **V1 = permanent historical control** (`v1.0-gw1-baseline`). Separate lane from V2B gates.
+3. **E016 pre-registered.** Active research control for V2B = **V2A-M + current rates**, not V1. Treatment = rates only.
+4. **Live 2026** validates frozen `v2am_s` prospectively — not a retune signal for minutes.
+5. **Next implement:** V2B rates versioning + four-season harness per E016 card. E012 parallel (non-blocking).
+6. **Invariant until E016 ships a PASS:** fixtures / scoring / ILP / objective / horizon / V2A-M minutes locked. Rates change only inside the treatment arm.
 
 ---
 

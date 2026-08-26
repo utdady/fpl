@@ -455,24 +455,23 @@ fixtures exist and are unfinished; `next_event` equals the target GW.
 Spearman(`xP`, actual) > 0.70, from xP vs actual only. Sets `LeakFlag`. Must
 not be computed from V1 scores.
 
-### V2A-M gates (post-GW1; per season, not averaged)
+### V2A-M gates (completed — E015 PASS; frozen as `v2am_s`)
 
-Control: V1 rates, fixtures, scoring, ILP, objective, minutes. Treatment:
-revised minutes/availability only.
+Historical control for that experiment was V1. Treatment: revised minutes only.
+E015 passed all four seasons; production default is now `v2am_s`. Do not retune.
 
-1. `p90_fitted` closer to 90%.
-2. Lower XI 0-min rate (ALL and CLEAN).
-3. Higher XI+cap vs V1.
+Canonical statement (E013): V1's repeatable weakness was **upper-tail
+playing-time overconfidence propagating into XI blank selections**.
 
-Guardrail: MAE among 60+ minute players. Cheat-block: XI 0-min must improve;
-pooled ECE alone is insufficient. No generic new-club prior in V2A-M v1.
-2024/25 XI 0-min (16.5%) is evaluated separately from the other three seasons
-(25–29%); do not average into one target.
+### V2B gates (E016; per season, not averaged)
 
-Canonical statement (E013): V1's repeatable weakness is **upper-tail
-playing-time overconfidence propagating into XI blank selections**. It is not
-currently supported as generic transfer mispricing or optimiser-objective
-failure.
+**Active control:** V2A-M (`v2am_s`) + current rates/fixtures/ILP/objective.  
+**Treatment:** multi-season rate prior only. **Not** judged by beating V1 alone.
+
+1. MAE among minutes ≥ 60 (primary).
+2. Spearman among minutes ≥ 60.
+3. XI+Cap non-inferiority (prefer improvement).
+4. XI 0-min must not worsen vs V2A-M (guardrail).
 
 ---
 
@@ -492,9 +491,12 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E008** | Per-GW Spearman(xP, actual) | H0a: 10/38 and 34/38 flagged on the two primary seasons |
 | **E009** | p_start calibration, XI 0-min, MAE \| 60+ | H0b at XI layer; new-club split confounded |
 | **E013** | Do those qualitative verdicts hold on 2022/23–2023/24? | Yes for H0a, H0b (p90_fitted), H-v1-naive; H2 sign-flips |
-| **E010** | Score live 2026/27 GW1 | **queued** (after 2026-08-21 17:30 UTC) |
+| **E010** | Score live 2026/27 GW1 | completed (V1 measurement) |
+| **E014** | LOSO p_start remap | **REJECT** |
+| **E015** | Structural as-of-T minutes (`v2am_s`) | **PASS** → promoted (`v2am-s-baseline`) |
+| **E016** | V2B multi-season rates vs V2A-M control | **queued** / pre-registered |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
-| **E012** | Property tests for evaluation integrity | **queued** (post-GW1; not a V2A-M gate) |
+| **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.
