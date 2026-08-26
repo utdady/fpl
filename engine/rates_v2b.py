@@ -22,6 +22,9 @@ from engine.project import blend, cost_prior_xa90, cost_prior_xg90
 
 # Minimum historical minutes at the *current* club before using multi-season prior.
 MIN_CLUB_MINUTES = 270
+# E017: mix weight on club prior vs cost prior. v2b uses 1.0; v2b_d uses 0.50.
+CLUB_PRIOR_ALPHA_FULL = 1.0
+CLUB_PRIOR_ALPHA_DAMPENED = 0.50
 
 
 def _norm_team(name: str) -> str:
@@ -146,10 +149,23 @@ def rates_for_v2b(
     player: Player,
     prior_xg90: float | None,
     prior_xa90: float | None,
+    *,
+    club_alpha: float = CLUB_PRIOR_ALPHA_FULL,
 ) -> dict[str, float]:
-    """Same as rates_v1 except xG/xA prior is multi-season club prior when available."""
-    px = prior_xg90 if prior_xg90 is not None else cost_prior_xg90(player.position, player.now_cost)
-    pa = prior_xa90 if prior_xa90 is not None else cost_prior_xa90(player.position, player.now_cost)
+    """xG/xA prior = (1-α)·cost + α·club when club prior exists; else cost.
+
+    club_alpha=1.0 is E016 (rejected). club_alpha=0.50 is E017 (v2b_d).
+    """
+    cost_x = cost_prior_xg90(player.position, player.now_cost)
+    cost_a = cost_prior_xa90(player.position, player.now_cost)
+    if prior_xg90 is not None:
+        px = (1.0 - club_alpha) * cost_x + club_alpha * prior_xg90
+    else:
+        px = cost_x
+    if prior_xa90 is not None:
+        pa = (1.0 - club_alpha) * cost_a + club_alpha * prior_xa90
+    else:
+        pa = cost_a
     xg = blend(player.xg90, px, player.minutes)
     xa = blend(player.xa90, pa, player.minutes)
     if player.minutes < 450 and player.pen_order == 1:
@@ -185,3 +201,14 @@ def rates_for_v2b(
         "y90": max(0.0, min(0.45, y90)),
         "bonus90": max(0.0, min(1.2, bonus90)),
     }
+
+
+def rates_for_v2b_d(
+    player: Player,
+    prior_xg90: float | None,
+    prior_xa90: float | None,
+) -> dict[str, float]:
+    """E017 dampened club prior (α=0.50)."""
+    return rates_for_v2b(
+        player, prior_xg90, prior_xa90, club_alpha=CLUB_PRIOR_ALPHA_DAMPENED
+    )

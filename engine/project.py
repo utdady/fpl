@@ -118,14 +118,16 @@ def resolve_rates(
 ) -> dict[str, float]:
     if rates_version == "v1":
         return rates_for_v1(player)
-    if rates_version == "v2b":
-        from engine.rates_v2b import rates_for_v2b
+    if rates_version in {"v2b", "v2b_d"}:
+        from engine.rates_v2b import rates_for_v2b, rates_for_v2b_d
 
         prior = (rates_priors or {}).get(player.id)
         px = prior[0] if prior else None
         pa = prior[1] if prior else None
+        if rates_version == "v2b_d":
+            return rates_for_v2b_d(player, px, pa)
         return rates_for_v2b(player, px, pa)
-    raise ValueError("rates_version must be 'v1' or 'v2b'")
+    raise ValueError("rates_version must be 'v1', 'v2b', or 'v2b_d'")
 
 
 
@@ -279,8 +281,8 @@ def project_all(
         raise ValueError(f"strategy must be one of {STRATEGIES}")
     if minutes_version not in {"v1", "v2am", "v2am_s"}:
         raise ValueError("minutes_version must be 'v1', 'v2am', or 'v2am_s'")
-    if rates_version not in {"v1", "v2b"}:
-        raise ValueError("rates_version must be 'v1' or 'v2b'")
+    if rates_version not in {"v1", "v2b", "v2b_d"}:
+        raise ValueError("rates_version must be 'v1', 'v2b', or 'v2b_d'")
     if minutes_version == "v2am" and p_start_map is None:
         raise ValueError("v2am requires a leave-one-season-out p_start_map")
     if minutes_version != "v2am":
@@ -292,7 +294,7 @@ def project_all(
             gw_ids.append(e.id)
 
     rates_priors: dict[int, tuple[float, float]] | None = None
-    if rates_version == "v2b":
+    if rates_version in {"v2b", "v2b_d"}:
         from engine.harness import SEASON_LABEL
         from engine.rates_v2b import build_rates_priors_for_snapshot
 

@@ -178,10 +178,8 @@ Implementation: `minutes_version=v2am_s` — soft max 0.85; cold 0.55 / hot 0.72
 E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+ all PASS.
 **Do not retune.** Production default = `v2am_s`. V1 remains permanent historical control (harnesses pin `minutes_version=v1`).
 
-**V2B / B4 — Multi-season shrinkage prior (E016 REJECT; E017 OPEN)**
-E016 (`rates_v2b` full club prior): MAE/Sp ↑ 4/4; Cap/XI0 fail 2/4 — **REJECT.**  
-E016b: concentrated club-prior μ promotion (FAIL = entered blank% > left blank%).  
-**E017 (next):** `rates_v2b_d` with **α=0.50** mix of cost and club prior — dampen prior→XI lifts. Control still `v2am_s` + `rates=v1`. Minutes frozen.
+**V2B / B4 — Multi-season rates (E016 REJECT; E017 REJECT)**
+E016 full club prior and E017 α=0.50 dampening both improve MAE/Sp but fail Cap/XI0 on 2022/23 and 2025/26. **rates default stays v1.** No α search. Further rates work needs a new structural card. Minutes frozen at `v2am_s`.
 
 **B5 — Role-transition minutes model**
 Detect club changes via Vaastav per-GW history. Discount start prior by new-club
@@ -315,6 +313,6 @@ POST-GW1 (research)
   E010 live GW1 score (V1 control measurement)
   E014 REJECT (LOSO remap); E014b diagnostic; E015 PASS (structural minutes)
   V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
-  E016 V2B REJECT; E016b concentrated (club-prior μ promotion)
-  E017 pre-registered: rates_v2b_d α=0.50 prior dampening; implement next
+  E016/E017 V2B REJECT (α=0.50 dampen insufficient); rates stay v1; no α search
+  NEXT: E012 or structurally new rates card; minutes locked; fixtures = V2D
 ```

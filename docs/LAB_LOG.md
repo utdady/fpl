@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E017 prior→XI dampening pre-registered (`rates=v2b_d`, α=0.50). E016 REJECT stands; minutes locked.
+**Active research question:** E017 REJECT (α=0.50 not enough / wrong structure). Rates stay v1; no α search; minutes locked.
 
 ---
 
@@ -553,50 +553,27 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Follow-up:** E017 pre-registered (prior→XI promotion dampening).
 
 ### E017 - V2B prior→XI promotion dampening (pre-registered)
-- **Date:** 2026-08-27 (from E016b; **not started**)
-- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
+- **Date:** 2026-08-27 (eval completed same day)
+- **Status:** completed - **REJECT** (do not promote `rates_version=v2b_d`; production stays `rates=v1`; **do not silent-search α**)
 - **Hypothesis:** Large club-prior–driven μ lifts are an unreliable XI promotion signal. Dampening how strongly the multi-season club prior can replace the cost prior reduces Cap/XI0 failures while preserving most of E016's MAE/Sp gains.
-- **Question:** Under frozen `v2am_s`, does a **half-strength** club prior (`rates=v2b_d`) clear E016's decision gates without giving back the player-level rate improvements?
+- **Question:** Under frozen `v2am_s`, does a **half-strength** club prior (`rates=v2b_d`, α=0.50) clear E016's decision gates without giving back the player-level rate improvements?
 
-- **Evidence (E016b):** Entrants were ~94–98% club-prior with mean μΔ +0.44 to +0.79. FAIL seasons had entered blank% > left blank%; PASS seasons did not. Mechanism is **magnitude of prior-driven lift**, not identity / p_start buckets (minutes locked).
-
-- **Scope lock:**
-  > Same as E016: player-level `xg90`/`xa90` inside `rates_for` only. ATK/CONCEDE/`attack_mult` frozen (V2D). dc/saves/bonus/cards unchanged. **Dampener acts on the prior fed into blend — not a post-hoc “freeze the XI” rule.**
-
-- **Versioning:**
-  ```text
-  minutes_version = "v2am_s"              # both arms
-  rates_version   = "v1" | "v2b" | "v2b_d"
-
-  control:   minutes=v2am_s + rates=v1
-  treatment: minutes=v2am_s + rates=v2b_d
-  ```
-  `v2b` remains the rejected full club prior (appendix / ablation only). Do not use V1 minutes as pass/fail control.
-
-- **Pinned treatment knobs (do not retune mid-run):**
-  | Knob | Value | Role |
-  |---|---|---|
-  | `α` (club prior mix) | **0.50** | `prior = (1−α)·cost_prior + α·club_prior` for xg90 and xa90 |
-  | `MIN_CLUB_MINUTES` | **270** | unchanged from E016; below this → cost prior only |
-  | Surface | **xg90, xa90 only** | dc/saves/bonus/cards locked |
-  | Club-stint split | **yes** | same as E016; no blind cross-club average |
-  | MC seed | **7** | fixed both arms |
-
-- **What this is not:** changing α after peeking; capping XI membership vs control; retuning V2A-M minutes; touching fixtures.
-
-- **Method (planned):** extend `rates_version` with `v2b_d`; harness parallel to `harness_v2b` (control `v1` vs treatment `v2b_d`). Optional ablation: report `v2b` column for reference only — not a gate.
+- **Method:** `python -m engine.harness_v2b_d`. `prior = 0.5·cost + 0.5·club` for xg/xa when club prior exists (MIN_CLUB_MINUTES=270). Seed=7. Control = `v2am_s` + `rates=v1`.
 - **Seasons / GWs:** 2022/23–2025/26, GW1–38
-- **Metrics / gates (same as E016; per season, not averaged):**
-  1. **MAE_60+** — primary: treatment ≤ control (prefer improvement)
-  2. **Spearman|60+** — non-inferiority; prefer improvement
-  3. **XI+Cap** — non-inferiority every season
-  4. **XI 0-min** — must not worsen vs control on any season
-- **Secondary diagnostic (not a gate):** mean |μΔ| / entered blank% among XI movers vs E016b (expect smaller lifts and FAIL-season blank gap closing)
-- **Cheat-blocks:** no minutes retune; no ATK/CONCEDE change; beating V1 alone ≠ pass; beating raw `v2b` alone ≠ pass; no post-hoc α search; no bundling `strategies.json`
-- **Results:** —
-- **Verdict:** —
-- **Artifacts:** —
-- **Follow-up sequence:** implement `v2b_d` → fixed-seed four-season harness → interpret → promote only if all gates PASS. E012 parallel.
+- **Results:**
+
+  | Season | MAE60 C→T | Sp60 C→T | XI+Cap C→T | XI0 C→T | swaps | entered μΔ | left blank% | entered blank% | Season |
+  |---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+  | 2022/23 | 2.576→**2.566** | 0.137→**0.141** | 57.1→**54.8** | 11.5→**12.5%** | 66 | +0.40 | 13.6 | **19.7** | **FAIL** Cap+XI0 |
+  | 2023/24 | 2.482→**2.477** | 0.177→**0.181** | 53.7→**54.9** | 11.0→11.0% | 29 | +0.26 | 6.9 | 6.9 | PASS |
+  | 2024/25 | 2.400→**2.392** | 0.161→**0.167** | 56.6→**57.0** | 10.5→**10.0%** | 36 | +0.25 | 11.1 | **5.6** | PASS |
+  | 2025/26 | 2.572→**2.566** | 0.092→**0.095** | 50.4→**49.6** | 14.1→**14.4%** | 33 | +0.20 | 15.2 | **18.2** | **FAIL** Cap+XI0 |
+
+- **vs E016b (dosage diagnostic):** α=0.50 cut mean entered μΔ roughly in half (e.g. 2022/23 +0.79→+0.40; 2025/26 +0.44→+0.20) and cut swap volume (~109→66; ~66→33), but FAIL seasons still show **entered blank% > left blank%**. PASS seasons still look healthy.
+- **Gate calls:** MAE_60+ and Spearman|60+ **PASS all four**; XI+Cap and XI 0-min **FAIL** 2022/23 and 2025/26 (same seasons as E016).
+- **Verdict:** **REJECT.** Right lever *direction* (dampen prior→XI lifts) but **α=0.50 is not enough** to clear decision gates — or half-mix is the wrong structure for the residual failure. Per pre-registration: **no post-hoc α search**. Signal–selection gap persists at reduced magnitude. Production rates stay `v1`.
+- **Artifacts:** `records/historical/v2b_d_rates_summary.csv`; `engine/harness_v2b_d.py`; `rates_version=v2b_d` in `engine/rates_v2b.py` / `project.py`
+- **Follow-up:** If pursuing rates again, a **new** card must change structure (e.g. eligibility / current-form gate / different prior), not grid α. E012 parallel. Minutes locked. Fixtures = V2D.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -628,14 +605,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E017 pre-registered):
+As of 2026-08-27 (after E017 REJECT):
 
 1. **V2A-M FROZEN + PRODUCTION.** `minutes_version=v2am_s`. Do not retune.
-2. **Rates production stays `rates=v1`.** E016 REJECT; E016b concentrated (club-prior μ promotion).
-3. **E017 contract locked.** Control = `v2am_s` + `rates=v1`. Treatment = `v2am_s` + `rates=v2b_d` with **α=0.50** club/cost prior mix. Same E016 gates. Dampen prior→μ, do not freeze XI post-hoc.
-4. **Next implement:** `rates_version=v2b_d` + harness → four-season eval. E012 parallel.
-5. **Live 2026** validates `v2am_s` + `rates_v1`.
-6. **Invariant:** minutes / fixtures / ILP / objective locked; no silent α search.
+2. **Rates production stays `rates=v1`.** E016 and E017 both REJECT (same FAIL seasons 22/23 + 25/26).
+3. **E017 dosage note:** α=0.50 halved μΔ and cut swaps vs E016b, but Cap/XI0 still fail — **no α grid search**. Next rates card must change structure if pursued.
+4. **Live 2026** validates `v2am_s` + `rates_v1`.
+5. **Next:** E012 parallel, or a structurally new V2B card (not α tweaks). Fixtures = V2D.
+6. **Invariant:** minutes / fixtures / ILP / objective locked.
 
 ---
 

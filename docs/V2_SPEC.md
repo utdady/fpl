@@ -47,24 +47,15 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
-## 0c. V2B-d - Prior→XI promotion dampening (**OPEN** — E017)
+## 0c. V2B-d - Prior→XI promotion dampening (**REJECT** — E017)
 
-**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E017.
+**Status:** Implemented and evaluated 2026-08-27. **REJECT.** Production `rates_version` remains `"v1"`. See `LAB_LOG.md` E017.
 
-**Why:** E016b showed FAIL seasons are driven by **large club-prior μ lifts** into the XI (entered blank% > left blank%), not by p_start bucket remap. Signal–selection gap: rate skill without safe selection.
+**What was tested:** `rates=v2b_d` with **α=0.50** (`prior = 0.5·cost + 0.5·club`), same club-stint / MIN_CLUB_MINUTES=270 / seed=7 stack as E016.
 
-**Control:** `minutes=v2am_s` + `rates=v1`  
-**Treatment:** `minutes=v2am_s` + `rates=v2b_d`
+**Result:** MAE_60+ and Spearman|60+ improved all four seasons; XI+Cap and XI 0-min **failed** again on 2022/23 and 2025/26. Dosage diagnostics: μΔ and swap volume fell vs E016b, but FAIL seasons still had entered blank% > left blank%.
 
-**Pinned knobs:**
-- `prior = (1−α)·cost_prior + α·club_prior` with **α = 0.50** (xg90 and xa90)
-- `MIN_CLUB_MINUTES = 270` (else cost prior only)
-- Club-stint split; seed=7; dc/saves/bonus/cards / ATK/CONCEDE locked
-
-**Dampener acts on the prior inside `rates_for`, not a post-hoc XI freeze.**
-
-**Gates:** same as E016 (MAE_60+, Spearman|60+, XI+Cap non-inferiority, XI 0-min non-worsening), all four seasons.
-
+**Do not promote. Do not grid-search α.** A further rates attempt needs a **new structural card**, not a different mix weight.
 ---
 
 ## 1. Harness requirements
