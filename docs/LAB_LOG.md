@@ -437,7 +437,7 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ### E015 - V2A-M-v2 structural as-of-T minutes
 - **Date:** 2026-08-26 (pre-registered from E014b; eval completed same day)
-- **Status:** completed - **PASS / retain as V2A-M candidate** (production default still `v1` until explicit promote)
+- **Status:** completed - **PASS** → promoted to production / V2A-M freeze (see promote note below)
 - **Hypothesis:** Soft-capping season-total 0.90 claims and demoting cold recent-4 players reduces XI blanks without post-hoc remap
 - **Method:** `python -m engine.harness_v2am_s` (`minutes_version=v2am_s`). Fixed rules: max base 0.85; if as_of_gw>4, cold cap 0.55 / hot floor 0.72 from last-4-GW minutes. No new-club prior. No bucket remap.
 - **Seasons / GWs:** 2022/23-2025/26, GW1-38
@@ -457,9 +457,18 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
   - XI+Cap: **PASS** all four (+7 to +14 pts/GW mean)
   - MAE_60+ guardrail: **PASS** all four (slightly better)
 
-- **Verdict:** **E015 PASS.** Structural as-of-T recent form + soft max addresses the E014 failure mode (no mid-bucket promotion via non-monotonic remap). V2A-M candidate = `minutes_version=v2am_s`. **Do not silently change live default** — promote in a separate explicit step after review.
+- **Verdict:** **E015 PASS.** Structural as-of-T recent form + soft max addresses the E014 failure mode (no mid-bucket promotion via non-monotonic remap). V2A-M = `minutes_version=v2am_s`.
 - **Artifacts:** `records/historical/v2am_s_summary.csv`; `engine/minutes_struct.py`; `engine/harness_v2am_s.py`; `records/historical/e014_xi_movement.csv`
-- **Follow-up:** optional promote `project_all` default / live capture to `v2am_s`; E012 still parallel; V2B rates still gated behind V2A-M freeze.
+- **Follow-up:** promoted (below). E012 parallel. V2B rates next; do not retune V2A-M knobs.
+
+### Promote — V2A-M freeze (`v2am_s`)
+- **Date:** 2026-08-26
+- **Status:** completed - production default flipped
+- **Decision:** Explicit promote after E015 four-season PASS. Not a new experiment.
+- **Code:** `project_all(..., minutes_version="v2am_s")` default. Historical control harnesses (`harness_run`, `harness_compare`, `harness_decomp`) pin `minutes_version="v1"`. Tag: `v2am-s-baseline`.
+- **Frozen knobs (do not retune):** soft max 0.85; cold cap 0.55; hot floor 0.72; recent window 4 GWs post-GW4; no new-club prior; no bucket remap.
+- **Invariant:** V1 (`v1.0-gw1-baseline`) remains permanent historical control. Live 2026 validates `v2am_s`; do not treat V1 GW1 as evidence for the new stack. Rates / fixtures / scoring / ILP / objective / horizon stay frozen.
+- **Next:** V2B (rates). E012 parallel.
 
 
 ### E011 — Test C: full-season decision simulation
@@ -492,13 +501,13 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-26 (after E015 PASS):
+As of 2026-08-26 (after V2A-M promote):
 
-1. **E015 PASS.** Structural as-of-T minutes (`v2am_s`) cuts XI 0-min roughly in half on all four seasons, lifts XI+Cap, improves upper-tail gap, MAE_60+ OK.
-2. **Production default still `minutes_version=v1`.** Promote `v2am_s` only via explicit decision (next freeze candidate).
-3. **E014 REJECT stands** (remap). **E014b** showed failure was concentrated: eject 0.80-0.90 players who played, insert 0.60-0.70 who blanked.
-4. **E010 live GW1** unchanged as measurement; do not retune from one GW.
-5. **Next:** review/promote V2A-M freeze; then V2B (rates) only after that. E012 parallel.
+1. **V2A-M FROZEN.** Production default = `minutes_version=v2am_s` (E015). Tag `v2am-s-baseline`.
+2. **V1 = permanent historical control** (`v1.0-gw1-baseline`). Historical harnesses pin `minutes_version="v1"`. Do not rewrite control records under the new default.
+3. **Do not retune V2A-M** (0.85 / 0.55 / 0.72 / window-4 / no new-club / no remap). Live 2026 is a validation stream for `v2am_s`, not a reason to reopen minutes.
+4. **E014 REJECT stands.** E010 V1 GW1 scorecard unchanged as V1 measurement.
+5. **Next:** **V2B (rates only).** Minutes layer locked. E012 parallel.
 6. **Invariant:** rates/fixtures/scoring/ILP/objective/horizon still frozen unless a new experiment says otherwise.
 
 ---

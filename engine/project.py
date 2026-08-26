@@ -245,7 +245,7 @@ def project_all(
     horizon: int,
     strategy: str,
     seed: int = 7,
-    minutes_version: str = "v1",
+    minutes_version: str = "v2am_s",
     p_start_map: dict[str, float] | None = None,
 ) -> list[PlayerProjection]:
     if strategy not in STRATEGIES:

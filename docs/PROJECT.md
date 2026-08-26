@@ -425,7 +425,7 @@ XI+Cap scores **actual FPL points** of the ILP eleven with captain doubled.
 
 ## 7. Hypotheses and gates
 
-Status as of 2026-08-19 (E013 complete; production freeze intact). Full board:
+Status as of 2026-08-26 (V2A-M frozen = `v2am_s`; V1 permanent historical control). Full board:
 [`LAB_LOG.md`](LAB_LOG.md#hypothesis-board).
 
 | ID | Claim | Status |

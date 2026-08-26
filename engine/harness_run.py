@@ -42,7 +42,9 @@ def freeze(season: str, gw: int, skip_validate: bool = False) -> bool:
 
   print(f"[harness_run] GW{gw}: building snapshot and projecting ...")
   snapshot = build_snapshot(season, as_of_gw=gw)
-  projections: list[PlayerProjection] = project_all(snapshot, horizon=1, strategy="balanced")
+  projections: list[PlayerProjection] = project_all(
+      snapshot, horizon=1, strategy="balanced", minutes_version="v1"
+  )
 
   now = datetime.now(timezone.utc).isoformat()
   rows = []

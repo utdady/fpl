@@ -5,7 +5,7 @@ Usage:
     python -m engine.harness_v2am_s --season 2025-26
 
 Hard gate: XI 0-min must not worsen vs V1 on any season.
-Production default remains minutes_version=v1.
+Production default is minutes_version=v2am_s (E015 promote / V2A-M freeze).
 """
 from __future__ import annotations
 
@@ -175,7 +175,7 @@ def main():
     args = parser.parse_args()
     seasons = (args.season,) if args.season else SUPPORTED_SEASONS
     print("[e015] Structural as-of-T minutes (v2am_s). Soft max 0.85; cold/hot recent-4.")
-    print("[e015] Hard gate: XI 0-min non-inferiority every season. Default production remains v1.")
+    print("[e015] Hard gate: XI 0-min non-inferiority every season. Production default = v2am_s.")
     results = [eval_season(s, args.strategy) for s in seasons]
     path = OUT_DIR / "v2am_s_summary.csv"
     fields = [

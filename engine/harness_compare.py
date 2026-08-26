@@ -73,7 +73,7 @@ def _xi_actual_points(solution, actuals: dict[int, dict]) -> float:
 def evaluate_gw(season: str, gw: int, strategy: str = "balanced") -> list[GWMetrics]:
     ensure_vaastav((season,))
     snapshot = build_snapshot(season, as_of_gw=gw)
-    v1 = project_all(snapshot, horizon=1, strategy=strategy)
+    v1 = project_all(snapshot, horizon=1, strategy=strategy, minutes_version="v1")
     prior_pts = prior_points_by_element(season)
     prior_pp90 = prior_pp90_by_element(season)
     actuals_raw = gw_actuals(season, gw)

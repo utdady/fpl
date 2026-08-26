@@ -9,32 +9,25 @@ Never overwrite it; treat it as the permanent control.
 
 ---
 
-## 0. V2A-M - First experiment (minutes / availability)
+## 0. V2A-M - Minutes / availability (**FROZEN**)
 
-**This is the first V2 experiment.** All B4-B6 work is sequenced after V2A-M results.
+**Status:** Frozen as production default after E015 PASS (2026-08-26). Tag: `v2am-s-baseline`.
+**Implementation:** `minutes_version="v2am_s"` (`engine/minutes_struct.py`).
+**Permanent control:** V1 (`v1.0-gw1-baseline`); historical harnesses pin `minutes_version="v1"`.
 
-**Evidence base (E013 four-season panel):**
-- `p90_fitted` (actual start rate at model >= 0.90): ~75-78% across 2022/23-2025/26 - stable four-season finding
-- XI 0-min rate: 16.5% (2024/25, outlier) / 25-29% (other three seasons) - elevated in all seasons
-- alpha/beta logistic parameters: **diagnostic appendix only** - sign flips across splits confirm they are noise-sensitive
-- H2 (horizon mismatch): inconsistent sign including -0.48 in 2022/23 - no stable case for objective change
+**What shipped:**
+- Soft max base `p_start` **0.85** (never 0.90 from season totals alone)
+- After GW4: last-4-GW minutes — cold cap **0.55** / hot floor **0.72**
+- No new-club prior; no bucket remap (E014 REJECT)
+- Rates / fixtures / scoring / ILP / objective / horizon unchanged
 
-**Canonical headline:** V1's repeatable weakness is upper-tail playing-time overconfidence propagating into XI blank selections. It is not currently supported as generic transfer mispricing or optimizer-objective failure.
+**Evidence base that justified the experiment (E013):**
+- `p90_fitted` ~75-78% at model >= 0.90; XI 0-min elevated (16.5% outlier in 2024/25; ~25-29% elsewhere)
+- Canonical headline: upper-tail playing-time overconfidence → XI blanks (not generic transfer mispricing / objective failure)
 
-**Control:** V1 rates, fixtures, scoring, ILP, objective, minutes (unchanged).
-**Treatment:** same everything + revised minutes/availability model.
+**E015 gate result (all four seasons PASS):** XI 0-min roughly halved; XI+Cap up; upper-tail gap improved; MAE_60+ OK.
 
-**Gates (evaluated on all four seasons individually):**
-1. `p90_fitted` improvement (actual start rate at model >= 0.90 closer to 90%)
-2. Lower XI 0-min rate (ALL and CLEAN slices)
-3. Higher XI+cap vs V1
-
-**Guardrail:** MAE_60+. **Cheat-block:** XI 0-min rate must improve; pooled ECE alone insufficient.
-
-**Constraints:**
-- No generic new-club transfer prior in V2A-M v1
-- alpha/beta columns never inform design decisions - use `p90_fitted` and bucket tables
-- 2024/25 XI 0-min (16.5%) evaluated separately from other seasons; do not average into a single target
+**Do not retune these knobs.** Next research lever is **V2B (rates)**. Live 2026 validates `v2am_s`; do not treat V1 GW1 as evidence for this stack.
 
 ---
 

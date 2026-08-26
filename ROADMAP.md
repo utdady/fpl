@@ -161,22 +161,22 @@ See docs/FORMAL.md for post-GW1 evaluation invariants (not a V2 gate).
 
 ### V2 - Projection improvement
 
-**Prerequisite:** Met. Four-season harness panel complete. V2A-M is the first experiment.
+**Prerequisite:** Met. V2A-M frozen; V2B is the active research question.
 
 **Research ladder (each rung beats the preceding control out-of-sample before being retained):**
 
 ```text
-V1.0 (frozen control)
-  -> V2A-M  minutes / availability model only
-  -> V2B    multi-season rate priors (B4)
+V1.0 (permanent historical control)     tag: v1.0-gw1-baseline
+  -> V2A-M  minutes / availability      FROZEN = v2am_s  tag: v2am-s-baseline
+  -> V2B    multi-season rate priors (B4)   <-- next
   -> V2C    role-transition / transfer-specific minutes (B5)
   -> V2D    learned fixture coefficients (B6)
 ```
 
-**V2A-M - Minutes / availability (first experiment)**
-Gate evidence from E013: `p90_fitted` ~75-78% at model >= 0.90 (stable, four seasons); XI 0-min rate 16-29% (2024/25 is an outlier at 16.5% vs ~27% other three seasons - evaluate separately).
-Success: (1) improved `p90_fitted` calibration, (2) lower XI 0-min rate on all four seasons, (3) higher XI+cap vs V1. Guardrail: MAE_60+.
-**Constraint:** no generic new-club prior in v1; alpha/beta fit parameters are diagnostic appendix only.
+**V2A-M - Minutes / availability (FROZEN)**
+Implementation: `minutes_version=v2am_s` — soft max 0.85; cold 0.55 / hot 0.72 from last-4 GW minutes post-GW4; no new-club prior; no bucket remap.
+E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+ all PASS.
+**Do not retune.** Production default = `v2am_s`. V1 remains permanent historical control (harnesses pin `minutes_version=v1`).
 
 **B4 - Multi-season shrinkage prior (V2B)**
 
@@ -312,8 +312,9 @@ FRI 21 AUG (deadline 17:30 UTC)
 AFTER GW1 RESULTS
   engine.capture --gw 1 --score    <- E010: score the frozen prediction
 
-POST-GW1 (research resumes)
-  docs sync (ROADMAP / V2_SPEC to reflect E013 findings)
-  V2A-M implementation and four-season validation
-  E012 property tests (parallel, not blocking V2A-M)
+POST-GW1 (research)
+  E010 live GW1 score (V1 control measurement)
+  E014 REJECT (LOSO remap); E014b diagnostic; E015 PASS (structural minutes)
+  V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
+  NEXT: V2B rates; E012 property tests (parallel; minutes layer locked)
 ```

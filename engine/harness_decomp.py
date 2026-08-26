@@ -164,7 +164,7 @@ def evaluate_gw(season: str, gw: int, strategy: str = "balanced") -> tuple[GWRow
     if status == "excluded":
         return row, player_rows
 
-    v1 = project_all(snapshot, horizon=6, strategy=strategy)
+    v1 = project_all(snapshot, horizon=6, strategy=strategy, minutes_version="v1")
     b0 = baseline_b0_xp(season, gw, snapshot)
     act_projs = actual_projections(snapshot, actuals)
 

@@ -4,7 +4,8 @@ Usage:
     python -m engine.harness_v2am
     python -m engine.harness_v2am --season 2025-26
 
-Does not change production defaults. project_all(..., minutes_version='v1') remains default.
+Historical V2A-M-v1 (E014 REJECT) eval. Control is explicit minutes_version='v1'.
+Production default is v2am_s (E015 promote).
 """
 from __future__ import annotations
 
@@ -250,7 +251,7 @@ def main() -> None:
     args = parser.parse_args()
     seasons = (args.season,) if args.season else SUPPORTED_SEASONS
     print("[v2am] Control = V1. Treatment = LOSO bucket recalibration of p_start only.")
-    print("[v2am] No new-club prior. Production minutes_version default remains v1.")
+    print("[v2am] No new-club prior. Control pinned to minutes_version=v1.")
     results = [eval_season(s, SUPPORTED_SEASONS, strategy=args.strategy) for s in seasons]
     write_summary(results, OUT_DIR / "v2am_loso_summary.csv")
 
