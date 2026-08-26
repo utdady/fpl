@@ -475,37 +475,53 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ### E016 - V2B multi-season rate priors (pre-registered)
 - **Date:** 2026-08-26 (opened after V2A-M promote; **not started**)
-- **Status:** queued / pre-registered
+- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
 - **Hypothesis:** Better per-90 rate estimates (multi-season shrinkage) improve player-level and decision-level outcomes while the entire V2A-M minutes stack stays fixed
 - **Question:** Can rate improvements raise realized FPL decisions vs the earned production model (`v2am_s`), without reopening minutes / fixtures / ILP / objective / horizon?
 
-- **Control (active research control):**
-  ```text
-  V2A-M (v2am_s minutes)
-  + current rates (cost-prior blend in rates_for)
-  + current fixtures / scoring / ILP / objective / horizon
-  ```
-- **Treatment:**
-  ```text
-  same everything
-  + multi-season rate prior only (B4 / rates_for path)
-  ```
-- **Historical benchmark (separate lane):** V1 (`minutes_version=v1`, original rates). Report as appendix; **do not** use V1 as the V2B pass/fail control — that would confound minutes gains with rate gains.
+- **Scope lock (read this first):**
+  > **Multi-season rates = the player-level per-90 rate path inside `rates_for`, not fixture strength. ATK/CONCEDE/`attack_mult` remain frozen and are reserved for the later fixture experiment (V2D/B6).**
 
-- **Method (planned):** harness comparing control vs treatment with `minutes_version=v2am_s` on both arms; rates version flag TBD (`v1` vs `v2b`). Four seasons individually (2022/23–2025/26). No minutes knob changes. No new-club minutes prior. No fixture / ILP / objective changes.
-- **Candidate treatment (from V2_SPEC B4; subject to as-of-T discipline):** replace single-season / cost-prior shrinkage with minutes-weighted multi-season per-90 blend; near-zero shrink when current-season minutes are large; fuller shrink when thin. Mid-season club changes must not silently average across stints.
+- **Axes:**
+
+  | Axis | Control | E016 treatment |
+  |---|---|---|
+  | Minutes | `v2am_s` | **Locked** |
+  | Player rates (`xg90`/`xa90` prior) | current `rates_for` / cost priors | **Multi-season prior** |
+  | Fixtures (ATK/CONCEDE/`attack_mult`) | current | **Locked** |
+  | dc / saves / bonus / cards | current | **Locked** (unchanged in E016) |
+  | Scoring / ILP / objective / horizon | current | Locked |
+  | MC seed | fixed | Fixed (same seed both arms) |
+
+- **Versioning contract (orthogonal):**
+  ```text
+  minutes_version = "v2am_s"          # both arms
+  rates_version   = "v1" | "v2b"
+
+  control:   minutes=v2am_s + rates=v1
+  treatment: minutes=v2am_s + rates=v2b
+  ```
+  Keep `cost_prior_xg90` / `cost_prior_xa90` available for `rates=v1`. Do not overwrite them in place; dispatch via `rates_version` (e.g. `rates_v1` / `rates_v2b`).
+
+- **Surface (treatment variables):** **`xg90` and `xa90` only.** Do not change defensive contribution, saves, bonus, or cards in E016 unless this card is explicitly amended first.
+
+- **As-of-T:** prior constructed only from information available before the GW being predicted (prior seasons / earlier GWs as allowed by harness). **Split historical rate evidence by club stint** — do not blindly average season-wide player rates across clubs (old-club environment is not evidence for a new-club role).
+
+- **Historical benchmark (separate lane):** V1 (`minutes_version=v1`, `rates_version=v1`). Report as appendix; **do not** use V1 as the V2B pass/fail control.
+
+- **Method (planned):** fixed-seed harness; both arms `minutes_version=v2am_s`; vary `rates_version` only. Four seasons individually (2022/23–2025/26).
+- **Candidate treatment:** minutes-weighted multi-season per-90 blend for xG/xA priors; near-zero shrink when current-season minutes are large; fuller shrink when thin.
 - **Seasons / GWs:** 2022/23–2025/26, GW1–38 (same panel discipline as E015)
 - **Metrics / gates (pre-registered; evaluate per season, not averaged):**
   1. **MAE_60+** — primary rate gate: treatment ≤ control (prefer strict improvement)
   2. **Spearman** among players with minutes ≥ 60 — non-inferiority; prefer improvement
   3. **XI+Cap** — decision gate: non-inferiority every season; prefer improvement
   4. **XI 0-min** — guardrail: must not worsen vs control on any season (minutes locked; selection shift only)
-- **Cheat-blocks:** do not retune V2A-M knobs (0.85 / 0.55 / 0.72 / window-4); do not claim pass from beating V1 alone; do not change fixtures/ILP/objective in the same experiment
+- **Cheat-blocks:** do not retune V2A-M knobs; do not touch ATK/CONCEDE/`attack_mult`; do not claim pass from beating V1 alone; do not change fixtures/ILP/objective/dc/saves/bonus/cards in the same experiment; do not bundle unrelated `strategies.json` refreshes into E016 commits
 - **Results:** —
 - **Verdict:** —
 - **Artifacts:** —
-- **Follow-up:** implement rates versioning + harness only after this card stays unchanged; E012 remains parallel and non-blocking
-
+- **Follow-up sequence:** versioning → as-of-T multi-season `xg90`/`xa90` prior → fixed-seed harness → four-season gates → interpret → only then consider promotion. E012 parallel (non-blocking).
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -537,14 +553,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-26 (E016 V2B opened):
+As of 2026-08-26 (E016 contract locked):
 
 1. **V2A-M FROZEN + PRODUCTION.** `minutes_version=v2am_s` (`v2am-s-baseline`). Do not retune knobs.
 2. **V1 = permanent historical control** (`v1.0-gw1-baseline`). Separate lane from V2B gates.
-3. **E016 pre-registered.** Active research control for V2B = **V2A-M + current rates**, not V1. Treatment = rates only.
+3. **E016 contract locked.** Control = `v2am_s` + `rates=v1`. Treatment = `v2am_s` + `rates=v2b`. Surface = `xg90`/`xa90` only. ATK/CONCEDE/`attack_mult` out of scope (V2D). dc/saves/bonus/cards locked. Club-stint as-of-T. Fixed MC seed.
 4. **Live 2026** validates frozen `v2am_s` prospectively — not a retune signal for minutes.
-5. **Next implement:** V2B rates versioning + four-season harness per E016 card. E012 parallel (non-blocking).
-6. **Invariant until E016 ships a PASS:** fixtures / scoring / ILP / objective / horizon / V2A-M minutes locked. Rates change only inside the treatment arm.
+5. **Next implement:** `rates_version` dispatcher → as-of-T multi-season prior → fixed-seed four-season harness → interpret. E012 parallel (non-blocking).
+6. **Invariant:** fixtures / scoring / ILP / objective / horizon / V2A-M minutes locked. Rates change only inside the `rates=v2b` arm.
 
 ---
 

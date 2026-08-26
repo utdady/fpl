@@ -465,8 +465,12 @@ playing-time overconfidence propagating into XI blank selections**.
 
 ### V2B gates (E016; per season, not averaged)
 
-**Active control:** V2A-M (`v2am_s`) + current rates/fixtures/ILP/objective.  
-**Treatment:** multi-season rate prior only. **Not** judged by beating V1 alone.
+**Scope lock:** multi-season rates = `rates_for` player per-90 (`xg90`/`xa90`) only.
+ATK/CONCEDE/`attack_mult` frozen (V2D). dc/saves/bonus/cards unchanged in E016.
+
+**Active control:** `minutes=v2am_s` + `rates=v1`.  
+**Treatment:** `minutes=v2am_s` + `rates=v2b`. **Not** judged by beating V1 alone.
+Fixed MC seed both arms; club-stint split for transfer rate history.
 
 1. MAE among minutes ≥ 60 (primary).
 2. Spearman among minutes ≥ 60.

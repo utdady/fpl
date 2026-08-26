@@ -34,14 +34,31 @@ production is V2A-M) is an appendix, not a pass.
 
 ## 0b. V2B - Multi-season rate priors (**OPEN** — E016)
 
-**Status:** Pre-registered 2026-08-26. Not implemented. See `LAB_LOG.md` E016.
+**Status:** Pre-registered 2026-08-26. Implementation contract locked. Not implemented. See `LAB_LOG.md` E016.
 
-**Control:** V2A-M (`v2am_s`) + current rates + current fixtures/scoring/ILP/objective/horizon.  
-**Treatment:** same stack + multi-season rate improvement only (`rates_for` / prior path).  
+**Scope lock:**
+> **Multi-season rates = the player-level per-90 rate path inside `rates_for`, not fixture strength. ATK/CONCEDE/`attack_mult` remain frozen and are reserved for the later fixture experiment (V2D/B6).**
+
+**Versioning (orthogonal):**
+```text
+minutes_version = "v2am_s"     # locked both arms
+rates_version   = "v1" | "v2b"
+
+control:   minutes=v2am_s + rates=v1
+treatment: minutes=v2am_s + rates=v2b
+```
+Preserve existing `cost_prior_xg90` / `cost_prior_xa90` for `rates=v1`; do not replace in place.
+
+**Surface:** treatment changes **`xg90` / `xa90` priors only**. dc / saves / bonus / cards unchanged in E016.
+
+**As-of-T:** prior seasons / pre-GW information only; **split rate evidence by club stint** (no blind season-wide average across clubs).
+
+**Control:** V2A-M (`v2am_s`) + `rates=v1` + current fixtures/scoring/ILP/objective/horizon + fixed MC seed.  
+**Treatment:** same + `rates=v2b` only.  
 **Not the control:** V1. Report V1 as a separate historical benchmark only.
 
 **Gates (per season):** MAE_60+ (primary); Spearman among mins≥60; XI+Cap non-inferiority; XI 0-min guardrail (must not worsen vs V2A-M).  
-**Locked:** V2A-M minutes knobs, fixtures, scoring, ILP, objective, horizon.
+**Locked:** V2A-M minutes knobs, ATK/CONCEDE/`attack_mult`, scoring, ILP, objective, horizon, dc/saves/bonus/cards.
 
 ---
 
@@ -155,23 +172,22 @@ forwards.
 
 ### B4 — V2B multi-season shrinkage prior (E016)
 
-**Control:** V2A-M (`v2am_s`) + current `rates_for` cost-prior blend.  
-**Treatment:** same + multi-season rate prior only.
+See §0b for the locked contract. Summary:
 
-**What changes:** `cost_prior_xg90` / `cost_prior_xa90` / `rates_for` path in
-`project.py` — minutes-weighted blend of prior seasons' per-90 rates. Players with
-large current-season minutes receive near-zero shrinkage; thin samples receive
-fuller shrinkage toward the multi-season average.
+**Control:** `minutes=v2am_s` + `rates=v1` (cost-prior blend).  
+**Treatment:** `minutes=v2am_s` + `rates=v2b` (multi-season xG/xA prior).
 
-**What does not change:** V2A-M minutes knobs, ATK, CONCEDE, BENCH_WEIGHT,
-optimizer, objective, horizon.
+**What changes:** `xg90` / `xa90` priors inside `rates_for` only — minutes-weighted
+blend of prior-season per-90 rates (club-stint split). Preserve cost priors for
+`rates=v1`; dispatch by `rates_version`.
 
-**Validation target:** beat V2A-M control on E016 gates (MAE_60+, Spearman|60+,
-XI+Cap non-inferiority, XI 0-min guardrail) on all four seasons. V1 comparison
-is appendix only.
+**What does not change:** V2A-M minutes knobs, ATK, CONCEDE, `attack_mult`,
+dc/saves/bonus/cards, BENCH_WEIGHT, optimizer, objective, horizon, MC seed protocol.
 
-**Key risk:** season-average per-90 stats for mid-season transfers are misleading.
-Split by club-stint before averaging, or treat mid-season transfers separately.
+**Validation target:** beat V2A-M control on E016 gates on all four seasons.
+V1 comparison is appendix only.
+
+**Key risk:** blind season-wide averages across club changes. Split by club stint.
 
 ### B5 — V1 + role-transition minutes model
 

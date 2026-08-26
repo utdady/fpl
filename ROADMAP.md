@@ -178,10 +178,11 @@ Implementation: `minutes_version=v2am_s` — soft max 0.85; cold 0.55 / hot 0.72
 E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+ all PASS.
 **Do not retune.** Production default = `v2am_s`. V1 remains permanent historical control (harnesses pin `minutes_version=v1`).
 
-**V2B / B4 — Multi-season shrinkage prior (OPEN — E016)**
-**Control:** V2A-M (`v2am_s`) + current rates (not V1).  
-**Treatment:** multi-season per-90 shrinkage in `rates_for` only. Minutes/fixtures/ILP/objective locked.
-Success: E016 gates vs V2A-M on all four seasons (MAE_60+ primary; XI+Cap non-inferiority; XI 0-min guardrail). V1 is a separate historical benchmark only.
+**V2B / B4 — Multi-season shrinkage prior (OPEN — E016; contract locked)**
+**Scope:** player-level `xg90`/`xa90` inside `rates_for` only — **not** ATK/CONCEDE/`attack_mult` (V2D).
+**API:** `minutes_version=v2am_s` (both arms) × `rates_version=v1|v2b`. Preserve cost priors for `rates=v1`.
+**Control:** `v2am_s` + `rates=v1`. **Treatment:** `v2am_s` + `rates=v2b`. dc/saves/bonus/cards locked. Fixed MC seed. Club-stint split for transfers.
+Success: E016 gates vs V2A-M on all four seasons. V1 is a separate historical benchmark only.
 
 **B5 — Role-transition minutes model**
 Detect club changes via Vaastav per-GW history. Discount start prior by new-club
@@ -315,6 +316,6 @@ POST-GW1 (research)
   E010 live GW1 score (V1 control measurement)
   E014 REJECT (LOSO remap); E014b diagnostic; E015 PASS (structural minutes)
   V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
-  E016 V2B pre-registered (control = V2A-M, not V1); implement next
-  E012 property tests (parallel; minutes layer locked)
+  E016 V2B contract locked (xg/xa in rates_for only; rates_version v1|v2b; ATK/CONCEDE out)
+  NEXT: implement rates versioning + harness; E012 parallel
 ```
