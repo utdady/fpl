@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E027 **REJECT** (H-PACK1 stability). Partial Cap recovery vs unconstrained treat; does not clear production bar. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No ε retune.
+**Active research question:** E028 local substitution stability diagnostic pre-registered (post E027 global-ε REJECT). Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1168,17 +1168,39 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **REJECT for promote.** H-PACK1 is a **partially validated mechanism** (binds; recovers some Cap vs raw treat on toxic season) but does **not** clear production Cap+XI0. Do **not** retune ε. Do **not** promote. Production unchanged. Confidence/challenger or alternative decision rule needs new structural hypothesis — not ε fishing.
 
 - **Artifacts:** `engine/stability_selection.py`; `engine/harness_pack_stability.py`; `scripts/calibrate_hpack1_epsilon.py`; `records/historical/hpack1_epsilon.json`; `records/historical/pack_stability_summary.csv`
-- **Follow-up:** No ε retune. H-PACK1 formulation closed at this ε. New structural selection hypothesis only.
+- **Follow-up:** → **E028** local substitution stability diagnostic. H-PACK1 (global ε) closed. No ε retune.
+
+### E028 - Local substitution stability (pre-registered)
+- **Date:** 2026-08-28 (after E027 REJECT)
+- **Status:** **pre-registered** — diagnostic only; no mechanism
+- **Hypothesis:** E027 global ε protects squad-level \(U_0\) but E025/E026 failures are **pairwise ranking** at the decision boundary. If bad swaps concentrate where \(M_{ij}=\mu_i^{ctrl}-\mu_j^{ctrl}\) is small (and/or rank distance small) even when the squad is globally ε-admissible, the next mechanism should be **local substitution stability**, not another global ε.
+- **Question:** On actual same-position entrant/leaver pairs from XI diffs, does \(P(\text{bad swap}\mid |M_{ij}|\text{ small})\) exceed \(P(\text{bad swap}\mid |M_{ij}|\text{ large})\) on FAIL vs PASS seasons? Does ctrl→PACK1 differ from ctrl→treat on bind GWs?
+
+- **Scope lock — mover collection; frozen buckets; no intervention:**
+  ```text
+  swap_sets: ctrl_treat, ctrl_pack1, treat_pack1 (bound GWs only)
+  pair unit: same-position (entrant, leaver) from actual XI diff — not full cross product
+  ctrl_margin_ij = μ_ctrl(i) − μ_ctrl(j)
+  ctrl_rank_dist_ij = rank_ctrl(i) − rank_ctrl(j)  # by control next_utility
+  bad_swap = both≥60 AND pts_entrant < pts_leaver
+  gap_bucket: near <0.25, mid [0.25,0.75), large ≥0.75 (E026 cuts)
+  gw_u0_slack = U0* − U0(PACK1 squad); globally_admissible = slack ≤ ε
+  season_gate: cap_fail | xi0_fail | both | pass (E027 frozen tags)
+  forbidden: new mechanism, ε retune, α/μ shrink
+  ```
+
+- **Method:** `python scripts/e028_local_substitution.py` (requires `hpack1_epsilon.json`)
+- **Follow-up:** Log concentration; only then propose H-PACK2 (local) if warranted.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E027 REJECT):
+As of 2026-08-28 (E028 pre-registered):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **E027 REJECT.** H-PACK1 stability: 1/4 PASS; binds 13–30%; partial Cap vs unconstrained treat on 2022/23 only.
-3. **Next.** New structural selection hypothesis — not ε/q/α fishing. PASS ≠ auto-promote.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. E027 H-PACK1 closed (global ε).
+2. **E028.** Local substitution stability diagnostic on actual swap pairs.
+3. **Invariant.** PASS ≠ auto-promote. No ε/q/α fishing.
 
 ---
 
@@ -1210,6 +1232,7 @@ python scripts/e025_swap_ranking.py  # E025: Cap-FAIL swap ranking concordance
 python scripts/e026_near_tie.py  # E026: control-μ near-tie (H-PACK1 branch)
 python scripts/calibrate_hpack1_epsilon.py  # E027: freeze ε (control-only)
 python -m engine.harness_pack_stability  # E027: H-PACK1 vs production
+python scripts/e028_local_substitution.py  # E028: local substitution pairs
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers
