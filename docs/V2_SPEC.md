@@ -98,6 +98,8 @@ production is V2A-M) is an appendix, not a pass.
 
 **Result:** MAE_60+ PASS 4/4; Cap FAIL 4/4; XI0 FAIL 4/4 (~180 swaps/season). Do not promote. Do not retune multipliers. Production fixtures stay `v1`.
 
+**E021b:** Fixture XI movers match rates toxicology — entered blank% > left every season; prior_str+recent4&lt;90 blank **61%**. Packaging theme next.
+
 **Not:** multiplier search; same-GW leakage fits; minutes/rates retune; ML fixture models.
 
 ---

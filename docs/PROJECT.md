@@ -471,9 +471,9 @@ Three structural club-prior treatments improved MAE/Sp but never cleared decisio
 
 E019: XI0✓ Cap✗2 MAE✗4. E019b: false-positive demotion. E020 cold-eligible: Cap✗ only 2022/23; MAE✗4. Production `v2am_s`. No further recent4-threshold fishing.
 
-### V2D gates (E021 REJECT)
+### V2D gates (E021 REJECT; E021b concentrated)
 
-MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4 (~180 swaps/season). Prior-season strengths help conditional accuracy but fail decision gates (E018s pattern). Production fixtures `v1`. No multiplier fishing.
+MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: entered blank% > left every season; prior_str+recent4&lt;90 blank **61%** (rates E017b shape). Production fixtures `v1`. Packaging theme next — no multiplier fishing.
 
 ---
 
@@ -506,6 +506,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E019b** | Cap-FAIL vs PASS demoted leavers | **concentrated** (false-positive demotion) |
 | **E020** | V2C-e cold-eligible demotion (recent4&lt;90) | **REJECT** (Cap↑; MAE✗ 4/4) |
 | **E021** | V2D learned fixture coefficients | **REJECT** (MAE✓ Cap/XI0✗ 4/4) |
+| **E021b** | Fixture XI mover toxicology | **concentrated** (cold cell 61% blank) |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 

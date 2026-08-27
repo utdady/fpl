@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E021 / V2D **REJECT** (learned fixtures). Production stays `v2am_s` + `rates=v1` + fixtures `v1`. Next: E012 parallel; new structural branch only.
+**Active research question:** E021b concentrated (fixture movers = rates toxicology). Packaging theme next; E012 parallel. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -805,7 +805,40 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **REJECT.** Prior-season strengths help **conditional** accuracy among 60+ players but the ILP over-rotates into worse XI/Cap outcomes (E018s pattern: useful signal, unsafe under current selection). Do not promote. Do not retune home/away or clamp. Production fixtures stay **`v1`**. This V2D formulation closed; any future fixture card needs decision-aware packaging, not coefficient dose.
 
 - **Artifacts:** `engine/fixtures_v2d.py`; `engine/harness_v2d.py`; `engine/fixtures.py` / `engine/project.py` dispatch; `records/historical/v2d_fixtures_summary.csv`; `records/historical/v2d_fixtures_run.log`
-- **Follow-up:** No multiplier fishing. E012 parallel. New research branch only with a fresh structural hypothesis.
+- **Follow-up:** E021b fixture-mover diagnostic (rates E016b/E017b mirror). No multiplier fishing. E012 parallel.
+
+### E021b - Fixture XI mover toxicology (post-E021)
+- **Date:** 2026-08-27
+- **Status:** complete — **diagnostic only** (no new `fixtures_version`; no multiplier retune)
+- **Question:** Do `fixtures=v2d` XI entrants show the same toxicology as rates E016b/E017b (entered blank% > left; cold-form lift tail blanks hard; blanks carry large μΔ)? No FAIL-vs-PASS season split (E021 failed 4/4) — use within-mover and lift/cold cells instead.
+- **Method:** `scripts/e021_fixture_movers.py` — per GW `fixtures=v1` vs `fixtures=v2d` under frozen `v2am_s` + `rates=v1`; tag leavers/entrants with μΔ, recent4, prior-season strength flag, new-club, blank. Seed=7.
+
+- **Results — blank% among movers:**
+
+  | Season | n swaps | left blank% | entered blank% | entered prior_str% | mean μΔ entered |
+  |---|---:|---:|---:|---:|---:|
+  | 2022/23 | 192 | 10.4 | **17.2** | 97.9 | **+0.95** |
+  | 2023/24 | 179 | 5.0 | **12.8** | 93.9 | **+1.04** |
+  | 2024/25 | 179 | 11.7 | **17.9** | 98.3 | **+1.06** |
+  | 2025/26 | 182 | 14.8 | **19.8** | 98.4 | **+0.93** |
+
+- **Overall (n=732 entered):** blank **16.9%** vs left **10.5%**; mean μΔ entered **+0.99** vs left **−0.16**.
+
+- **Smoking gun (entered):**
+
+  | Cell | n | blank% | mean μΔ |
+  |---|---:|---:|---:|
+  | prior_str + recent4 &lt; 90 | **85** | **61.2** | 0.95 |
+  | prior_str + recent4 ≥ 90 | 626 | 11.0 | 1.02 |
+  | high μΔ tercile | 244 | 18.9 | 1.70 |
+  | low μΔ tercile | 244 | 15.6 | 0.37 |
+  | entered blanks | 124 | — | **1.02** |
+  | entered played ≥60 | 539 | — | 0.97 |
+
+- **Verdict:** **Concentrated — same shape as rates E017b, stronger cold cell.** Every season: entered blank% > left blank%; ILP systematically inserts large positive fixture μ lifts. Warm prior-strength entrants blank ~11% (healthy); **cold** prior-strength entrants blank **61%** (worse than rates' 43% prior+cold cell). Lift tercile effect is mild; the cold-form cell dominates. Confirms refined theory: extra μ on a decision-tuned stack, fed raw, over-rotates — packaging is the right next theme, not a fourth raw signal. Do **not** retune home/away or invent a fixture eligibility gate as a silent dose substitute.
+
+- **Artifacts:** `scripts/e021_fixture_movers.py`; `records/historical/e021_fixture_movers.csv`; `records/historical/e021_fixture_movers_run.log`; `records/historical/e021_fixture_movers_summary.txt`
+- **Follow-up:** Decision-aware packaging research (theme, not a pre-registered dose card yet). Keep V2C targeting separate. E012 parallel.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -837,13 +870,13 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E021 / V2D REJECT):
+As of 2026-08-27 (E021b concentrated):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Rates club-prior RETIRED** (E018s = B). **V2C threshold family frozen** (E019/E020 REJECT).
-3. **E021 REJECT.** `fixtures=v2d`: MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. Production fixtures stay `v1`. No multiplier fishing.
-4. **Next:** E012 parallel; new structural hypothesis only (not dose retune on fixtures/minutes/rates).
-5. **Invariant:** no coefficient fishing; PASS ≠ auto-promote.
+2. **Rates club-prior RETIRED** (E018s = B). **V2C threshold family frozen** (E019/E020 REJECT) — targeting, not packaging.
+3. **E021 REJECT; E021b concentrated.** Fixture movers match rates toxicology (cold prior_str blank 61%). Packaging theme next — not multiplier/eligibility fishing.
+4. **Next:** decision-aware packaging design (pre-register before code); E012 parallel.
+5. **Invariant:** no coefficient fishing; PASS ≠ auto-promote. E015 remains the counterexample (availability *was* the decision tuning).
 
 ---
 
@@ -866,6 +899,7 @@ python -m engine.harness_v2b_e   # E018: v2b_e vs v1 under v2am_s
 python -m engine.harness_v2c   # E019: v2c vs v2am_s under rates=v1
 python -m engine.harness_v2c_e  # E020: v2c_e vs v2am_s (cold-eligible demotion)
 python -m engine.harness_v2d    # E021: fixtures_v2d vs v1 under v2am_s + rates=v1
+python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers
 python scripts/e018s_synthesis.py  # E018s: A vs B close from existing CSVs
 python -m engine.obs --season 2025-26
