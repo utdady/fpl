@@ -475,10 +475,10 @@ E019: XI0✓ Cap✗2 MAE✗4. E019b: false-positive demotion. E020 cold-eligible
 
 MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that blank rate is **true zeros**; cold 60+ (n=20) outscore treat μ. Production fixtures `v1`.
 
-### Packaging gates (E022 PASS vs raw v2d; E023 OPEN)
+### Packaging gates (E022 PASS vs raw v2d; E023 REJECT for promote)
 
-E022: U beats raw v2d Cap+XI0 4/4; MAE identity; **not promoted**.
-E023 pre-registered: packaged v2d vs production fixtures=v1; q frozen from E022; Cap+XI0 hard; MAE guardrail; **XI0 named primary risk**. See `LAB_LOG.md` E023.
+E022: U beats raw v2d Cap+XI0 4/4; MAE identity; mechanism validated.
+E023: packaged v2d vs production — MAE✓ 4/4; Cap✓ 3/4; **XI0✗ 4/4**. Do not promote. Do not retune q. Production fixtures `v1`.
 
 ---
 
@@ -514,7 +514,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E021b** | Fixture XI mover toxicology | **concentrated** (cold cell 61% blank) |
 | **E021c** | Cold-cell minutes × points | **mostly non-playing** (61% zeros; 60+ OK) |
 | **E022** | Packaging: minutes-reliability of fixture μΔ | **PASS** vs raw v2d (not promote) |
-| **E023** | Packaged v2d vs production fixtures=v1 | **queued** / pre-registered (XI0 risk) |
+| **E023** | Packaged v2d vs production fixtures=v1 | **REJECT** (XI0✗ 4/4; named risk) |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 

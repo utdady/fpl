@@ -106,13 +106,13 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
-## 0h. Packaging - Decision-safe fixture μΔ (**E022 PASS**; **E023 OPEN**)
+## 0h. Packaging - Decision-safe fixture μΔ (**E022 PASS**; **E023 REJECT for promote**)
 
-**E022:** PASS vs raw v2d. Not promoted. See `LAB_LOG.md` E022.
+**E022:** PASS vs raw v2d. Mechanism validated. Not promoted. See `LAB_LOG.md` E022.
 
-**E023 (pre-registered):** Packaged `fixtures=v2d` (ILP on U) vs production `fixtures=v1` (ILP on raw μ). q frozen from E022. Gates Cap+XI0; MAE guardrail. **XI0 named primary risk.** PASS ≠ auto-promote. See `LAB_LOG.md` E023.
+**E023:** Packaged v2d vs production fixtures=v1 — MAE✓; Cap mostly✓; **XI0✗ 4/4** (named risk). Reject promote. No q fishing. See `LAB_LOG.md` E023.
 
-**Not:** q fishing; bundling E022+promote; V2C/rates reopen.
+**Not:** q fishing; silent promote; V2C/rates reopen.
 
 ---
 
@@ -262,9 +262,9 @@ Older “after B5” ordering is obsolete; V2D was an independent parallel branc
 
 See §0h / `LAB_LOG.md` E022. Cap+XI0 PASS 4/4; not a production promote.
 
-### B9 — Packaged v2d vs production fixtures=v1 (E023) — supersedes silent promote
+### B9 — Packaged v2d vs production fixtures=v1 (E023) — **REJECT for promote**
 
-See §0h / `LAB_LOG.md` E023. Promote bar; q frozen; **XI0 named primary risk**. PASS ≠ auto-promote.
+See §0h / `LAB_LOG.md` E023. XI0✗ 4/4 as named risk. Packaging mechanism (E022) remains validated; production fixtures stay `v1`. No q fishing.
 
 ---
 
