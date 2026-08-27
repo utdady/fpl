@@ -69,6 +69,8 @@ production is V2A-M) is an appendix, not a pass.
 
 **Do not promote. Do not grid-search α or retune 90/450.** Pivot to V2C/V2D as parallel branches.
 
+**E018s (2026-08-27):** Family synthesis → **B**. Club-history contains predictive information but μ perturbations are not reliably safe for the current ILP. Retirement is of this packaging, not of all historical-rate research.
+
 ---
 
 ## 1. Harness requirements

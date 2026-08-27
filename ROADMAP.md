@@ -161,16 +161,21 @@ See docs/FORMAL.md for post-GW1 evaluation invariants (not a V2 gate).
 
 ### V2 - Projection improvement
 
-**Prerequisite:** Met. V2A-M frozen; V2B is the active research question.
+**Prerequisite:** Met. V2A-M frozen; club-prior rate family retired (E018s = **B**).
 
-**Research ladder (each rung beats the preceding control out-of-sample before being retained):**
+**Research tree (parallel branches, not a forced ladder):**
 
 ```text
-V1.0 (permanent historical control)     tag: v1.0-gw1-baseline
-  -> V2A-M  minutes / availability      FROZEN = v2am_s  tag: v2am-s-baseline
-  -> V2B    multi-season rate priors (B4)   <-- next
-  -> V2C    role-transition / transfer-specific minutes (B5)
-  -> V2D    learned fixture coefficients (B6)
+V2A-M / v2am_s + rates_v1     ✅ production baseline
+  │
+  ├── Rate research
+  │     E016 → E017 → E018 → ❌ club-prior family retired (E018s: B)
+  │
+  ├── Minutes / role research
+  │     V2C role-transition P(start)   <-- next to pre-register
+  │
+  └── Fixture research
+        V2D learned ATK/CONCEDE          (later, independent)
 ```
 
 **V2A-M - Minutes / availability (FROZEN)**
@@ -178,17 +183,18 @@ Implementation: `minutes_version=v2am_s` — soft max 0.85; cold 0.55 / hot 0.72
 E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+ all PASS.
 **Do not retune.** Production default = `v2am_s`. V1 remains permanent historical control (harnesses pin `minutes_version=v1`).
 
-**V2B / B4 — Multi-season rates (E016/E017/E018 REJECT — branch retired)**
-Full club prior, α=0.50 dampening, and form-eligible prior all improved MAE/Sp but failed decision gates. **rates default stays v1.** No further club-prior cards. Minutes frozen at `v2am_s`.
+**V2B / rates — Club-prior family (RETIRED after E018s)**
+E016/E017/E018 all improved MAE/Sp; decision gates never clean. E018s: information useful but unsafe under ILP (**B**). **rates stay v1.** No E019. Future rate ideas need decision-aware packaging, not prior retunes.
 
-**B5 — Role-transition minutes model**
-Detect club changes via Vaastav per-GW history. Discount start prior by new-club
-positional depth (count of teammates with ≥ 1800 mins). Note: generic new-club transfer status remains unresolved/confounded (E013). V2C targets the residual after V2A-M demonstrates general calibration improvement.
-Success: better-calibrated p_start for new-club players, conditional on V2A-M already running.
+**V2C — Role-transition minutes (next)**
+Not `if new_club: discount`. Target:
+`P(start)=f(prior minutes, current competition, position, role, recent usage, transfer context)`.
+Transfer is one conditional feature among several. Residual after V2A-M; E013 new-club sign was inconsistent.
+Success: better-calibrated p_start / decision gates vs frozen `v2am_s` control.
 
-**B6 — Learned fixture coefficients**
-Replace hand-set ATK/CONCEDE with a Poisson GLM fitted from historical match data.
-Success: lower fixture-xG RMSE than the hand-set table.
+**V2D — Learned fixture coefficients (later)**
+Replace hand-set ATK/CONCEDE with a Poisson GLM from historical match data.
+Keep independent of V2C. Success: lower fixture-xG RMSE + decision gates.
 
 ---
 
@@ -313,6 +319,6 @@ POST-GW1 (research)
   E010 live GW1 score (V1 control measurement)
   E014 REJECT (LOSO remap); E014b diagnostic; E015 PASS (structural minutes)
   V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
-  E018 REJECT (form-eligible club prior); club-prior branch retired; rates stay v1
-  NEXT: V2C role-transition mins, V2D fixtures, E012 — parallel branches
+  E018 REJECT; E018s = B (useful signal, unsafe under ILP); club-prior family retired
+  NEXT: pre-register V2C role-transition minutes; V2D later; E012 parallel
 ```

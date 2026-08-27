@@ -463,9 +463,9 @@ E015 passed all four seasons; production default is now `v2am_s`. Do not retune.
 Canonical statement (E013): V1's repeatable weakness was **upper-tail
 playing-time overconfidence propagating into XI blank selections**.
 
-### V2B gates (E016/E017/E018 REJECT — branch retired)
+### V2B gates (E016/E017/E018 REJECT — family retired; E018s = B)
 
-Three structural attempts on club prior (full, damped, form-eligible) all improved MAE/Sp but failed decision gates. Production `rates_version=v1`. Do not tune α or thresholds. Pivot to V2C/V2D.
+Three structural club-prior treatments improved MAE/Sp but never cleared decision gates. E018s: **B** — signal useful, unsafe under current ILP. Production `rates_version=v1`. No E019. Next: V2C (not another rate blend).
 
 ---
 
@@ -493,6 +493,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E017** | V2B-d prior→XI dampening (α=0.50) | **REJECT** (same FAIL seasons; dosage↓ but gates fail) |
 | **E017b** | FAIL vs PASS entrant profiles | **concentrated** (prior+cold recent → 43% blank) |
 | **E018** | V2B-e form eligibility gate (90/450) | **REJECT** (0/4 gates; branch retired) |
+| **E018s** | Club-prior family A vs B synthesis | **B** (useful signal; unsafe under ILP) |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 

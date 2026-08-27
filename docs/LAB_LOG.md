@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E018 **REJECT** — club-prior branch retired. Rates stay `v1`. Next: V2C (role-transition mins) or V2D (fixtures) as parallel branches; E012 parallel.
+**Active research question:** E018s closed (**B** — useful signal, unsafe under ILP). Club-prior retired. Next: pre-register V2C role-transition minutes; V2D later; E012 parallel.
 
 ---
 
@@ -634,7 +634,49 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `engine/rates_v2b.py` (`rates_for_v2b_e`); `engine/harness_v2b_e.py`; `records/historical/v2b_e_rates_summary.csv`; `records/historical/v2b_e_rates_run.log`
 
-- **Follow-up:** Do not invent E019 threshold variants on club prior. Open V2C (role-transition minutes) or V2D (fixtures) as **parallel** branches. E012 parallel.
+- **Follow-up:** E018s thin synthesis (A vs B); then V2C. No E019.
+
+### E018s - Club-prior family synthesis (diagnostic)
+- **Date:** 2026-08-27
+- **Status:** complete — **diagnostic only** (no new `rates_version`; no threshold retune; no E019)
+- **Question:** Was club-prior information **weak (A)** or **useful but badly consumed by the current decision stack (B)**?
+- **Inputs only:** `v2b*_rates_summary.csv`, `e017_entrant_profile.csv`, `e016_xi_movement.csv`; script `scripts/e018s_synthesis.py`
+
+- **Gate signature map (relocated damage):**
+
+  | Season | E016 full | E017 damp α=0.50 | E018 eligible |
+  |---|---|---|---|
+  | 2022/23 | Cap+XI0 FAIL | Cap+XI0 FAIL | **Cap FAIL** (XI0 OK) |
+  | 2023/24 | PASS | PASS | **XI0 FAIL** |
+  | 2024/25 | PASS | PASS | **XI0 FAIL** |
+  | 2025/26 | Cap+XI0 FAIL | Cap+XI0 FAIL | **XI0 FAIL** (Cap OK) |
+
+  MAE_60+ and Spearman_60+ improved **every season under every treatment**. Decision failures **moved with the mechanism** — not fixed.
+
+- **Dosage (where recorded):**
+
+  | Season | E017 swaps / entered blank% | E018 swaps / entered blank% |
+  |---|---|---|
+  | 2022/23 | 66 / 19.7% | 74 / 8.1% |
+  | 2023/24 | 29 / 6.9% | 39 / 7.7% |
+  | 2024/25 | 36 / 5.6% | 53 / 13.2% |
+  | 2025/26 | 33 / 18.2% | 48 / 6.3% |
+
+  Eligibility cut toxic-season entered blanks vs dampening, but swap volume stayed high and previously clean seasons newly failed XI0.
+
+- **Entrant categories (E017b = max-contrast `rates_v2b` movers; n=304 entered):**
+  - ~95% of entrants had club prior in both FAIL and PASS seasons.
+  - FAIL blank **16.6%** vs PASS **9.3%**; FAIL mean μΔ **0.66** vs PASS **0.51**.
+  - Toxic subgroup unchanged: prior+recent4&lt;90 blank **43%** (FAIL) vs **7%** (PASS).
+  - Position: FAIL **FWD** blank **34%** vs PASS FWD **3%** (MID similar across gates).
+  - Among FAIL entrants who **played ≥60**: mean μΔ still **+0.59** — rate uplift is real for players who appear. Blanks carried even larger μΔ (**+0.75**): ILP most tempted by promotions that then blanked.
+
+- **Verdict:** **B.** Club-history contains predictive information (MAE/Sp ↑ always; μΔ remains positive among players who play), but μ perturbations are **not reliably safe** for the current ILP. Relocated-not-eliminated failure across three structural treatments supports signal×consumer interaction, not pure noise (A).
+
+- **Retirement language (narrow):** This **club-conditioned multi-season prior family** is retired. That does **not** kill all future historical-rate research — only this packaging. Future rate work (if any) needs **decision-aware signal packaging**, not another prior blend / α / eligibility tweak.
+
+- **Artifacts:** `scripts/e018s_synthesis.py`; `records/historical/e018s_synthesis_run.log`
+- **Follow-up:** Pre-register V2C (role-transition `P(start)`, not transfer haircut). V2D later, independent. E012 parallel. Do not reopen 90/450.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -666,13 +708,13 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E018 REJECT):
+As of 2026-08-27 (E018s complete):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1`.
-2. **Club-prior branch RETIRED.** E016 full → E017 damped → E018 eligible: MAE/Sp ↑ all seasons; **0/4 pass all gates.**
-3. **Do not tune α or 90/450.** No E019 on club prior.
-4. **Next (parallel branches):** V2C role-transition minutes, V2D fixtures, E012 evaluation integrity.
-5. **Invariant:** minutes / fixtures / ILP / objective locked.
+2. **Club-prior family RETIRED** (E016/E017/E018). Synthesis verdict **B**: useful rates signal, unsafe under current ILP.
+3. **No E019.** No α / 90/450 retune. Historical rates ≠ this packaging.
+4. **Next:** pre-register **V2C** role-transition minutes (`P(start)=f(...)`, not transfer haircut). **V2D** fixtures later. E012 parallel.
+5. **Invariant:** minutes / fixtures / ILP / objective locked until a new card passes gates.
 
 ---
 
@@ -692,6 +734,7 @@ python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --score --s
 python -m engine.harness_compare --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_decomp --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_v2b_e   # E018: v2b_e vs v1 under v2am_s
+python scripts/e018s_synthesis.py  # E018s: A vs B close from existing CSVs
 python -m engine.obs --season 2025-26
 python -m engine.obs --season 2024-25
 python -m engine.obs --season 2023-24
