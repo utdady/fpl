@@ -56,6 +56,26 @@ production is V2A-M) is an appendix, not a pass.
 **Result:** MAE_60+ and Spearman|60+ improved all four seasons; XI+Cap and XI 0-min **failed** again on 2022/23 and 2025/26. Dosage diagnostics: μΔ and swap volume fell vs E016b, but FAIL seasons still had entered blank% > left blank%.
 
 **Do not promote. Do not grid-search α.** A further rates attempt needs a **new structural card**, not a different mix weight.
+
+---
+
+## 0d. V2B-e - Current-form eligibility gate (**OPEN** — E018)
+
+**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E018.
+
+**Why:** E017b — toxic promotions = club prior on **cold/thin-form** players (prior+recent4&lt;90 → 43% blank in FAIL seasons).
+
+**Control:** `minutes=v2am_s` + `rates=v1`  
+**Treatment:** `minutes=v2am_s` + `rates=v2b_e` (club prior only when form-eligible)
+
+**Pinned gates (reuse existing constants):**
+- MIN_CLUB_MINUTES=270 at current club (club pool exists)
+- recent4≥**90** for club prior (when as_of_gw&gt;4)
+- season_minutes≥**450** for club prior (always; sole gate when as_of_gw≤4)
+- Ineligible → cost prior only; eligible → full club prior (α=1 on club leg)
+
+**Gates:** same as E016. No α search. No post-hoc threshold tuning.
+
 ---
 
 ## 1. Harness requirements

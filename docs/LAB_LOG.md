@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E017b concentrated (prior+cold recent blanks in FAIL seasons). E018 form-gate card next; rates stay v1.
+**Active research question:** E018 pre-registered (`rates=v2b_e`, form eligibility). E017b concentrated; rates stay v1.
 
 ---
 
@@ -598,7 +598,49 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Verdict:** **Concentrated.** FAIL seasons promote the same prior machinery into a **cold / thin-form** subgroup that blanks heavily (43% when prior + recent4&lt;90). Warm-form prior entrants in FAIL seasons look like PASS (~10% blank). New-club share is higher in FAIL but is a weaker blank separator than recent/season minutes. Supports an **eligibility / current-form gate** before club-prior weight — not another global α.
 - **Artifacts:** `records/historical/e017_entrant_profile.csv`; `scripts/e017_entrant_profile.py`
-- **Follow-up:** pre-register E018 (structural): withhold or fully damp club prior unless recent-4 / season-minutes thresholds are met; pin thresholds from this diagnostic before code.
+- **Follow-up:** E018 pre-registered (current-form eligibility gate).
+
+### E018 - V2B current-form eligibility gate (pre-registered)
+- **Date:** 2026-08-27 (from E017b; **not started**)
+- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
+- **Hypothesis:** Toxic `rates_v2b` promotions are **categorical** (club prior applied to cold/thin-form players). Withholding club prior unless current form supports it clears Cap/XI0 failures while preserving MAE/Sp gains.
+- **Question:** Under frozen `v2am_s`, does **eligible-only** club prior (`rates=v2b_e`) pass E016 gates vs `rates=v1`?
+
+- **Evidence (E017b):** prior + recent4&lt;90 blank **43%** (FAIL) vs **7%** (PASS); prior + recent4≥90 ~**10%** both splits. Uniform α (E017) failed because it did not remove the cold subgroup from prior eligibility.
+
+- **Scope lock:** Same as E016 — `xg90`/`xa90` in `rates_for` only; ATK/CONCEDE frozen; dc/saves/bonus/cards locked. **Gate acts on eligibility for club prior, not post-hoc XI freeze.**
+
+- **Versioning:**
+  ```text
+  minutes_version = "v2am_s"
+  rates_version   = "v1" | "v2b_e"
+
+  control:   minutes=v2am_s + rates=v1
+  treatment: minutes=v2am_s + rates=v2b_e
+  ```
+
+- **Pinned eligibility (reuse existing constants — no new free parameters):**
+
+  | Rule | Threshold | Source |
+  |---|---|---|
+  | Club prior pool | MIN_CLUB_MINUTES **270** at current club | E016 (unchanged) |
+  | Recent-form gate | recent4 **≥ 90** required for club prior | V2A-M cold window (`minutes_struct`) |
+  | Season-form gate | season_minutes **≥ 450** required for club prior | `rates_for` blend window |
+  | Early GWs | if `as_of_gw ≤ 4`: **season_minutes gate only** (recent4 ill-defined / noisy) | pre-registered |
+  | When ineligible | **cost prior only** (no club prior) | categorical withhold |
+  | When eligible | **full club prior** (α=1.0 on club leg; not `v2b_d`) | E016 club-stint prior |
+
+- **What this is not:** tuning 90/450 after peeking; α grid search; minutes retune; XI membership freeze vs control.
+
+- **Method (planned):** `rates_version=v2b_e` in `rates_v2b.py` / `project_all`; harness `python -m engine.harness_v2b_e` (seed=7). Four seasons individually.
+- **Seasons / GWs:** 2022/23–2025/26, GW1–38
+- **Metrics / gates (same as E016):** MAE_60+; Spearman|60+; XI+Cap non-inferiority; XI 0-min non-worsening — per season, not averaged.
+- **Secondary diagnostic (not a gate):** entered blank% for prior-eligible vs ineligible movers vs E017b.
+- **Cheat-blocks:** no α search; no threshold retune; beating V1 alone ≠ pass; no bundling `strategies.json`
+- **Results:** —
+- **Verdict:** —
+- **Artifacts:** —
+- **Follow-up sequence:** implement `v2b_e` → fixed-seed four-season harness → interpret → promote only if all gates PASS. E012 parallel.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -630,13 +672,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (after E017b):
+As of 2026-08-27 (E018 pre-registered):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1`.
-2. **E016/E017 REJECT.** Global α dampening insufficient.
-3. **E017b concentrated.** FAIL entrants: prior + cold recent4 blank **43%** vs ~10% when recent4≥90. Form eligibility is the natural next structure.
-4. **Next:** pre-register E018 current-form gate on club prior (pin thresholds from E017b). E012 parallel.
-5. **Invariant:** no α search; minutes/fixtures/ILP locked.
+2. **E016/E017 REJECT.** Global α dampening insufficient (signal–selection gap).
+3. **E017b concentrated.** Toxic subgroup = prior + cold/thin form (43% blank).
+4. **E018 contract locked.** `rates=v2b_e`: club prior only if recent4≥90 (or GW≤4: season≥450 only) AND season≥450 AND MIN_CLUB_MINUTES=270. Full club prior when eligible. No α search; no threshold retune.
+5. **Next implement:** `v2b_e` + four-season harness. E012 parallel.
+6. **Invariant:** minutes / fixtures / ILP / objective locked.
 
 ---
 
