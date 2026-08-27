@@ -106,16 +106,13 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
-## 0h. Packaging - Decision-safe fixture μΔ (**PASS vs raw v2d** — E022)
+## 0h. Packaging - Decision-safe fixture μΔ (**E022 PASS**; **E023 OPEN**)
 
-**Status:** Implemented + evaluated 2026-08-27. **PASS** vs raw v2d. **Not promoted.** See `LAB_LOG.md` E022.
+**E022:** PASS vs raw v2d. Not promoted. See `LAB_LOG.md` E022.
 
-**Control:** `v2am_s` + `rates=v1` + `fixtures=v2d`, ILP on raw next_utility(μ_v2d)  
-**Treatment:** same projections; ILP on U = (1−q)·μ_v1 + q·μ_v2d with q = clip(recent4/90, 0, 1); as_of_gw≤4 → q=1
+**E023 (pre-registered):** Packaged `fixtures=v2d` (ILP on U) vs production `fixtures=v1` (ILP on raw μ). q frozen from E022. Gates Cap+XI0; MAE guardrail. **XI0 named primary risk.** PASS ≠ auto-promote. See `LAB_LOG.md` E023.
 
-**Result:** Cap+XI0 PASS 4/4; MAE identity. Production fixtures stay `v1`. Secondary: XI0 still above production v1.
-
-**Not:** q denominator fishing; bundling packaging + promote; V2C reopen; rates reopen.
+**Not:** q fishing; bundling E022+promote; V2C/rates reopen.
 
 ---
 
@@ -263,7 +260,11 @@ Older “after B5” ordering is obsolete; V2D was an independent parallel branc
 
 ### B8 — Packaging decision utility for fixture μΔ (E022) — **PASS vs raw v2d**
 
-See §0h / `LAB_LOG.md` E022. Cap+XI0 PASS 4/4; not a production promote. Optional separate card vs fixtures=v1 if desired.
+See §0h / `LAB_LOG.md` E022. Cap+XI0 PASS 4/4; not a production promote.
+
+### B9 — Packaged v2d vs production fixtures=v1 (E023) — supersedes silent promote
+
+See §0h / `LAB_LOG.md` E023. Promote bar; q frozen; **XI0 named primary risk**. PASS ≠ auto-promote.
 
 ---
 
