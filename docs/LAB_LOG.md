@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E025 **concentrated** — Cap-FAIL is relative ranking among reliable players (concordance ~47% vs PASS ~75%). Packaging closed. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No q/α/μΔ-clamp fishing.
+**Active research question:** E026 **concentrated** → lock **H-PACK1** branch (stability / near-optimal selection). FAIL rank errors ~91% near+mid control-μ gaps. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No q/α/μΔ-clamp fishing.
 
 ---
 
@@ -1103,17 +1103,48 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated — relative ranking failure.** Cap-FAIL seasons lose the swap: model prefers entrant (~ΔU>0) but entrant wins only ~45% when both play 60+ (PASS ~66–75%). Large rates μΔ makes FAIL concordance collapse (~30%). Same-position pairs reproduce the gap. Not blank risk; not absolute μ bias; **ordering among reliable players under rates μΔ**. Do **not** retune q/α. Do **not** invent a silent μΔ clamp as the next card without a structural hypothesis.
 
 - **Artifacts:** `scripts/e025_swap_ranking.py`; `records/historical/e025_swap_pairs.csv`; `records/historical/e025_swap_ranking_summary.txt`
-- **Follow-up:** Structural valuation/selection hypothesis only (e.g. uncertainty-aware ranking or rates-μΔ credibility among regulars — not minutes-reliability, already `q≈1`). No dose fishing.
+- **Follow-up:** → **E026** control-μ near-tie diagnostic (branch H-PACK1). No dose fishing.
+
+### E026 - Control-μ near-tie diagnostic (H-PACK1 branch)
+- **Date:** 2026-08-27 (after E025)
+- **Status:** **concentrated** — FAIL ranking errors sit on small/mid control gaps, not large overturns
+- **Hypothesis:** If Cap-FAIL relative-ranking failures concentrate where \(|\mu_i^{\mathrm{ctrl}}-\mu_j^{\mathrm{ctrl}}|\) is small, the first structural card is **stability / near-optimal baseline selection**. If FAIL also overturns large control gaps, prefer a **confidence / challenger** rule instead.
+- **Question:** On E025-style both≥60 entered×left pairs, do Cap-FAIL seasons show higher near-tie share and rank-error mass in the near/mid control-μ gap buckets than Cap-PASS?
+
+- **Scope lock — post-process E024b; fixed buckets pre-registered; no mechanism:**
+  ```text
+  input: e024b_cap_fail_movers.csv
+  d_ctrl = ctrl_mu_enter − ctrl_mu_left
+  buckets (frozen): near |d_ctrl|<0.25; mid [0.25,0.75); large ≥0.75
+  primary: both actual_minutes ≥ 60
+  no q/α/μ shrink; no ILP change
+  ```
+
+- **Method:** `python scripts/e026_near_tie.py`
+
+- **Results (both≥60):**
+
+  | Gate | near% | mid% | large% | rank_err→near% | rank_err→large% | near concordance% |
+  |---|---:|---:|---:|---:|---:|---:|
+  | FAIL | **47.2** | 36.7 | 16.1 | **55.2** | 8.8 | **48.1** |
+  | PASS | 33.8 | 37.9 | 28.3 | 42.9 | 5.7 | **75.4** |
+
+  FAIL rank_err mass: near 55% + mid 36% = **91%**; large only **9%**. Same-position reproduces near-heavy FAIL (56% near). FAIL also has more treatment overturns of control-preferred leavers (overturn_n 210 vs PASS 76).
+
+- **Verdict:** **concentrated — branch to stability-aware selection.** Cap-FAIL damage is **not** mainly “treatment flips players who were clearly worse under control.” It is concentrated where control already saw a **near or moderate tie**, and even within the near bucket FAIL concordance collapses (~48% vs PASS ~75%). Supports locking **H-PACK1: near-optimal / stability-aware marginal selection** as the first decision-layer mechanism. Confidence/challenger remains secondary (large-gap errors exist but are rare). Do **not** implement ε yet without a frozen ε definition. Do **not** reopen α / μ shrink / cold gates.
+
+- **Artifacts:** `scripts/e026_near_tie.py`; `records/historical/e026_near_tie_pairs.csv`; `records/historical/e026_near_tie_summary.txt`
+- **Follow-up:** Pre-register H-PACK1 mechanism card (lexicographic near-optimal baseline → treatment; ε frozen from control-only quantity). Forbidden: α, μ shrink, cold-form, new-club rules.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E025 concentrated):
+As of 2026-08-27 (E026 concentrated):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. Packaging arc closed.
-2. **E025 concentrated.** Cap-FAIL swap concordance ~47% vs PASS ~75% (both≥60); worse under large μΔ. Relative ranking, not availability.
-3. **Next.** New structural valuation/selection card only — not q/α/μΔ clamp fishing. PASS ≠ auto-promote.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. Packaging (minutes-reliability) closed.
+2. **E025/E026.** Relative ranking failure; FAIL rank errors ~91% near+mid control gaps → **H-PACK1 stability-aware selection** is the locked branch.
+3. **Next.** Pre-register H-PACK1 mechanism (decision rule, not predictor). Freeze ε before running. PASS ≠ auto-promote.
 
 ---
 
@@ -1142,6 +1173,7 @@ python -m unittest tests.test_e012_integrity -v  # E012: evaluation integrity
 python -m engine.harness_pack_rates  # E024: packaged rates_v2b vs production
 python scripts/e024b_cap_fail_movers.py  # E024b: Cap-FAIL vs PASS rates movers
 python scripts/e025_swap_ranking.py  # E025: Cap-FAIL swap ranking concordance
+python scripts/e026_near_tie.py  # E026: control-μ near-tie (H-PACK1 branch)
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

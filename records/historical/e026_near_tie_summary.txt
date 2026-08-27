@@ -1,0 +1,39 @@
+E026: Cap-FAIL vs Cap-PASS control-μ near-tie diagnostic
+Pre-registered buckets: near |dctrl|<0.25, mid [0.25,0.75), large ≥0.75
+Primary filter: both ≥60 minutes
+
+=== FAIL both60 (n=354) ===
+  overall: n=354 mean_|dctrl|=0.414 mean_dctrl=-0.258 mean_dU=0.276 mean_dpts=-0.958 entrant_win%=44.5 concordance%=46.8 overturn_n=210 overturn_bad_n=90 rank_err_n=125
+  near  share= 47.2%  n=167 mean_|dctrl|=0.109 mean_dctrl=-0.062 mean_dU=0.399 mean_dpts=-0.659 entrant_win%=46.5 concordance%=48.1 overturn_n=111 overturn_bad_n=49 rank_err_n=69
+  mid   share= 36.7%  n=130 mean_|dctrl|=0.412 mean_dctrl=-0.283 mean_dU=0.327 mean_dpts=-0.515 entrant_win%=49.1 concordance%=48.3 overturn_n=89 overturn_bad_n=35 rank_err_n=45
+  large share= 16.1%  n=57 mean_|dctrl|=1.310 mean_dctrl=-0.772 mean_dU=-0.204 mean_dpts=-2.842 entrant_win%=29.4 concordance%=26.7 overturn_n=10 overturn_bad_n=6 rank_err_n=11
+  rank_err total n=125
+    rank_err→near: n=69 share=55.2%  n=69 mean_|dctrl|=0.112 mean_dctrl=-0.053 mean_dU=0.495 mean_dpts=-4.942 entrant_win%=0.0 concordance%=0.0 overturn_n=49 overturn_bad_n=49 rank_err_n=69
+    rank_err→mid: n=45 share=36.0%  n=45 mean_|dctrl|=0.392 mean_dctrl=-0.208 mean_dU=0.454 mean_dpts=-5.267 entrant_win%=0.0 concordance%=0.0 overturn_n=35 overturn_bad_n=35 rank_err_n=45
+    rank_err→large: n=11 share=8.8%  n=11 mean_|dctrl|=1.233 mean_dctrl=0.265 mean_dU=1.015 mean_dpts=-6.182 entrant_win%=0.0 concordance%=0.0 overturn_n=6 overturn_bad_n=6 rank_err_n=11
+  ctrl_gap≤-0.25 (control clearly prefers left): n=160 mean_|dctrl|=0.653 mean_dctrl=-0.653 mean_dU=-0.024 mean_dpts=-1.319 entrant_win%=45.3 concordance%=50.0 overturn_n=99 overturn_bad_n=41 rank_err_n=41
+
+=== PASS both60 (n=240) ===
+  overall: n=240 mean_|dctrl|=0.547 mean_dctrl=-0.259 mean_dU=0.198 mean_dpts=1.179 entrant_win%=66.3 concordance%=74.6 overturn_n=76 overturn_bad_n=23 rank_err_n=35
+  near  share= 33.8%  n=81 mean_|dctrl|=0.096 mean_dctrl=-0.020 mean_dU=0.364 mean_dpts=1.531 entrant_win%=74.6 concordance%=75.4 overturn_n=39 overturn_bad_n=11 rank_err_n=15
+  mid   share= 37.9%  n=91 mean_|dctrl|=0.463 mean_dctrl=-0.087 mean_dU=0.376 mean_dpts=1.264 entrant_win%=64.5 concordance%=69.5 overturn_n=31 overturn_bad_n=12 rank_err_n=18
+  large share= 28.3%  n=68 mean_|dctrl|=1.196 mean_dctrl=-0.772 mean_dU=-0.238 mean_dpts=0.647 entrant_win%=59.7 concordance%=88.9 overturn_n=6 overturn_bad_n=0 rank_err_n=2
+  rank_err total n=35
+    rank_err→near: n=15 share=42.9%  n=15 mean_|dctrl|=0.109 mean_dctrl=-0.043 mean_dU=0.439 mean_dpts=-3.200 entrant_win%=0.0 concordance%=0.0 overturn_n=11 overturn_bad_n=11 rank_err_n=15
+    rank_err→mid: n=18 share=51.4%  n=18 mean_|dctrl|=0.425 mean_dctrl=-0.098 mean_dU=0.575 mean_dpts=-4.889 entrant_win%=0.0 concordance%=0.0 overturn_n=12 overturn_bad_n=12 rank_err_n=18
+    rank_err→large: n=2 share=5.7%  n=2 mean_|dctrl|=1.291 mean_dctrl=1.291 mean_dU=1.618 mean_dpts=-2.500 entrant_win%=0.0 concordance%=0.0 overturn_n=0 overturn_bad_n=0 rank_err_n=2
+  ctrl_gap≤-0.25 (control clearly prefers left): n=110 mean_|dctrl|=0.836 mean_dctrl=-0.836 mean_dU=-0.285 mean_dpts=0.145 entrant_win%=53.7 concordance%=64.7 overturn_n=37 overturn_bad_n=12 rank_err_n=12
+
+=== both60 same_pos ===
+  FAIL n=140
+    near  share= 55.7%  n=78 mean_|dctrl|=0.106 mean_dctrl=-0.070 mean_dU=0.335 mean_dpts=-0.500 entrant_win%=47.0 concordance%=47.6 overturn_n=57 overturn_bad_n=25 rank_err_n=33
+    mid   share= 33.6%  n=47 mean_|dctrl|=0.400 mean_dctrl=-0.313 mean_dU=0.284 mean_dpts=-0.319 entrant_win%=43.2 concordance%=48.4 overturn_n=33 overturn_bad_n=12 rank_err_n=16
+    large share= 10.7%  n=15 mean_|dctrl|=1.303 mean_dctrl=-0.648 mean_dU=-0.069 mean_dpts=0.333 entrant_win%=50.0 concordance%=40.0 overturn_n=3 overturn_bad_n=2 rank_err_n=3
+  PASS n=100
+    near  share= 52.0%  n=52 mean_|dctrl|=0.079 mean_dctrl=-0.025 mean_dU=0.286 mean_dpts=1.827 entrant_win%=75.6 concordance%=75.6 overturn_n=27 overturn_bad_n=9 rank_err_n=10
+    mid   share= 33.0%  n=33 mean_|dctrl|=0.416 mean_dctrl=-0.118 mean_dU=0.389 mean_dpts=1.606 entrant_win%=64.3 concordance%=63.0 overturn_n=16 overturn_bad_n=8 rank_err_n=10
+    large share= 15.0%  n=15 mean_|dctrl|=1.338 mean_dctrl=-0.978 mean_dU=-0.221 mean_dpts=-1.600 entrant_win%=50.0 concordance%=100.0 overturn_n=4 overturn_bad_n=0 rank_err_n=0
+
+=== branching readout (FAIL vs PASS both60) ===
+  FAIL: pair_near%=47.2 pair_large%=16.1 rank_err_near%=55.2 rank_err_large%=8.8
+  PASS: pair_near%=33.8 pair_large%=28.3 rank_err_near%=42.9 rank_err_large%=5.7
