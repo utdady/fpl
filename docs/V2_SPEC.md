@@ -83,18 +83,20 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
-## 0g. V2D - Learned fixture coefficients (**OPEN** — E021)
+## 0g. V2D - Learned fixture coefficients (**REJECT** — E021)
 
-**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E021.
+**Status:** Implemented + evaluated 2026-08-27. **REJECT.** See `LAB_LOG.md` E021.
 
 **Control:** `minutes=v2am_s` + `rates=v1` + `fixtures=v1` (hand `ATK`/`CONCEDE`)  
-**Treatment:** same minutes/rates + `fixtures=v2d` (prior-season Poisson team attack/defence)
+**Treatment:** same minutes/rates + `fixtures=v2d` (prior-season empirical team attack/defence)
 
 **Pinned:**
 - Fit from **complete prior seasons only** (team name keys); promoted clubs → league-average attack/defence
 - Home/away multipliers **1.10 / 0.88** frozen; `LEAGUE_AVG` / clamp frozen
 - Dispatch `fixtures_version`; default stays `"v1"`
 - Gates: XI0 + Cap hard vs control; MAE_60+ guardrail; four seasons; seed=7
+
+**Result:** MAE_60+ PASS 4/4; Cap FAIL 4/4; XI0 FAIL 4/4 (~180 swaps/season). Do not promote. Do not retune multipliers. Production fixtures stay `v1`.
 
 **Not:** multiplier search; same-GW leakage fits; minutes/rates retune; ML fixture models.
 
@@ -236,11 +238,11 @@ See §0e. Competition demotion improved XI0 but failed Cap/MAE gates. Production
 Stacked improvements. Only build if B4 and B5 each individually beat B3.
 If only one improves on B3, use only that one.
 
-### B7 — V2D learned fixture coefficients (E021) — supersedes older B7 sketch
+### B7 — V2D learned fixture coefficients (E021) — **REJECT**
 
-See §0g / `LAB_LOG.md` E021. Control is `v2am_s` + `rates=v1` + hand fixtures — **not** V1. Home/away multipliers frozen; prior-season Poisson strengths only.
+See §0g / `LAB_LOG.md` E021. MAE_60+ improved; Cap/XI0 failed 4/4. Production fixtures stay `v1`. No multiplier fishing.
 
-Older “after B5” ordering is obsolete; V2D is an independent parallel branch.
+Older “after B5” ordering is obsolete; V2D was an independent parallel branch.
 
 ---
 

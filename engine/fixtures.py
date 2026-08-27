@@ -30,10 +30,23 @@ def _clamp(x: float) -> float:
     return max(0.45, min(3.4, x))
 
 
-def player_match_context(snapshot: Snapshot, team_id: int, fx: Fixture) -> dict:
+def player_match_context(
+    snapshot: Snapshot,
+    team_id: int,
+    fx: Fixture,
+    fixtures_version: str = "v1",
+    fixture_strengths: dict | None = None,
+) -> dict:
     home = snapshot.team(fx.team_h)
     away = snapshot.team(fx.team_a)
-    e_home, e_away = expected_goals(home, away)
+    if fixtures_version == "v2d":
+        from engine.fixtures_v2d import expected_goals_v2d
+
+        if fixture_strengths is None:
+            raise ValueError("fixtures_version=v2d requires fixture_strengths")
+        e_home, e_away = expected_goals_v2d(home, away, fixture_strengths)
+    else:
+        e_home, e_away = expected_goals(home, away)
     is_home = team_id == fx.team_h
     team_xg = e_home if is_home else e_away
     opp_xg = e_away if is_home else e_home

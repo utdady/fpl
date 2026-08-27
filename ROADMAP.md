@@ -175,7 +175,7 @@ V2A-M / v2am_s + rates_v1     ✅ production baseline
   │     V2C role-transition P(start)   ❌ E019/E020 REJECT (threshold family frozen)
   │
   └── Fixture research
-        V2D learned ATK/CONCEDE          <-- E021 pre-registered / implement next
+        V2D learned ATK/CONCEDE          ❌ E021 REJECT (MAE✓ Cap/XI0✗; fixtures stay v1)
 ```
 
 **V2A-M - Minutes / availability (FROZEN)**
@@ -189,8 +189,8 @@ E016/E017/E018 all improved MAE/Sp; decision gates never clean. E018s: informati
 **V2C — Role-transition minutes (E019/E020 REJECT)**
 E019 competition demotion: XI0↑ 4/4; Cap fail 2/4. E019b: false-positive targeting. E020 cold-eligible (`recent4<90`): Cap fail reduced to 1/4; MAE still fail 4/4. **minutes stay `v2am_s`.** No further recent4-threshold cards without a new structural hypothesis.
 
-**V2D — Learned fixture coefficients (E021 OPEN / pre-registered)**
-Replace hand-set `ATK`/`CONCEDE` with prior-season Poisson team strengths (`fixtures_version=v2d`). Minutes=`v2am_s`, rates=`v1` frozen. Home/away 1.10/0.88 frozen. Success: XI0 + Cap vs control; MAE_60+ guardrail. See `LAB_LOG.md` E021.
+**V2D — Learned fixture coefficients (E021 REJECT)**
+Prior-season strengths vs hand ATK/CONCEDE: MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E018s pattern (useful signal, unsafe under ILP). **fixtures stay v1.** No home/away multiplier fishing.
 
 ---
 
@@ -318,5 +318,5 @@ POST-GW1 (research)
   E019 REJECT (v2c): XI0↑ 4/4 but Cap fail 2/4, MAE guardrail fail 4/4; minutes stay v2am_s
   E019b concentrated: Cap-fail demoted leavers high value-when-playing (false positives)
   E020 REJECT (v2c_e cold-eligible): Cap better (1 fail) but MAE✗ 4/4; minutes stay v2am_s
-  E021 pre-registered: V2D learned fixtures (fixtures_v2d); implement next
+  E021 REJECT (fixtures_v2d): MAE✓ 4/4 Cap/XI0✗ 4/4; fixtures stay v1; no multiplier fishing
 ```

@@ -206,6 +206,8 @@ def project_player_gw(
     rates_priors: dict[int, tuple[float, float]] | None = None,
     as_of_gw: int = 1,
     recent_minutes: dict[int, int] | None = None,
+    fixtures_version: str = "v1",
+    fixture_strengths: dict | None = None,
 ) -> GWProjection:
     scoring = snapshot.scoring
     pos = player.position
@@ -229,7 +231,13 @@ def project_player_gw(
     pstart_acc = 0.0
 
     for fx in fixtures:
-        ctx = player_match_context(snapshot, player.team_id, fx)
+        ctx = player_match_context(
+            snapshot,
+            player.team_id,
+            fx,
+            fixtures_version=fixtures_version,
+            fixture_strengths=fixture_strengths,
+        )
         attack_mult = ctx["attack_mult"]
         lam_g = rates["xg90"] * attack_mult
         lam_a = rates["xa90"] * attack_mult
@@ -295,6 +303,7 @@ def project_all(
     minutes_version: str = "v2am_s",
     p_start_map: dict[str, float] | None = None,
     rates_version: str = "v1",
+    fixtures_version: str = "v1",
 ) -> list[PlayerProjection]:
     if strategy not in STRATEGIES:
         raise ValueError(f"strategy must be one of {STRATEGIES}")
@@ -302,6 +311,8 @@ def project_all(
         raise ValueError("minutes_version must be 'v1', 'v2am', 'v2am_s', 'v2c', or 'v2c_e'")
     if rates_version not in {"v1", "v2b", "v2b_d", "v2b_e"}:
         raise ValueError("rates_version must be 'v1', 'v2b', 'v2b_d', or 'v2b_e'")
+    if fixtures_version not in {"v1", "v2d"}:
+        raise ValueError("fixtures_version must be 'v1' or 'v2d'")
     if minutes_version == "v2am" and p_start_map is None:
         raise ValueError("v2am requires a leave-one-season-out p_start_map")
     if minutes_version != "v2am":
@@ -313,14 +324,20 @@ def project_all(
             gw_ids.append(e.id)
 
     rates_priors: dict[int, tuple[float, float]] | None = None
-    if rates_version in {"v2b", "v2b_d", "v2b_e"}:
+    fixture_strengths = None
+    if rates_version in {"v2b", "v2b_d", "v2b_e"} or fixtures_version == "v2d":
         from engine.harness import SEASON_LABEL
-        from engine.rates_v2b import build_rates_priors_for_snapshot
 
         label_to_season = {v: k for k, v in SEASON_LABEL.items()}
         season_key = label_to_season.get(snapshot.season_label)
-        if season_key:
+        if season_key and rates_version in {"v2b", "v2b_d", "v2b_e"}:
+            from engine.rates_v2b import build_rates_priors_for_snapshot
+
             rates_priors = build_rates_priors_for_snapshot(season_key, snapshot)
+        if season_key and fixtures_version == "v2d":
+            from engine.fixtures_v2d import strengths_for_season
+
+            fixture_strengths = strengths_for_season(season_key)
 
     rng = np.random.default_rng(seed)
     as_of_gw = next_e.id
@@ -382,6 +399,8 @@ def project_all(
                 rates_priors=rates_priors,
                 as_of_gw=as_of_gw,
                 recent_minutes=recent,
+                fixtures_version=fixtures_version,
+                fixture_strengths=fixture_strengths,
             )
             by_gw[gw] = pred
             w = DECAY ** offset
