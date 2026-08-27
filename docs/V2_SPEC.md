@@ -106,6 +106,23 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
+## 0h. Packaging - Decision-safe fixture μΔ (**OPEN** — E022)
+
+**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E022.
+
+**Control:** `v2am_s` + `rates=v1` + `fixtures=v2d`, ILP on raw next_utility(μ_v2d)  
+**Treatment:** same projections; ILP on U = (1−q)·μ_v1 + q·μ_v2d with q = clip(recent4/90, 0, 1); as_of_gw≤4 → q=1
+
+**Pinned:**
+- MAE / prediction scored on μ_v2d (unchanged by packaging)
+- Continuous q — not hard eligibility zeroing (≠ E018)
+- Gates: XI0 + Cap hard vs raw v2d; four seasons; seed=7
+- PASS ≠ promote fixtures=v2d to production (separate card vs v1 if ever warranted)
+
+**Not:** q denominator fishing; bundling packaging + promote; V2C reopen; rates reopen.
+
+---
+
 ## 1. Harness requirements
 
 The harness is the prerequisite for B4–B7. Getting it wrong produces silent
@@ -247,6 +264,10 @@ If only one improves on B3, use only that one.
 See §0g / `LAB_LOG.md` E021. MAE_60+ improved; Cap/XI0 failed 4/4. Production fixtures stay `v1`. No multiplier fishing.
 
 Older “after B5” ordering is obsolete; V2D was an independent parallel branch.
+
+### B8 — Packaging decision utility for fixture μΔ (E022) — supersedes raw V2D promote
+
+See §0h / `LAB_LOG.md` E022. Isolates decision-layer consumption of frozen v2d projections vs raw μ into ILP. Continuous q; not E018 zeroing.
 
 ---
 

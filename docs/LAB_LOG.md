@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E021c = mostly non-playing (cold 61% zeros). Next: pre-register packaging (decision utility; not E018 zeroing). Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E022 packaging **pre-registered** (decision U = blend μ_v1/μ_v2d by q=clip(recent4/90); base μ_v2d for MAE). Confident target, honest PASS odds. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -865,7 +865,57 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **Mostly non-playing.** Cold toxicity is dominated by **0-min** promotions (61% of the cell = the entire E021b blank rate). The 60+ minority (n=20) are **not** a wrong-player underperformance story vs treat μ — they outscore treat μ on average (gap −1.87). Warm control is healthy (80% play 60+; mild underprediction). Packaging should primarily address **minutes-reliability of increments** into the decision layer — not broader projection-uncertainty among cold players who appear. Still **not** an E018-style `if cold: zero signal` card; still preserve base μ for prediction metrics.
 
 - **Artifacts:** `scripts/e021c_cold_minutes_breakdown.py`; `records/historical/e021c_cold_minutes_breakdown.txt`; `records/historical/e021c_cold_minutes_breakdown.csv`; `records/historical/e021c_cold_minutes_breakdown_run.log`
-- **Follow-up:** Pre-register packaging hypothesis (decision utility over μΔ × minutes-reliability; base μ unchanged for MAE). E012 parallel. No threshold fishing.
+- **Follow-up:** E022 packaging pre-registered (decision U; minutes-reliability of fixture μΔ). E012 parallel. No threshold fishing.
+
+### E022 - Decision packaging: minutes-reliability of fixture μΔ (pre-registered)
+- **Date:** 2026-08-27 (after E021c; **not started**)
+- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
+- **Hypothesis:** E021 improved conditional MAE but failed Cap/XI0 because large fixture-driven μ lifts promote cold-form players who often blank (E021b/c: mostly true zeros). **Packaging** lets the decision layer consume the same fixture signal safely: leave prediction μ intact; damp **how much of the fixture μΔ enters ILP utility** by a continuous minutes-reliability weight. Confident about the target; honest about PASS odds (warm-cell blanks remain; cold-60+ n=20 thin).
+- **Question:** Under frozen `minutes=v2am_s` + `rates=v1` + `fixtures=v2d`, does ILP on packaged decision utility beat ILP on raw v2d μ for Cap + XI0 across four seasons?
+
+- **Why now:** E021c narrowed the failure to non-playing among cold lifted entrants. Rates eligibility (E018) already failed as upstream zeroing. Next card must change **decision consumption**, not retune fixtures/rates/minutes.
+
+- **Scope lock — decision layer only (isolates packaging from “better fixtures”):**
+  ```text
+  both arms: minutes=v2am_s + rates=v1 + fixtures=v2d  (same projections)
+
+  control:   ILP / captain on raw next_utility(μ_v2d, …)
+  treatment: ILP / captain on next_utility(U, …) where
+             U = (1 − q)·μ_v1 + q·μ_v2d
+             q = clip(recent4 / 90, 0, 1)
+             as_of_gw ≤ 4 → q = 1  (no damp without recent window)
+
+  μ_v1 from fixtures=v1 projection (same seed/minutes/rates); used only to form Δμ for U
+  prediction metrics (MAE_60+) scored on μ_v2d for both arms (expect identity)
+
+  frozen: minutes knobs, rates, fixture fit, home/away, scoring, ILP constraints,
+          BENCH_WEIGHT, objective=next harness protocol, seed=7, q schedule above
+  ```
+
+- **What this is (packaging):**
+  - Continuous reliability weight on **fixture lift** into decision U
+  - At q=0: decision sees μ_v1 (no fixture lift) — not “player deleted” / not prior zeroed
+  - At q=1: decision sees μ_v2d (full lift)
+  - Base μ_v2d unchanged for MAE / Spearman
+
+- **What this is not:**
+  - E018-style `if cold: drop signal` / hard eligibility gate
+  - Searching q denominator (90), clip shape, or as_of_gw rule after peeking
+  - Changing ATK/CONCEDE, home/away, rates, or v2am_s
+  - Bundled promote of `fixtures=v2d` to production (that would need a **separate** card vs fixtures=v1 after packaging PASS)
+  - V2C demotion-rung / threshold reopen
+
+- **Pinned method:** implement dual project (v1 + v2d) → build U → solve with packaged `next_utility`; `python -m engine.harness_pack_v2d` (name TBD). Seed=7. Four seasons GW1–38.
+- **Metrics / gates (per season, treatment vs control = raw v2d):**
+  - **Hard:** XI 0-min non-worsening
+  - **Hard:** XI+Cap non-inferiority
+  - **Guardrail:** MAE_60+ on μ_v2d non-worsening (expect equality — packaging must not alter scored μ)
+  - **Secondary (not a gate):** swap count; cold-cell entered blank%; diagnostic Cap/XI0 vs production fixtures=v1 (interpretation only)
+- **Cheat-blocks:** no post-hoc q fishing; PASS ≠ auto-promote fixtures or packaging to live default; beating raw v2d ≠ beating production v1
+- **Results:** —
+- **Verdict:** —
+- **Artifacts:** —
+- **Follow-up sequence:** implement harness → four-season eval → interpret. If FAIL, do not retune q; reconsider packaging structure or abandon this fixture+q form. E012 parallel.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -897,13 +947,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E021c complete):
+As of 2026-08-27 (E022 packaging pre-registered):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Rates club-prior RETIRED** (E018s = B). **V2C threshold family frozen** (E019/E020 REJECT) — targeting, not packaging.
-3. **E021 REJECT; E021b concentrated; E021c = mostly non-playing.** Cold prior_str: 61% true zeros; cold 60+ (n=20) not underperforming vs treat μ. Packaging = minutes-reliability of increments into decision U — not E018 zeroing.
-4. **Next:** pre-register packaging hypothesis (base μ for MAE; decision U may damp μΔ under low minutes reliability). E012 parallel.
-5. **Invariant:** no coefficient fishing; PASS ≠ auto-promote. E015 remains the counterexample.
+2. **Rates club-prior RETIRED** (E018s = B). **V2C threshold family frozen** (E019/E020 REJECT).
+3. **E021/b/c done.** Fixture signal useful for MAE; toxic for raw ILP via cold non-playing.
+4. **E022 contract locked.** Packaging: same v2d μ for MAE; ILP on U=(1−q)μ_v1+qμ_v2d with q=clip(recent4/90); as_of_gw≤4 → q=1. Not E018 zeroing; no q fishing after peek.
+5. **Next implement:** packaging harness only after this contract. E012 parallel. PASS ≠ promote.
+6. **Invariant:** confident about target, honest about odds. E015 remains the counterexample.
 
 ---
 
