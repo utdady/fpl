@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E022 packaging **pre-registered** (decision U = blend μ_v1/μ_v2d by q=clip(recent4/90); base μ_v2d for MAE). Confident target, honest PASS odds. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E022 packaging **PASS** vs raw v2d (4/4). Production still `v2am_s` + `rates=v1` + fixtures `v1`. Optional next: packaged v2d vs production v1 (separate card). E012 parallel.
 
 ---
 
@@ -867,9 +867,9 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Artifacts:** `scripts/e021c_cold_minutes_breakdown.py`; `records/historical/e021c_cold_minutes_breakdown.txt`; `records/historical/e021c_cold_minutes_breakdown.csv`; `records/historical/e021c_cold_minutes_breakdown_run.log`
 - **Follow-up:** E022 packaging pre-registered (decision U; minutes-reliability of fixture μΔ). E012 parallel. No threshold fishing.
 
-### E022 - Decision packaging: minutes-reliability of fixture μΔ (pre-registered)
-- **Date:** 2026-08-27 (after E021c; **not started**)
-- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
+### E022 - Decision packaging: minutes-reliability of fixture μΔ
+- **Date:** 2026-08-27 (after E021c)
+- **Status:** **PASS** — implemented and evaluated (vs raw v2d only; **not** a production promote)
 - **Hypothesis:** E021 improved conditional MAE but failed Cap/XI0 because large fixture-driven μ lifts promote cold-form players who often blank (E021b/c: mostly true zeros). **Packaging** lets the decision layer consume the same fixture signal safely: leave prediction μ intact; damp **how much of the fixture μΔ enters ILP utility** by a continuous minutes-reliability weight. Confident about the target; honest about PASS odds (warm-cell blanks remain; cold-60+ n=20 thin).
 - **Question:** Under frozen `minutes=v2am_s` + `rates=v1` + `fixtures=v2d`, does ILP on packaged decision utility beat ILP on raw v2d μ for Cap + XI0 across four seasons?
 
@@ -905,17 +905,25 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
   - Bundled promote of `fixtures=v2d` to production (that would need a **separate** card vs fixtures=v1 after packaging PASS)
   - V2C demotion-rung / threshold reopen
 
-- **Pinned method:** implement dual project (v1 + v2d) → build U → solve with packaged `next_utility`; `python -m engine.harness_pack_v2d` (name TBD). Seed=7. Four seasons GW1–38.
-- **Metrics / gates (per season, treatment vs control = raw v2d):**
-  - **Hard:** XI 0-min non-worsening
-  - **Hard:** XI+Cap non-inferiority
-  - **Guardrail:** MAE_60+ on μ_v2d non-worsening (expect equality — packaging must not alter scored μ)
-  - **Secondary (not a gate):** swap count; cold-cell entered blank%; diagnostic Cap/XI0 vs production fixtures=v1 (interpretation only)
-- **Cheat-blocks:** no post-hoc q fishing; PASS ≠ auto-promote fixtures or packaging to live default; beating raw v2d ≠ beating production v1
-- **Results:** —
-- **Verdict:** —
-- **Artifacts:** —
-- **Follow-up sequence:** implement harness → four-season eval → interpret. If FAIL, do not retune q; reconsider packaging structure or abandon this fixture+q form. E012 parallel.
+- **Method:** `engine/packaging.py` + `python -m engine.harness_pack_v2d` (seed=7). Four seasons GW1–38.
+
+- **Results (vs raw v2d):**
+
+  | Season | MAE60 | XI+Cap | XI0% | swaps | Gate |
+  |---|---|---:|---:|---:|---|
+  | 2022/23 | 2.557→2.557 ✓ | 55.8→**58.5** ✓ | 14.7→**12.5** ✓ | 34 | **PASS** |
+  | 2023/24 | 2.467→2.467 ✓ | 53.1→**53.5** ✓ | 14.4→**12.9** ✓ | 25 | **PASS** |
+  | 2024/25 | 2.389→2.389 ✓ | 56.3→**57.3** ✓ | 13.2→13.2 ✓ | 17 | **PASS** |
+  | 2025/26 | 2.560→2.560 ✓ | 49.9→**51.3** ✓ | 16.3→**14.6** ✓ | 22 | **PASS** |
+
+  MAE identity as pinned. Swaps modest (~17–34). Left blank% ≫ entered blank% in 3/4 seasons (packaging ejects blank-heavy raw-v2d picks).
+
+- **Secondary vs production fixtures=v1 (E021 control; not a gate):** packaged Cap often ≥ v1 Cap, but XI0 still **above** v1 (e.g. 12.5–14.6% vs v1 10.5–14.1%). Beating raw v2d ≠ beating production.
+
+- **Verdict:** **PASS** on the registered gates (packaging vs raw v2d). Decision-layer minutes-reliability of fixture μΔ works as hypothesized under this contract. **Do not promote** `fixtures=v2d` or packaging to production. Do not retune q. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+
+- **Artifacts:** `engine/packaging.py`; `engine/harness_pack_v2d.py`; `records/historical/pack_v2d_summary.csv`; `records/historical/pack_v2d_run.log`
+- **Follow-up:** Optional separate card: packaged v2d vs production fixtures=v1 (only if desired). E012 parallel. No q fishing.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -947,14 +955,14 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E022 packaging pre-registered):
+As of 2026-08-27 (E022 PASS vs raw v2d):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Rates club-prior RETIRED** (E018s = B). **V2C threshold family frozen** (E019/E020 REJECT).
-3. **E021/b/c done.** Fixture signal useful for MAE; toxic for raw ILP via cold non-playing.
-4. **E022 contract locked.** Packaging: same v2d μ for MAE; ILP on U=(1−q)μ_v1+qμ_v2d with q=clip(recent4/90); as_of_gw≤4 → q=1. Not E018 zeroing; no q fishing after peek.
-5. **Next implement:** packaging harness only after this contract. E012 parallel. PASS ≠ promote.
-6. **Invariant:** confident about target, honest about odds. E015 remains the counterexample.
+2. **Rates / V2C threshold families closed.** E021 raw fixtures REJECT.
+3. **E022 PASS.** Packaged U beats raw v2d on Cap+XI0 (4/4); MAE identity. **Do not promote** fixtures or packaging to live.
+4. **Secondary:** packaged Cap often ≥ production v1 Cap, but XI0 still above v1 — beating raw v2d ≠ beating production.
+5. **Next:** optional E023 packaged-v2d vs fixtures=v1 (only if desired); else E012. No q fishing.
+6. **Invariant:** PASS ≠ auto-promote. E015 remains the successful availability counterexample.
 
 ---
 
@@ -977,6 +985,7 @@ python -m engine.harness_v2b_e   # E018: v2b_e vs v1 under v2am_s
 python -m engine.harness_v2c   # E019: v2c vs v2am_s under rates=v1
 python -m engine.harness_v2c_e  # E020: v2c_e vs v2am_s (cold-eligible demotion)
 python -m engine.harness_v2d    # E021: fixtures_v2d vs v1 under v2am_s + rates=v1
+python -m engine.harness_pack_v2d  # E022: packaged U vs raw v2d
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

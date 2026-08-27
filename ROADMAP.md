@@ -176,7 +176,7 @@ V2A-M / v2am_s + rates_v1     ✅ production baseline
   │
   └── Fixture research
         V2D learned ATK/CONCEDE          ❌ E021 REJECT (MAE✓ Cap/XI0✗; fixtures stay v1)
-        └── Packaging (decision U)       <-- E022 pre-registered / implement next
+        └── Packaging (decision U)       ✅ E022 PASS vs raw v2d (not production promote)
 ```
 
 **V2A-M - Minutes / availability (FROZEN)**
@@ -193,8 +193,8 @@ E019 competition demotion: XI0↑ 4/4; Cap fail 2/4. E019b: false-positive targe
 **V2D — Learned fixture coefficients (E021 REJECT; E021b/c)**
 E021: MAE✓ Cap/XI0✗. E021b: rates-like toxicology. E021c: cold cell = mostly non-playing (61% zeros). **fixtures stay v1.**
 
-**Packaging — Decision-safe μΔ (E022 OPEN / pre-registered)**
-Under frozen v2d projections: ILP on U=(1−q)μ_v1+qμ_v2d with q=clip(recent4/90), as_of_gw≤4→q=1 vs raw μ_v2d. MAE scored on μ_v2d (unchanged). Not E018 zeroing; no q fishing. See `LAB_LOG.md` E022.
+**Packaging — Decision-safe μΔ (E022 PASS vs raw v2d)**
+U=(1−q)μ_v1+qμ_v2d, q=clip(recent4/90), beats raw v2d Cap+XI0 4/4; MAE identity. **Not promoted.** Secondary: XI0 still above production fixtures=v1. Optional next card vs v1 only if desired. No q fishing.
 
 ---
 
@@ -325,5 +325,5 @@ POST-GW1 (research)
   E021 REJECT (fixtures_v2d): MAE✓ 4/4 Cap/XI0✗ 4/4; fixtures stay v1; no multiplier fishing
   E021b concentrated: fixture movers = rates toxicology (cold prior_str blank 61%); packaging next
   E021c mostly non-playing: cold 61% zeros; cold 60+ outscore treat mu; preregister packaging
-  E022 pre-registered: packaging U=(1-q)mu_v1+q mu_v2d, q=clip(recent4/90); implement next
+  E022 PASS (packaged U vs raw v2d): Cap+XI0 4/4; MAE identity; do not promote fixtures
 ```
