@@ -1,0 +1,47 @@
+E021c: cold vs warm prior_str entrants by actual minutes
+Source: records\historical\e021_fixture_movers.csv
+Entered only; had_prior_strength=1.
+No re-projection; no model changes.
+Total prior_str entered: 711 (COLD=85, WARM=626)
+
+=== COLD: prior_str & recent4 < 90 ===
+n=85
+bucket       n   share%
+0           52     61.2
+1-59        13     15.3
+60+         20     23.5
+
+Among 60+:
+  n=20
+  mean treat_mu              = 4.033
+  mean mu_delta              = 1.047
+  mean actual_points         = 5.900
+  mean treat_mu - actual_pts = -1.867
+
+Mean mu_delta by bucket:
+  0        n= 52 mean_mu_delta=0.884 mean_treat_mu=3.668 mean_actual_pts=0.000
+  1-59     n= 13 mean_mu_delta=1.054 mean_treat_mu=3.680 mean_actual_pts=1.385
+  60+      n= 20 mean_mu_delta=1.047 mean_treat_mu=4.033 mean_actual_pts=5.900
+
+=== WARM: prior_str & recent4 >= 90 ===
+n=626
+bucket       n   share%
+0           69     11.0
+1-59        56      8.9
+60+        501     80.0
+
+Among 60+:
+  n=501
+  mean treat_mu              = 4.314
+  mean mu_delta              = 0.991
+  mean actual_points         = 4.707
+  mean treat_mu - actual_pts = -0.392
+
+Mean mu_delta by bucket:
+  0        n= 69 mean_mu_delta=1.145 mean_treat_mu=4.533 mean_actual_pts=0.000
+  1-59     n= 56 mean_mu_delta=1.125 mean_treat_mu=4.199 mean_actual_pts=1.696
+  60+      n=501 mean_mu_delta=0.991 mean_treat_mu=4.314 mean_actual_pts=4.707
+
+=== interpretation hint ===
+COLD share 0-min=61.2% | 60+=23.5%
+-> Mostly non-playing: packaging primarily minutes-reliability of increments.

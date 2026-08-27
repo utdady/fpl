@@ -1,0 +1,9 @@
+cell,section,bucket,n,share_pct,mean_treat_mu,mean_mu_delta,mean_actual_pts,mean_treat_mu_minus_actual
+COLD,bucket_share,0,52,61.18,,,,
+COLD,bucket_share,1-59,13,15.29,,,,
+COLD,bucket_share,60+,20,23.53,,,,
+COLD,among_60plus,60+,20,23.53,4.0333,1.0467,5.9,-1.8667
+WARM,bucket_share,0,69,11.02,,,,
+WARM,bucket_share,1-59,56,8.95,,,,
+WARM,bucket_share,60+,501,80.03,,,,
+WARM,among_60plus,60+,501,80.03,4.3143,0.9911,4.7066,-0.3923

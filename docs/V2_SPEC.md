@@ -98,9 +98,11 @@ production is V2A-M) is an appendix, not a pass.
 
 **Result:** MAE_60+ PASS 4/4; Cap FAIL 4/4; XI0 FAIL 4/4 (~180 swaps/season). Do not promote. Do not retune multipliers. Production fixtures stay `v1`.
 
-**E021b:** Fixture XI movers match rates toxicology — entered blank% > left every season; prior_str+recent4&lt;90 blank **61%**. Packaging theme next.
+**E021b:** Fixture XI movers match rates toxicology — entered blank% > left every season; prior_str+recent4&lt;90 blank **61%**.
 
-**Not:** multiplier search; same-GW leakage fits; minutes/rates retune; ML fixture models.
+**E021c:** That 61% is **true zeros**. Cold 60+ (n=20) outscore treat μ on average. Packaging should target minutes-reliability of increments into decision U.
+
+**Not:** multiplier search; same-GW leakage fits; minutes/rates retune; ML fixture models; E018-style `if cold: zero signal` disguised as packaging.
 
 ---
 

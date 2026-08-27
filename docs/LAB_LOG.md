@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E021b concentrated (fixture movers = rates toxicology). Packaging theme next; E012 parallel. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E021c = mostly non-playing (cold 61% zeros). Next: pre-register packaging (decision utility; not E018 zeroing). Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -838,7 +838,34 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **Concentrated — same shape as rates E017b, stronger cold cell.** Every season: entered blank% > left blank%; ILP systematically inserts large positive fixture μ lifts. Warm prior-strength entrants blank ~11% (healthy); **cold** prior-strength entrants blank **61%** (worse than rates' 43% prior+cold cell). Lift tercile effect is mild; the cold-form cell dominates. Confirms refined theory: extra μ on a decision-tuned stack, fed raw, over-rotates — packaging is the right next theme, not a fourth raw signal. Do **not** retune home/away or invent a fixture eligibility gate as a silent dose substitute.
 
 - **Artifacts:** `scripts/e021_fixture_movers.py`; `records/historical/e021_fixture_movers.csv`; `records/historical/e021_fixture_movers_run.log`; `records/historical/e021_fixture_movers_summary.txt`
-- **Follow-up:** Decision-aware packaging research (theme, not a pre-registered dose card yet). Keep V2C targeting separate. E012 parallel.
+- **Follow-up:** E021c cold/warm minutes×points breakdown before packaging preregister. Keep V2C targeting separate. E012 parallel.
+
+### E021c - Cold-cell minutes × points decomposition (post-E021b)
+- **Date:** 2026-08-27
+- **Status:** complete — **diagnostic only** (CSV-only; no model / threshold changes)
+- **Question:** Within E021b's smoking-gun cell (`prior_str ∧ recent4&lt;90` entered), is toxicity mostly **non-playing**, or do material **60+** appearances still show wrong-player / projection failure? Warm cell (`prior_str ∧ recent4≥90`) is the control.
+- **Method:** `scripts/e021c_cold_minutes_breakdown.py` on `e021_fixture_movers.csv`. Buckets 0 / 1–59 / 60+ by share; among 60+: mean treat μ, μΔ, actual pts, treat μ − actual. No re-projection.
+
+- **Results — bucket shares (entered, prior_str):**
+
+  | Cell | n | 0 min share | 1–59 share | 60+ share |
+  |---|---:|---:|---:|---:|
+  | **COLD** (recent4&lt;90) | 85 | **61.2%** | 15.3% | 23.5% |
+  | **WARM** (recent4≥90) | 626 | 11.0% | 8.9% | **80.0%** |
+
+- **Among 60+:**
+
+  | Cell | n | mean treat μ | mean μΔ | mean actual pts | mean treat μ − actual |
+  |---|---:|---:|---:|---:|---:|
+  | COLD | 20 | 4.03 | **+1.05** | **5.90** | **−1.87** |
+  | WARM | 501 | 4.31 | +0.99 | 4.71 | −0.39 |
+
+  COLD mean μΔ by bucket: 0-min **+0.88**, 1–59 **+1.05**, 60+ **+1.05** (lift present even among true blanks).
+
+- **Verdict:** **Mostly non-playing.** Cold toxicity is dominated by **0-min** promotions (61% of the cell = the entire E021b blank rate). The 60+ minority (n=20) are **not** a wrong-player underperformance story vs treat μ — they outscore treat μ on average (gap −1.87). Warm control is healthy (80% play 60+; mild underprediction). Packaging should primarily address **minutes-reliability of increments** into the decision layer — not broader projection-uncertainty among cold players who appear. Still **not** an E018-style `if cold: zero signal` card; still preserve base μ for prediction metrics.
+
+- **Artifacts:** `scripts/e021c_cold_minutes_breakdown.py`; `records/historical/e021c_cold_minutes_breakdown.txt`; `records/historical/e021c_cold_minutes_breakdown.csv`; `records/historical/e021c_cold_minutes_breakdown_run.log`
+- **Follow-up:** Pre-register packaging hypothesis (decision utility over μΔ × minutes-reliability; base μ unchanged for MAE). E012 parallel. No threshold fishing.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -870,13 +897,13 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E021b concentrated):
+As of 2026-08-27 (E021c complete):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
 2. **Rates club-prior RETIRED** (E018s = B). **V2C threshold family frozen** (E019/E020 REJECT) — targeting, not packaging.
-3. **E021 REJECT; E021b concentrated.** Fixture movers match rates toxicology (cold prior_str blank 61%). Packaging theme next — not multiplier/eligibility fishing.
-4. **Next:** decision-aware packaging design (pre-register before code); E012 parallel.
-5. **Invariant:** no coefficient fishing; PASS ≠ auto-promote. E015 remains the counterexample (availability *was* the decision tuning).
+3. **E021 REJECT; E021b concentrated; E021c = mostly non-playing.** Cold prior_str: 61% true zeros; cold 60+ (n=20) not underperforming vs treat μ. Packaging = minutes-reliability of increments into decision U — not E018 zeroing.
+4. **Next:** pre-register packaging hypothesis (base μ for MAE; decision U may damp μΔ under low minutes reliability). E012 parallel.
+5. **Invariant:** no coefficient fishing; PASS ≠ auto-promote. E015 remains the counterexample.
 
 ---
 
@@ -900,6 +927,7 @@ python -m engine.harness_v2c   # E019: v2c vs v2am_s under rates=v1
 python -m engine.harness_v2c_e  # E020: v2c_e vs v2am_s (cold-eligible demotion)
 python -m engine.harness_v2d    # E021: fixtures_v2d vs v1 under v2am_s + rates=v1
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
+python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers
 python scripts/e018s_synthesis.py  # E018s: A vs B close from existing CSVs
 python -m engine.obs --season 2025-26

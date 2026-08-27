@@ -189,8 +189,8 @@ E016/E017/E018 all improved MAE/Sp; decision gates never clean. E018s: informati
 **V2C — Role-transition minutes (E019/E020 REJECT)**
 E019 competition demotion: XI0↑ 4/4; Cap fail 2/4. E019b: false-positive targeting. E020 cold-eligible (`recent4<90`): Cap fail reduced to 1/4; MAE still fail 4/4. **minutes stay `v2am_s`.** No further recent4-threshold cards without a new structural hypothesis.
 
-**V2D — Learned fixture coefficients (E021 REJECT; E021b concentrated)**
-Prior-season strengths vs hand ATK/CONCEDE: MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: same toxicology as rates (entered blank%↑; cold prior_str blank 61%). **fixtures stay v1.** Packaging theme next; no home/away multiplier fishing.
+**V2D — Learned fixture coefficients (E021 REJECT; E021b/c)**
+E021: MAE✓ Cap/XI0✗. E021b: rates-like toxicology. E021c: cold cell = mostly non-playing (61% zeros); cold 60+ not underperforming vs treat μ. **fixtures stay v1.** Next: pre-register packaging (decision utility / minutes-reliability of μΔ). No home/away fishing; no E018-style zeroing.
 
 ---
 
@@ -320,4 +320,5 @@ POST-GW1 (research)
   E020 REJECT (v2c_e cold-eligible): Cap better (1 fail) but MAE✗ 4/4; minutes stay v2am_s
   E021 REJECT (fixtures_v2d): MAE✓ 4/4 Cap/XI0✗ 4/4; fixtures stay v1; no multiplier fishing
   E021b concentrated: fixture movers = rates toxicology (cold prior_str blank 61%); packaging next
+  E021c mostly non-playing: cold 61% zeros; cold 60+ outscore treat mu; preregister packaging
 ```
