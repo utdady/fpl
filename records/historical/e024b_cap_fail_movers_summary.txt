@@ -1,0 +1,31 @@
+E024b: Cap-FAIL vs Cap-PASS packaged rates movers
+Entered players under rates_v1 XI -> packaged rates_v2b XI
+
+=== entered ===
+FAIL entered: n=165 blank%=10.9 prior%=95.2 recent4<90%=10.3 mean_q=0.98 mean_muD=0.632 mean_pts=3.44 mean_pts|60+=4.25 (n60=122) pos={'MID': 86, 'DEF': 42, 'FWD': 29, 'GKP': 8}
+PASS entered: n=129 blank%=9.3 prior%=96.1 recent4<90%=10.9 mean_q=1.00 mean_muD=0.506 mean_pts=3.84 mean_pts|60+=4.86 (n60=98) pos={'MID': 47, 'FWD': 35, 'DEF': 44, 'GKP': 3}
+=== left (ejected from production XI) ===
+FAIL left: n=165 blank%=11.5 prior%=60.0 recent4<90%=17.0 mean_q=0.95 mean_muD=0.080 mean_pts=4.17 mean_pts|60+=5.00 (n60=134) pos={'FWD': 36, 'MID': 65, 'DEF': 56, 'GKP': 8}
+PASS left: n=129 blank%=11.6 prior%=75.2 recent4<90%=14.7 mean_q=0.99 mean_muD=0.036 mean_pts=3.26 mean_pts|60+=4.05 (n60=103) pos={'MID': 46, 'DEF': 44, 'FWD': 36, 'GKP': 3}
+
+=== FAIL vs PASS entered: prior+cold / lift tails ===
+  FAIL prior+recent4<90       n= 14 blank%=14.3 mean_muD=1.283 mean_pts|60+=6.00 (n60=9)
+  FAIL prior+recent4>=90      n=143 blank%=9.8 mean_muD=0.604 mean_pts|60+=4.06 (n60=108)
+  FAIL muD>=0.5               n= 96 blank%=12.5 mean_muD=0.949 mean_pts|60+=4.15 (n60=66)
+  FAIL muD>=1.0               n= 31 blank%=16.1 mean_muD=1.448 mean_pts|60+=4.90 (n60=21)
+  FAIL q<0.5                  n=  3 blank%=33.3 mean_muD=0.570 mean_pts|60+=nan (n60=0)
+  FAIL q>=0.5                 n=162 blank%=10.5 mean_muD=0.634 mean_pts|60+=4.25 (n60=122)
+  PASS prior+recent4<90       n= 14 blank%=7.1 mean_muD=0.896 mean_pts|60+=6.57 (n60=7)
+  PASS prior+recent4>=90      n=110 blank%=9.1 mean_muD=0.480 mean_pts|60+=4.84 (n60=87)
+  PASS muD>=0.5               n= 56 blank%=3.6 mean_muD=0.859 mean_pts|60+=5.21 (n60=43)
+  PASS muD>=1.0               n= 19 blank%=5.3 mean_muD=1.177 mean_pts|60+=4.29 (n60=14)
+  PASS q<0.5                  n=0
+  PASS q>=0.5                 n=129 blank%=9.3 mean_muD=0.506 mean_pts|60+=4.86 (n60=98)
+
+=== entered who played >=60: Cap-relevant scoring ===
+  FAIL: n=122 mean_pts=4.25 mean_muD=0.590 mean_treat_mu=3.62 mean_treat_mu-actual=-0.64
+  PASS: n=98 mean_pts=4.86 mean_muD=0.499 mean_treat_mu=3.54 mean_treat_mu-actual=-1.32
+
+=== left who played >=60 (ejected production XI) ===
+  FAIL: n=134 mean_pts=5.00
+  PASS: n=103 mean_pts=4.05

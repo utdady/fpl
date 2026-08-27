@@ -475,10 +475,11 @@ E019: XI0✓ Cap✗2 MAE✗4. E019b: false-positive demotion. E020 cold-eligible
 
 MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that blank rate is **true zeros**; cold 60+ (n=20) outscore treat μ. Production fixtures `v1`.
 
-### Packaging gates (E022 PASS; E023 REJECT; E024 REJECT)
+### Packaging gates (E022 PASS; E023 REJECT; E024 REJECT; E024b concentrated)
 
 E022: packaging beats raw v2d. E023: packaged v2d fails promote on XI0.
-E024: packaged rates=v2b vs production — MAE✓ XI0✓ 4/4; Cap✗ 2022/23+2025/26 (same toxic seasons as raw rates). Do not promote. Do not retune q.
+E024: packaged rates=v2b vs production — MAE✓ XI0✓ 4/4; Cap✗ 2022/23+2025/26 (same toxic seasons as raw rates).
+E024b: Cap-fail = wrong-player-when-playing (not blanks); do not enlarge q. Do not promote.
 
 ---
 
@@ -518,6 +519,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **PASS** (9/9 unittest) |
 | **E024** | Packaged rates=v2b vs production rates=v1 | **REJECT** (Cap✗ 2/4; XI0✓) |
+| **E024b** | Cap-FAIL vs PASS packaged rates movers | **concentrated** (wrong-player-when-playing) |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.
