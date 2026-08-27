@@ -475,11 +475,10 @@ E019: XI0✓ Cap✗2 MAE✗4. E019b: false-positive demotion. E020 cold-eligible
 
 MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that blank rate is **true zeros**; cold 60+ (n=20) outscore treat μ. Production fixtures `v1`.
 
-### Packaging gates (E022 PASS; E023 REJECT; E024 REJECT; E024b concentrated)
+### Packaging gates (CLOSED after E024b)
 
-E022: packaging beats raw v2d. E023: packaged v2d fails promote on XI0.
-E024: packaged rates=v2b vs production — MAE✓ XI0✓ 4/4; Cap✗ 2022/23+2025/26 (same toxic seasons as raw rates).
-E024b: Cap-fail = wrong-player-when-playing (not blanks); do not enlarge q. Do not promote.
+E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
+**Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
 ---
 

@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E024 **REJECT**; E024b = Cap-fail is **wrong-player-when-playing** (not blanks). Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No q/α fishing.
+**Active research question:** Packaging arc **closed** (E022–E024b). Packaging solves availability risk, not valuation among reliable players. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No q/α fishing.
 
 ---
 
@@ -1035,7 +1035,7 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **REJECT for promote.** Frozen-q packaging **generalizes partially**: XI0 clears vs production (unlike E023 fixtures path; unlike raw rates E016 XI0 fails). Cap still fails on the historically toxic seasons — relocated-not-eliminated Cap damage. Do **not** retune q/α. Do **not** promote `rates=v2b`. Production stays `rates=v1`. Club-prior family remains retired for production; packaging is validated as a reusable interface that is not sufficient alone for this rates signal vs incumbent.
 
 - **Artifacts:** `engine/harness_pack_rates.py`; `records/historical/pack_rates_summary.csv`; `records/historical/pack_rates_run.log`
-- **Follow-up:** E024b Cap-fail mover diagnostic (no q retune). No E017/E018 reopen.
+- **Follow-up:** → **E024b** (done). No E017/E018 reopen. No q retune.
 
 ### E024b - Cap-FAIL vs Cap-PASS packaged rates movers
 - **Date:** 2026-08-27 (after E024)
@@ -1063,26 +1063,23 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
   | FAIL left | 165 | 11.5 | 0.080 | **5.00** (134) |
   | PASS left | 129 | 11.6 | 0.036 | **4.05** (103) |
 
-  Blank% similar FAIL vs PASS (~10–12%) — **not** blank-driven. mean_q ≈ 0.98–1.00 on movers (packaging nearly full weight). Cap-FAIL seasons **eject** 5.00 pts|60+ production XI players and **insert** 4.25 pts|60+ packaged picks; Cap-PASS does the opposite (eject 4.05 → enter 4.86). FAIL entered carry higher mean_μΔ (0.632 vs 0.506). Cold prior+recent4&lt;90 cells small (n=14 each) — not the Cap story.
+  Blank% ~10–12% all four cells — **not** availability risk. mean_q ≈ 0.98–1.00 on movers: packaging already trusted them at near-full strength; dosage cannot explain Cap. Cap-FAIL **ejects** 5.00 pts|60+ production XI and **inserts** 4.25; Cap-PASS does the opposite (4.05 → 4.86). FAIL entered mean_μΔ higher (0.632 vs 0.506). Cold prior+recent4&lt;90 cells small (n=14 each) — not the Cap story.
 
-- **Verdict:** **concentrated — wrong-player-when-playing.** E024 Cap failure is portfolio selection of lower-scoring regulars under large rates μΔ, not residual blank toxicity. Do **not** enlarge q. Do **not** reopen α/eligibility. Packaging remains validated for XI0; Cap needs a **new structural** hypothesis (selection / ranking under μΔ), not another dose card.
+- **Verdict:** **concentrated — wrong-player-when-playing.** Closes packaging generalization: minutes-reliability damping catches unreliable minutes, not overrated regulars vs alternatives. Do **not** enlarge q. Do **not** reopen α/eligibility. Contrast preserved — E023 fixtures = systemic XI0; E024 rates = localized Cap among players who were always going to play.
 
 - **Artifacts:** `scripts/e024b_cap_fail_movers.py`; `records/historical/e024b_cap_fail_movers.csv`; `records/historical/e024b_cap_fail_movers_summary.txt`; `records/historical/e024b_cap_fail_movers_run.log`
-- **Follow-up:** New structural Cap/selection hypothesis only. Preserve E023 vs E024 contrast (fixtures = systemic XI0; rates = localized Cap). No q fishing.
+- **Follow-up:** Open only on valuation/selection (uncertainty-aware ranking or objective term). Not a packaging / q card.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E024b concentrated):
+As of 2026-08-27 (packaging arc closed):
 
-1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **E022 PASS** (packaging vs raw v2d). **E023 REJECT** (packaged v2d vs production XI0).
-3. **E012 PASS.** Evaluation integrity green.
-4. **E024 REJECT.** Packaged rates=v2b vs production: MAE✓ XI0✓ 4/4; Cap✗ 2022/23+2025/26.
-5. **E024b concentrated.** Cap-fail = eject high pts|60+ / enter lower pts|60+; blanks similar FAIL vs PASS. Not a q problem.
-6. **Next:** new structural Cap/selection hypothesis only (not q/α fishing). Packaging remains a validated decision-layer tool.
-7. **Invariant:** PASS ≠ auto-promote.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. E012 integrity green.
+2. **Packaging closed.** E022 PASS (vs raw). E023 REJECT (fixtures XI0 vs prod). E024 REJECT (rates Cap vs prod; XI0✓). E024b: Cap = valuation among reliable players (`q≈1`); blanks similar FAIL/PASS.
+3. **Reach.** Packaging = availability risk. Remaining Cap damage = “who’s actually good,” not “who plays.”
+4. **Next.** New structural valuation/selection hypothesis only — not q/α fishing. PASS ≠ auto-promote.
 
 ---
 

@@ -170,6 +170,7 @@ V2A-M / v2am_s + rates_v1     ✅ production baseline
   │
   ├── Rate research
   │     E016 → E017 → E018 → ❌ club-prior family retired (E018s: B)
+  │     └── Packaging rates_v2b vs prod  ❌ E024 REJECT (XI0✓ Cap✗); E024b = valuation
   │
   ├── Minutes / role research
   │     V2C role-transition P(start)   ❌ E019/E020 REJECT (threshold family frozen)
@@ -186,7 +187,7 @@ E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+
 **Do not retune.** Production default = `v2am_s`. V1 remains permanent historical control (harnesses pin `minutes_version=v1`).
 
 **V2B / rates — Club-prior family (RETIRED after E018s)**
-E016/E017/E018 all improved MAE/Sp; decision gates never clean. E018s: information useful but unsafe under ILP (**B**). **rates stay v1.** No E019. Future rate ideas need decision-aware packaging, not prior retunes.
+E016/E017/E018 all improved MAE/Sp; decision gates never clean. E018s: information useful but unsafe under ILP (**B**). **rates stay v1.** Packaged rates (E024/E024b) cleared XI0 but Cap remains valuation error among reliable players — not fixed by prior retunes or q.
 
 **V2C — Role-transition minutes (E019/E020 REJECT)**
 E019 competition demotion: XI0↑ 4/4; Cap fail 2/4. E019b: false-positive targeting. E020 cold-eligible (`recent4<90`): Cap fail reduced to 1/4; MAE still fail 4/4. **minutes stay `v2am_s`.** No further recent4-threshold cards without a new structural hypothesis.
@@ -194,10 +195,9 @@ E019 competition demotion: XI0↑ 4/4; Cap fail 2/4. E019b: false-positive targe
 **V2D — Learned fixture coefficients (E021 REJECT; E021b/c)**
 E021: MAE✓ Cap/XI0✗. E021b: rates-like toxicology. E021c: cold cell = mostly non-playing (61% zeros). **fixtures stay v1.**
 
-**Packaging — Decision-safe μΔ (E022 PASS; E023/E024 REJECT; E024b concentrated)**
-E022: packaging beats raw v2d. E023: packaged v2d fails XI0 vs production.
-E024: packaged rates=v2b — XI0✓ vs production but Cap✗ on 2022/23+2025/26.
-E024b: Cap-fail = wrong-player-when-playing (eject 5.00 pts|60+ → enter 4.25); blanks similar FAIL/PASS. **rates stay v1.** No q/α fishing. Cap needs a new selection hypothesis.
+**Packaging — Decision-safe μΔ (CLOSED after E024b)**
+Mechanism validated (E022). Does not clear production promote bars (E023 XI0; E024 Cap).
+**Reach ends:** availability risk only. E024b movers already at `q≈1` and still wrong picks — valuation/selection among players who play, not dosage. No q/α fishing. Production unchanged.
 
 ---
 
@@ -332,5 +332,5 @@ POST-GW1 (research)
   E023 REJECT (packaged v2d vs production): MAE✓ Cap mostly✓ XI0✗ 4/4; fixtures stay v1; no q fishing
   E012 PASS: evaluation integrity property tests (9/9)
   E024 REJECT (packaged rates_v2b vs production): MAE✓ XI0✓ Cap✗ toxic seasons; rates stay v1
-  E024b concentrated: Cap-fail ejects high pts|60+ / enters lower; not blank-driven; no q enlarge
+  E024b concentrated: Cap = valuation among reliable players (q≈1); packaging arc closed
 ```
