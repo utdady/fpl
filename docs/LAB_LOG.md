@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E012 **PASS**. E024 **pre-registered** (packaged rates=v2b vs production rates=v1; XI0 named risk). Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E024 **REJECT** for promote (Cap✗ toxic seasons; XI0✓). Packaging partially generalizes. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No q/α fishing.
 
 ---
 
@@ -997,13 +997,11 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Artifacts:** `tests/test_e012_integrity.py`; `docs/FORMAL.md`
 - **Follow-up:** E024 rates+packaging promote-bar pre-registered. Optional Lean `formal/` later. No production change.
 
-### E024 - Packaged rates=v2b vs production rates=v1 (pre-registered)
-- **Date:** 2026-08-27 (after E012 PASS; **not started**)
-- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
+### E024 - Packaged rates=v2b vs production rates=v1
+- **Date:** 2026-08-27 (after E012 PASS)
+- **Status:** **REJECT** (promote bar) — implemented and evaluated; **do not promote**; **do not retune q**
 - **Hypothesis:** E018s = B (club-prior useful, unsafe under ILP). E022 showed continuous minutes-reliability packaging can neutralize fixture μΔ toxicity vs *raw* treatment. Applying the **same frozen q schedule** to rates μΔ (`rates=v2b` vs `rates=v1`) may clear Cap+XI0 vs **production** `rates=v1` — the real promote bar (lesson from E023).
 - **Question:** Under frozen `minutes=v2am_s` + `fixtures=v1`, does packaged `rates=v2b` (ILP on U) beat production `rates=v1` (ILP on raw μ) on Cap + XI0 across four seasons?
-
-- **Why now:** Fixture+q promote closed (E023). Packaging mechanism validated (E022). E018s left the door open for decision-aware rates packaging — not α/eligibility reopen.
 
 - **Scope lock — promote bar; q frozen from E022; rates contrast = E016 max:**
   ```text
@@ -1012,39 +1010,44 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
   treatment: minutes=v2am_s + rates=v2b + fixtures=v1
              ILP on U = (1 − q)·μ_v1 + q·μ_v2b
-             q = clip(recent4 / 90, 0, 1)   # FROZEN from E022 — no retune
-             as_of_gw ≤ 4 → q = 1          # FROZEN
+             q = clip(recent4 / 90, 0, 1)   # FROZEN from E022
+             as_of_gw ≤ 4 → q = 1
 
-  MAE_60+: control on μ_v1; treatment on μ_v2b (guardrail)
+  MAE_60+: control on μ_v1; treatment on μ_v2b
   seed=7; objective=next; four seasons GW1–38
-
-  frozen: minutes, fixtures=v1, rates_v2b prior recipe (E016), q schedule, ILP
   ```
 
-- **Named risk (pre-registered):** **XI0** primary (same as E023 / rates history). Cap secondary.
+- **Named risk (pre-registered):** **XI0** primary; Cap secondary.
 
-- **What this is:** Reuse packaging interface on rates club-prior μΔ; vs-production from day one.
-- **What this is not:** E017 α damp; E018 eligibility; q fishing; fixtures=v2d reopen; V2C reopen; silent promote
+- **Method:** `engine/packaging.py` + `python -m engine.harness_pack_rates` (seed=7).
 
-- **Method (planned):** reuse `engine/packaging.py`; harness e.g. `python -m engine.harness_pack_rates` (name TBD).
-- **Metrics / gates:** Cap + XI0 hard vs production; MAE_60+ guardrail; secondary swaps/blanks
-- **Cheat-blocks:** no q/α/90 fishing after peek; PASS ≠ auto-promote `rates=v2b`; FAIL → do not retune q
-- **Results:** —
-- **Verdict:** —
-- **Artifacts:** —
-- **Follow-up sequence:** implement → four-season eval. E012 already PASS.
+- **Results (vs production rates=v1):**
+
+  | Season | MAE60 | XI+Cap | XI0% | swaps | Gate |
+  |---|---|---:|---:|---:|---|
+  | 2022/23 | 2.576→2.559 ✓ | 57.1→**54.0** ✗ | 11.5→**11.3** ✓ | 104 | **FAIL** (Cap) |
+  | 2023/24 | 2.482→2.474 ✓ | 53.7→**55.6** ✓ | 11.0→**10.5** ✓ | 61 | **PASS** |
+  | 2024/25 | 2.400→2.386 ✓ | 56.6→**58.2** ✓ | 10.5→**10.3** ✓ | 68 | **PASS** |
+  | 2025/26 | 2.572→2.562 ✓ | 50.4→**50.1** ✗ | 14.1→14.1 ✓ | 61 | **FAIL** (Cap) |
+
+  MAE✓ 4/4. **XI0✓ 4/4** (named risk did *not* fire — packaging helped blanks vs raw E016). Cap✗ on **2022/23 and 2025/26** — same seasons as raw rates Cap failures (E016/E017).
+
+- **Verdict:** **REJECT for promote.** Frozen-q packaging **generalizes partially**: XI0 clears vs production (unlike E023 fixtures path; unlike raw rates E016 XI0 fails). Cap still fails on the historically toxic seasons — relocated-not-eliminated Cap damage. Do **not** retune q/α. Do **not** promote `rates=v2b`. Production stays `rates=v1`. Club-prior family remains retired for production; packaging is validated as a reusable interface that is not sufficient alone for this rates signal vs incumbent.
+
+- **Artifacts:** `engine/harness_pack_rates.py`; `records/historical/pack_rates_summary.csv`; `records/historical/pack_rates_run.log`
+- **Follow-up:** No q fishing. No E017/E018 reopen. Packaging stays in the toolkit; next research needs a new structural hypothesis (not another rates dose card).
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E012 PASS; E024 pre-registered):
+As of 2026-08-27 (E024 REJECT for promote):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
 2. **E022 PASS** (packaging vs raw v2d). **E023 REJECT** (packaged v2d vs production XI0).
-3. **E012 PASS.** Evaluation integrity property tests green.
-4. **E024 contract locked.** Packaged rates=v2b vs production rates=v1; q frozen; **XI0 named primary risk.**
-5. **Next implement:** `harness_pack_rates` under E024 only. No q/α fishing.
+3. **E012 PASS.** Evaluation integrity green.
+4. **E024 REJECT.** Packaged rates=v2b vs production: MAE✓ XI0✓ 4/4; Cap✗ 2022/23+2025/26. Do not retune q. Do not promote.
+5. **Next:** new structural hypothesis only (not q/α fishing). Packaging remains a validated decision-layer tool.
 6. **Invariant:** PASS ≠ auto-promote.
 
 ---
@@ -1071,7 +1074,7 @@ python -m engine.harness_v2d    # E021: fixtures_v2d vs v1 under v2am_s + rates=
 python -m engine.harness_pack_v2d  # E022: packaged U vs raw v2d
 python -m engine.harness_pack_vs_v1  # E023: packaged v2d vs production v1
 python -m unittest tests.test_e012_integrity -v  # E012: evaluation integrity
-# E024 (planned): python -m engine.harness_pack_rates  # packaged rates_v2b vs production
+python -m engine.harness_pack_rates  # E024: packaged rates_v2b vs production
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

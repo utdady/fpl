@@ -112,7 +112,7 @@ production is V2A-M) is an appendix, not a pass.
 
 **E023:** Packaged v2d vs production fixtures=v1 — MAE✓; Cap mostly✓; **XI0✗ 4/4** (named risk). Reject promote. No q fishing. See `LAB_LOG.md` E023.
 
-**E024 (pre-registered):** Packaged `rates=v2b` (ILP on U) vs production `rates=v1`. q frozen from E022. **XI0 named primary risk.** PASS ≠ auto-promote. See `LAB_LOG.md` E024.
+**E024:** Packaged `rates=v2b` vs production — MAE✓ XI0✓ 4/4; Cap✗ 2022/23+2025/26. Reject promote. No q fishing. See `LAB_LOG.md` E024.
 
 **Not:** q fishing; silent promote; V2C reopen; E017/E018 reopen.
 
@@ -268,9 +268,9 @@ See §0h / `LAB_LOG.md` E022. Cap+XI0 PASS 4/4; not a production promote.
 
 See §0h / `LAB_LOG.md` E023. XI0✗ 4/4 as named risk. Packaging mechanism (E022) remains validated; production fixtures stay `v1`. No q fishing.
 
-### B10 — Packaged rates=v2b vs production rates=v1 (E024) — OPEN
+### B10 — Packaged rates=v2b vs production rates=v1 (E024) — **REJECT for promote**
 
-See `LAB_LOG.md` E024. Reuse frozen E022 q on rates μΔ; vs-production bar; XI0 named risk.
+See `LAB_LOG.md` E024. XI0✓ 4/4 but Cap✗ on toxic seasons. rates stay v1. No q/α fishing.
 
 ---
 

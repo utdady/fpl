@@ -194,9 +194,9 @@ E019 competition demotion: XI0↑ 4/4; Cap fail 2/4. E019b: false-positive targe
 **V2D — Learned fixture coefficients (E021 REJECT; E021b/c)**
 E021: MAE✓ Cap/XI0✗. E021b: rates-like toxicology. E021c: cold cell = mostly non-playing (61% zeros). **fixtures stay v1.**
 
-**Packaging — Decision-safe μΔ (E022 PASS; E023 REJECT; E024 OPEN)**
-E022: packaging beats raw v2d. E023: packaged v2d fails promote on XI0.
-E024 (pre-registered): packaged rates=v2b vs production rates=v1; q frozen from E022; **XI0 named primary risk.** See `LAB_LOG.md` E024.
+**Packaging — Decision-safe μΔ (E022 PASS; E023/E024 REJECT for promote)**
+E022: packaging beats raw v2d. E023: packaged v2d fails XI0 vs production.
+E024: packaged rates=v2b — XI0✓ vs production but Cap✗ on 2022/23+2025/26. **rates stay v1.** No q/α fishing. Packaging remains a validated interface, not a free promote.
 
 ---
 
@@ -330,5 +330,5 @@ POST-GW1 (research)
   E022 PASS (packaged U vs raw v2d): Cap+XI0 4/4; MAE identity; do not promote fixtures
   E023 REJECT (packaged v2d vs production): MAE✓ Cap mostly✓ XI0✗ 4/4; fixtures stay v1; no q fishing
   E012 PASS: evaluation integrity property tests (9/9)
-  E024 pre-registered: packaged rates_v2b vs production rates_v1; XI0 named risk
+  E024 REJECT (packaged rates_v2b vs production): MAE✓ XI0✓ Cap✗ toxic seasons; rates stay v1
 ```
