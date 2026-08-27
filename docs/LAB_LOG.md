@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** Packaging arc **closed** (E022–E024b). Packaging solves availability risk, not valuation among reliable players. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No q/α fishing.
+**Active research question:** E025 **concentrated** — Cap-FAIL is relative ranking among reliable players (concordance ~47% vs PASS ~75%). Packaging closed. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No q/α/μΔ-clamp fishing.
 
 ---
 
@@ -1068,18 +1068,52 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated — wrong-player-when-playing.** Closes packaging generalization: minutes-reliability damping catches unreliable minutes, not overrated regulars vs alternatives. Do **not** enlarge q. Do **not** reopen α/eligibility. Contrast preserved — E023 fixtures = systemic XI0; E024 rates = localized Cap among players who were always going to play.
 
 - **Artifacts:** `scripts/e024b_cap_fail_movers.py`; `records/historical/e024b_cap_fail_movers.csv`; `records/historical/e024b_cap_fail_movers_summary.txt`; `records/historical/e024b_cap_fail_movers_run.log`
-- **Follow-up:** Open only on valuation/selection (uncertainty-aware ranking or objective term). Not a packaging / q card.
+- **Follow-up:** → **E025** swap-pair ranking concordance (diagnostic). Not a packaging / q card.
+
+### E025 - Cap-FAIL swap ranking concordance
+- **Date:** 2026-08-27 (after packaging close)
+- **Status:** **concentrated** — Cap-FAIL is relative ranking failure on the swap set
+- **Hypothesis:** E024b showed Cap-FAIL ejects higher pts|60+ than it inserts, with `q≈1` and blank parity — so damage is **relative ranking** among reliable players, not availability. Absolute treat_μ − actual was *not* worse on FAIL (−0.64 vs PASS −1.32), which points away from simple overconfidence and toward **ordering error** on the swap set.
+- **Question:** On E024 control→packaged-rates XI movers, among within-GW (entered, left) pairs where **both played ≥60**, do Cap-FAIL seasons show worse ranking concordance than Cap-PASS — i.e. lower P(pts_e > pts_l | U_e > U_l) and worse mean Δpts?
+
+- **Scope lock — post-process E024b movers; no new projections; no promote:**
+  ```text
+  input: records/historical/e024b_cap_fail_movers.csv
+  unit:  within (season, gw) cross pairs (entered × left)
+  primary filter: both actual_minutes ≥ 60
+  U = decision_utility as recorded on mover rows
+  FAIL = 2022-23, 2025-26; PASS = 2023-24, 2024-25
+  ```
+
+- **Method:** `python scripts/e025_swap_ranking.py` (1010 pairs).
+
+- **Results (primary = both ≥60):**
+
+  | Cell | n | mean ΔU | mean Δpts | entrant win% | concordance% |
+  |---|---:|---:|---:|---:|---:|
+  | FAIL both60 | 354 | 0.276 | **−0.96** | **44.5** | **46.8** |
+  | PASS both60 | 240 | 0.198 | **+1.18** | **66.3** | **74.6** |
+  | FAIL both60 μΔ≥1.0 | 71 | 0.543 | −1.62 | 36.1 | **30.4** |
+  | PASS both60 μΔ≥1.0 | 34 | 0.493 | +0.09 | 59.3 | 65.0 |
+  | FAIL both60 same_pos | 140 | 0.275 | −0.35 | 46.2 | 47.5 |
+  | PASS both60 same_pos | 100 | 0.244 | +1.24 | 67.8 | 72.6 |
+
+  Spearman(U, pts) on movers|60+: FAIL entered∪left **0.17** vs PASS **0.28**. Rank errors (model prefers enter, actual prefers left) mean Δpts ≈ −5.2 on FAIL both60.
+
+- **Verdict:** **concentrated — relative ranking failure.** Cap-FAIL seasons lose the swap: model prefers entrant (~ΔU>0) but entrant wins only ~45% when both play 60+ (PASS ~66–75%). Large rates μΔ makes FAIL concordance collapse (~30%). Same-position pairs reproduce the gap. Not blank risk; not absolute μ bias; **ordering among reliable players under rates μΔ**. Do **not** retune q/α. Do **not** invent a silent μΔ clamp as the next card without a structural hypothesis.
+
+- **Artifacts:** `scripts/e025_swap_ranking.py`; `records/historical/e025_swap_pairs.csv`; `records/historical/e025_swap_ranking_summary.txt`
+- **Follow-up:** Structural valuation/selection hypothesis only (e.g. uncertainty-aware ranking or rates-μΔ credibility among regulars — not minutes-reliability, already `q≈1`). No dose fishing.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (packaging arc closed):
+As of 2026-08-27 (E025 concentrated):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. E012 integrity green.
-2. **Packaging closed.** E022 PASS (vs raw). E023 REJECT (fixtures XI0 vs prod). E024 REJECT (rates Cap vs prod; XI0✓). E024b: Cap = valuation among reliable players (`q≈1`); blanks similar FAIL/PASS.
-3. **Reach.** Packaging = availability risk. Remaining Cap damage = “who’s actually good,” not “who plays.”
-4. **Next.** New structural valuation/selection hypothesis only — not q/α fishing. PASS ≠ auto-promote.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. Packaging arc closed.
+2. **E025 concentrated.** Cap-FAIL swap concordance ~47% vs PASS ~75% (both≥60); worse under large μΔ. Relative ranking, not availability.
+3. **Next.** New structural valuation/selection card only — not q/α/μΔ clamp fishing. PASS ≠ auto-promote.
 
 ---
 
@@ -1107,6 +1141,7 @@ python -m engine.harness_pack_vs_v1  # E023: packaged v2d vs production v1
 python -m unittest tests.test_e012_integrity -v  # E012: evaluation integrity
 python -m engine.harness_pack_rates  # E024: packaged rates_v2b vs production
 python scripts/e024b_cap_fail_movers.py  # E024b: Cap-FAIL vs PASS rates movers
+python scripts/e025_swap_ranking.py  # E025: Cap-FAIL swap ranking concordance
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

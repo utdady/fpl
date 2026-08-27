@@ -199,6 +199,9 @@ E021: MAE✓ Cap/XI0✗. E021b: rates-like toxicology. E021c: cold cell = mostly
 Mechanism validated (E022). Does not clear production promote bars (E023 XI0; E024 Cap).
 **Reach ends:** availability risk only. E024b movers already at `q≈1` and still wrong picks — valuation/selection among players who play, not dosage. No q/α fishing. Production unchanged.
 
+**Valuation / selection (open after E025)**
+E025 concentrated: Cap-FAIL both≥60 swap concordance ~47% vs PASS ~75%; large rates μΔ → FAIL concordance ~30%. Relative ranking failure among reliable players. Next card must be structural — not a μΔ clamp / α reopen.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -333,4 +336,5 @@ POST-GW1 (research)
   E012 PASS: evaluation integrity property tests (9/9)
   E024 REJECT (packaged rates_v2b vs production): MAE✓ XI0✓ Cap✗ toxic seasons; rates stay v1
   E024b concentrated: Cap = valuation among reliable players (q≈1); packaging arc closed
+  E025 concentrated: Cap-FAIL swap concordance ~47% vs PASS ~75% (both60); ranking not blanks
 ```

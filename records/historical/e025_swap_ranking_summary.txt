@@ -1,0 +1,29 @@
+E025: Cap-FAIL vs Cap-PASS swap ranking concordance
+Within-GW entered × left pairs from E024b movers; primary = both ≥60
+
+=== FAIL pairs ===
+  FAIL all pairs: n=611 mean_dU=0.367 mean_dpts=-0.907 entrant_win%=44.8 (nontie=524) concordance%=47.5 (model_pref_nontie=415) rank_err_n=218 mean_dU|err=0.578 mean_dpts|err=-4.991
+  FAIL both_play: n=464 mean_dU=0.302 mean_dpts=-1.088 entrant_win%=42.4 (nontie=394) concordance%=43.6 (model_pref_nontie=305) rank_err_n=172 mean_dU|err=0.579 mean_dpts|err=-5.029
+  FAIL both60: n=354 mean_dU=0.276 mean_dpts=-0.958 entrant_win%=44.5 (nontie=301) concordance%=46.8 (model_pref_nontie=235) rank_err_n=125 mean_dU|err=0.526 mean_dpts|err=-5.168
+  FAIL both60 enter_muD>=0.5: n=213 mean_dU=0.385 mean_dpts=-1.803 entrant_win%=42.3 (nontie=182) concordance%=43.2 (model_pref_nontie=148) rank_err_n=84 mean_dU|err=0.604 mean_dpts|err=-5.702
+  FAIL both60 enter_muD>=1.0: n=71 mean_dU=0.543 mean_dpts=-1.620 entrant_win%=36.1 (nontie=61) concordance%=30.4 (model_pref_nontie=46) rank_err_n=32 mean_dU|err=0.896 mean_dpts|err=-4.906
+
+=== PASS pairs ===
+  PASS all pairs: n=399 mean_dU=0.227 mean_dpts=0.754 entrant_win%=60.5 (nontie=347) concordance%=68.4 (model_pref_nontie=228) rank_err_n=72 mean_dU|err=0.543 mean_dpts|err=-3.931
+  PASS both_play: n=312 mean_dU=0.195 mean_dpts=0.833 entrant_win%=60.7 (nontie=267) concordance%=68.6 (model_pref_nontie=175) rank_err_n=55 mean_dU|err=0.546 mean_dpts|err=-3.727
+  PASS both60: n=240 mean_dU=0.198 mean_dpts=1.179 entrant_win%=66.3 (nontie=205) concordance%=74.6 (model_pref_nontie=138) rank_err_n=35 mean_dU|err=0.576 mean_dpts|err=-4.029
+  PASS both60 enter_muD>=0.5: n=105 mean_dU=0.399 mean_dpts=0.857 entrant_win%=65.9 (nontie=85) concordance%=71.2 (model_pref_nontie=66) rank_err_n=19 mean_dU|err=0.645 mean_dpts|err=-4.684
+  PASS both60 enter_muD>=1.0: n=34 mean_dU=0.493 mean_dpts=0.088 entrant_win%=59.3 (nontie=27) concordance%=65.0 (model_pref_nontie=20) rank_err_n=7 mean_dU|err=0.739 mean_dpts|err=-3.571
+
+=== Spearman(decision_U, pts) among movers with mins≥60 ===
+  FAIL entered: n=122 spearman=0.242
+  FAIL left: n=134 spearman=0.171
+  FAIL entered∪left: n=256 spearman=0.172
+
+  PASS entered: n=98 spearman=0.189
+  PASS left: n=103 spearman=0.309
+  PASS entered∪left: n=201 spearman=0.279
+
+=== both60 same-position pairs ===
+  FAIL both60 same_pos: n=140 mean_dU=0.275 mean_dpts=-0.350 entrant_win%=46.2 (nontie=117) concordance%=47.5 (model_pref_nontie=99) rank_err_n=52 mean_dU|err=0.475 mean_dpts|err=-4.808
+  PASS both60 same_pos: n=100 mean_dU=0.244 mean_dpts=1.240 entrant_win%=67.8 (nontie=87) concordance%=72.6 (model_pref_nontie=73) rank_err_n=20 mean_dU|err=0.390 mean_dpts|err=-4.200
