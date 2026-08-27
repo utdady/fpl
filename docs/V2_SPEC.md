@@ -73,6 +73,32 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
+## 0e. V2C - Role-transition minutes (**OPEN** — E019)
+
+**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E019.
+
+**Control:** `minutes=v2am_s` + `rates=v1`  
+**Treatment:** `minutes=v2c` + `rates=v1` (minutes path only)
+
+**Hypothesis:** After V2A-M, residual start miscalibration sits in **club-transition** contexts. Joint features — not a transfer dummy:
+
+$$
+P(start)=f(\text{v2am\_s base},\ \text{competition},\ \text{position},\ \text{recent usage},\ \text{transfer context})
+$$
+
+**Pinned rule (summary):**
+- Detect club-transition (inter-season team change via `code`, or intra-season Vaastav team change as-of-T).
+- Start from unchanged `v2am_s` base for everyone.
+- For transition **outfield** only: demote by competition depth using existing ladder caps (`n_comp≥2 → ≤0.48`, `n_comp==1 → ≤0.68`); competition = teammates with prior-season mins at current club ≥1800 (else as-of-T season ≥900).
+- Hot override: `recent4≥270` skips demotion. Soft max 0.85 kept. **GK path unchanged in E019.**
+- Never raise above v2am_s. No α search. No V2A-M retune.
+
+**Gates:** XI0 + XI+Cap hard vs `v2am_s`; MAE_60+ guardrail; four seasons; seed=7. PASS → candidate only (explicit promote).
+
+**Not:** binary new-club haircut; E014 remap; club-prior rates; promoted-club-wide curve (out of scope).
+
+---
+
 ## 1. Harness requirements
 
 The harness is the prerequisite for B4–B7. Getting it wrong produces silent
@@ -200,31 +226,17 @@ V1 comparison is appendix only.
 
 **Key risk:** blind season-wide averages across club changes. Split by club stint.
 
-### B5 — V1 + role-transition minutes model
+### B5 — V2C role-transition minutes (E019) — supersedes older B5 sketch
 
-Highest-value experiment, identified directly by the GW1 audit.
+See §0e for the locked contract. Summary:
 
-Audit finding: Guehi, Delta = 1.94 (third-largest leave-one-out driver), with
-Palace 2025/26 minutes mapped as a 0.90 Man City start probability. This is the
-specific structural bug B5 fixes.
+**Control:** `minutes=v2am_s` + `rates=v1` (not V1).  
+**Treatment:** `minutes=v2c` + `rates=v1`.
 
-**What changes:** `build_role_start` in `minutes.py`. Replace the single
-`_outfield_start` curve with three cases:
+**What changes:** `P(start)` for **club-transition outfield** players only — competition-depth demotion on top of frozen V2A-M base; hot recent4 override.  
+**What does not:** rates, fixtures, ILP, V2A-M knobs for established players, binary new-club haircut, promoted-club-wide curve (out of scope for E019), GK path.
 
-1. **Returning starters** — same club, >= 1800 mins last season, no material
-   competition added. Current curve, high confidence.
-2. **New-club players** — current team_id differs from the club where they
-   accumulated most of last season's minutes (detected via Vaastav per-GW history).
-   Prior discounted by new-club positional depth: count how many other players at
-   that position in the new club have >= 1800 mins. More competition -> lower prior.
-3. **Promoted-club players** — separate curve calibrated on past seasons of newly-
-   promoted sides.
-
-**What does not change:** fixture model, ATK, CONCEDE, projection coefficients,
-optimizer.
-
-**Validation target:** better-calibrated p_start specifically for new-club players,
-measured against the last 3 seasons of summer and January transfer windows.
+Older “three curve” B5 wording is historical intent only; E019 is the authoritative card.
 
 ### B6 — V1 + B4 + B5
 

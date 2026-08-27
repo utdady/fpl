@@ -172,7 +172,7 @@ V2A-M / v2am_s + rates_v1     ✅ production baseline
   │     E016 → E017 → E018 → ❌ club-prior family retired (E018s: B)
   │
   ├── Minutes / role research
-  │     V2C role-transition P(start)   <-- next to pre-register
+  │     V2C role-transition P(start)   <-- E019 pre-registered / implement next
   │
   └── Fixture research
         V2D learned ATK/CONCEDE          (later, independent)
@@ -186,11 +186,10 @@ E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+
 **V2B / rates — Club-prior family (RETIRED after E018s)**
 E016/E017/E018 all improved MAE/Sp; decision gates never clean. E018s: information useful but unsafe under ILP (**B**). **rates stay v1.** No E019. Future rate ideas need decision-aware packaging, not prior retunes.
 
-**V2C — Role-transition minutes (next)**
-Not `if new_club: discount`. Target:
-`P(start)=f(prior minutes, current competition, position, role, recent usage, transfer context)`.
-Transfer is one conditional feature among several. Residual after V2A-M; E013 new-club sign was inconsistent.
-Success: better-calibrated p_start / decision gates vs frozen `v2am_s` control.
+**V2C — Role-transition minutes (E019 OPEN / pre-registered)**
+Not `if new_club: discount`. Contract locked in `LAB_LOG.md` E019 / `V2_SPEC.md` §0e:
+`minutes=v2c` vs `v2am_s`; competition demotion for club-transition outfield only; hot override; GK unchanged; rates/fixtures/ILP frozen.
+Success: XI0 + XI+Cap non-inferiority vs `v2am_s` on all four seasons; MAE_60+ guardrail.
 
 **V2D — Learned fixture coefficients (later)**
 Replace hand-set ATK/CONCEDE with a Poisson GLM from historical match data.
@@ -320,5 +319,5 @@ POST-GW1 (research)
   E014 REJECT (LOSO remap); E014b diagnostic; E015 PASS (structural minutes)
   V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
   E018 REJECT; E018s = B (useful signal, unsafe under ILP); club-prior family retired
-  NEXT: pre-register V2C role-transition minutes; V2D later; E012 parallel
+  E019 pre-registered: V2C role-transition minutes (v2c vs v2am_s); implement next
 ```
