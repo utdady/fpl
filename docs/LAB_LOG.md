@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E020 / V2C-e **REJECT**. Production stays `v2am_s` + `rates=v1`. Cap improved vs E019 (only 2022/23 Cap fail); MAE guardrail still fails 4/4. Next: V2D or new minutes card; E012 parallel.
+**Active research question:** E021 / V2D **pre-registered** (learned fixture coefficients). V2C frozen for threshold variants. Production stays `v2am_s` + `rates=v1`.
 
 ---
 
@@ -759,7 +759,54 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **REJECT.** Eligibility tightening helped Cap (especially 2024/25) and kept XI0 gains, but **MAE guardrail fails 4/4** and **2022/23 Cap still fails**. Do not promote. Do not retune 90/0.48/0.68. Production stays **`v2am_s`**. Stage-1 who-fix partially validated; not decision-complete.
 
 - **Artifacts:** `engine/minutes_v2c.py` (`v2c_e`); `engine/harness_v2c_e.py`; `records/historical/v2c_e_minutes_summary.csv`; `records/historical/v2c_e_minutes_run.log`
-- **Follow-up:** V2D fixtures (parallel), or a *new* minutes card only with a different structural hypothesis (not another recent4 threshold). E012 parallel.
+- **Follow-up:** V2D fixtures pre-registered as E021 (parallel). No further recent4-threshold cards. E012 parallel.
+
+### E021 - V2D learned fixture coefficients (pre-registered)
+- **Date:** 2026-08-27 (after E020; **not started**)
+- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
+- **Hypothesis:** Hand-set `ATK`/`CONCEDE` tables on FPL strength 2–5 are a coarse fixture layer. Replacing them with **as-of-T learned team attack/defence strengths** from historical match goals improves conditional projections **and** survives the decision layer vs frozen `v2am_s` + `rates=v1`.
+- **Question:** Under frozen minutes=`v2am_s` and rates=`v1`, does `fixtures_version=v2d` beat `fixtures_version=v1` on decision gates across four seasons?
+
+- **Why now:** Rates family retired (E018s = B). V2C family REJECT for threshold variants (E019/E020); door open only for a *new* minutes structural hypothesis. Fixture layer is an independent branch — does not retune minutes/rates.
+
+- **Scope lock — fixtures only:**
+  ```text
+  control:   minutes=v2am_s + rates=v1 + fixtures=v1
+  treatment: minutes=v2am_s + rates=v1 + fixtures=v2d
+
+  frozen: minutes knobs, rates, scoring, ILP, objective, horizon, seed=7
+  ```
+
+- **What changes:** `engine/fixtures.py` path only — `expected_goals` / `attack_mult` / `opp_xg` / `p_cs` via learned strengths instead of hand `ATK`/`CONCEDE` maps on FPL `strength_overall_*`.
+
+- **What does not change:** `rates_for`, V2A-M / V2C minutes, optimizer, BENCH_WEIGHT, MC seed protocol. No club-prior rates. No demotion-rung retune.
+
+- **Pinned method (structural, not a coefficient search):**
+  1. **Observation model:** Poisson goals; team attack + defence parameters (optional shared home advantage). Prefer simple independent Poisson / Dixon–Coles-lite over black-box ML.
+  2. **As-of-T fit:** for season S, GW G — fit only on **complete prior seasons** (and optionally completed GWs `< G` of S if used; default pin = **prior seasons only** to avoid mid-season leakage debates). Team identity by **normalized club name** (IDs renumber).
+  3. **Promoted / new clubs:** no prior-season row → fall back to FPL strength map (`fixtures=v1` ATK/CONCEDE for that team only) or league-average attack/defence — **pin one rule before code** (prefer: league-average attack/defence + keep home/away multipliers).
+  4. **Home/away multipliers:** keep current scalars **1.10 / 0.88** frozen in E021 (do not jointly optimize with strengths). `LEAGUE_AVG` and `_clamp` bounds frozen.
+  5. **Dispatch:** `fixtures_version="v1"|"v2d"` on `project_all` / `player_match_context` (default remains `"v1"`).
+
+- **What this is not:**
+  - Searching home/away multipliers or clamp bounds after peeking
+  - Fitting on the same GW being predicted
+  - Changing minutes or rates to “help” fixtures
+  - Season-specific patches for 2022/23 Cap
+  - Neural / gradient-boosted fixture models (deferred)
+
+- **Method (planned):** `fixtures_version=v2d` + `python -m engine.harness_v2d` (seed=7). Four seasons individually.
+- **Seasons / GWs:** 2022/23–2025/26, GW1–38
+- **Metrics / gates (per season vs control — not vs V1 minutes):**
+  - **Hard:** XI 0-min non-worsening
+  - **Hard:** XI+Cap non-inferiority
+  - **Guardrail:** MAE_60+ non-worsening
+  - **Secondary (not a gate):** match xG / goals RMSE vs hand ATK/CONCEDE; Spearman|60+
+- **Cheat-blocks:** no post-hoc multiplier search; beating obsolete ancestors ≠ pass; PASS earns **candidate** `v2d` only (explicit promote); production fixtures stay v1 until then
+- **Results:** —
+- **Verdict:** —
+- **Artifacts:** —
+- **Follow-up sequence:** implement fit + `fixtures_version` → four-season harness → interpret. If FAIL with MAE↑ / Cap↓, apply signal–selection discipline (E018s lesson) — do not retune minutes to compensate. E012 parallel.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -791,13 +838,13 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E020 REJECT):
+As of 2026-08-27 (E021 / V2D pre-registered):
 
-1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1`.
-2. **E019 REJECT / E019b concentrated / E020 REJECT.** Cold-eligible demotion: XI0✓ 4/4; Cap fail only 2022/23; MAE✗ 4/4.
-3. **Do not** retune 90 or demotion rungs. Who-fix helped Cap but not enough.
-4. **Next:** V2D fixtures (parallel) or a new minutes hypothesis (not another recent4 threshold). E012 parallel.
-5. **Invariant:** production untouched.
+1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
+2. **Rates club-prior RETIRED** (E018s = B). **V2C threshold family frozen** (E019/E020 REJECT).
+3. **E021 contract locked.** `fixtures=v2d`: prior-season Poisson team strengths; home/away 1.10/0.88 frozen; minutes/rates locked.
+4. **Next implement:** `fixtures_version` + four-season harness. E012 parallel.
+5. **Invariant:** no coefficient fishing; PASS ≠ auto-promote.
 
 ---
 

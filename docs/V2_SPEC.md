@@ -83,6 +83,23 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
+## 0g. V2D - Learned fixture coefficients (**OPEN** — E021)
+
+**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E021.
+
+**Control:** `minutes=v2am_s` + `rates=v1` + `fixtures=v1` (hand `ATK`/`CONCEDE`)  
+**Treatment:** same minutes/rates + `fixtures=v2d` (prior-season Poisson team attack/defence)
+
+**Pinned:**
+- Fit from **complete prior seasons only** (team name keys); promoted clubs → league-average attack/defence
+- Home/away multipliers **1.10 / 0.88** frozen; `LEAGUE_AVG` / clamp frozen
+- Dispatch `fixtures_version`; default stays `"v1"`
+- Gates: XI0 + Cap hard vs control; MAE_60+ guardrail; four seasons; seed=7
+
+**Not:** multiplier search; same-GW leakage fits; minutes/rates retune; ML fixture models.
+
+---
+
 ## 1. Harness requirements
 
 The harness is the prerequisite for B4–B7. Getting it wrong produces silent
@@ -219,19 +236,11 @@ See §0e. Competition demotion improved XI0 but failed Cap/MAE gates. Production
 Stacked improvements. Only build if B4 and B5 each individually beat B3.
 If only one improves on B3, use only that one.
 
-### B7 — V1 + B6 + learned fixture coefficients
+### B7 — V2D learned fixture coefficients (E021) — supersedes older B7 sketch
 
-**What changes:** ATK / CONCEDE in `fixtures.py` fitted from historical Premier
-League match results using a Poisson GLM (Dixon-Coles or similar). Attack and
-defence strength per team estimated from actual goal outcomes, not the FPL 1–5
-strength scale.
+See §0g / `LAB_LOG.md` E021. Control is `v2am_s` + `rates=v1` + hand fixtures — **not** V1. Home/away multipliers frozen; prior-season Poisson strengths only.
 
-**Key constraint:** at season start the FPL attack/defence splits are zero. B7
-at GW1 still falls back to a fitted mapping from overall strength to xG. It can
-update on actual 2026/27 results from GW3–4 onward.
-
-**When to build:** last, and only after B5 is measured and validated. Fixture
-uncertainty is fundamental at season start — diminishing returns kick in early.
+Older “after B5” ordering is obsolete; V2D is an independent parallel branch.
 
 ---
 

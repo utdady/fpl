@@ -471,6 +471,10 @@ Three structural club-prior treatments improved MAE/Sp but never cleared decisio
 
 E019: XI0✓ Cap✗2 MAE✗4. E019b: false-positive demotion. E020 cold-eligible: Cap✗ only 2022/23; MAE✗4. Production `v2am_s`. No further recent4-threshold fishing.
 
+### V2D gates (E021 OPEN)
+
+Pre-registered: `fixtures=v2d` vs hand ATK/CONCEDE; minutes=`v2am_s`, rates=`v1` frozen. Prior-season Poisson strengths; home/away 1.10/0.88 frozen. Hard gates: XI0 + Cap; MAE_60+ guardrail. See `LAB_LOG.md` E021.
+
 ---
 
 ## 8. Experiment map
@@ -501,6 +505,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E019** | V2C role-transition minutes | **REJECT** (XI0↑; Cap/MAE fail) |
 | **E019b** | Cap-FAIL vs PASS demoted leavers | **concentrated** (false-positive demotion) |
 | **E020** | V2C-e cold-eligible demotion (recent4&lt;90) | **REJECT** (Cap↑; MAE✗ 4/4) |
+| **E021** | V2D learned fixture coefficients | **queued** / pre-registered |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 
