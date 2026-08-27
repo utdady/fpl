@@ -158,4 +158,6 @@ Suggested first tests (after GW1, not before):
 3. Assert `R_total == R_squad + R_XI + R_cap` on every scored GW (named oracle).
 4. Assert B0 / V1 / V2 ILPs use the same constraint set F when compared.
 
-Queued as **E012** in `LAB_LOG.md`.
+**Status (E012, 2026-08-27):** Python property tests **PASS** — `tests/test_e012_integrity.py` (9/9). Lean `formal/` still optional / deferred.
+
+Queued historically as **E012** in `LAB_LOG.md`.
