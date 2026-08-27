@@ -172,7 +172,7 @@ V2A-M / v2am_s + rates_v1     ✅ production baseline
   │     E016 → E017 → E018 → ❌ club-prior family retired (E018s: B)
   │
   ├── Minutes / role research
-  │     V2C role-transition P(start)   ❌ E019 REJECT
+  │     V2C role-transition P(start)   ❌ E019/E020 REJECT
   │
   └── Fixture research
         V2D learned ATK/CONCEDE          (later, independent)
@@ -186,8 +186,8 @@ E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+
 **V2B / rates — Club-prior family (RETIRED after E018s)**
 E016/E017/E018 all improved MAE/Sp; decision gates never clean. E018s: information useful but unsafe under ILP (**B**). **rates stay v1.** No E019. Future rate ideas need decision-aware packaging, not prior retunes.
 
-**V2C — Role-transition minutes (E019 REJECT)**
-Competition demotion for club-transition outfield improved XI0 4/4 but Cap failed 2/4 and MAE_60+ failed 4/4. **minutes stay `v2am_s`.** No post-hoc rung retune. Further minutes work needs a new structural card.
+**V2C — Role-transition minutes (E019/E020 REJECT)**
+E019 competition demotion: XI0↑ 4/4; Cap fail 2/4. E019b: false-positive targeting. E020 cold-eligible (`recent4<90`): Cap fail reduced to 1/4; MAE still fail 4/4. **minutes stay `v2am_s`.** No further recent4-threshold cards without a new structural hypothesis.
 
 **V2D — Learned fixture coefficients (later)**
 Replace hand-set ATK/CONCEDE with a Poisson GLM from historical match data.
@@ -318,5 +318,6 @@ POST-GW1 (research)
   V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
   E019 REJECT (v2c): XI0↑ 4/4 but Cap fail 2/4, MAE guardrail fail 4/4; minutes stay v2am_s
   E019b concentrated: Cap-fail demoted leavers high value-when-playing (false positives)
-  NEXT: new who-flag minutes card OR V2D fixtures; no rung retune; E012 parallel
+  E020 REJECT (v2c_e cold-eligible): Cap better (1 fail) but MAE✗ 4/4; minutes stay v2am_s
+  NEXT: V2D fixtures OR new minutes hypothesis (not another recent4 tweak); E012 parallel
 ```

@@ -298,8 +298,8 @@ def project_all(
 ) -> list[PlayerProjection]:
     if strategy not in STRATEGIES:
         raise ValueError(f"strategy must be one of {STRATEGIES}")
-    if minutes_version not in {"v1", "v2am", "v2am_s", "v2c"}:
-        raise ValueError("minutes_version must be 'v1', 'v2am', 'v2am_s', or 'v2c'")
+    if minutes_version not in {"v1", "v2am", "v2am_s", "v2c", "v2c_e"}:
+        raise ValueError("minutes_version must be 'v1', 'v2am', 'v2am_s', 'v2c', or 'v2c_e'")
     if rates_version not in {"v1", "v2b", "v2b_d", "v2b_e"}:
         raise ValueError("rates_version must be 'v1', 'v2b', 'v2b_d', or 'v2b_e'")
     if minutes_version == "v2am" and p_start_map is None:
@@ -327,16 +327,16 @@ def project_all(
     recent: dict[int, int] = {}
     apply_recent = False
     season_key: str | None = None
-    if minutes_version in {"v2am_s", "v2c"} or rates_version == "v2b_e":
+    if minutes_version in {"v2am_s", "v2c", "v2c_e"} or rates_version == "v2b_e":
         from engine.harness import SEASON_LABEL, recent_minutes_by_element
 
         label_to_season = {v: k for k, v in SEASON_LABEL.items()}
         season_key = label_to_season.get(snapshot.season_label)
         if season_key and as_of_gw > RECENT_WINDOW:
             recent = recent_minutes_by_element(season_key, as_of_gw, window=RECENT_WINDOW)
-            apply_recent = minutes_version in {"v2am_s", "v2c"}
-    if minutes_version == "v2c":
-        from engine.minutes_v2c import build_role_start_v2c
+            apply_recent = minutes_version in {"v2am_s", "v2c", "v2c_e"}
+    if minutes_version in {"v2c", "v2c_e"}:
+        from engine.minutes_v2c import build_role_start_v2c, build_role_start_v2c_e
 
         if not season_key:
             from engine.harness import SEASON_LABEL
@@ -344,9 +344,10 @@ def project_all(
             label_to_season = {v: k for k, v in SEASON_LABEL.items()}
             season_key = label_to_season.get(snapshot.season_label)
         if not season_key:
-            raise ValueError("v2c requires a historical season_label mapped to a season key")
+            raise ValueError(f"{minutes_version} requires a historical season_label mapped to a season key")
         team_names = {tid: t.name for tid, t in snapshot.teams.items()}
-        role_start = build_role_start_v2c(
+        builder = build_role_start_v2c_e if minutes_version == "v2c_e" else build_role_start_v2c
+        role_start = builder(
             snapshot.players,
             season=season_key,
             as_of_gw=as_of_gw,

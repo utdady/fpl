@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E019b **concentrated** (false-positive demotion in Cap-fail seasons). V2C rungs frozen. Next: tighten *who* is demoted (new card) or V2D; E012 parallel.
+**Active research question:** E020 / V2C-e **REJECT**. Production stays `v2am_s` + `rates=v1`. Cap improved vs E019 (only 2022/23 Cap fail); MAE guardrail still fails 4/4. Next: V2D or new minutes card; E012 parallel.
 
 ---
 
@@ -726,7 +726,40 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **Concentrated — targeting / false-positive demotion.** Cap-fail seasons eject demoted transitions who **play more and score more when they play**; Cap-pass seasons eject low-value / high-blank demotions (mechanism working). XI0↑ everywhere because even FAIL demotions blank more than replacements (22.7% vs entered 14.9%), but Cap falls when the ejected group is high-ceiling. **Not a dosage problem** (do not retune 0.48/0.68). Next minutes card (if any) must tighten **who** gets competition demotion — not how hard.
 
 - **Artifacts:** `records/historical/e019_cap_fail_profile.csv`; `scripts/e019_cap_fail_profile.py`; `records/historical/e019_cap_fail_profile_run.log`
-- **Follow-up:** Pre-register a structural “who is competition-risk” card only if pursuing minutes further; else V2D fixtures. No post-hoc rung search.
+- **Follow-up:** Pre-register E020 cold-eligible demotion (`v2c_e`): same rungs, demote only if recent4&lt;90. No rung retune.
+
+### E020 - V2C-e cold-eligible competition demotion
+- **Date:** 2026-08-27 (from E019b)
+- **Status:** **REJECT** — implemented and evaluated
+- **Hypothesis:** E019b false positives are non-cold transitions. Restricting demotion to **cold** competition-risk transitions (`recent4 &lt; 90`) preserves XI0 gains while restoring Cap/MAE vs `v2am_s`.
+- **Question:** Does `minutes=v2c_e` beat `v2am_s` on XI0 + Cap (+ MAE guardrail) across four seasons?
+
+- **Scope — who only (stage 1):**
+  ```text
+  control:   minutes=v2am_s + rates=v1
+  treatment: minutes=v2c_e  + rates=v1
+
+  frozen from E019: n_comp caps 0.48/0.68, 1800/900, GK unchanged
+  eligibility: skip demotion if as_of_gw>4 and recent4 >= 90 (COLD_RECENT_MIN)
+  GW<=4: same as E019 (no recent gate)
+  ```
+- **Method:** `build_role_start_v2c_e`; `python -m engine.harness_v2c_e` (seed=7).
+
+- **Results (vs `v2am_s`):**
+
+  | Season | MAE60 | XI+Cap | XI0% | swaps | Gate |
+  |---|---|---:|---:|---:|---|
+  | 2022/23 | 2.576→2.578 ✗ | 57.1→56.7 ✗ | 11.5→10.6 ✓ | 26 | **FAIL** |
+  | 2023/24 | 2.482→2.483 ✗ | 53.7→53.8 ✓ | 11.0→10.8 ✓ | 16 | **FAIL** |
+  | 2024/25 | 2.400→2.401 ✗ | 56.6→56.8 ✓ | 10.5→**9.3** ✓ | 14 | **FAIL** |
+  | 2025/26 | 2.572→2.573 ✗ | 50.4→51.8 ✓ | 14.1→13.4 ✓ | 20 | **FAIL** |
+
+  vs E019: Cap-fail seasons reduced from **2→1** (2024/25 Cap now PASS); swap volume roughly halved; XI0 still PASS 4/4. MAE_60+ still fails all four (tiny regressions).
+
+- **Verdict:** **REJECT.** Eligibility tightening helped Cap (especially 2024/25) and kept XI0 gains, but **MAE guardrail fails 4/4** and **2022/23 Cap still fails**. Do not promote. Do not retune 90/0.48/0.68. Production stays **`v2am_s`**. Stage-1 who-fix partially validated; not decision-complete.
+
+- **Artifacts:** `engine/minutes_v2c.py` (`v2c_e`); `engine/harness_v2c_e.py`; `records/historical/v2c_e_minutes_summary.csv`; `records/historical/v2c_e_minutes_run.log`
+- **Follow-up:** V2D fixtures (parallel), or a *new* minutes card only with a different structural hypothesis (not another recent4 threshold). E012 parallel.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -758,12 +791,12 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E019b complete):
+As of 2026-08-27 (E020 REJECT):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1`.
-2. **E019 REJECT.** XI0↑ 4/4; Cap fail 2/4; MAE guardrail fail 4/4.
-3. **E019b concentrated.** Cap-fail demoted leavers: blank 23%, pts|60+ **6.4**; Cap-pass: blank 41%, pts|60+ **3.8**. False-positive targeting, not dosage.
-4. **Do not retune** 0.48/0.68/1800/900. Next minutes work = new structural who-flag card, or pivot V2D.
+2. **E019 REJECT / E019b concentrated / E020 REJECT.** Cold-eligible demotion: XI0✓ 4/4; Cap fail only 2022/23; MAE✗ 4/4.
+3. **Do not** retune 90 or demotion rungs. Who-fix helped Cap but not enough.
+4. **Next:** V2D fixtures (parallel) or a new minutes hypothesis (not another recent4 threshold). E012 parallel.
 5. **Invariant:** production untouched.
 
 ---
@@ -785,6 +818,7 @@ python -m engine.harness_compare --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_decomp --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_v2b_e   # E018: v2b_e vs v1 under v2am_s
 python -m engine.harness_v2c   # E019: v2c vs v2am_s under rates=v1
+python -m engine.harness_v2c_e  # E020: v2c_e vs v2am_s (cold-eligible demotion)
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers
 python scripts/e018s_synthesis.py  # E018s: A vs B close from existing CSVs
 python -m engine.obs --season 2025-26

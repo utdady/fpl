@@ -19,6 +19,7 @@ from engine.harness import (
     season_dir,
 )
 from engine.minutes_struct import (
+    COLD_RECENT_MIN,
     HOT_RECENT_MIN,
     MAX_BASE,
     RECENT_WINDOW,
@@ -167,8 +168,13 @@ def build_role_start_v2c(
     recent_minutes: dict[int, int] | None = None,
     apply_recent: bool = False,
     team_names: dict[int, str] | None = None,
+    demotion_skip_recent: int = HOT_RECENT_MIN,
 ) -> dict[int, float]:
-    """V2A-M base + competition demotion for club-transition outfield only."""
+    """V2A-M base + competition demotion for club-transition outfield only.
+
+    demotion_skip_recent: skip competition demotion when recent4 >= this
+    (E019 default HOT_RECENT_MIN=270; E020 v2c_e uses COLD_RECENT_MIN=90).
+    """
     recent_minutes = recent_minutes or {}
     base = build_role_start_struct(
         players, recent_minutes=recent_minutes, apply_recent=apply_recent
@@ -191,13 +197,13 @@ def build_role_start_v2c(
     out = dict(base)
     for (team_id, pos), group in groups.items():
         if pos == "GKP":
-            continue  # E019: GK path unchanged
+            continue  # E019/E020: GK path unchanged
         name = team_names.get(team_id, "")
         for p in group:
             if p.id not in transition:
                 continue
-            # Hot override: evidenced role — skip demotion.
-            if apply_recent and recent_minutes.get(p.id, 0) >= HOT_RECENT_MIN:
+            # Form skip: evidenced non-cold (E020) or hot (E019) role — no demotion.
+            if apply_recent and recent_minutes.get(p.id, 0) >= demotion_skip_recent:
                 continue
             n_comp = competition_count(p, group, name, id_code, prior_mins)
             p0 = out[p.id]
@@ -208,3 +214,24 @@ def build_role_start_v2c(
             # n_comp == 0: unchanged
             out[p.id] = min(MAX_BASE, out[p.id])
     return out
+
+
+def build_role_start_v2c_e(
+    players: list[Player],
+    *,
+    season: str,
+    as_of_gw: int,
+    recent_minutes: dict[int, int] | None = None,
+    apply_recent: bool = False,
+    team_names: dict[int, str] | None = None,
+) -> dict[int, float]:
+    """E020: same demotion rungs as v2c; skip demotion if recent4 >= 90 (cold gate)."""
+    return build_role_start_v2c(
+        players,
+        season=season,
+        as_of_gw=as_of_gw,
+        recent_minutes=recent_minutes,
+        apply_recent=apply_recent,
+        team_names=team_names,
+        demotion_skip_recent=COLD_RECENT_MIN,
+    )

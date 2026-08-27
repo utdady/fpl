@@ -73,13 +73,13 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
-## 0e. V2C - Role-transition minutes (**REJECT** — E019)
+## 0f. V2C-e - Cold-eligible competition demotion (**REJECT** — E020)
 
-**Status:** Implemented and evaluated 2026-08-27. **REJECT.** Production `minutes_version` remains `"v2am_s"`. See `LAB_LOG.md` E019.
+**Status:** Implemented and evaluated 2026-08-27. **REJECT.** Production stays `v2am_s`. See `LAB_LOG.md` E020.
 
-**What was tested:** `minutes=v2c` vs `v2am_s` (+ `rates=v1`): competition demotion for club-transition outfield on frozen V2A-M base; hot override; GK unchanged.
+**What changed vs E019:** same demotion rungs; skip demotion when `recent4 ≥ 90` (was ≥270).
 
-**Result:** XI0 improved **all four** seasons; XI+Cap failed 2022/23 and 2024/25; MAE_60+ guardrail failed all four. Do not promote. Do not retune 1800/900/0.48/0.68.
+**Result:** XI0 PASS 4/4; Cap PASS 3/4 (only 2022/23 fails — improved vs E019); MAE_60+ FAIL 4/4. Do not promote. Do not retune 90/rungs.
 
 ---
 
