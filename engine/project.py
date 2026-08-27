@@ -115,19 +115,30 @@ def resolve_rates(
     player: Player,
     rates_version: str,
     rates_priors: dict[int, tuple[float, float]] | None,
+    *,
+    as_of_gw: int = 1,
+    recent_minutes: dict[int, int] | None = None,
 ) -> dict[str, float]:
     if rates_version == "v1":
         return rates_for_v1(player)
-    if rates_version in {"v2b", "v2b_d"}:
-        from engine.rates_v2b import rates_for_v2b, rates_for_v2b_d
+    if rates_version in {"v2b", "v2b_d", "v2b_e"}:
+        from engine.rates_v2b import rates_for_v2b, rates_for_v2b_d, rates_for_v2b_e
 
         prior = (rates_priors or {}).get(player.id)
         px = prior[0] if prior else None
         pa = prior[1] if prior else None
         if rates_version == "v2b_d":
             return rates_for_v2b_d(player, px, pa)
+        if rates_version == "v2b_e":
+            return rates_for_v2b_e(
+                player,
+                px,
+                pa,
+                as_of_gw=as_of_gw,
+                recent4=(recent_minutes or {}).get(player.id, 0),
+            )
         return rates_for_v2b(player, px, pa)
-    raise ValueError("rates_version must be 'v1', 'v2b', or 'v2b_d'")
+    raise ValueError("rates_version must be 'v1', 'v2b', 'v2b_d', or 'v2b_e'")
 
 
 
@@ -193,6 +204,8 @@ def project_player_gw(
     p_start_map: dict[str, float] | None = None,
     rates_version: str = "v1",
     rates_priors: dict[int, tuple[float, float]] | None = None,
+    as_of_gw: int = 1,
+    recent_minutes: dict[int, int] | None = None,
 ) -> GWProjection:
     scoring = snapshot.scoring
     pos = player.position
@@ -204,7 +217,13 @@ def project_player_gw(
     if not fixtures or (p_start + p_sub) < 1e-4:
         return GWProjection(player.id, event_id, len(fixtures), 0, 0, p_start, p_sub, p_60, 0, 0)
 
-    rates = resolve_rates(player, rates_version, rates_priors)
+    rates = resolve_rates(
+        player,
+        rates_version,
+        rates_priors,
+        as_of_gw=as_of_gw,
+        recent_minutes=recent_minutes,
+    )
     total = np.zeros(n, dtype=np.float64)
     p60_acc = 0.0
     pstart_acc = 0.0
@@ -281,8 +300,8 @@ def project_all(
         raise ValueError(f"strategy must be one of {STRATEGIES}")
     if minutes_version not in {"v1", "v2am", "v2am_s"}:
         raise ValueError("minutes_version must be 'v1', 'v2am', or 'v2am_s'")
-    if rates_version not in {"v1", "v2b", "v2b_d"}:
-        raise ValueError("rates_version must be 'v1', 'v2b', or 'v2b_d'")
+    if rates_version not in {"v1", "v2b", "v2b_d", "v2b_e"}:
+        raise ValueError("rates_version must be 'v1', 'v2b', 'v2b_d', or 'v2b_e'")
     if minutes_version == "v2am" and p_start_map is None:
         raise ValueError("v2am requires a leave-one-season-out p_start_map")
     if minutes_version != "v2am":
@@ -294,7 +313,7 @@ def project_all(
             gw_ids.append(e.id)
 
     rates_priors: dict[int, tuple[float, float]] | None = None
-    if rates_version in {"v2b", "v2b_d"}:
+    if rates_version in {"v2b", "v2b_d", "v2b_e"}:
         from engine.harness import SEASON_LABEL
         from engine.rates_v2b import build_rates_priors_for_snapshot
 
@@ -304,17 +323,18 @@ def project_all(
             rates_priors = build_rates_priors_for_snapshot(season_key, snapshot)
 
     rng = np.random.default_rng(seed)
-    if minutes_version == "v2am_s":
-        # Historical snapshots carry season_label like "2025/26"; live may not map.
+    as_of_gw = next_e.id
+    recent: dict[int, int] = {}
+    apply_recent = False
+    if minutes_version == "v2am_s" or rates_version == "v2b_e":
         from engine.harness import SEASON_LABEL, recent_minutes_by_element
+
         label_to_season = {v: k for k, v in SEASON_LABEL.items()}
         season_key = label_to_season.get(snapshot.season_label)
-        as_of_gw = next_e.id
-        recent: dict[int, int] = {}
-        apply_recent = False
         if season_key and as_of_gw > RECENT_WINDOW:
             recent = recent_minutes_by_element(season_key, as_of_gw, window=RECENT_WINDOW)
-            apply_recent = True
+            apply_recent = minutes_version == "v2am_s"
+    if minutes_version == "v2am_s":
         role_start = build_role_start_struct(
             snapshot.players, recent_minutes=recent, apply_recent=apply_recent
         )
@@ -339,6 +359,8 @@ def project_all(
                 p_start_map=p_start_map,
                 rates_version=rates_version,
                 rates_priors=rates_priors,
+                as_of_gw=as_of_gw,
+                recent_minutes=recent,
             )
             by_gw[gw] = pred
             w = DECAY ** offset

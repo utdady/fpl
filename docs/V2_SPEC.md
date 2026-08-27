@@ -59,22 +59,15 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
-## 0d. V2B-e - Current-form eligibility gate (**OPEN** — E018)
+## 0d. V2B-e - Current-form eligibility gate (**REJECT** — E018)
 
-**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E018.
+**Status:** Implemented and evaluated 2026-08-27. **REJECT.** Production `rates_version` remains `"v1"`. See `LAB_LOG.md` E018.
 
-**Why:** E017b — toxic promotions = club prior on **cold/thin-form** players (prior+recent4&lt;90 → 43% blank in FAIL seasons).
+**Why:** E017b — toxic promotions = club prior on **cold/thin-form** players. E018 withheld club prior unless recent4≥90 (GW&gt;4) and season≥450.
 
-**Control:** `minutes=v2am_s` + `rates=v1`  
-**Treatment:** `minutes=v2am_s` + `rates=v2b_e` (club prior only when form-eligible)
+**Result:** MAE/Sp improved all four seasons; **0/4 pass all gates.** XI0 worsened on 2023/24–2025/26; 2022/23 Cap still failed. **Club-prior branch retired** after full → damped → eligible attempts.
 
-**Pinned gates (reuse existing constants):**
-- MIN_CLUB_MINUTES=270 at current club (club pool exists)
-- recent4≥**90** for club prior (when as_of_gw&gt;4)
-- season_minutes≥**450** for club prior (always; sole gate when as_of_gw≤4)
-- Ineligible → cost prior only; eligible → full club prior (α=1 on club leg)
-
-**Gates:** same as E016. No α search. No post-hoc threshold tuning.
+**Do not promote. Do not grid-search α or retune 90/450.** Pivot to V2C/V2D as parallel branches.
 
 ---
 

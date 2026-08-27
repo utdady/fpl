@@ -178,9 +178,8 @@ Implementation: `minutes_version=v2am_s` — soft max 0.85; cold 0.55 / hot 0.72
 E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+ all PASS.
 **Do not retune.** Production default = `v2am_s`. V1 remains permanent historical control (harnesses pin `minutes_version=v1`).
 
-**V2B / B4 — Multi-season rates (E016/E017 REJECT; E018 OPEN)**
-E016/E017 failed Cap/XI0 on 2022/23 and 2025/26. E017b: toxic subgroup = prior on cold/thin form.  
-**E018 (next):** `rates=v2b_e` — withhold club prior unless recent4≥90 and season≥450 (GW≤4: season gate only). Reuse thresholds 90/450. No α search.
+**V2B / B4 — Multi-season rates (E016/E017/E018 REJECT — branch retired)**
+Full club prior, α=0.50 dampening, and form-eligible prior all improved MAE/Sp but failed decision gates. **rates default stays v1.** No further club-prior cards. Minutes frozen at `v2am_s`.
 
 **B5 — Role-transition minutes model**
 Detect club changes via Vaastav per-GW history. Discount start prior by new-club
@@ -314,6 +313,6 @@ POST-GW1 (research)
   E010 live GW1 score (V1 control measurement)
   E014 REJECT (LOSO remap); E014b diagnostic; E015 PASS (structural minutes)
   V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
-  E017b concentrated (prior+cold recent → 43% blank)
-  E018 pre-registered: rates_v2b_e form eligibility (90/450); implement next
+  E018 REJECT (form-eligible club prior); club-prior branch retired; rates stay v1
+  NEXT: V2C role-transition mins, V2D fixtures, E012 — parallel branches
 ```

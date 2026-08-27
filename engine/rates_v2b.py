@@ -1,6 +1,7 @@
 """E016 V2B multi-season xG/xA priors (club-stint split).
 
 rates_version=v2b changes only the prior inside rates_for for xg90/xa90.
+rates_version=v2b_e (E018) withholds club prior unless form-eligible.
 ATK/CONCEDE, dc/saves/bonus/cards, and minutes stay untouched.
 """
 from __future__ import annotations
@@ -8,6 +9,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass
 
+from engine.minutes_struct import COLD_RECENT_MIN, RECENT_WINDOW
 from engine.harness import (
     PREV_SEASON,
     _id_code_map,
@@ -25,6 +27,8 @@ MIN_CLUB_MINUTES = 270
 # E017: mix weight on club prior vs cost prior. v2b uses 1.0; v2b_d uses 0.50.
 CLUB_PRIOR_ALPHA_FULL = 1.0
 CLUB_PRIOR_ALPHA_DAMPENED = 0.50
+# E018: reuse rates_for blend window for season-form gate.
+SEASON_MIN_GATE = 450
 
 
 def _norm_team(name: str) -> str:
@@ -212,3 +216,34 @@ def rates_for_v2b_d(
     return rates_for_v2b(
         player, prior_xg90, prior_xa90, club_alpha=CLUB_PRIOR_ALPHA_DAMPENED
     )
+
+
+def eligible_for_club_prior(player: Player, as_of_gw: int, recent4: int) -> bool:
+    """E018: cross-layer form gate before applying club prior (α=1).
+
+    GW≤RECENT_WINDOW: season minutes only (recent window ill-defined).
+    GW>RECENT_WINDOW: season≥450 and recent4≥90 (V2A-M cold constant).
+    """
+    if player.minutes < SEASON_MIN_GATE:
+        return False
+    if as_of_gw <= RECENT_WINDOW:
+        return True
+    return recent4 >= COLD_RECENT_MIN
+
+
+def rates_for_v2b_e(
+    player: Player,
+    prior_xg90: float | None,
+    prior_xa90: float | None,
+    *,
+    as_of_gw: int,
+    recent4: int,
+) -> dict[str, float]:
+    """E018: full club prior only when form-eligible; else cost prior only."""
+    if (
+        prior_xg90 is not None
+        and prior_xa90 is not None
+        and eligible_for_club_prior(player, as_of_gw, recent4)
+    ):
+        return rates_for_v2b(player, prior_xg90, prior_xa90, club_alpha=CLUB_PRIOR_ALPHA_FULL)
+    return rates_for_v2b(player, None, None, club_alpha=CLUB_PRIOR_ALPHA_FULL)

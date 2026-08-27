@@ -463,11 +463,9 @@ E015 passed all four seasons; production default is now `v2am_s`. Do not retune.
 Canonical statement (E013): V1's repeatable weakness was **upper-tail
 playing-time overconfidence propagating into XI blank selections**.
 
-### V2B gates (E016/E017 REJECT; E018 OPEN)
+### V2B gates (E016/E017/E018 REJECT — branch retired)
 
-E017b: withhold club prior for cold/thin-form players (prior+recent4&lt;90 → 43% blank in FAIL seasons).
-
-**E018 (pre-registered):** `rates=v2b_e` — eligible club prior only (recent4≥90, season≥450; GW≤4 season-only). Same gates vs `v2am_s`+`rates=v1`. No α/threshold search.
+Three structural attempts on club prior (full, damped, form-eligible) all improved MAE/Sp but failed decision gates. Production `rates_version=v1`. Do not tune α or thresholds. Pivot to V2C/V2D.
 
 ---
 
@@ -494,7 +492,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E016b** | XI movers under rates_v2b | **concentrated** (club-prior μ promotion) |
 | **E017** | V2B-d prior→XI dampening (α=0.50) | **REJECT** (same FAIL seasons; dosage↓ but gates fail) |
 | **E017b** | FAIL vs PASS entrant profiles | **concentrated** (prior+cold recent → 43% blank) |
-| **E018** | V2B-e form eligibility gate (90/450) | **queued** / pre-registered |
+| **E018** | V2B-e form eligibility gate (90/450) | **REJECT** (0/4 gates; branch retired) |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 
