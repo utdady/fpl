@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E019 / V2C **pre-registered** (role-transition minutes). Club-prior family closed (E018s = B). Production stays `v2am_s` + `rates=v1`.
+**Active research question:** E019 / V2C **REJECT**. Production stays `v2am_s` + `rates=v1`. Next: V2D fixtures or revise V2C structure; E012 parallel.
 
 ---
 
@@ -678,75 +678,35 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Artifacts:** `scripts/e018s_synthesis.py`; `records/historical/e018s_synthesis_run.log`
 - **Follow-up:** Pre-register V2C (role-transition `P(start)`, not transfer haircut). V2D later, independent. E012 parallel. Do not reopen 90/450. **No further club-prior cards.**
 
-### E019 - V2C role-transition minutes (pre-registered)
-- **Date:** 2026-08-27 (from E018s / E009 / E013 / E014; **not started**)
-- **Status:** queued / pre-registered — **implementation contract locked** (docs only; no code yet)
-- **Hypothesis:** Residual XI blanks / start miscalibration after V2A-M concentrate in **role-transition contexts** (new club or mid-season move into contested roles). Encoding competition + transfer context into `P(start)` — without a binary new-club haircut — improves decision gates vs frozen `v2am_s`.
-- **Question:** Under frozen `rates=v1` / fixtures / ILP, does `minutes_version=v2c` beat `minutes_version=v2am_s` on E015-style decision gates across four seasons?
-
-- **Why now (evidence chain):**
-  - E009/E013: upper-tail overconfidence; new-club split **confounded** / sign-flips → no generic new-club prior in V2A-M.
-  - E014 REJECT (bucket remap); E015 PASS (`v2am_s` structural recent form).
-  - E016–E018s: rates μ bumps can improve MAE/Sp yet still hurt selection (**B**). Next structural layer is still **who plays**, with role/competition context V2A-M deliberately omitted.
+### E019 - V2C role-transition minutes
+- **Date:** 2026-08-27
+- **Status:** **REJECT** — implemented and evaluated
+- **Hypothesis:** Residual XI blanks / start miscalibration after V2A-M concentrate in **role-transition contexts**. Encoding competition + transfer context into `P(start)` — without a binary new-club haircut — improves decision gates vs frozen `v2am_s`.
+- **Question:** Under frozen `rates=v1` / fixtures / ILP, does `minutes_version=v2c` beat `minutes_version=v2am_s` on hard gates across four seasons?
 
 - **Scope lock — minutes only:**
   ```text
   control:   minutes=v2am_s + rates=v1
   treatment: minutes=v2c   + rates=v1
-
-  frozen: rates, ATK/CONCEDE, scoring, ILP, objective, horizon, seed=7
-  V2A-M knobs (0.85 / cold 0.55 / hot 0.72 / window 4): do not retune for established players
   ```
+  Club-transition = `obs.new_club_ids` ∪ intra-season Vaastav team change. Outfield competition demotion (`n_comp≥2→≤0.48`, `n_comp==1→≤0.68`); hot recent4≥270 skips; GK unchanged. No param search.
 
-- **Pinned definition — club-transition player (as-of-T):**
-  A player is **club-transition** at `as_of_gw` if either:
-  1. **Inter-season:** FPL `code` has previous-season `team` ≠ current-season `team` (same rule as `obs.new_club_ids`), **or**
-  2. **Intra-season:** Vaastav GW rows show the player's team for the latest completed GW `< as_of_gw` differs from their team in the first GW of the season with minutes (January / mid-season moves).
+- **Method:** `engine/minutes_v2c.py`; `python -m engine.harness_v2c` (seed=7). Four seasons.
 
-  **Out of scope for E019:** promoted-club-wide curve (old B5 case 3); rate priors; fixture retunes. Analysis labels may still report promoted-club players, but they are not a separate treatment arm.
+- **Results (treatment vs `v2am_s` control):**
 
-- **Pinned features (joint; transfer is not a lone dummy):**
+  | Season | MAE60 | XI+Cap | XI0% | swaps | entered blank% | Gate |
+  |---|---|---:|---:|---:|---:|---|
+  | 2022/23 | 2.576→2.587 ✗ | 57.1→55.5 ✗ | 11.5→10.3 ✓ | 50 | 14.0 | **FAIL** |
+  | 2023/24 | 2.482→2.484 ✗ | 53.7→55.3 ✓ | 11.0→10.0 ✓ | 22 | 9.1 | **FAIL** |
+  | 2024/25 | 2.400→2.404 ✗ | 56.6→55.9 ✗ | 10.5→10.3 ✓ | 37 | 16.2 | **FAIL** |
+  | 2025/26 | 2.572→2.576 ✗ | 50.4→52.3 ✓ | 14.1→12.7 ✓ | 34 | 20.6 | **FAIL** |
 
-  | Feature | Source | Role |
-  |---|---|---|
-  | V2A-M base | `build_role_start_struct` | Starting `P(start)` for everyone |
-  | Prior minutes | player / Vaastav prior season | Context for transition strength |
-  | Club competition | teammates at same (team, position) | Contested role vs open role |
-  | Position / GK role | existing GK within-club logic | GK stays role-ranked; outfield competition count |
-  | Recent usage | V2A-M recent4 | If hot (`recent4 ≥ 270`), do not demote on competition alone |
-  | Transfer context | club-transition flag above | Eligibility for competition adjustment only |
+- **Verdict:** **REJECT.** **XI0 improved all four seasons** (hard XI0 PASS 4/4) — competition demotion of transitions did cut blanks. But **XI+Cap failed 2022/23 and 2024/25**, and **MAE_60+ guardrail failed all four** (small regressions). Partial minutes signal without decision-safe Cap. Production stays **`v2am_s`**. Do not retune 1800/900/0.48/0.68 after peeking.
 
-- **Pinned structural rule (reuse existing ladder rungs — no new free parameters):**
-  1. Compute **v2am_s** base for all players (unchanged cold/hot/soft-max).
-  2. For **non-transition** players: treatment = control (identical).
-  3. For **club-transition** outfield players, compute `n_comp` = count of *other* players at same `(team_id, position)` with:
-     - prior-season minutes at **current** club ≥ **1800** (B5 / starter evidence), **or** if that prior pool is empty for the club-season, as-of-T season minutes ≥ **900**.
-  4. Demote only (never raise above v2am_s base):
-     - `n_comp ≥ 2` → `base = min(base, 0.48)`  *(existing ladder rung)*
-     - `n_comp == 1` → `base = min(base, 0.68)`  *(existing ladder rung)*
-     - `n_comp == 0` → unchanged
-  5. **Hot override:** if `as_of_gw > 4` and `recent4 ≥ HOT_RECENT_MIN` (270), skip competition demotion (role already evidenced).
-  6. Soft max **0.85** still applies. GK: keep V2A-M within-club starter logic; apply competition demotion only to non-starter new-club GKs if they would otherwise inherit a high outfield-style base (default: GK path unchanged unless implementation note requires it — prefer **GK unchanged in E019** to limit scope).
+- **Artifacts:** `engine/minutes_v2c.py`; `engine/harness_v2c.py`; `records/historical/v2c_minutes_summary.csv`; `records/historical/v2c_minutes_run.log`
 
-- **What this is not:**
-  - `if new_club: base *= α` haircut
-  - Retuning V2A-M cold/hot/soft-max
-  - LOSO bucket remap (E014)
-  - Club-prior rates (retired)
-  - Searching 1800/900/0.48/0.68 after peeking
-
-- **Method (planned):** `minutes_version="v2c"` in `minutes_struct` / `project_all`; harness `python -m engine.harness_v2c` (seed=7). Four seasons individually.
-- **Seasons / GWs:** 2022/23–2025/26, GW1–38
-- **Metrics / gates (per season vs `v2am_s` control — not vs V1):**
-  - **Hard:** XI 0-min non-worsening
-  - **Hard:** XI+Cap non-inferiority (mean actual XI+captain points)
-  - **Guardrail:** MAE_60+ non-worsening
-  - **Secondary (not a gate):** upper-tail gap; blank% among club-transition XI entrants vs leavers; n_comp distribution
-- **Cheat-blocks:** no parameter search; beating V1 alone ≠ pass; production stays `v2am_s` until explicit promote after PASS; PASS earns **candidate** `v2c` only
-- **Results:** —
-- **Verdict:** —
-- **Artifacts:** —
-- **Follow-up sequence:** implement `v2c` → fixed-seed four-season harness → interpret → promote only if all hard gates PASS all seasons. E012 parallel. V2D stays independent.
+- **Follow-up:** Do not promote. A further V2C attempt needs a **new structural card** (not rung retune). Options: V2D fixtures (parallel); or diagnostic on Cap-fail seasons (who entered after demotions). E012 parallel. Club-prior family remains retired.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -778,13 +738,13 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E019 / V2C pre-registered):
+As of 2026-08-27 (E019 REJECT):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1`.
-2. **Club-prior family RETIRED** (E016–E018s = **B**). No further club-prior cards.
-3. **E019 contract locked.** `minutes=v2c`: competition-aware demotion for club-transition players only; V2A-M base + hot override; rates/fixtures/ILP frozen.
-4. **Next implement:** `v2c` + four-season harness vs `v2am_s`. V2D later. E012 parallel.
-5. **Invariant:** do not retune V2A-M knobs; no binary new-club haircut; PASS ≠ auto-promote.
+2. **Club-prior family RETIRED** (E018s = B). **E019 V2C REJECT** — XI0 ↑ 4/4 but Cap fail 2/4 and MAE guardrail fail 4/4.
+3. **Do not retune** V2C competition caps after peeking.
+4. **Next:** V2D fixtures (parallel) or a *new* minutes structural card if Cap-fail diagnostics warrant it. E012 parallel.
+5. **Invariant:** production untouched until explicit promote.
 
 ---
 
@@ -804,6 +764,7 @@ python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --score --s
 python -m engine.harness_compare --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_decomp --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_v2b_e   # E018: v2b_e vs v1 under v2am_s
+python -m engine.harness_v2c   # E019: v2c vs v2am_s under rates=v1
 python scripts/e018s_synthesis.py  # E018s: A vs B close from existing CSVs
 python -m engine.obs --season 2025-26
 python -m engine.obs --season 2024-25

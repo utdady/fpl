@@ -73,29 +73,13 @@ production is V2A-M) is an appendix, not a pass.
 
 ---
 
-## 0e. V2C - Role-transition minutes (**OPEN** — E019)
+## 0e. V2C - Role-transition minutes (**REJECT** — E019)
 
-**Status:** Pre-registered 2026-08-27. Not implemented. See `LAB_LOG.md` E019.
+**Status:** Implemented and evaluated 2026-08-27. **REJECT.** Production `minutes_version` remains `"v2am_s"`. See `LAB_LOG.md` E019.
 
-**Control:** `minutes=v2am_s` + `rates=v1`  
-**Treatment:** `minutes=v2c` + `rates=v1` (minutes path only)
+**What was tested:** `minutes=v2c` vs `v2am_s` (+ `rates=v1`): competition demotion for club-transition outfield on frozen V2A-M base; hot override; GK unchanged.
 
-**Hypothesis:** After V2A-M, residual start miscalibration sits in **club-transition** contexts. Joint features — not a transfer dummy:
-
-$$
-P(start)=f(\text{v2am\_s base},\ \text{competition},\ \text{position},\ \text{recent usage},\ \text{transfer context})
-$$
-
-**Pinned rule (summary):**
-- Detect club-transition (inter-season team change via `code`, or intra-season Vaastav team change as-of-T).
-- Start from unchanged `v2am_s` base for everyone.
-- For transition **outfield** only: demote by competition depth using existing ladder caps (`n_comp≥2 → ≤0.48`, `n_comp==1 → ≤0.68`); competition = teammates with prior-season mins at current club ≥1800 (else as-of-T season ≥900).
-- Hot override: `recent4≥270` skips demotion. Soft max 0.85 kept. **GK path unchanged in E019.**
-- Never raise above v2am_s. No α search. No V2A-M retune.
-
-**Gates:** XI0 + XI+Cap hard vs `v2am_s`; MAE_60+ guardrail; four seasons; seed=7. PASS → candidate only (explicit promote).
-
-**Not:** binary new-club haircut; E014 remap; club-prior rates; promoted-club-wide curve (out of scope).
+**Result:** XI0 improved **all four** seasons; XI+Cap failed 2022/23 and 2024/25; MAE_60+ guardrail failed all four. Do not promote. Do not retune 1800/900/0.48/0.68.
 
 ---
 
@@ -226,17 +210,9 @@ V1 comparison is appendix only.
 
 **Key risk:** blind season-wide averages across club changes. Split by club stint.
 
-### B5 — V2C role-transition minutes (E019) — supersedes older B5 sketch
+### B5 — V2C role-transition minutes (E019) — **REJECT**
 
-See §0e for the locked contract. Summary:
-
-**Control:** `minutes=v2am_s` + `rates=v1` (not V1).  
-**Treatment:** `minutes=v2c` + `rates=v1`.
-
-**What changes:** `P(start)` for **club-transition outfield** players only — competition-depth demotion on top of frozen V2A-M base; hot recent4 override.  
-**What does not:** rates, fixtures, ILP, V2A-M knobs for established players, binary new-club haircut, promoted-club-wide curve (out of scope for E019), GK path.
-
-Older “three curve” B5 wording is historical intent only; E019 is the authoritative card.
+See §0e. Competition demotion improved XI0 but failed Cap/MAE gates. Production stays `v2am_s`.
 
 ### B6 — V1 + B4 + B5
 

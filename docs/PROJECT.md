@@ -467,9 +467,9 @@ playing-time overconfidence propagating into XI blank selections**.
 
 Three structural club-prior treatments improved MAE/Sp but never cleared decision gates. E018s: **B** — signal useful, unsafe under current ILP. Production `rates_version=v1`. Club-prior family closed.
 
-### V2C gates (E019 OPEN)
+### V2C gates (E019 REJECT)
 
-Pre-registered: `minutes=v2c` vs `v2am_s` (+ `rates=v1`). Competition-aware demotion for club-transition outfield players only; no binary new-club haircut; V2A-M knobs frozen. Hard gates: XI0 + XI+Cap; MAE_60+ guardrail. See `LAB_LOG.md` E019.
+`minutes=v2c` vs `v2am_s`: XI0 PASS 4/4; Cap FAIL 2022/23 + 2024/25; MAE_60+ FAIL 4/4. Production stays `v2am_s`. Do not retune competition caps.
 
 ---
 
@@ -498,7 +498,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E017b** | FAIL vs PASS entrant profiles | **concentrated** (prior+cold recent → 43% blank) |
 | **E018** | V2B-e form eligibility gate (90/450) | **REJECT** (0/4 gates; branch retired) |
 | **E018s** | Club-prior family A vs B synthesis | **B** (useful signal; unsafe under ILP) |
-| **E019** | V2C role-transition minutes | **queued** / pre-registered |
+| **E019** | V2C role-transition minutes | **REJECT** (XI0↑; Cap/MAE fail) |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 
