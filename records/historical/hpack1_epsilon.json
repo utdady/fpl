@@ -1,0 +1,8 @@
+{
+  "epsilon": 0.79096,
+  "percentile": 90,
+  "method": "one_exclusion_gap",
+  "description": "P90 of pooled (U0* - U0(exclude i)) across control-only solves; control stack v2am_s + rates=v1 + fixtures=v1; objective=next",
+  "n_gaps": 2280,
+  "control_stack": "v2am_s+rates=v1+fixtures=v1"
+}

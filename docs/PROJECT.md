@@ -480,11 +480,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E025/E026 → H-PACK1)
+### Valuation / selection (E027 REJECT)
 
-E025: Cap-FAIL both≥60 swap concordance ~47% vs PASS ~75%.
-E026: FAIL rank errors ~91% near+mid control-μ gaps → lock **H-PACK1** stability / near-optimal selection.
-Next = decision-rule card with frozen ε. Forbidden: α, μ shrink, cold-form, new-club.
+E027: H-PACK1 stability (ε=0.791) — 1/4 PASS; binds 13–30%; partial Cap vs unconstrained treat on 2022/23. Do not promote. No ε retune.
 
 ---
 
@@ -527,6 +525,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E024b** | Cap-FAIL vs PASS packaged rates movers | **concentrated** (wrong-player-when-playing) |
 | **E025** | Cap-FAIL swap ranking concordance | **concentrated** (relative ranking ~47% vs ~75%) |
 | **E026** | Control-μ near-tie (H-PACK1 branch) | **concentrated** (rank_err ~91% near+mid) |
+| **E027** | H-PACK1 stability selection vs production | **REJECT** (1/4 PASS; binds 13–30%) |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

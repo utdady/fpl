@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E026 **concentrated** → lock **H-PACK1** branch (stability / near-optimal selection). FAIL rank errors ~91% near+mid control-μ gaps. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No q/α/μΔ-clamp fishing.
+**Active research question:** E027 **REJECT** (H-PACK1 stability). Partial Cap recovery vs unconstrained treat; does not clear production bar. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. No ε retune.
 
 ---
 
@@ -1134,17 +1134,51 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated — branch to stability-aware selection.** Cap-FAIL damage is **not** mainly “treatment flips players who were clearly worse under control.” It is concentrated where control already saw a **near or moderate tie**, and even within the near bucket FAIL concordance collapses (~48% vs PASS ~75%). Supports locking **H-PACK1: near-optimal / stability-aware marginal selection** as the first decision-layer mechanism. Confidence/challenger remains secondary (large-gap errors exist but are rare). Do **not** implement ε yet without a frozen ε definition. Do **not** reopen α / μ shrink / cold gates.
 
 - **Artifacts:** `scripts/e026_near_tie.py`; `records/historical/e026_near_tie_pairs.csv`; `records/historical/e026_near_tie_summary.txt`
-- **Follow-up:** Pre-register H-PACK1 mechanism card (lexicographic near-optimal baseline → treatment; ε frozen from control-only quantity). Forbidden: α, μ shrink, cold-form, new-club rules.
+- **Follow-up:** → **E027** H-PACK1 stability selection (pre-registered below). Forbidden: α, μ shrink, cold-form, new-club.
+
+### E027 - H-PACK1 stability-aware marginal selection
+- **Date:** 2026-08-27 (after E026)
+- **Status:** **REJECT** (promote bar) — mechanism partially active; does not clear Cap+XI0 vs control
+- **Hypothesis (H-PACK1):** When treatment perturbs rankings among near-optimal baseline choices, preserve baseline structure within pre-registered ε; let treatment optimize only inside \(\mathcal{F}_\epsilon=\{S: U_0(S)\ge U_0^*-\epsilon\}\). Decision layer only — μ unchanged for MAE.
+- **Question:** Under packaged `rates=v2b` (E024 treatment signal), does ε-stable selection beat **production control** on Cap + XI0 across four seasons?
+
+- **Scope lock — decision rule only; ε frozen from control; no promote without gates:**
+  ```text
+  control U0:  v2am_s + rates=v1 + fixtures=v1, ILP objective=next (weighted squad ILP)
+  treatment U1: packaged rates_v2b (q frozen E022)
+  PACK1:       max U1 s.t. U0 >= U0* - ε
+
+  ε = 0.791 (P90 of 2280 control one-exclusion gaps, 152 GWs; frozen before harness)
+  gates vs control: Cap primary (pack >= ctrl); XI0 non-regress; MAE secondary (not required)
+  ```
+
+- **Method:** `engine/stability_selection.py`; `scripts/calibrate_hpack1_epsilon.py`; `python -m engine.harness_pack_stability` (seed=7).
+
+- **Results (PACK1 vs production control):**
+
+  | Season | Cap | XI0% | bind% | Gate |
+  |---|---:|---:|---:|---|
+  | 2022/23 | 57.1→**55.3** ✗ (treat 54.0) | 11.5→**12.0** ✗ | 29.7 | **FAIL** |
+  | 2023/24 | 53.7→**55.1** ✓ (treat 55.6) | 11.0→**10.8** ✓ | 18.4 | **PASS** |
+  | 2024/25 | 56.6→**57.9** ✓ (treat 58.2) | 10.5→**10.8** ✗ | 18.4 | **FAIL** (XI0) |
+  | 2025/26 | 50.4→**49.5** ✗ (treat 50.1) | 14.1→14.4 ✗ | 13.2 | **FAIL** |
+
+  MAE✓ 4/4 (unchanged — μ path untouched). Cap✗ 2/4; XI0✗ 3/4. **1/4 PASS.** Constraint binds 13–30% of GWs — not inert. On 2022/23 Cap improves vs unconstrained E024 treat (54.0→55.3) but still below control (57.1).
+
+- **Verdict:** **REJECT for promote.** H-PACK1 is a **partially validated mechanism** (binds; recovers some Cap vs raw treat on toxic season) but does **not** clear production Cap+XI0. Do **not** retune ε. Do **not** promote. Production unchanged. Confidence/challenger or alternative decision rule needs new structural hypothesis — not ε fishing.
+
+- **Artifacts:** `engine/stability_selection.py`; `engine/harness_pack_stability.py`; `scripts/calibrate_hpack1_epsilon.py`; `records/historical/hpack1_epsilon.json`; `records/historical/pack_stability_summary.csv`
+- **Follow-up:** No ε retune. H-PACK1 formulation closed at this ε. New structural selection hypothesis only.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E026 concentrated):
+As of 2026-08-27 (E027 REJECT):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. Packaging (minutes-reliability) closed.
-2. **E025/E026.** Relative ranking failure; FAIL rank errors ~91% near+mid control gaps → **H-PACK1 stability-aware selection** is the locked branch.
-3. **Next.** Pre-register H-PACK1 mechanism (decision rule, not predictor). Freeze ε before running. PASS ≠ auto-promote.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
+2. **E027 REJECT.** H-PACK1 stability: 1/4 PASS; binds 13–30%; partial Cap vs unconstrained treat on 2022/23 only.
+3. **Next.** New structural selection hypothesis — not ε/q/α fishing. PASS ≠ auto-promote.
 
 ---
 
@@ -1174,6 +1208,8 @@ python -m engine.harness_pack_rates  # E024: packaged rates_v2b vs production
 python scripts/e024b_cap_fail_movers.py  # E024b: Cap-FAIL vs PASS rates movers
 python scripts/e025_swap_ranking.py  # E025: Cap-FAIL swap ranking concordance
 python scripts/e026_near_tie.py  # E026: control-μ near-tie (H-PACK1 branch)
+python scripts/calibrate_hpack1_epsilon.py  # E027: freeze ε (control-only)
+python -m engine.harness_pack_stability  # E027: H-PACK1 vs production
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

@@ -199,10 +199,9 @@ E021: MAE✓ Cap/XI0✗. E021b: rates-like toxicology. E021c: cold cell = mostly
 Mechanism validated (E022). Does not clear production promote bars (E023 XI0; E024 Cap).
 **Reach ends:** availability risk only. E024b movers already at `q≈1` and still wrong picks — valuation/selection among players who play, not dosage. No q/α fishing. Production unchanged.
 
-**Valuation / selection (E025/E026 → H-PACK1)**
-E025: Cap-FAIL both≥60 concordance ~47% vs PASS ~75%.
-E026: FAIL rank_err mass ~91% near+mid control-μ gaps (large overturns rare).
-**Branch locked:** H-PACK1 stability / near-optimal baseline selection (decision rule). Not μ shrink. Freeze ε before first mechanism card.
+**Valuation / selection (E025–E027)**
+E025/E026: relative ranking failure; near+mid control gaps.
+E027 REJECT: H-PACK1 (ε=0.791) binds 13–30%; 1/4 PASS; partial Cap vs unconstrained treat. **No ε retune.** Production unchanged.
 
 ---
 
@@ -340,4 +339,5 @@ POST-GW1 (research)
   E024b concentrated: Cap = valuation among reliable players (q≈1); packaging arc closed
   E025 concentrated: Cap-FAIL swap concordance ~47% vs PASS ~75% (both60); ranking not blanks
   E026 concentrated: FAIL rank_err ~91% near+mid ctrl gaps → H-PACK1 stability branch
+  E027 REJECT (H-PACK1 stability): 1/4 PASS; binds 13-30%; no ε retune
 ```
