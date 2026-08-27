@@ -467,9 +467,9 @@ playing-time overconfidence propagating into XI blank selections**.
 
 Three structural club-prior treatments improved MAE/Sp but never cleared decision gates. E018s: **B** — signal useful, unsafe under current ILP. Production `rates_version=v1`. Club-prior family closed.
 
-### V2C gates (E019 REJECT)
+### V2C gates (E019 REJECT; E019b concentrated)
 
-`minutes=v2c` vs `v2am_s`: XI0 PASS 4/4; Cap FAIL 2022/23 + 2024/25; MAE_60+ FAIL 4/4. Production stays `v2am_s`. Do not retune competition caps.
+`minutes=v2c`: XI0 PASS 4/4; Cap FAIL 2/4; MAE FAIL 4/4. E019b: Cap-fail demoted leavers score **6.4** pts|60+ vs Cap-pass **3.8** — false-positive targeting. Do not retune caps; next minutes card must change *who* is demoted.
 
 ---
 
@@ -499,6 +499,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E018** | V2B-e form eligibility gate (90/450) | **REJECT** (0/4 gates; branch retired) |
 | **E018s** | Club-prior family A vs B synthesis | **B** (useful signal; unsafe under ILP) |
 | **E019** | V2C role-transition minutes | **REJECT** (XI0↑; Cap/MAE fail) |
+| **E019b** | Cap-FAIL vs PASS demoted leavers | **concentrated** (false-positive demotion) |
 | **E011** | Season simulation with 1 FT/week | **queued** (needs transfer engine) |
 | **E012** | Property tests for evaluation integrity | **queued** (parallel; not a V2 gate) |
 

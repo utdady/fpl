@@ -317,5 +317,6 @@ POST-GW1 (research)
   E014 REJECT (LOSO remap); E014b diagnostic; E015 PASS (structural minutes)
   V2A-M FROZEN = v2am_s (tag v2am-s-baseline); production default flipped
   E019 REJECT (v2c): XI0↑ 4/4 but Cap fail 2/4, MAE guardrail fail 4/4; minutes stay v2am_s
-  NEXT: V2D fixtures (parallel) or new minutes card; E012 parallel
+  E019b concentrated: Cap-fail demoted leavers high value-when-playing (false positives)
+  NEXT: new who-flag minutes card OR V2D fixtures; no rung retune; E012 parallel
 ```

@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E019 / V2C **REJECT**. Production stays `v2am_s` + `rates=v1`. Next: V2D fixtures or revise V2C structure; E012 parallel.
+**Active research question:** E019b **concentrated** (false-positive demotion in Cap-fail seasons). V2C rungs frozen. Next: tighten *who* is demoted (new card) or V2D; E012 parallel.
 
 ---
 
@@ -706,7 +706,27 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `engine/minutes_v2c.py`; `engine/harness_v2c.py`; `records/historical/v2c_minutes_summary.csv`; `records/historical/v2c_minutes_run.log`
 
-- **Follow-up:** Do not promote. A further V2C attempt needs a **new structural card** (not rung retune). Options: V2D fixtures (parallel); or diagnostic on Cap-fail seasons (who entered after demotions). E012 parallel. Club-prior family remains retired.
+- **Follow-up:** E019b Cap-fail demoted-leaver diagnostic (false-positive vs diffuse). Do not retune rungs. Club-prior family remains retired.
+
+### E019b - Cap-FAIL vs Cap-PASS demoted leavers
+- **Date:** 2026-08-27
+- **Status:** complete — **diagnostic only** (no new `minutes_version`; no rung retune)
+- **Question:** Among players **demoted** out of the `v2am_s` XI by `v2c` competition caps, do Cap-fail seasons (2022/23, 2024/25) eject high value-when-playing transitions (false positives), while Cap-pass seasons eject low-value players?
+- **Method:** `scripts/e019_cap_fail_profile.py` — per GW `v2am_s` vs `v2c` XI movers; tag demotion (`cap_0.48` / `cap_0.68` / hot_skip / none), actual minutes/points/blank. Contrast Cap-FAIL vs Cap-PASS. Seed=7.
+
+- **Results — demoted leavers only:**
+
+  | Split | n | blank% | mean pts (all) | mean pts \| played&gt;0 | mean pts \| 60+ | mean mins |
+  |---|---:|---:|---:|---:|---:|---:|
+  | Cap-FAIL | 66 | **22.7** | **4.26** | **5.51** (n=51) | **6.38** (n=42) | **66** |
+  | Cap-PASS | 44 | **40.9** | **1.68** | **2.85** (n=26) | **3.82** (n=17) | **42** |
+
+  Replacements (entered): Cap-FAIL mean pts\|60+ **4.28** &lt; demoted leavers' **6.38**; Cap-PASS entered **5.47** &gt; demoted leavers' **3.82**.
+
+- **Verdict:** **Concentrated — targeting / false-positive demotion.** Cap-fail seasons eject demoted transitions who **play more and score more when they play**; Cap-pass seasons eject low-value / high-blank demotions (mechanism working). XI0↑ everywhere because even FAIL demotions blank more than replacements (22.7% vs entered 14.9%), but Cap falls when the ejected group is high-ceiling. **Not a dosage problem** (do not retune 0.48/0.68). Next minutes card (if any) must tighten **who** gets competition demotion — not how hard.
+
+- **Artifacts:** `records/historical/e019_cap_fail_profile.csv`; `scripts/e019_cap_fail_profile.py`; `records/historical/e019_cap_fail_profile_run.log`
+- **Follow-up:** Pre-register a structural “who is competition-risk” card only if pursuing minutes further; else V2D fixtures. No post-hoc rung search.
 
 ### E011 — Test C: full-season decision simulation
 - **Date:** —
@@ -738,13 +758,13 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-27 (E019 REJECT):
+As of 2026-08-27 (E019b complete):
 
 1. **V2A-M FROZEN + PRODUCTION.** `v2am_s` + `rates=v1`.
-2. **Club-prior family RETIRED** (E018s = B). **E019 V2C REJECT** — XI0 ↑ 4/4 but Cap fail 2/4 and MAE guardrail fail 4/4.
-3. **Do not retune** V2C competition caps after peeking.
-4. **Next:** V2D fixtures (parallel) or a *new* minutes structural card if Cap-fail diagnostics warrant it. E012 parallel.
-5. **Invariant:** production untouched until explicit promote.
+2. **E019 REJECT.** XI0↑ 4/4; Cap fail 2/4; MAE guardrail fail 4/4.
+3. **E019b concentrated.** Cap-fail demoted leavers: blank 23%, pts|60+ **6.4**; Cap-pass: blank 41%, pts|60+ **3.8**. False-positive targeting, not dosage.
+4. **Do not retune** 0.48/0.68/1800/900. Next minutes work = new structural who-flag card, or pivot V2D.
+5. **Invariant:** production untouched.
 
 ---
 
@@ -765,6 +785,7 @@ python -m engine.harness_compare --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_decomp --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_v2b_e   # E018: v2b_e vs v1 under v2am_s
 python -m engine.harness_v2c   # E019: v2c vs v2am_s under rates=v1
+python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers
 python scripts/e018s_synthesis.py  # E018s: A vs B close from existing CSVs
 python -m engine.obs --season 2025-26
 python -m engine.obs --season 2024-25
