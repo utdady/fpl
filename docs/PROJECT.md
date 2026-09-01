@@ -482,10 +482,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E037 pre-registered)
+### Valuation / selection (E037 concentrated negative)
 
-E036 closed H-MC1 (MC ≡ U). Portfolio value spec: `docs/PORTFOLIO_VALUE_SPEC.md`.
-E037: descriptive alignment of \(V_A\) (next-GW) vs \(V_B\) (horizon-6) with realized ΔCap.
+E037: V_B does not beat V_A on FAIL (Δcorr +0.013); both anti-align (~−0.19). Horizon objective alone does not fix regime inversion. V_C state spec next.
 
 ---
 
@@ -540,7 +539,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E034c** | Pairwise swap counterfactual | **concentrated** — layered pair + re-equilibration; chain closed |
 | **E035** | Portfolio value decomposition | **concentrated** — g_treat cluster; MC hypothesis earned |
 | **E036** | Contextual marginal admission value (H-MC1) | **concentrated (negative)** — MC ≡ U; V(S) suspect |
-| **E037** | Portfolio value alignment (\(V_A\) vs \(V_B\)) | **pre-registered** — descriptive |
+| **E037** | Portfolio value alignment (\(V_A\) vs \(V_B\)) | **concentrated (negative)** — V_B ≈ V_A; both anti-align FAIL |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

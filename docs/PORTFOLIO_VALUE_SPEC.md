@@ -264,6 +264,10 @@ on FAIL-season GWs (gate from E024), treatment arm.
 | \(V_B\) helps PASS only | Horizon mismatch artifact; revisit production vs harness objectives |
 | Both anti-align on FAIL | Irreducible μ-regime problem; upstream revisit, not \(V\) tweak |
 
+### E037 results (2026-09-02)
+
+**Concentrated (negative).** On FAIL (n=75): corr(ΔV_A, ΔCap)=−0.196, corr(ΔV_B, ΔCap)=−0.183 (Δcorr +0.013). V_B does not beat V_A. Both anti-align on FAIL; modest positive corr on PASS. **E038 horizon ILP not earned.**
+
 ---
 
 ## 9. Failure modes to preserve in any new \(V(S)\)
@@ -308,8 +312,8 @@ add a declaration to `formal/` before production integration.
 PRODUCTION     v2am_s + rates=v1 + fixtures v1  (horizon squad objective)
 CLOSED         E024–E036
 SPEC           this document (Phase 0)
-NEXT           E037 descriptive V_A vs V_B alignment (pre-registered below)
-NOT NEXT       optimizer integration without E037 branch
+NEXT           V_C state vector spec (Phase 0); no E038 horizon promote
+NOT NEXT       horizon-only ILP switch on FAIL evidence
 ```
 
 See [`LAB_LOG.md`](LAB_LOG.md) § E037 for frozen scope when implemented.

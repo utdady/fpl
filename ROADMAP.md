@@ -242,7 +242,7 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 **E034c concentrated:** layered pair displacement + re-equilibration; G_treat explains tripwire; chain closed.
 **E035 concentrated:** g_treat cluster discriminates portfolio_bad; proxies collinear; MC hypothesis earned.
 **E036 / H-MC1 concentrated (negative):** MC ≡ U at boundary; V(S) spec earned.
-**E037 pre-registered:** V_A vs V_B alignment; `docs/PORTFOLIO_VALUE_SPEC.md`.
+**E037 concentrated (negative):** V_B ≈ V_A; both anti-align on FAIL; no E038 horizon promote.
 
 ---
 
@@ -397,6 +397,7 @@ POST-GW1 (research)
   E035 concentrated: g_treat cluster AUROC 0.73 FAIL; replacement/budget weak; MC hypothesis
   E036/H-MC1 concentrated (negative): MC identical to U; V(S) payoff model next
   E037 pre-registered: V_A vs V_B alignment (descriptive)
+  E037 concentrated (negative): V_B does not beat V_A; both anti-align FAIL
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

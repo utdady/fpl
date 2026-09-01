@@ -355,6 +355,7 @@ Do **not** promote `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 | **V5 multi-GW engine** | transfer flexibility candidate; deferred |
 | **Decision architecture (this doc)** | **current research front** |
 | **E036 / H-MC1** | **concentrated (negative)** — MC ≡ U; Phase C closed |
+| **E037** | **concentrated (negative)** — V_B ≈ V_A; both anti-align FAIL; E038 not earned |
 
-The next productive step is **[`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md)** (Phase 0)
-and pre-registered **E037** descriptive \(V_A\) vs \(V_B\) alignment — not optimizer integration.
+The next productive step is **V_C state vector spec** ([`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md)),
+not horizon-only ILP or another separable \(V\) tweak.

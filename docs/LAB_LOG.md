@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** Define and validate portfolio value functional \(V(S)\). Spec: `docs/PORTFOLIO_VALUE_SPEC.md`. E037 pre-registered (descriptive \(V_A\) vs \(V_B\) alignment). Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E037 concentrated (negative) — V_B ≈ V_A alignment; both anti-align on FAIL. V_C state spec or upstream μ regime. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1573,37 +1573,48 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Spec:** `docs/DECISION_ARCHITECTURE.md` §9
 - **Follow-up:** → **portfolio value spec** (`docs/PORTFOLIO_VALUE_SPEC.md`) and **E037** \(V_A\) vs \(V_B\) alignment.
 
-### E037 - Portfolio value alignment (pre-registered)
-- **Date:** 2026-09-02 (after E036; `PORTFOLIO_VALUE_SPEC.md` Phase 0)
-- **Status:** **pre-registered** — descriptive only; no optimizer change
+### E037 - Portfolio value alignment
+- **Date:** 2026-09-02 (after portfolio value spec)
+- **Status:** **concentrated (negative)** — V_B does not beat V_A on FAIL; both anti-align with ΔCap (~−0.19 FAIL)
 - **Hypothesis:** E036 closed admission ranking under separable \(V\). Open: does **multi-GW state value** \(V_B\) (`horizon_utility`) align with realized ΔCap better than **next-GW value** \(V_A\) (`next_utility`) on FAIL?
 - **Question:** On frozen μ and chosen squads, is corr(ΔV_B, ΔCap) > corr(ΔV_A, ΔCap) on FAIL-season treatment GWs?
 
 - **Scope lock:**
   ```text
-  V_A:  next-GW XI+cap utility (harness default)
-  V_B:  horizon-6 squad-weighted utility (production squad objective)
-  stack: v2am_s + packaged rates_v2b vs rates=v1; balanced; seed=7
-  primary: corr(delta_V_A, delta_cap) vs corr(delta_V_B, delta_cap) on FAIL treat GWs
-  secondary (report only): PASS gate; AUROC delta_V vs portfolio_bad; g_treat strata
-  forbidden: change ILP selection; fit weights on FAIL; combine A+B+C; promote on winner
+  V_A:  next-GW XI+cap utility (sol.next_xi_utility)
+  V_B:  horizon-6 squad-weighted utility post XI-solve on horizon U
+  squads: frozen next ILP (no selection change)
+  primary: corr(delta_V_A, delta_cap) vs corr(delta_V_B, delta_cap) on FAIL
+  forbidden: change ILP selection; fit weights; promote on winner
   ```
 
-- **Method:** `python scripts/e037_portfolio_value_alignment.py` (not yet implemented)
+- **Method:** `python scripts/e037_portfolio_value_alignment.py` (151 GW-rows).
+
+- **Results:**
+
+  | Gate | n | corr(ΔV_A, ΔCap) | corr(ΔV_B, ΔCap) | Δcorr | AUROC V_A | AUROC V_B |
+  |---|---:|---:|---:|---:|---:|---:|
+  | FAIL | 75 | **−0.196** | −0.183 | +0.013 | 0.668 | 0.666 |
+  | PASS | 76 | +0.262 | +0.251 | −0.011 | 0.605 | 0.646 |
+
+  FAIL: portfolio_bad=30. **V_B does not meaningfully beat V_A** (Δcorr +0.013). **Both anti-align** on FAIL — predicted value rises while realized Cap falls (consistent with E030). PASS: modest positive corr for both. g_treat high FAIL: corr_A=−0.19, corr_B=−0.16 (secondary).
+
+- **Verdict:** **concentrated (negative).** Horizon state value \(V_B\) is not a better estimand than next-GW \(V_A\) for realized ΔCap on FAIL. Switching objective from `next` to `horizon` alone does not fix regime anti-alignment. Branch → spec **V_C** transfer/state vector, or accept irreducible μ-regime inversion; **do not** pre-register E038 horizon ILP promote.
+
+- **Artifacts:** `scripts/e037_portfolio_value_alignment.py`; `records/historical/e037_portfolio_value_alignment_gw.csv`; `records/historical/e037_portfolio_value_alignment_summary.txt`
 - **Spec:** `docs/PORTFOLIO_VALUE_SPEC.md` §8
-- **Branching:** V_B better on FAIL → E038 horizon ILP pre-reg; neither aligns → spec V_C state; both anti-align → upstream μ regime
+- **Follow-up:** V_C state spec (Phase 0); no horizon-only ILP change on FAIL evidence.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-02 (E037 pre-registered):
+As of 2026-09-02 (E037 concentrated negative):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE (horizon squad objective).
-2. **Closed:** E024–E036.
-3. **Spec.** `docs/PORTFOLIO_VALUE_SPEC.md` — define and validate \(V(S)\).
-4. **Next.** E037 descriptive \(V_A\) vs \(V_B\) alignment. No optimizer integration.
-5. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
+2. **Closed:** E024–E037 (incl. V_A vs V_B alignment).
+3. **Next.** V_C transfer/state vector spec (Phase 0 only). No horizon ILP promote on FAIL.
+4. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 
 ---
 
@@ -1646,7 +1657,7 @@ python scripts/e034b_forced_swap.py  # E034b: forced entrant vs cascade
 python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibration
 python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
 python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
-# E037 (pre-registered): python scripts/e037_portfolio_value_alignment.py
+python scripts/e037_portfolio_value_alignment.py  # E037: V_A vs V_B alignment
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

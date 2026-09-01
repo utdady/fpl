@@ -1,0 +1,25 @@
+E037: portfolio value alignment V_A (next) vs V_B (horizon)
+primary: corr(delta_V, delta_cap); squads from frozen next ILP
+
+=== FAIL n=75 portfolio_bad=30 ===
+  corr(delta_V_A, delta_cap)=-0.196
+  corr(delta_V_B, delta_cap)=-0.183
+  delta_corr(V_B - V_A)=0.013
+  mean_delta_V_A=2.173 mean_delta_V_B=1.765
+  mean_delta_cap=-1.707
+  AUROC(delta_V_A, portfolio_bad)=0.668
+  AUROC(delta_V_B, portfolio_bad)=0.666
+  g_treat low n=38: corr_A=0.092 corr_B=0.083
+  g_treat high n=37: corr_A=-0.185 corr_B=-0.164
+
+=== PASS n=76 portfolio_bad=17 ===
+  corr(delta_V_A, delta_cap)=0.262
+  corr(delta_V_B, delta_cap)=0.251
+  delta_corr(V_B - V_A)=-0.011
+  mean_delta_V_A=1.461 mean_delta_V_B=1.237
+  mean_delta_cap=1.750
+  AUROC(delta_V_A, portfolio_bad)=0.605
+  AUROC(delta_V_B, portfolio_bad)=0.646
+  g_treat low n=39: corr_A=0.598 corr_B=0.566
+  g_treat high n=37: corr_A=0.139 corr_B=0.131
+
