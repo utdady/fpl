@@ -308,7 +308,7 @@ def main() -> None:
     args = parser.parse_args()
     epsilon = load_epsilon()
     seasons = (args.season,) if args.season else SUPPORTED_SEASONS
-    print(f"[e028] local substitution diagnostic; ε={epsilon:.6f}; no mechanism")
+    print(f"[e028] local substitution diagnostic; eps={epsilon:.6f}; no mechanism")
     all_rows: list[dict] = []
     for s in seasons:
         all_rows.extend(analyze_season(s, epsilon))

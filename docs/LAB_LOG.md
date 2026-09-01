@@ -1,4 +1,4 @@
-# Experiment Log
+c# Experiment Log
 
 Living record of hypotheses, tests, and results. **Append new experiments; do not rewrite old verdicts.** If a later test overturns an earlier one, add a new row and link back.
 
@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E028 local substitution stability diagnostic pre-registered (post E027 global-ε REJECT). Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E028 **reject (local branch)** — bad swaps margin-agnostic on FAIL; H-PACK2 near-margin gate not supported. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1170,9 +1170,9 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Artifacts:** `engine/stability_selection.py`; `engine/harness_pack_stability.py`; `scripts/calibrate_hpack1_epsilon.py`; `records/historical/hpack1_epsilon.json`; `records/historical/pack_stability_summary.csv`
 - **Follow-up:** → **E028** local substitution stability diagnostic. H-PACK1 (global ε) closed. No ε retune.
 
-### E028 - Local substitution stability (pre-registered)
-- **Date:** 2026-08-28 (after E027 REJECT)
-- **Status:** **pre-registered** — diagnostic only; no mechanism
+### E028 - Local substitution stability
+- **Date:** 2026-09-01 (after E027 REJECT)
+- **Status:** **reject (local branch)** — bad swaps on FAIL are margin-agnostic; does not support H-PACK2 near-margin gate
 - **Hypothesis:** E027 global ε protects squad-level \(U_0\) but E025/E026 failures are **pairwise ranking** at the decision boundary. If bad swaps concentrate where \(M_{ij}=\mu_i^{ctrl}-\mu_j^{ctrl}\) is small (and/or rank distance small) even when the squad is globally ε-admissible, the next mechanism should be **local substitution stability**, not another global ε.
 - **Question:** On actual same-position entrant/leaver pairs from XI diffs, does \(P(\text{bad swap}\mid |M_{ij}|\text{ small})\) exceed \(P(\text{bad swap}\mid |M_{ij}|\text{ large})\) on FAIL vs PASS seasons? Does ctrl→PACK1 differ from ctrl→treat on bind GWs?
 
@@ -1189,18 +1189,31 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
   forbidden: new mechanism, ε retune, α/μ shrink
   ```
 
-- **Method:** `python scripts/e028_local_substitution.py` (requires `hpack1_epsilon.json`)
-- **Follow-up:** Log concentration; only then propose H-PACK2 (local) if warranted.
+- **Method:** `python scripts/e028_local_substitution.py` (804 pairs; ε=0.791).
+
+- **Results (ctrl_treat, both≥60 bad_swap%):**
+
+  | Gate | all | near | mid | large |
+  |---|---:|---:|---:|---:|
+  | FAIL | **45.0** | 44.9 | 44.7 | 46.7 |
+  | PASS | **28.0** | 21.2 | 30.3 | 46.7 |
+
+  Central test: on FAIL, P(bad|near) ≈ P(bad|large) — **no concentration in small \(|M_{ij}|\)**. FAIL vs PASS gap exists at all margin levels (overall 45% vs 28%). ctrl_pack1 similar (FAIL near 39.7%, large 66.7% n=6 only). treat_pack1 n small — inconclusive.
+
+- **Verdict:** **reject (local branch).** Does **not** support H-PACK2 local substitution stability keyed on small control μ margin. E026 rank-error mass in near+mid buckets does not translate to margin-stratified bad-swap rates on actual same-position pairs — FAIL damage is **season-wide and margin-agnostic** among swaps that play 60+. Global ε (E027) and local margin gate both insufficient. Do **not** implement near-margin challenger without new structural hypothesis. No ε retune.
+
+- **Artifacts:** `scripts/e028_local_substitution.py`; `records/historical/e028_local_substitution_pairs.csv`; `records/historical/e028_local_substitution_summary.txt`
+- **Follow-up:** Step back on selection packaging; no H-PACK2 at this ε/margin formulation.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-08-28 (E028 pre-registered):
+As of 2026-09-01 (E028 reject local branch):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. E027 H-PACK1 closed (global ε).
-2. **E028.** Local substitution stability diagnostic on actual swap pairs.
-3. **Invariant.** PASS ≠ auto-promote. No ε/q/α fishing.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
+2. **E028 reject.** Bad swaps margin-agnostic on FAIL (~45% all buckets); does not support local near-margin H-PACK2.
+3. **Next.** New structural selection hypothesis — not ε/margin fishing. PASS ≠ auto-promote.
 
 ---
 

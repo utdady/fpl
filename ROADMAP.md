@@ -341,5 +341,5 @@ POST-GW1 (research)
   E025 concentrated: Cap-FAIL swap concordance ~47% vs PASS ~75% (both60); ranking not blanks
   E026 concentrated: FAIL rank_err ~91% near+mid ctrl gaps → H-PACK1 stability branch
   E027 REJECT (H-PACK1 stability): 1/4 PASS; binds 13-30%; no ε retune
-  E028 pre-registered: local substitution stability diagnostic
+  E028 REJECT (local branch): bad swaps margin-agnostic on FAIL; no H-PACK2 near-margin
 ```

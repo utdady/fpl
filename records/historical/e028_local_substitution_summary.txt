@@ -1,0 +1,43 @@
+E028: local substitution stability diagnostic
+Buckets: near |margin|<0.25, mid [0.25,0.75), large >=0.75
+Pair unit: same-position actual entrant/leaver from XI diff
+
+=== ctrl_treat ===
+  FAIL all: n=249 both60=140 bad_swap%=45.0
+    near: n=123 both60=78 bad_swap%=44.9
+    mid: n=102 both60=47 bad_swap%=44.7
+    large: n=24 both60=15 bad_swap%=46.7
+    admissible+near: n=123 both60=78 bad_swap%=44.9
+  PASS all: n=163 both60=100 bad_swap%=28.0
+    near: n=82 both60=52 bad_swap%=21.2
+    mid: n=59 both60=33 bad_swap%=30.3
+    large: n=22 both60=15 bad_swap%=46.7
+    admissible+near: n=82 both60=52 bad_swap%=21.2
+
+=== ctrl_pack1 ===
+  FAIL all: n=181 both60=99 bad_swap%=43.4
+    near: n=105 both60=63 bad_swap%=39.7
+    mid: n=65 both60=30 bad_swap%=46.7
+    large: n=11 both60=6 bad_swap%=66.7
+    admissible+near: n=105 both60=63 bad_swap%=39.7
+  PASS all: n=140 both60=91 bad_swap%=31.9
+    near: n=78 both60=53 bad_swap%=26.4
+    mid: n=49 both60=27 bad_swap%=37.0
+    large: n=13 both60=11 bad_swap%=45.5
+    admissible+near: n=78 both60=53 bad_swap%=26.4
+
+=== treat_pack1 ===
+  FAIL all: n=42 both60=25 bad_swap%=36.0
+    near: n=15 both60=11 bad_swap%=45.5
+    mid: n=16 both60=8 bad_swap%=12.5
+    large: n=11 both60=6 bad_swap%=50.0
+    admissible+near: n=15 both60=11 bad_swap%=45.5
+  PASS all: n=29 both60=17 bad_swap%=47.1
+    near: n=11 both60=6 bad_swap%=50.0
+    mid: n=9 both60=6 bad_swap%=50.0
+    large: n=9 both60=5 bad_swap%=40.0
+    admissible+near: n=11 both60=6 bad_swap%=50.0
+
+=== Central test: P(bad|both60) by ctrl_margin bucket (ctrl_treat) ===
+  FAIL: near bad%=44.9 (n60=78) large bad%=46.7 (n60=15)
+  PASS: near bad%=21.2 (n60=52) large bad%=46.7 (n60=15)
