@@ -205,6 +205,7 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 **E031 concentrated:** sign flip XI-level on FAIL; captain secondary.
 **E032 concentrated:** μ inversion on FAIL; not utility transform; squad_xi_agree=100%.
 **E033 concentrated:** wrong-15 pool dominates FAIL; treat rank on ctrl 15 neutral.
+**E034 concentrated:** budget displacement; entrants OK individually; vs_leaver −0.5 on FAIL.
 
 ---
 
@@ -349,4 +350,5 @@ POST-GW1 (research)
   E031 concentrated: XI-level sign flip on FAIL; captain secondary; oracle does not fix
   E032 concentrated: mu inversion on FAIL; oracle XI still negative; squad pipeline OK
   E033 concentrated: wrong-15 pool dominates FAIL; ranking on ctrl 15 neutral
+  E034 concentrated: budget displacement signal; not toxic entrant; vs_leaver FAIL -0.5
 ```

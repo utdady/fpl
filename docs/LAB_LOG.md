@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E033 complete — wrong-15 (pool) dominates on FAIL; ranking secondary. Squad-selection research earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E034 complete — budget displacement signal on FAIL (entrants OK individually, worse than leavers). E034b forced-swap earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1380,17 +1380,50 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated.** FAIL toxicity is primarily **squad pool selection** (who enters the 15), not utility mis-ranking on a fixed pool. Branch → squad-ILP / entrant profiling on FAIL — not XI-objective rewrite or λ first.
 
 - **Artifacts:** `scripts/e033_squad_pool_diagnostic.py`; `records/historical/e033_squad_pool_gw.csv`; `records/historical/e033_squad_pool_movers.csv`; `records/historical/e033_squad_pool_summary.txt`
-- **Follow-up:** Pre-register FAIL entrant toxicology (μ_lift vs outcome on squad movers) — not new objective.
+- **Follow-up:** → **E034** squad-admission entrant toxicology + boundary analysis.
+
+### E034 - Squad-admission entrant toxicology
+- **Date:** 2026-09-01 (after E033 concentrated)
+- **Status:** **concentrated** — budget-displacement signal; entrants not individually toxic; marginal boundary crossings
+- **Hypothesis:** E033: wrong-15 dominates on FAIL. Open: which squad entrants cross the admission boundary with inflated μ, and do they share identifiable pre-decision profiles?
+- **Question:** On squad entrants, what is `ΔU_boundary`? Do FAIL entrants differ from PASS on μ_lift, prior/cold cells, boundary margin?
+
+- **Scope lock:**
+  ```text
+  stack:    packaged rates_v2b (E024); balanced; objective=next; seed=7
+  unit:     squad entrants/leavers (15-player boundary)
+  forbidden: new utility, lambda, squad ILP rewrite
+  ```
+
+- **Method:** `python scripts/e034_squad_entrant_toxicology.py` (982 rows; 267 FAIL / 224 PASS entrants).
+
+- **Results (entered, balanced):**
+
+  | Metric | FAIL | PASS |
+  |---|---:|---:|
+  | good_60% (mins≥60, pts>0) | **96.7%** (174/180) | 94.5% (156/165) |
+  | mean vs_mean_leaver_pts | **−0.51** | **+0.52** |
+  | blank% | 18.4 | 17.0 |
+  | prior+recent4&lt;90 blank% | 38.5 (n=26) | 37.9 (n=29) |
+  | small ΔU_boundary (&lt;0.25) | **257/267** (96%) | 212/224 (95%) |
+  | mean ΔU_boundary | −0.96 | −0.99 |
+
+  Entrants who play 60+ are **not individually toxic** on FAIL (97% score points). FAIL entrants score **~0.5 pts below mean leaver** they displaced; PASS entrants score **~0.5 above** leavers — primary FAIL/PASS separator at entrant level. Prior+cold cell does **not** separate FAIL vs PASS at squad layer (unlike E017b XI). ~96% of admissions are small-boundary perturbations (global best excluded has higher U — constraint-driven cascade).
+
+- **Verdict:** **concentrated.** Supports **budget displacement (B)** over toxic-entrant (A): pool damage is not "bad players who play badly" but **entrants worse than leavers in portfolio context** under marginal boundary shifts. E017b cold-cell toxicology does not replicate at squad admission layer. Branch → **E034b** forced-swap counterfactual (single entrant into ctrl 15) to confirm displacement vs cascade.
+
+- **Artifacts:** `scripts/e034_squad_entrant_toxicology.py`; `records/historical/e034_squad_entrant_toxicology.csv`; `records/historical/e034_squad_entrant_toxicology_summary.txt`
+- **Follow-up:** E034b forced-swap counterfactual (A vs B/C separation).
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E033 concentrated):
+As of 2026-09-01 (E034 concentrated):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** E024–E033; wrong-15 pool dominates FAIL (ranking on ctrl 15 neutral).
-3. **Next.** Pre-register FAIL entrant toxicology on squad movers. PASS ≠ auto-promote.
+2. **Closed:** E024–E034; wrong-15 pool; budget-displacement signal (not toxic entrant).
+3. **Next.** E034b forced-swap counterfactual. PASS ≠ auto-promote.
 
 ---
 
@@ -1428,6 +1461,7 @@ python scripts/e030_objective_alignment.py  # E030: objective alignment diagnost
 python scripts/e031_objective_decomposition.py  # E031: XI vs captain decomposition
 python scripts/e032_xi_objective_audit.py  # E032: XI objective audit (oracle XI, mu vs utility)
 python scripts/e033_squad_pool_diagnostic.py  # E033: squad pool / mu-inflation
+python scripts/e034_squad_entrant_toxicology.py  # E034: squad entrant toxicology
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

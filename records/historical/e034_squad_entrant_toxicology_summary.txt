@@ -1,0 +1,24 @@
+E034: squad-admission entrant toxicology (packaged rates_v2b; balanced)
+delta_u_boundary = entrant treat_u - best excluded treat_u
+good_60/bad_60: actual_pts >/<= 0 with minutes>=60 (evaluation only)
+
+=== FAIL entered n=267 ===
+  blank%=18.4 prior%=82.4 recent4<90%=15.4 mean_mu_lift=0.429 mean_u_lift=0.421
+  both60: good%=96.7% (174/180) bad%=3.3% (6/180) mean_pts=3.96 mean_mu_error=0.582
+  delta_u_boundary: mean=-0.963 small(<0.25)=257/267
+  vs_mean_leaver_pts: mean=-0.513
+  cells (entered blank% / good_60% when n>=5):
+    prior+recent4<90       n= 26 blank%=38.5 good_60%=100.0
+    prior+recent4>=90      n=194 blank%=11.3 good_60%=97.2
+    small_boundary         n=257 blank%=19.1 good_60%=96.6
+
+=== PASS entered n=224 ===
+  blank%=17.0 prior%=86.2 recent4<90%=18.3 mean_mu_lift=0.369 mean_u_lift=0.369
+  both60: good%=94.5% (156/165) bad%=5.5% (9/165) mean_pts=4.08 mean_mu_error=0.858
+  delta_u_boundary: mean=-0.990 small(<0.25)=212/224
+  vs_mean_leaver_pts: mean=0.522
+  cells (entered blank% / good_60% when n>=5):
+    prior+recent4<90       n= 29 blank%=37.9 good_60%=100.0
+    prior+recent4>=90      n=164 blank%=7.9 good_60%=94.9
+    small_boundary         n=212 blank%=17.9 good_60%=94.2
+

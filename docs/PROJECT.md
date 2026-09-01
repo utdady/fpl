@@ -480,9 +480,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E033 concentrated)
+### Valuation / selection (E034 concentrated)
 
-E033: pool effect ~−1.2 pts on FAIL (ctrl rank on treat 15); treat rank on ctrl 15 ≈ neutral (−0.05). Wrong-15 dominates; entrant μ_lift uncorrelated with points (r≈0.10).
+E034: entrants 97% good_60 on FAIL; vs_mean_leaver −0.51 (FAIL) vs +0.52 (PASS). Budget displacement not toxic entrant. 96% marginal boundary crossings.
 
 ---
 
@@ -532,6 +532,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E031** | Objective decomposition (XI vs captain) | **concentrated** — XI-level sign flip on FAIL |
 | **E032** | XI objective audit (oracle XI, μ vs utility) | **concentrated** — μ inversion; squad pool not XI-solve |
 | **E033** | Squad pool / μ-inflation diagnostic | **concentrated** — wrong-15 pool dominates FAIL |
+| **E034** | Squad entrant toxicology + boundary | **concentrated** — budget displacement signal |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.
