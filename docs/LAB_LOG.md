@@ -2,11 +2,11 @@
 
 Living record of hypotheses, tests, and results. **Append new experiments; do not rewrite old verdicts.** If a later test overturns an earlier one, add a new row and link back.
 
-Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`, `docs/V2_SPEC.md`, `docs/FORMAL.md`.
+Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`, `docs/V2_SPEC.md`, `docs/FORMAL.md`, `docs/PORTFOLIO_VALUE_SPEC.md`.
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E036 / H-MC1 concentrated (negative) — MC ≡ U at boundary; \(V(S)\) suspect not admission ranking. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. See `docs/DECISION_ARCHITECTURE.md`.
+**Active research question:** Define and validate portfolio value functional \(V(S)\). Spec: `docs/PORTFOLIO_VALUE_SPEC.md`. E037 pre-registered (descriptive \(V_A\) vs \(V_B\) alignment). Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1571,18 +1571,39 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `scripts/e036_contextual_marginal.py`; `records/historical/e036_contextual_marginal_pairs.csv`; `records/historical/e036_contextual_marginal_gw.csv`; `records/historical/e036_contextual_marginal_summary.txt`
 - **Spec:** `docs/DECISION_ARCHITECTURE.md` §9
-- **Follow-up:** revisit what \(V(S)\) should approximate (multi-GW? realized Cap proxy?); no MC packaging.
+- **Follow-up:** → **portfolio value spec** (`docs/PORTFOLIO_VALUE_SPEC.md`) and **E037** \(V_A\) vs \(V_B\) alignment.
+
+### E037 - Portfolio value alignment (pre-registered)
+- **Date:** 2026-09-02 (after E036; `PORTFOLIO_VALUE_SPEC.md` Phase 0)
+- **Status:** **pre-registered** — descriptive only; no optimizer change
+- **Hypothesis:** E036 closed admission ranking under separable \(V\). Open: does **multi-GW state value** \(V_B\) (`horizon_utility`) align with realized ΔCap better than **next-GW value** \(V_A\) (`next_utility`) on FAIL?
+- **Question:** On frozen μ and chosen squads, is corr(ΔV_B, ΔCap) > corr(ΔV_A, ΔCap) on FAIL-season treatment GWs?
+
+- **Scope lock:**
+  ```text
+  V_A:  next-GW XI+cap utility (harness default)
+  V_B:  horizon-6 squad-weighted utility (production squad objective)
+  stack: v2am_s + packaged rates_v2b vs rates=v1; balanced; seed=7
+  primary: corr(delta_V_A, delta_cap) vs corr(delta_V_B, delta_cap) on FAIL treat GWs
+  secondary (report only): PASS gate; AUROC delta_V vs portfolio_bad; g_treat strata
+  forbidden: change ILP selection; fit weights on FAIL; combine A+B+C; promote on winner
+  ```
+
+- **Method:** `python scripts/e037_portfolio_value_alignment.py` (not yet implemented)
+- **Spec:** `docs/PORTFOLIO_VALUE_SPEC.md` §8
+- **Branching:** V_B better on FAIL → E038 horizon ILP pre-reg; neither aligns → spec V_C state; both anti-align → upstream μ regime
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E036 concentrated negative):
+As of 2026-09-02 (E037 pre-registered):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** E024–E036 (displacement, proxy decomposition, H-MC1 contextual marginal).
-3. **Next.** Revisit \(V(S)\) payoff model (not MC under same U). No optimizer integration.
-4. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE (horizon squad objective).
+2. **Closed:** E024–E036.
+3. **Spec.** `docs/PORTFOLIO_VALUE_SPEC.md` — define and validate \(V(S)\).
+4. **Next.** E037 descriptive \(V_A\) vs \(V_B\) alignment. No optimizer integration.
+5. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 
 ---
 
@@ -1625,6 +1646,7 @@ python scripts/e034b_forced_swap.py  # E034b: forced entrant vs cascade
 python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibration
 python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
 python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
+# E037 (pre-registered): python scripts/e037_portfolio_value_alignment.py
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

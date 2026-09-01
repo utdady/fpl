@@ -19,7 +19,8 @@ It does **not** replace the living experiment log. Numbers and verdicts live in
 | [`V2_INVESTIGATION.md`](V2_INVESTIGATION.md) | Nested regret, evaluation status, H0–H3 protocol |
 | [`V2_SPEC.md`](V2_SPEC.md) | How a successor model earns a version number |
 | [`FORMAL.md`](FORMAL.md) | What Lean could prove vs what statistics prove (post-GW1) |
-| [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer spec: current V(S), failure modes, E035 proxies |
+| [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer history, failure modes, E030–E036 |
+| [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | Portfolio value estimand, candidate \(V(S)\), E037 plan |
 | `ROADMAP.md` | Version ladder (may lag E013; do not treat it as the experiment log) |
 
 Python tells us what happened. Statistics tell us whether it is reproducible.
@@ -481,9 +482,10 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E036 concentrated negative)
+### Valuation / selection (E037 pre-registered)
 
-E036 / H-MC1: MC ≡ U at admission boundary (100% same sign); ~42% realized concordance on FAIL. Contextual marginal under treat V does not help — problem is \(V(S)\) not ranking rule.
+E036 closed H-MC1 (MC ≡ U). Portfolio value spec: `docs/PORTFOLIO_VALUE_SPEC.md`.
+E037: descriptive alignment of \(V_A\) (next-GW) vs \(V_B\) (horizon-6) with realized ΔCap.
 
 ---
 
@@ -538,6 +540,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E034c** | Pairwise swap counterfactual | **concentrated** — layered pair + re-equilibration; chain closed |
 | **E035** | Portfolio value decomposition | **concentrated** — g_treat cluster; MC hypothesis earned |
 | **E036** | Contextual marginal admission value (H-MC1) | **concentrated (negative)** — MC ≡ U; V(S) suspect |
+| **E037** | Portfolio value alignment (\(V_A\) vs \(V_B\)) | **pre-registered** — descriptive |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

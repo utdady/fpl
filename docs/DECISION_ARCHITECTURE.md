@@ -16,7 +16,8 @@ the log, the log wins.
 | Document | Job |
 |---|---|
 | [`LAB_LOG.md`](LAB_LOG.md) | Hypotheses, E001–E034c, tables, verdicts (append-only) |
-| **This file** | Decision-layer spec: current architecture, failure modes, candidate quantities |
+| [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer history, failure modes, E030–E036 |
+| [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | **Current front:** estimand, candidate \(V(S)\), E037 discrimination |
 | [`PROJECT.md`](PROJECT.md) | Full methods, math, experiment map |
 | [`HARNESS_SPEC.md`](HARNESS_SPEC.md) | As-of-T reconstruction and pass/fail gates |
 | [`FORMAL.md`](FORMAL.md) | What can be proved vs what statistics prove |
@@ -355,5 +356,5 @@ Do **not** promote `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 | **Decision architecture (this doc)** | **current research front** |
 | **E036 / H-MC1** | **concentrated (negative)** — MC ≡ U; Phase C closed |
 
-The next productive step is **redefining \(V(S)\)** (payoff model / horizon),
-not MC under the same treat utility or another packaging rule.
+The next productive step is **[`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md)** (Phase 0)
+and pre-registered **E037** descriptive \(V_A\) vs \(V_B\) alignment — not optimizer integration.
