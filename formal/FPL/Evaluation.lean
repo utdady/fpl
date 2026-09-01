@@ -95,28 +95,28 @@ def classifyWeek (nFixtures : Nat) (integ : WeekIntegrity) (nSnapshot : Nat) :
 /-! ### Sanity checks (decidable instances on concrete weeks) -/
 
 example : classifyWeek 10 ⟨false, 100, 80, 0, 50⟩ 800 = (.clean, noFlags) := by
-  native_decide
+  decide
 
 example : classifyWeek 8 ⟨false, 100, 80, 0, 50⟩ 800 = (.flagged, ["bgw_or_short"]) := by
-  native_decide
+  decide
 
 example :
     classifyWeek 10 ⟨false, 100, 10, 0, 50⟩ 800 =
       (.excluded, ["actuals_join_failure"]) := by
-  native_decide
+  decide
 
 example :
     ¬ ("inspect_v1_lt_15" ∈ (classifyWeek 10 ⟨false, 100, 80, 0, 50⟩ 800).2) := by
-  native_decide
+  decide
 
 example :
     ¬ ("inspect_b0_gt_80" ∈ (classifyWeek 10 ⟨false, 100, 80, 0, 50⟩ 800).2) := by
-  native_decide
+  decide
 
 /-- Diagnostic inspect flags are not in the allowed output set of `classifyWeek`. -/
 theorem inspect_flags_not_allowed :
     ("inspect_v1_lt_15" ∉ allowedStatusFlags)
       ∧ ("inspect_b0_gt_80" ∉ allowedStatusFlags) := by
-  native_decide
+  decide
 
 end FPL
