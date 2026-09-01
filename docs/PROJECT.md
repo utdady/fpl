@@ -481,9 +481,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E035 concentrated)
+### Valuation / selection (E036 / H-MC1 pre-registered)
 
-E035: g_treat/composition-shift cluster discriminates portfolio_bad (AUROC 0.73 FAIL); replacement/budget weak; realized swap inverted. Marginal/contextual value (MC_i(S)) hypothesis earned — spec only, no optimizer change.
+E035 closed proxy decomposition (g_treat cluster). E036 Phase A: compare MC vs standalone U concordance with realized swap outcomes at admission boundary. Spec: `docs/DECISION_ARCHITECTURE.md` §9.
 
 ---
 
@@ -537,6 +537,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E034b** | Forced-swap counterfactual | **concentrated** — tripwire re-equilibration; Δ_cascade=0 |
 | **E034c** | Pairwise swap counterfactual | **concentrated** — layered pair + re-equilibration; chain closed |
 | **E035** | Portfolio value decomposition | **concentrated** — g_treat cluster; MC hypothesis earned |
+| **E036** | Contextual marginal admission value (H-MC1) | **pre-registered** — Phase A diagnostic |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

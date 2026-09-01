@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E035 concentrated — g_treat/composition-shift cluster discriminates portfolio_bad; marginal/contextual value hypothesis earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. See `docs/DECISION_ARCHITECTURE.md`.
+**Active research question:** E036 / H-MC1 pre-registered — contextual marginal admission value (Phase A diagnostic). Production stays `v2am_s` + `rates=v1` + fixtures `v1`. See `docs/DECISION_ARCHITECTURE.md`.
 
 ---
 
@@ -1522,17 +1522,37 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `scripts/e035_portfolio_decomposition.py`; `records/historical/e035_portfolio_decomposition_gw.csv`; `records/historical/e035_portfolio_decomposition_summary.txt`
 - **Spec:** `docs/DECISION_ARCHITECTURE.md`
-- **Follow-up:** mechanism hypothesis doc for marginal/contextual portfolio value; no optimizer change.
+- **Follow-up:** → **E036 / H-MC1** contextual marginal admission value. See `docs/DECISION_ARCHITECTURE.md` §9.
+
+### E036 / H-MC1 - Contextual marginal admission value (pre-registered)
+- **Date:** 2026-09-01 (after E035 concentrated)
+- **Status:** **pre-registered** — Phase A diagnostic only; no optimizer integration
+- **Hypothesis (H-MC1):** A player's decision value should be measured by incremental contribution to the **current feasible portfolio**, not standalone μ. E035: g_treat cluster (portfolio displacement under treat μ) best discriminates portfolio_bad; replacement/budget weak; realized swap inverted. Open: does \(MC_E - MC_L\) rank boundary swaps better than \(U_E - U_L\) on **realized** outcomes?
+- **Question:** On same-position ctrl→treat swap pairs (both≥60), does contextual marginal value concordance with realized dpts exceed standalone utility concordance on FAIL?
+
+- **Scope lock:**
+  ```text
+  V(S):     squad-weighted treat utility post solve_xi (BENCH_WEIGHT=0.12)
+  MC_E:     V(S_ctrl \\ L ∪ E) - V(S_ctrl); manual swap, no squad ILP
+  primary:  concordance sign(delta_mc) vs sign(dpts) vs sign(delta_u) vs sign(dpts) on FAIL
+  secondary (report only): GW-level sum MC vs delta_cap; PASS pairs; near-tie buckets
+  phases:   A=estimate MC; B=test ranking; C=integrate (separate pre-reg)
+  forbidden:  MC in optimizer; new mu/packaging/lambda; MC+justification score
+  ```
+
+- **Method:** `python scripts/e036_contextual_marginal.py` (not yet implemented)
+- **Branching:** MC > U concordance on FAIL → integration spec; MC ≈ U → V itself suspect; MC < U → not the fix
+- **Spec:** `docs/DECISION_ARCHITECTURE.md` §9
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E035 concentrated):
+As of 2026-09-01 (E036 / H-MC1 pre-registered):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** E024–E034c displacement chain; E035 proxy decomposition.
-3. **Next.** Mechanism hypothesis for contextual/marginal portfolio value (spec only). No optimizer change.
+2. **Closed:** E024–E035 (displacement + proxy decomposition).
+3. **Next.** E036 Phase A: MC vs standalone U on realized swap concordance. Spec: `docs/DECISION_ARCHITECTURE.md` §9.
 4. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 
 ---
@@ -1575,6 +1595,7 @@ python scripts/e034_squad_entrant_toxicology.py  # E034: squad entrant toxicolog
 python scripts/e034b_forced_swap.py  # E034b: forced entrant vs cascade
 python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibration
 python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
+# E036 (pre-registered): python scripts/e036_contextual_marginal.py
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

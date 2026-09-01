@@ -234,16 +234,94 @@ E035 ran the pre-registered proxy discrimination. Key findings:
 | mean_vs_leaver inverted | AUROC 0.21 — realized swap quality anti-predicts bad (μ inversion) |
 | FAIL ≈ PASS on top proxies | Architecture-intrinsic, not treatment-only distortion |
 
-**Branch:** formulate marginal/contextual portfolio value hypothesis (MC_i(S)); do not implement in optimizer yet.
+**Branch:** → **E036 / H-MC1** contextual marginal admission value (pre-registered below). Phase A diagnostic only; no optimizer integration.
 
 ---
 
-## 9. Closed branches (do not reopen without new hypothesis)
+## 9. H-MC1 — Contextual marginal admission value (E036 pre-registered)
+
+> **Standalone player value is insufficient for constrained FPL squad construction; the decision should account for the value of a player conditional on the portfolio they are entering.**
+
+E035 showed the strongest discriminator is **treat-induced portfolio displacement** (g_treat cluster), not replacement value or realized entrant-leaver quality. H-MC1 tests whether **contextual marginal contribution** ranks boundary admissions better than standalone \(U_i\) — using frozen μ, realized outcomes as the judge.
+
+### 9.1 What we are not doing yet
+
+- Implementing \(MC_i(S)\) in the squad ILP (Phase C only if Phase B concentrates)
+- Adding a "justification" or packaging score on top of MC
+- Changing projections, minutes, fixtures, or rates
+- Penalizing portfolio movement (large moves can be good on PASS)
+
+### 9.2 Minimal definition of \(V(S)\)
+
+Frozen for E036 Phase A — same object the optimizer already uses:
+
+\[
+V(S) = \text{squad-weighted treat utility post-XI-solve}
+\]
+
+(`BENCH_WEIGHT = 0.12`; `solve_xi` + starter/bench weighting on **treat** projections)
+
+For control portfolio \(S_{\text{ctrl}}\) and same-position swap pair \((E, L)\):
+
+\[
+MC_E = V(S_{\text{ctrl}} \setminus L \cup E) - V(S_{\text{ctrl}})
+\]
+
+Computed by manual squad swap + `solve_xi` on treat utility (no squad ILP re-solve), matching E034c pair arm.
+
+Standalone comparator: \(\Delta U = U_E - U_L\) (treat next_utility).
+
+### 9.3 Phases (frozen)
 
 ```text
-E024–E029   selection packaging / q(Δμ) / lift reliability
-E026–E028   stability / margin / local substitution
-E030–E034c  displacement localization (pair + re-equilibration)
+Phase A  estimate MC at admission boundary (this experiment)
+Phase B  test MC ranking vs U ranking on realized portfolio improvement
+Phase C  integrate into optimizer (only if Phase B concentrates; separate pre-reg)
+```
+
+**Circularity guard:** Phase A/B use **realized** Cap / swap pts as outcomes. Do not use treat-\(U\) improvement as the success metric for MC.
+
+### 9.4 E036 scope lock
+
+```text
+stack:     v2am_s + packaged rates_v2b (treat) vs rates=v1 (ctrl)
+           objective=next; strategy=balanced; seed=7
+unit:      same-position (E,L) swap pairs at ctrl→treat squad boundary
+filter:    both>=60 actual minutes (E025 convention)
+arms:      delta_mc = MC_E - MC_L;  delta_u = U_E - U_L;  realized dpts = pts_E - pts_L
+
+primary:   concordance on FAIL pairs:
+             sign(delta_mc) vs sign(dpts)  vs  sign(delta_u) vs sign(dpts)
+           report % concordant, rank correlation (Spearman) per gate
+
+secondary (report only, not for branching):
+  GW-level: sum(MC_entrants) - sum(MC_leavers) vs delta_cap
+  PASS-season pairs (architecture-intrinsic check)
+  near-tie bucket stratification (E026 cuts: 0.25 / 0.75 on ctrl mu gap)
+
+forbidden:  squad ILP rewrite; MC in optimizer; new mu/packaging/lambda;
+            MC + justification score; promote on PASS alone
+```
+
+### 9.5 Branching (after E036 only)
+
+| Result | Next step |
+|---|---|
+| MC concordance > U concordance on FAIL (both60) | Phase B concentrated → integration spec (not code) |
+| MC ≈ U on realized | Problem is \(V\) itself, not admission ranking under same \(U\) |
+| MC worse than U | Contextual valuation under treat-\(U\) is not the fix |
+| MC helps FAIL only, not PASS | Treatment-specific; revisit upstream μ, not architecture |
+
+### 9.6 Method
+
+`python scripts/e036_contextual_marginal.py` (not yet implemented)
+
+---
+
+## 10. Closed branches (do not reopen without new hypothesis)
+
+```text
+E024–E035   selection packaging / proxy decomposition
 ```
 
 Production unchanged: `v2am_s` + `rates=v1` + fixtures `v1`.
@@ -252,16 +330,17 @@ Do **not** promote `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 
 ---
 
-## 10. Roadmap relationship
+## 11. Roadmap relationship
 
 | Roadmap item | Status relative to this spec |
 |---|---|
 | **V2B rates** | REJECT; upstream rate/club-prior family retired |
 | **Packaging** | CLOSED (availability risk only) |
 | **V3 calibration** | orthogonal; does not fix portfolio architecture |
-| **V4 correlation-aware optimizer** | one candidate quantity; deferred until E035 |
+| **V4 correlation-aware optimizer** | one candidate quantity; deferred until E036 |
 | **V5 multi-GW engine** | transfer flexibility candidate; deferred |
 | **Decision architecture (this doc)** | **current research front** |
+| **E036 / H-MC1** | **pre-registered** — contextual marginal admission value, Phase A diagnostic |
 
-The next productive step is **specification + descriptive decomposition (E035)**,
+The next productive step is **E036 Phase A** (MC vs standalone \(U\) on realized swap concordance),
 not another packaging rule or ε retune.
