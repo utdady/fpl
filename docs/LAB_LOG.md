@@ -997,6 +997,23 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Artifacts:** `tests/test_e012_integrity.py`; `docs/FORMAL.md`
 - **Follow-up:** E024 rates+packaging promote-bar pre-registered. Optional Lean `formal/` later. No production change.
 
+### E012-lean — Lean formal core landed
+- **Date:** 2026-09-01 (after E012 Python PASS)
+- **Status:** completed (spec); CI green
+- **Hypothesis:** evaluation dependency graphs can be stated explicitly in Lean without becoming a V2 gate
+- **Question:** Does `formal/` formalize the same invariants E012 checks in Python?
+- **Method:** `formal/FPL/{Regret,Evaluation,Leakage,Snapshot}.lean`; `cd formal && lake build`; inventory in `docs/FORMAL.md` § Implementation inventory
+- **Seasons / GWs:** n/a (spec layer; E012 Python still authoritative on 2022/23–2025/26 artifacts)
+- **Results:**
+  - `Regret.lean` — `regret_identity_int`; `B0Gap` kept separate from nested regret
+  - `Evaluation.lean` — `classifyWeek` port of `classify_week`; `joinFloor`; inspect flags ∉ output
+  - `Leakage.lean` — `LeakInput` (no V1 field); `leakFlag` at 0.70; Spearman opaque in Lean
+  - `Snapshot.lean` — `Predictor gw` cannot mention `Actuals` in signature
+  - Queued: `Squad.lean`, `Lineup.lean`, certificate checker
+- **Verdict:** Spec landed. Python E012 verdict unchanged. Lean is not a version gate.
+- **Artifacts:** `formal/`; `docs/FORMAL.md`; `.github/workflows/formal.yml`
+- **Follow-up:** extend inventory when new modules land; do not log CI fixes in docs
+
 ### E024 - Packaged rates=v2b vs production rates=v1
 - **Date:** 2026-08-27 (after E012 PASS)
 - **Status:** **REJECT** (promote bar) — implemented and evaluated; **do not promote**; **do not retune q**

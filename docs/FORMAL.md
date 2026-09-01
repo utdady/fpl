@@ -158,6 +158,39 @@ Suggested first tests (after GW1, not before):
 3. Assert `R_total == R_squad + R_XI + R_cap` on every scored GW (named oracle).
 4. Assert B0 / V1 / V2 ILPs use the same constraint set F when compared.
 
-**Status (E012):** Python property tests **PASS** — `tests/test_e012_integrity.py` (9/9). Lean core started in `formal/` (`FPL/Regret.lean`, `FPL/Evaluation.lean`, `FPL/Leakage.lean`, `FPL/Snapshot.lean`). Run `cd formal && lake build` after installing [elan](https://github.com/leanprover/elan). E012 Python tests remain authoritative on recorded artifacts; Lean polishes definitions.
+---
+
+## Implementation inventory
+
+Living record of what `formal/` contains. Update when a module lands or scope
+changes. Do **not** log CI plumbing here — git history covers that.
+
+| Module | Formalizes | Python source | Lean artifact | Python regression |
+|---|---|---|---|---|
+| `Regret.lean` | Nested regret is additive: `R_total = P(oracle) − P(V1 realized)`; B0 gap is separate | `engine.harness_decomp.evaluate_gw` | `regret_identity_int`; `B0Gap` struct | `TestRegretIdentity` |
+| `Evaluation.lean` | `evaluation_status` from fixture count + integrity only; never `inspect_*` | `engine.harness_decomp.classify_week` | `classifyWeek` port; `joinFloor` | `TestEvaluationStatusIndependence` |
+| `Leakage.lean` | `LeakFlag` depends only on xP + actuals (evaluation-time) | `engine.obs.LEAKAGE_SPEARMAN` | `LeakInput`; `leakFlag`; Spearman `opaque` | `TestLeakFlagIndependence` |
+| `Snapshot.lean` | Predictor at GW `n` cannot take `Actuals` in its signature | `engine.models.Snapshot`; `HARNESS_SPEC.md` | `Snapshot gw`, `Predictor gw`, `Actuals gw` | `engine.harness_validate` (provenance) |
+
+**Evaluation note:** `joinFloor(nSnapshot) = max(50, ⌊0.15 · nSnapshot⌋)`. Status labels
+depend on snapshot size as well as integrity fields — not on model scores.
+
+### Queued
+
+| Module | Formalizes | Python source | Status |
+|---|---|---|---|
+| `Squad.lean` | Legal 15: size, budget, positions, club limit | `engine.optimize.solve_squad` | not started |
+| `Lineup.lean` | Legal XI formation windows | `engine.optimize.solve_xi` | not started |
+| Certificate checker | Verify returned squad + objective; not CBC optimality | `engine.optimize` | not started |
+
+**Authority:** `tests/test_e012_integrity.py` remains the regression harness on recorded
+artifacts. Lean makes definitions and identities explicit; it is not a V2 gate.
+
+---
+
+**Status (E012):** Python property tests **PASS** — `tests/test_e012_integrity.py` (9/9).
+Lean core **landed** in `formal/` (see Implementation inventory above). CI: `.github/workflows/formal.yml`.
+Build: `cd formal && lake build` (requires [elan](https://github.com/leanprover/elan)).
+Milestone: **E012-lean** in `LAB_LOG.md`.
 
 Queued historically as **E012** in `LAB_LOG.md`.

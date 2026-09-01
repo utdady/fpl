@@ -4,7 +4,10 @@ Executable specification for evaluation invariants documented in [`docs/FORMAL.m
 
 Python property tests in [`tests/test_e012_integrity.py`](../tests/test_e012_integrity.py) remain the regression harness on real artifacts. Lean makes the definitions and algebraic identities explicit.
 
-## Modules
+**Implementation inventory** (what each module formalizes, Python cross-refs, queued work):
+[`docs/FORMAL.md` § Implementation inventory](../docs/FORMAL.md#implementation-inventory).
+
+## Modules (summary)
 
 | File | Matches |
 |---|---|
