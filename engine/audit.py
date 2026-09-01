@@ -5,8 +5,10 @@ python -m engine.audit --strategy balanced
 from __future__ import annotations
 
 import argparse
+import math
 import sys
 from collections import Counter
+from pathlib import Path
 
 from engine.api import load_snapshot
 from engine.models import Player, PlayerProjection, Snapshot, SquadSolution
@@ -113,6 +115,160 @@ def vice_formulas(solution: SquadSolution, by_id: dict[int, PlayerProjection]) -
     return "\n".join(lines)
 
 
+def loo_tag(delta: float) -> str:
+    if not math.isfinite(delta):
+        return "unknown"
+    if delta >= 2.0:
+        return "essential"
+    if delta >= 0.4:
+        return "marginal"
+    return "interchangeable"
+
+
+LOO_COLUMNS = [
+    "player_id",
+    "web_name",
+    "position",
+    "cost",
+    "next_mu",
+    "horizon_u",
+    "p_start",
+    "delta",
+    "tag",
+    "incoming",
+    "strategy",
+    "as_of",
+]
+
+CF_COLUMNS = [
+    "player_id",
+    "web_name",
+    "action",
+    "delta",
+    "baseline_u",
+    "alt_u",
+    "strategy",
+    "as_of",
+]
+
+
+def export_loo_rows(
+    snapshot: Snapshot,
+    projections: list[PlayerProjection],
+    solution: SquadSolution | None = None,
+    strategy: str = "balanced",
+) -> list[dict]:
+    by_id = _by_id(projections)
+    solution = solution or solve_squad(snapshot, projections, strategy=strategy)
+    base_u = weighted_objective(solution, by_id)
+    as_of = snapshot.as_of.isoformat() if snapshot.as_of else ""
+    rows: list[dict] = []
+    for p in solution.players:
+        try:
+            alt = solve_squad(snapshot, projections, strategy=strategy, must_exclude={p.id})
+        except RuntimeError:
+            rows.append(
+                {
+                    "player_id": p.id,
+                    "web_name": p.web_name,
+                    "position": p.position,
+                    "cost": p.now_cost,
+                    "next_mu": round(by_id[p.id].next_mu, 4),
+                    "horizon_u": round(by_id[p.id].horizon_utility, 4),
+                    "p_start": round(by_id[p.id].next_p_start, 4),
+                    "delta": "",
+                    "tag": "solver_failed",
+                    "incoming": "",
+                    "strategy": strategy,
+                    "as_of": as_of,
+                }
+            )
+            continue
+        alt_u = weighted_objective(alt, by_id)
+        delta = base_u - alt_u
+        incoming = names(alt.players) - names(solution.players)
+        rows.append(
+            {
+                "player_id": p.id,
+                "web_name": p.web_name,
+                "position": p.position,
+                "cost": p.now_cost,
+                "next_mu": round(by_id[p.id].next_mu, 4),
+                "horizon_u": round(by_id[p.id].horizon_utility, 4),
+                "p_start": round(by_id[p.id].next_p_start, 4),
+                "delta": round(delta, 4) if math.isfinite(delta) else "",
+                "tag": loo_tag(delta),
+                "incoming": ", ".join(sorted(incoming)) if incoming else "",
+                "strategy": strategy,
+                "as_of": as_of,
+            }
+        )
+    rows.sort(key=lambda r: -(float(r["delta"]) if r["delta"] != "" else -1e9))
+    return rows
+
+
+def export_counterfactual_rows(
+    snapshot: Snapshot,
+    projections: list[PlayerProjection],
+    solution: SquadSolution | None = None,
+    strategy: str = "balanced",
+    target_name: str = "Haaland",
+) -> list[dict]:
+    by_id = _by_id(projections)
+    solution = solution or solve_squad(snapshot, projections, strategy=strategy)
+    base_u = weighted_objective(solution, by_id)
+    as_of = snapshot.as_of.isoformat() if snapshot.as_of else ""
+    target = find_player(snapshot, target_name)
+    if target is None:
+        return []
+    rows: list[dict] = []
+    for action, alt in (
+        ("exclude", solve_squad(snapshot, projections, strategy=strategy, must_exclude={target.id})),
+        ("lock", solve_squad(snapshot, projections, strategy=strategy, must_include={target.id})),
+    ):
+        alt_u = weighted_objective(alt, by_id)
+        if action == "exclude":
+            delta = base_u - alt_u
+        else:
+            delta = alt_u - base_u
+        rows.append(
+            {
+                "player_id": target.id,
+                "web_name": target.web_name,
+                "action": action,
+                "delta": round(delta, 4),
+                "baseline_u": round(base_u, 4),
+                "alt_u": round(alt_u, 4),
+                "strategy": strategy,
+                "as_of": as_of,
+            }
+        )
+    return rows
+
+
+def write_audit_csv(
+    snapshot: Snapshot,
+    projections: list[PlayerProjection],
+    strategy: str = "balanced",
+    loo_path: Path | None = None,
+    cf_path: Path | None = None,
+) -> tuple[int, int]:
+    import csv
+    from pathlib import Path as P
+
+    loo_path = loo_path or P("records/audit_loo.csv")
+    cf_path = cf_path or P("records/audit_counterfactual.csv")
+    loo_rows = export_loo_rows(snapshot, projections, strategy=strategy)
+    cf_rows = export_counterfactual_rows(snapshot, projections, strategy=strategy)
+    for path, rows, columns in ((loo_path, loo_rows, LOO_COLUMNS), (cf_path, cf_rows, CF_COLUMNS)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=columns)
+            writer.writeheader()
+            writer.writerows(rows)
+    return len(loo_rows), len(cf_rows)
+
+
 # ---------- leave-one-out ----------
 
 def why_selected(
@@ -146,7 +302,7 @@ def why_selected(
         f"  {'player':16} {'pos':3} {'price':6} {'next':>5} {'horizU':>7} {'P(st)':>5} {'P60':>5} {'P10+':>5} {'Delta':>7}  comes in"
     )
     for delta, p, proj, incoming, _alt_u in rows:
-        tag = "essential" if delta >= 2.0 else ("marginal" if delta >= 0.4 else "interchangeable")
+        tag = loo_tag(delta)
         who = ", ".join(sorted(incoming)) if incoming else "-"
         lines.append(
             f"  {p.web_name:16} {p.position:3} {p.now_cost/10:5.1f}m {proj.next_mu:5.2f} "
@@ -278,6 +434,7 @@ def main() -> int:
     parser.add_argument("--strategy", choices=STRATEGIES, default="balanced")
     parser.add_argument("--horizon", type=int, default=6)
     parser.add_argument("--refresh", action="store_true")
+    parser.add_argument("--export-csv", action="store_true", help="Write records/audit_*.csv")
     args = parser.parse_args()
 
     if hasattr(sys.stdout, "reconfigure"):
@@ -287,6 +444,11 @@ def main() -> int:
     projections = project_all(snapshot, horizon=args.horizon, strategy=args.strategy)
     solution = solve_squad(snapshot, projections, strategy=args.strategy)
     by_id = _by_id(projections)
+
+    if args.export_csv:
+        n_loo, n_cf = write_audit_csv(snapshot, projections, strategy=args.strategy)
+        print(f"[audit] wrote {n_loo} LOO rows and {n_cf} counterfactual rows to records/")
+        return 0
 
     nxt = snapshot.next_event()
     print(f"FPL V1 audit  |  {snapshot.season_label}  |  as of {snapshot.as_of.strftime('%Y-%m-%d %H:%M UTC')}")

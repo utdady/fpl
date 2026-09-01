@@ -24,14 +24,17 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-from engine.api import load_snapshot
+from engine.model_config import PRODUCTION, V1_CONTROL
 from engine.models import GWProjection, PlayerProjection
-from engine.project import project_all
+from engine.optimize import solve_squad
+from engine.project import STRATEGIES, project_all, project_player_gw
 
 RECORDS_DIR = Path("records")
 RECORDS_DIR.mkdir(exist_ok=True)
 
 SCORES_CSV = RECORDS_DIR / "scores.csv"
+AUDIT_LOO_CSV = RECORDS_DIR / "audit_loo.csv"
+AUDIT_CF_CSV = RECORDS_DIR / "audit_counterfactual.csv"
 
 PRED_COLUMNS = [
     "gw",
@@ -57,6 +60,115 @@ PRED_COLUMNS = [
 
 def _record_path(gw: int) -> Path:
     return RECORDS_DIR / f"gw{gw:02d}_v1.0.csv"
+
+
+def _diagnostics_path(gw: int) -> Path:
+    return RECORDS_DIR / f"gw{gw:02d}_diagnostics.json"
+
+
+def _role_start_for(snapshot):
+    from engine.harness import SEASON_LABEL, recent_minutes_by_element
+    from engine.minutes_struct import RECENT_WINDOW, build_role_start_struct
+
+    next_e = snapshot.next_event()
+    label_to_season = {v: k for k, v in SEASON_LABEL.items()}
+    season_key = label_to_season.get(snapshot.season_label)
+    recent: dict[int, int] = {}
+    apply_recent = False
+    if season_key and next_e.id > RECENT_WINDOW:
+        recent = recent_minutes_by_element(season_key, next_e.id, window=RECENT_WINDOW)
+        apply_recent = True
+    return build_role_start_struct(
+        snapshot.players, recent_minutes=recent, apply_recent=apply_recent
+    )
+
+
+def _player_diagnostics_for_gw(snapshot, gw: int, strategy: str = "balanced") -> dict[str, dict]:
+    import numpy as np
+
+    role_start = _role_start_for(snapshot)
+    rng = np.random.default_rng(7)
+    players: dict[str, dict] = {}
+    for player in snapshot.players:
+        gw_rng = np.random.default_rng(rng.integers(0, 2**32 - 1) ^ (player.id * 1009 + gw))
+        pred = project_player_gw(
+            snapshot, player, gw, 0, strategy, gw_rng, role_start,
+            include_finished_fixtures=True,
+        )
+        players[str(player.id)] = {
+            "name": player.web_name,
+            "pos": player.position,
+            "quantiles": list(pred.quantiles),
+            "p_0": round(pred.p_0, 4),
+            "mu_components": pred.mu_components or {},
+        }
+    return players
+
+
+def _write_diagnostics(gw: int, snapshot, strategy: str = "balanced") -> None:
+    """Companion JSON: sim quantiles, P(0), mu components, per-strategy squads."""
+    players = _player_diagnostics_for_gw(snapshot, gw, strategy=strategy)
+
+    squads: dict[str, dict] = {}
+    teams = {tid: t.short_name for tid, t in snapshot.teams.items()}
+    for strat in STRATEGIES:
+        projs = project_all(snapshot, horizon=6, strategy=strat)
+        by_id = {p.player.id: p for p in projs}
+        sol = solve_squad(snapshot, projs, strategy=strat)
+        xi_ids = {p.id for p in sol.xi}
+        squads[strat] = {
+            "cost": sol.cost,
+            "bank": sol.bank,
+            "captain": sol.captain.web_name,
+            "vice": sol.vice.web_name,
+            "players": [
+                {
+                    "id": p.id,
+                    "name": p.web_name,
+                    "pos": p.position,
+                    "teamCode": teams.get(p.team_id),
+                    "cost": p.now_cost,
+                    "mu": round(by_id[p.id].next_mu, 4),
+                    "xi": p.id in xi_ids,
+                    "captain": p.id == sol.captain.id,
+                    "vice": p.id == sol.vice.id,
+                }
+                for p in sol.players
+            ],
+        }
+
+    payload = {
+        "gw": gw,
+        "captured_at": datetime.now(timezone.utc).isoformat(),
+        "model_config": {**PRODUCTION, "role": "live_resolv", "horizon": PRODUCTION["horizon_resolv"]},
+        "note": (
+            "Quantiles and mu_components come from 2500 Monte Carlo draws per player. "
+            "Not a fitted Normal. P(0) is P(total <= 0), distinct from 1 - p_start."
+        ),
+        "players": players,
+        "squads": squads,
+    }
+    path = _diagnostics_path(gw)
+    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    print(f"[capture] Wrote diagnostics ({len(players)} players) -> {path}")
+
+
+def diagnostics(gw: int, refresh: bool = False) -> None:
+    """Generate diagnostics for an existing freeze without rewriting predictions."""
+    path = _record_path(gw)
+    if not path.exists():
+        print(f"[capture] No frozen record at {path}. Run freeze first.")
+        sys.exit(1)
+    snapshot = load_snapshot(refresh=refresh)
+    projections = project_all(snapshot, horizon=6, strategy="balanced")
+    _write_diagnostics(gw, snapshot, strategy="balanced")
+    _write_audit_exports(snapshot, projections, strategy="balanced")
+
+
+def _write_audit_exports(snapshot, projections: list[PlayerProjection], strategy: str) -> None:
+    from engine.audit import write_audit_csv
+
+    write_audit_csv(snapshot, projections, strategy=strategy, loo_path=AUDIT_LOO_CSV, cf_path=AUDIT_CF_CSV)
 
 
 def freeze(gw: int, refresh: bool = False) -> None:
@@ -112,6 +224,9 @@ def freeze(gw: int, refresh: bool = False) -> None:
         writer.writerows(rows)
 
     print(f"[capture] Froze {len(rows)} player projections -> {path}")
+    audit_projs = project_all(snapshot, horizon=6, strategy="balanced")
+    _write_diagnostics(gw, snapshot, strategy="balanced")
+    _write_audit_exports(snapshot, audit_projs, strategy="balanced")
 
 
 def _fetch_event_live(gw: int) -> dict[int, dict]:
@@ -313,9 +428,16 @@ def main() -> None:
         action="store_true",
         help="Force a fresh API pull when freezing.",
     )
+    parser.add_argument(
+        "--diagnostics",
+        action="store_true",
+        help="Write gw diagnostics + audit CSVs for an existing freeze (no CSV rewrite).",
+    )
     args = parser.parse_args()
 
-    if args.score:
+    if args.diagnostics:
+        diagnostics(args.gw, refresh=args.refresh)
+    elif args.score:
         score(args.gw)
     else:
         freeze(args.gw, refresh=args.refresh)

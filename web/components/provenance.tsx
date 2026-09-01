@@ -1,4 +1,5 @@
 import type { Manifest } from "@/lib/types";
+import { modelLabel } from "@/lib/model-config";
 
 const day = (iso: string | null) => (iso ? iso.slice(0, 10) : "unknown");
 
@@ -7,13 +8,19 @@ const day = (iso: string | null) => (iso ? iso.slice(0, 10) : "unknown");
  * project rests on freeze discipline, so the tag travels into the UI.
  */
 export function Provenance({ manifest }: { manifest: Manifest }) {
-  const { engine, generated_at, snapshot_as_of } = manifest;
+  const { engine, generated_at, snapshot_as_of, production, controls } = manifest;
 
   return (
     <footer className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-edge py-5 font-mono text-[11px] text-faint">
-      <span className="text-muted">V1.0</span>
+      <span className="text-muted">Research</span>
       {engine.tag && <span>{engine.tag}</span>}
       {engine.sha && <span>{engine.sha}</span>}
+      {production && (
+        <span title="Live re-solve defaults">prod {modelLabel(production)}</span>
+      )}
+      {controls?.v1_gw1_baseline?.tag && (
+        <span title="Frozen pool control">ctrl {controls.v1_gw1_baseline.tag}</span>
+      )}
       <span>exported {day(generated_at)}</span>
       <span>snapshot {day(snapshot_as_of)}</span>
       <span className="ml-auto max-w-md text-right leading-relaxed">

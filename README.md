@@ -1,8 +1,15 @@
-# FPL V1
+# FPL Research
 
-Projection-first Fantasy Premier League squad picker for 2026/27.
+Projection-first Fantasy Premier League research for 2026/27.
 
-The projection engine is the brain. The ILP optimizer is the decision layer.
+The **projection engine** (`engine/`) estimates points and uncertainty per player.
+The **ILP optimizer** picks a legal fifteen, XI, and captain. The **research viewer**
+(`web/`) is a read-only UI over frozen records — it does not write back to the model.
+
+**Production defaults** (live re-solves): `minutes_version=v2am_s`, `rates_version=v1`.
+**Permanent control** (frozen GW1 pool and historical harness): `v1.0-gw1-baseline`.
+
+## Quick start (engine)
 
 ```bash
 python -m venv .venv
@@ -10,7 +17,7 @@ python -m venv .venv
 python fpl.py --horizon 6 --strategy balanced
 ```
 
-Strategies: safe, balanced, aggressive.
+Strategies: `safe`, `balanced`, `aggressive`.
 
 ## Live track (2026/27)
 
@@ -19,11 +26,28 @@ python fpl.py --refresh
 python -m engine.audit --refresh
 python -m engine.capture --gw 1          # freeze before deadline
 python -m engine.capture --gw 1 --score  # score after results
+python -m engine.capture --gw 1 --diagnostics  # sim quantiles, LOO CSV, per-strategy squads
 ```
 
-## Historical lab (2024/25 + 2025/26)
+## Research viewer (`web/`)
 
-Vaastav data is cloned automatically on first use into data/vaastav/.
+```bash
+python scripts/export_ui.py              # records/ + .cache/fpl → web/public/data/
+cd web && npm install && npm run dev     # http://localhost:3000
+```
+
+Surfaces: **Pool** (frozen predictions), **XI board** (historical elevens + live
+strategy re-solve), **Lab** (four-season evaluation), **Audit** (LOO, counterfactuals,
+sim diagnostics), **Teams** (track entries, compare, GW edge), **My team** (signed-in
+FPL session). See `web/README.md` for deploy notes and strategy refresh cadence.
+
+```bash
+.venv\Scripts\python.exe scripts\refresh_strategies.py --force
+```
+
+## Historical lab
+
+Vaastav data is cloned automatically on first use into `data/vaastav/`.
 
 ```bash
 python -m engine.harness_validate --season 2025-26 --gw 1
@@ -31,12 +55,7 @@ python -m engine.harness_run --season 2025-26 --gw 1
 python -m engine.harness_run --season 2025-26 --gw 1 --score
 ```
 
-See docs/PROJECT.md for methods, math, data provenance, and the experiment map.
-See docs/HARNESS_SPEC.md for as-of-T rules and validation gates.
-See docs/FORMAL.md for evaluation-integrity invariants (post-GW1, not a V2 gate).
-See ROADMAP.md for the full version ladder.
-
-Rolling evaluation and B0-B3 comparison:
+Rolling evaluation and B0–B3 comparison:
 
 ```bash
 python -m engine.harness_run --season 2025-26 --from-gw 1 --to-gw 38 --skip-existing --skip-validate
@@ -51,19 +70,19 @@ python -m engine.harness_decomp --season 2025-26 --from-gw 1 --to-gw 38
 python -m engine.harness_decomp --season 2024-25 --from-gw 1 --to-gw 38
 ```
 
-See docs/V2_INVESTIGATION.md.
-
-Experiment log: docs/LAB_LOG.md
-Project methods (encyclopedia): docs/PROJECT.md
-
 Observational E008/E009 (does not change V1):
 
-    python -m engine.obs --season 2025-26
-
-Live strategy board (UI re-solve, not a freeze):
-
 ```bash
-.venv\Scripts\python.exe scripts\refresh_strategies.py --force
+python -m engine.obs --season 2025-26
 ```
 
-See web/README.md for the daily / deadline-day Task Scheduler cadence.
+## Documentation
+
+| Doc | Purpose |
+|---|---|
+| [`docs/PROJECT.md`](docs/PROJECT.md) | Methods, math, data provenance, experiment map |
+| [`docs/LAB_LOG.md`](docs/LAB_LOG.md) | Hypotheses, E-codes, verdicts (append-only) |
+| [`ROADMAP.md`](ROADMAP.md) | Version ladder and production vs control |
+| [`docs/HARNESS_SPEC.md`](docs/HARNESS_SPEC.md) | As-of-T rules and validation gates |
+| [`docs/V2_INVESTIGATION.md`](docs/V2_INVESTIGATION.md) | Nested regret and evaluation protocol |
+| [`web/README.md`](web/README.md) | UI export, deploy, live strategy refresh |

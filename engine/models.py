@@ -128,6 +128,19 @@ class Snapshot:
         return self.teams[team_id]
 
 
+MU_COMPONENT_KEYS = (
+    "appearance",
+    "goals",
+    "assists",
+    "clean_sheet",
+    "defensive",
+    "saves",
+    "goals_conceded",
+    "yellow",
+    "bonus",
+)
+
+
 @dataclass
 class GWProjection:
     player_id: int
@@ -140,6 +153,10 @@ class GWProjection:
     p_60: float
     p_10_plus: float
     p90: float
+    # Phase 6: from the 2500-sim step — not a fitted Normal.
+    quantiles: tuple[float, float, float, float, float] = (0.0, 0.0, 0.0, 0.0, 0.0)
+    p_0: float = 0.0
+    mu_components: dict[str, float] | None = None
 
 
 @dataclass

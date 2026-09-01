@@ -3,10 +3,13 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
 
+import { MuWaterfall } from "./charts/mu-waterfall";
+import { OutcomeDistribution } from "./charts/outcome-distribution";
 import { StartConfidence } from "./start-confidence";
 import { TrackRecord } from "./charts/track-record";
 import { Field } from "./ui/stat";
 import { dec, pct, price, seasonLabel, signed } from "@/lib/format";
+import { playerDiagAt } from "@/lib/player-diagnostics";
 import { useLiveContext, useLiveDisplay } from "@/lib/live-context";
 import { liveToneClass } from "@/lib/live-display";
 import type { PlayerSeries, Predictions } from "@/lib/types";
@@ -61,6 +64,7 @@ export function PlayerDrawer({
   }, [player, season]);
 
   const open = player != null;
+  const diag = series && player ? playerDiagAt(series, gw) : null;
 
   return (
     <Dialog.Root open={open} modal={modal} onOpenChange={(next) => !next && onClose()}>
@@ -165,14 +169,27 @@ export function PlayerDrawer({
 
                 <div>
                   <div className="label-xs mb-2">Outcome shape</div>
-                  <p className="rounded-lg border border-edge bg-raised/40 p-3 text-[11.5px] leading-relaxed text-muted">
-                    The engine runs 2500 simulations per player per gameweek but persists
-                    only mu, sigma and P(10+). Drawing a distribution from those three
-                    would assert a smooth bell curve the model never claimed, and FPL
-                    points are lumpy. A quantile vector from{" "}
-                    <span className="font-mono text-faint">capture.py</span> unlocks this
-                    panel.
-                  </p>
+                  {diag?.quantiles ? (
+                    <div className="space-y-3 rounded-lg border border-edge bg-raised/40 p-3">
+                      <OutcomeDistribution
+                        quantiles={diag.quantiles}
+                        actual={diag.actual}
+                        mu={diag.mu ?? player.mu}
+                      />
+                      {diag.components && <MuWaterfall components={diag.components} />}
+                      {diag.p0 != null && (
+                        <p className="text-[10px] leading-relaxed text-faint">
+                          P(0) = {pct(diag.p0, 1)} from 2500 sims. Distinct from 1 − p_start.
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="rounded-lg border border-edge bg-raised/40 p-3 text-[11.5px] leading-relaxed text-muted">
+                      Sim quantiles are not exported for this gameweek yet. Run{" "}
+                      <span className="font-mono text-faint">capture --diagnostics</span> and{" "}
+                      <span className="font-mono text-faint">export_ui.py</span>.
+                    </p>
+                  )}
                 </div>
               </div>
             </>

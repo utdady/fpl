@@ -19,7 +19,13 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+import sys
+
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from engine.model_config import PRODUCTION, V1_CONTROL
+
 RECORDS = ROOT / "records"
 HISTORICAL = RECORDS / "historical"
 CACHE = ROOT / ".cache" / "fpl"
@@ -75,6 +81,15 @@ CAVEATS = {
     "live_pool": (
         "The live season record is a prediction pool only. capture.py does not "
         "persist squad selection, so no XI is available for this season."
+    ),
+    "diagnostics": (
+        "Quantiles and mu_components come from 2500 Monte Carlo draws per player "
+        "per gameweek. They are not a fitted Normal. P(0) is P(total <= 0), "
+        "distinct from 1 - p_start."
+    ),
+    "audit_loo": (
+        "Leave-one-out delta uses bench-weighted horizon utility with the next-GW "
+        "XI as starters. Re-solved from the cached snapshot, not the frozen GW1 CSV."
     ),
     "did_start": (
         "did_start is a proxy: capture.py sets it from minutes >= 45, because "
@@ -264,6 +279,119 @@ def historical_team_map(season: str) -> dict[str, str]:
 # --------------------------------------------------------------------------
 
 
+def merge_gw_diagnostics(season_dir: Path, players: dict, gws: list[int]) -> int:
+    """Attach p0, quantiles, mu_components from gw##_diagnostics.json when present."""
+    merged = 0
+    extra_keys = ("p0", "q05", "q25", "q50", "q75", "q95")
+    comp_keys = (
+        "appearance",
+        "goals",
+        "assists",
+        "clean_sheet",
+        "defensive",
+        "saves",
+        "goals_conceded",
+        "yellow",
+        "bonus",
+    )
+    for gw, _path in gw_files(season_dir):
+        diag_path = season_dir / f"gw{gw:02d}_diagnostics.json"
+        if not diag_path.exists():
+            continue
+        with diag_path.open(encoding="utf-8") as fh:
+            diag = json.load(fh)
+        for pid, info in diag.get("players", {}).items():
+            entry = players.get(pid)
+            if entry is None:
+                continue
+            if "p0" not in entry:
+                for k in extra_keys:
+                    entry[k] = []
+                for k in comp_keys:
+                    entry[f"mu_{k}"] = []
+            idx = entry["gw"].index(gw) if gw in entry["gw"] else None
+            if idx is None:
+                continue
+            # Pad arrays if shorter than gw list (shouldn't happen)
+            for k in extra_keys:
+                while len(entry[k]) <= idx:
+                    entry[k].append(None)
+            qu = info.get("quantiles") or [None] * 5
+            entry["p0"][idx] = num(info.get("p_0"), 4)
+            for j, qk in enumerate(("q05", "q25", "q50", "q75", "q95")):
+                entry[qk][idx] = num(qu[j] if j < len(qu) else None, 3)
+            comps = info.get("mu_components") or {}
+            for ck in comp_keys:
+                if f"mu_{ck}" not in entry:
+                    entry[f"mu_{ck}"] = []
+                while len(entry[f"mu_{ck}"]) <= idx:
+                    entry[f"mu_{ck}"].append(None)
+                entry[f"mu_{ck}"][idx] = num(comps.get(ck), 3)
+            merged += 1
+    return merged
+
+
+def export_diagnostics_gw(season: str, season_dir: Path, gw: int) -> dict | None:
+    path = season_dir / f"gw{gw:02d}_diagnostics.json"
+    if not path.exists():
+        return None
+    with path.open(encoding="utf-8") as fh:
+        payload = json.load(fh)
+    write_json(
+        f"season/{season}/gw/{gw:02d}/diagnostics.json",
+        {
+            "season": season,
+            "gw": gw,
+            "caveats": [CAVEATS["diagnostics"]],
+            **payload,
+        },
+    )
+    return {"players": len(payload.get("players", {})), "strategies": len(payload.get("squads", {}))}
+
+
+def export_audit(season: str, season_dir: Path) -> dict:
+    loo = read_csv(season_dir / "audit_loo.csv")
+    cf = read_csv(season_dir / "audit_counterfactual.csv")
+    write_json(
+        f"season/{season}/audit.json",
+        {
+            "season": season,
+            "caveats": [CAVEATS["audit_loo"], CAVEATS["diagnostics"]],
+            "model_config": {**PRODUCTION, "role": "live_resolv", "horizon": PRODUCTION["horizon_resolv"]},
+            "baseline_u_note": "Delta = U* - U without player (LOO). Counterfactual lock/exclude vs baseline.",
+            "loo": [
+                {
+                    "id": num(r["player_id"], 0),
+                    "name": r["web_name"],
+                    "pos": r["position"],
+                    "cost": num(r["cost"], 0),
+                    "next_mu": num(r["next_mu"], 4),
+                    "horizon_u": num(r["horizon_u"], 4),
+                    "p_start": num(r["p_start"], 4),
+                    "delta": num(r["delta"], 4),
+                    "tag": r["tag"],
+                    "incoming": r.get("incoming") or "",
+                    "strategy": r.get("strategy"),
+                }
+                for r in loo
+            ],
+            "counterfactuals": [
+                {
+                    "id": num(r["player_id"], 0),
+                    "name": r["web_name"],
+                    "action": r["action"],
+                    "delta": num(r["delta"], 4),
+                    "baseline_u": num(r["baseline_u"], 4),
+                    "alt_u": num(r["alt_u"], 4),
+                }
+                for r in cf
+            ],
+            "as_of": loo[0].get("as_of") if loo else None,
+        },
+    )
+    return {"loo": len(loo), "counterfactuals": len(cf)}
+
+
 def export_predictions(season: str, season_dir: Path) -> dict:
     """Columnar per-player series. One file serves the pool and the drawer."""
     players: dict[str, dict] = {}
@@ -314,16 +442,35 @@ def export_predictions(season: str, season_dir: Path) -> dict:
             entry["min"].append(num(row.get("actual_minutes"), 0))
             entry["start"].append(num(row.get("did_start"), 0))
 
+    diag_merged = merge_gw_diagnostics(season_dir, players, gws)
+    caveats = [CAVEATS["horizon"], CAVEATS["p_start"], CAVEATS["did_start"]]
+    if diag_merged:
+        caveats.append(CAVEATS["diagnostics"])
+
     size = write_json(
         f"season/{season}/predictions.json",
         {
             "season": season,
             "gws": gws,
-            "caveats": [CAVEATS["horizon"], CAVEATS["p_start"], CAVEATS["did_start"]],
+            "caveats": caveats,
+            "has_diagnostics": diag_merged > 0,
+            "model_config": (
+                {**V1_CONTROL, "role": "frozen_record"}
+                if season == LIVE_SEASON
+                else {**V1_CONTROL, "role": "historical_control"}
+            ),
             "players": players,
         },
     )
-    return {"gws": len(gws), "players": len(players), "rows": rows_seen, "bytes": size}
+    for gw in gws:
+        export_diagnostics_gw(season, season_dir, gw)
+    return {
+        "gws": len(gws),
+        "players": len(players),
+        "rows": rows_seen,
+        "bytes": size,
+        "diagnostics": diag_merged,
+    }
 
 
 def export_xi(season: str, season_dir: Path) -> dict:
@@ -651,10 +798,17 @@ def main() -> None:
         }
 
     live = export_predictions(LIVE_SEASON, RECORDS)
-    report[LIVE_SEASON] = {"predictions": live}
+    audit_live = export_audit(LIVE_SEASON, RECORDS)
+    report[LIVE_SEASON] = {"predictions": live, "audit": audit_live}
     write_json(
         f"season/{LIVE_SEASON}/meta.json",
-        {"season": LIVE_SEASON, "caveats": [CAVEATS["live_pool"]], "has_xi": False},
+        {
+            "season": LIVE_SEASON,
+            "caveats": [CAVEATS["live_pool"]],
+            "has_xi": False,
+            "production": PRODUCTION,
+            "controls": {"v1_gw1_baseline": V1_CONTROL},
+        },
     )
 
     write_json(
@@ -671,6 +825,8 @@ def main() -> None:
             "engine": git_info(),
             "snapshot_as_of": snapshot_as_of(),
             "live_season": LIVE_SEASON,
+            "production": PRODUCTION,
+            "controls": {"v1_gw1_baseline": V1_CONTROL},
             "seasons": [
                 {
                     "season": season,

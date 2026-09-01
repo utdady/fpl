@@ -1,10 +1,28 @@
 export type Position = "GKP" | "DEF" | "MID" | "FWD";
 
+export type ModelRole = "frozen_record" | "live_resolv" | "historical_control";
+
+export type ModelConfig = {
+  minutes_version: string;
+  rates_version: string;
+  strategy?: string;
+  horizon?: number;
+  tag?: string | null;
+  role?: ModelRole;
+  note?: string;
+};
+
 export type Manifest = {
   generated_at: string;
   engine: { sha: string | null; tag: string | null };
   snapshot_as_of: string | null;
   live_season: string;
+  /** Current engine.project_all defaults for live re-solves. */
+  production?: ModelConfig;
+  /** Permanent control arms — V1 freeze stays visible after production moves on. */
+  controls?: {
+    v1_gw1_baseline: ModelConfig;
+  };
   seasons: { season: string; gws: number; has_xi: boolean; has_lab: boolean }[];
   caveats: Record<string, string>;
 };
@@ -26,12 +44,31 @@ export type PlayerSeries = {
   pts: (number | null)[];
   min: (number | null)[];
   start: (number | null)[];
+  /** Present when capture.py diagnostics exist for that GW. */
+  p0?: (number | null)[];
+  q05?: (number | null)[];
+  q25?: (number | null)[];
+  q50?: (number | null)[];
+  q75?: (number | null)[];
+  q95?: (number | null)[];
+  mu_appearance?: (number | null)[];
+  mu_goals?: (number | null)[];
+  mu_assists?: (number | null)[];
+  mu_clean_sheet?: (number | null)[];
+  mu_defensive?: (number | null)[];
+  mu_saves?: (number | null)[];
+  mu_goals_conceded?: (number | null)[];
+  mu_yellow?: (number | null)[];
+  mu_bonus?: (number | null)[];
 };
 
 export type Predictions = {
   season: string;
   gws: number[];
   caveats: string[];
+  has_diagnostics?: boolean;
+  /** Which model produced this freeze (usually V1 control). */
+  model_config?: ModelConfig;
   players: Record<string, PlayerSeries>;
 };
 
@@ -264,6 +301,80 @@ export type Strategies = {
   gw: number;
   horizon: number;
   snapshot_as_of: string | null;
+  generated_at?: string;
+  model_config?: ModelConfig;
   caveats: string[];
   squads: Record<StrategyKey, StrategySquad>;
+};
+
+export type AuditLooRow = {
+  id: number;
+  name: string;
+  pos: Position;
+  cost: number | null;
+  next_mu: number | null;
+  horizon_u: number | null;
+  p_start: number | null;
+  delta: number | null;
+  tag: string;
+  incoming: string;
+  strategy: string | null;
+};
+
+export type AuditCounterfactual = {
+  id: number;
+  name: string;
+  action: "exclude" | "lock" | string;
+  delta: number | null;
+  baseline_u: number | null;
+  alt_u: number | null;
+};
+
+export type Audit = {
+  season: string;
+  caveats: string[];
+  model_config?: ModelConfig;
+  baseline_u_note: string;
+  loo: AuditLooRow[];
+  counterfactuals: AuditCounterfactual[];
+  as_of: string | null;
+};
+
+export type GwDiagnostics = {
+  season: string;
+  gw: number;
+  caveats: string[];
+  model_config?: ModelConfig;
+  note: string;
+  captured_at: string;
+  players: Record<
+    string,
+    {
+      name: string;
+      pos: Position;
+      quantiles: number[];
+      p_0: number;
+      mu_components: Record<string, number>;
+    }
+  >;
+  squads: Record<
+    StrategyKey,
+    {
+      cost: number;
+      bank: number;
+      captain: string;
+      vice: string;
+      players: {
+        id: number;
+        name: string;
+        pos: Position;
+        teamCode: string | null;
+        cost: number;
+        mu: number;
+        xi: boolean;
+        captain: boolean;
+        vice: boolean;
+      }[];
+    }
+  >;
 };

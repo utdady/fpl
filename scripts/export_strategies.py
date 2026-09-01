@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from engine.api import load_snapshot
+from engine.model_config import PRODUCTION
 from engine.optimize import solve_squad
 from engine.project import STRATEGIES, project_all
 
@@ -85,6 +86,7 @@ def export_strategies(*, refresh: bool) -> int:
         "horizon": HORIZON,
         "snapshot_as_of": as_of,
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "model_config": {**PRODUCTION, "role": "live_resolv", "horizon": HORIZON},
         "caveats": [CAVEAT],
         "squads": squads,
     }

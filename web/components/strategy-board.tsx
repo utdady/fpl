@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { ModelProvenance } from "./model-provenance";
 import { Pitch } from "./pitch";
 import { Section } from "./ui/section";
 import { Stat, StatRow } from "./ui/stat";
@@ -44,8 +45,13 @@ export function StrategyBoard({
 
   return (
     <div className="space-y-5">
+      <ModelProvenance
+        role="live_resolv"
+        config={data.model_config}
+        compact
+      />
       <Section
-        title={`V1 ${strategy} fifteen — ${season.replace("-", "/")} GW${data.gw}`}
+        title={`${strategy} fifteen — ${season.replace("-", "/")} GW${data.gw}`}
         subtitle={`Formation ${formation(xi.map((p) => p.pos))}. Captain ${squad.captain}, vice ${squad.vice}. Strategy changes the projected utility, not the constraint set.`}
         source="scripts/export_strategies.py from engine.optimize.solve_squad"
         caveats={data.caveats}

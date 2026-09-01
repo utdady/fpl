@@ -1,0 +1,16 @@
+player_id,web_name,position,cost,next_mu,horizon_u,p_start,delta,tag,incoming,strategy,as_of
+12,Saka,MID,95,5.0104,24.5263,0.72,4.7596,essential,"Cherki, Havertz, Lacroix, Muniz",balanced,2026-08-27T04:58:24.217304+00:00
+426,B.Fernandes,MID,120,6.9484,26.3304,0.72,4.0542,essential,"Aït-Nouri, Enzo, Furo, Haaland, Hincapie",balanced,2026-08-27T04:58:24.217304+00:00
+154,Palmer,MID,95,5.1864,22.771,0.72,3.0042,essential,"Cherki, Havertz, Lacroix, Muniz",balanced,2026-08-27T04:58:24.217304+00:00
+368,Szoboszlai,MID,70,4.3004,18.764,0.72,2.851,essential,Enzo,balanced,2026-08-27T04:58:24.217304+00:00
+579,Araujo,DEF,55,2.7684,12.1959,0.45,2.3156,essential,"Davies, Lacroix",balanced,2026-08-27T04:58:24.217304+00:00
+140,Sánchez,GKP,50,3.7224,16.5051,0.85,1.6676,marginal,"Lacroix, Petrović",balanced,2026-08-27T04:58:24.217304+00:00
+4,Gabriel,DEF,80,3.2004,14.8724,0.72,1.1384,marginal,"Havertz, Lacroix, Muniz, Senesi",balanced,2026-08-27T04:58:24.217304+00:00
+367,Gakpo,MID,70,3.7668,16.7481,0.72,0.8352,marginal,Enzo,balanced,2026-08-27T04:58:24.217304+00:00
+401,Marmoush,FWD,70,2.73,12.987,0.72,0.6427,marginal,"Furo, Havertz, Lacroix",balanced,2026-08-27T04:58:24.217304+00:00
+439,Šeško,FWD,70,3.1752,12.7157,0.72,0.4968,marginal,"Dubravka, Havertz",balanced,2026-08-27T04:58:24.217304+00:00
+496,Kinsky,GKP,45,3.1132,13.5228,0.75,0.0955,interchangeable,"Dubravka, Lacroix",balanced,2026-08-27T04:58:24.217304+00:00
+472,Murillo,DEF,55,1.7232,9.9679,0.45,0.0955,interchangeable,"Dubravka, Lacroix",balanced,2026-08-27T04:58:24.217304+00:00
+586,Mendy,DEF,40,0.6824,2.9277,0.1,0.0217,interchangeable,Herrington,balanced,2026-08-27T04:58:24.217304+00:00
+277,Egan,DEF,40,0.704,2.8601,0.1,0.0136,interchangeable,Herrington,balanced,2026-08-27T04:58:24.217304+00:00
+441,Obi,FWD,45,0.5,2.2919,0.1,0.0061,interchangeable,Mheuka,balanced,2026-08-27T04:58:24.217304+00:00

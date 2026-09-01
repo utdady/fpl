@@ -21,10 +21,10 @@ Projection + ILP
 
     V15["V1.5
 Prediction Capture
-🔄 Build now"]
+✅ Active"]
 
-    H["Backtest Harness Validation
-2024/25 sanity check"]
+    H["Backtest Harness
+✅ Four-season panel"]
 
     V2["V2
 Projection Improvement"]
@@ -44,6 +44,9 @@ Online Adaptation"]
     PRODUCT["PRODUCT TRACK
 Dashboard / What-if / Recommendations"]
 
+    VIEWER["Research viewer
+✅ Lab + Audit + Teams"]
+
     V1 --> V15
     V15 --> H
     H --> V2
@@ -53,6 +56,9 @@ Dashboard / What-if / Recommendations"]
     V5 --> V6
     V6 --> V7
     V7 --> V8
+
+    V15 --> VIEWER
+    H --> VIEWER
 
     V3 -. "minimum viable research model" .-> PRODUCT
     V8 -. "mature model" .-> PRODUCT
@@ -77,7 +83,8 @@ CAPTURE → MEASURE → DIAGNOSE → IMPROVE → BACKTEST → GATE"]
 |---|---|---|---|---|
 | **V1** | Transparent baseline | Works, legal, reproducible | None | ✅ Frozen GW1 2026/27 |
 | **V1.5** | No prediction history | GW1 predictions captured before results | V1 | ✅ Active |
-| **Historical Lab** | No validated backtest | Harness passes on 2024/25 + 2025/26 | V1.5 | 🔄 In progress |
+| **Historical Lab** | No validated backtest | Harness passes on 2024/25 + 2025/26 | V1.5 | ✅ Four-season E013 panel |
+| **Research viewer** | Results not inspectable | Read-only UI over frozen records + live re-solve | V1.5 + Historical Lab | ✅ Shipped (`web/`) |
 | **V2** | Projection quality | Lower MAE / higher Spearman vs V1 | Validated harness | ⏳ |
 | **V3** | Uncalibrated uncertainty | Better calibration / lower ECE | V2 | ⏳ |
 | **V4** | Independence assumption | Better portfolio/risk decisions | V3 distributions | ⏳ |
@@ -117,9 +124,10 @@ CAPTURE → MEASURE → DIAGNOSE → IMPROVE → BACKTEST → GATE"]
 
 ---
 
-### V1.5 — Prediction capture 🔄
+### V1.5 — Prediction capture ✅
 
-**Status:** Active. GW1 frozen to records/gw01_v1.0.csv.
+**Status:** Active. GW1 frozen and scored (`records/gw01_v1.0.csv`). Diagnostics
+and audit CSVs exportable via `--diagnostics`.
 
 **What it does:**
 - Serialises frozen projections to `records/gw{N:02d}_v1.0.csv` before results land
@@ -136,13 +144,37 @@ python -m engine.capture --gw 1
 
 # After results are published — score it
 python -m engine.capture --gw 1 --score
+# After results are published — score it
+python -m engine.capture --gw 1 --score
+
+# Optional: sim quantiles, mu components, LOO/counterfactual CSV, per-strategy squads
+python -m engine.capture --gw 1 --diagnostics
 ```
-
-
 
 ---
 
-### Historical Lab — As-of-T backtesting 🔄
+### Research viewer — read-only UI ✅
+
+**Status:** Shipped in `web/`. Exports from `scripts/export_ui.py`; never writes
+`records/`.
+
+**What it does:**
+- **Pool** — frozen prediction pool (V1 control μ/σ) for the live season
+- **XI board** — historical V1 vs B0 vs oracle; live season = strategy re-solve
+- **Lab** — six chart families from four-season artifacts (E013 panel, leakage, regret)
+- **Audit** — LOO delta, lock/exclude counterfactuals, sim quantiles, boom-or-bust quadrant
+- **Teams** — track public entries, pitch preview, rival compare, GW edge
+- **My team** — signed-in FPL session (picks, transfers, mini-leagues); research caveats apply
+
+**Model provenance:** UI labels **frozen record** vs **live re-solve** via
+`engine/model_config.py` → `manifest.json` (`production` vs `controls.v1_gw1_baseline`).
+Frozen GW1 pool stays V1 even when production runs `v2am_s`.
+
+See `web/README.md` for deploy, export cadence, and colour law.
+
+---
+
+### Historical Lab — As-of-T backtesting ✅
 
 **Status:** Complete. Four-season E013 robustness panel: 2022/23, 2023/24, 2024/25, 2025/26.
 
@@ -285,9 +317,13 @@ data contamination.
 
 ### V9 — Product track 🌐
 
-Separate from the research chain. Minimum research prerequisite: V3 (calibrated
-uncertainty). Dashboard, what-if analysis, transfer recommendations, explainable
-decisions.
+Separate from the research chain. Minimum research prerequisite: **V3** (calibrated
+uncertainty). Full product: dashboard, what-if analysis, transfer recommendations,
+explainable decisions.
+
+**Partial today (not V9):** Teams tracker, signed-in **My team**, and live strategy
+re-solve are convenience layers on top of the research viewer. They do not replace
+the V3 calibration gate for advice-shaped features.
 
 Product-specific success metrics (engagement, decision accuracy for real users)
 rather than out-of-sample MAE.
@@ -359,4 +395,9 @@ POST-GW1 (research)
   E034c concentrated: layered pair + re-equilibration; G_treat tripwire; displacement chain closed
   E035 concentrated: g_treat cluster AUROC 0.73 FAIL; replacement/budget weak; MC hypothesis
   E036/H-MC1 concentrated (negative): MC identical to U; V(S) payoff model next
+
+VIEWER (shipped, post-GW1)
+  web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels
+  capture --diagnostics → gw##_diagnostics.json, audit_loo.csv, audit_counterfactual.csv
+  export_ui.py → manifest production/controls, audit.json, diagnostics per GW
 ```

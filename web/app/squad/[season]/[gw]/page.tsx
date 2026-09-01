@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { GwStrip, SeasonTabs } from "@/components/gw-strip";
+import { ModelProvenance } from "@/components/model-provenance";
 import { Pitch, XiList } from "@/components/pitch";
 import { StrategyBoard } from "@/components/strategy-board";
 import { Section } from "@/components/ui/section";
@@ -45,14 +46,14 @@ export default async function SquadPage({
     if (strategies) {
       return (
         <div className="space-y-5">
-          <Header season={season} seasons={seasons} />
+          <Header season={season} seasons={seasons} manifest={manifest} />
           <StrategyBoard season={season} data={strategies} />
         </div>
       );
     }
     return (
       <div className="space-y-5">
-        <Header season={season} seasons={seasons} />
+        <Header season={season} seasons={seasons} manifest={manifest} />
         <Section
           title={`No eleven for ${seasonLabel(season)}`}
           subtitle="The XI board reads the decision decomposition, which exists only for scored seasons."
@@ -83,7 +84,7 @@ export default async function SquadPage({
   if (!v1.length) {
     return (
       <div className="space-y-5">
-        <Header season={season} seasons={seasons} />
+        <Header season={season} seasons={seasons} manifest={manifest} />
         <GwStrip season={season} current={gw} gws={availableGws} decisions={decisions.gws} />
         <Section
           title={`No eleven recorded for GW${gw}`}
@@ -98,7 +99,7 @@ export default async function SquadPage({
 
   return (
     <div className="space-y-5">
-      <Header season={season} seasons={seasons} />
+      <Header season={season} seasons={seasons} manifest={manifest} historical={labSeasons.includes(season)} />
 
       <GwStrip season={season} current={gw} gws={availableGws} decisions={decisions.gws} />
 
@@ -180,17 +181,35 @@ export default async function SquadPage({
   );
 }
 
-function Header({ season, seasons }: { season: string; seasons: string[] }) {
+function Header({
+  season,
+  seasons,
+  manifest,
+  historical = false,
+}: {
+  season: string;
+  seasons: string[];
+  manifest?: Awaited<ReturnType<typeof getManifest>>;
+  historical?: boolean;
+}) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
         <h1 className="text-xl font-semibold tracking-tight">XI board</h1>
         <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-muted">
-          The frozen V1 eleven for every scored gameweek, beside the official-xP eleven
-          and the hindsight oracle. The live season is a re-solved fifteen (safe /
-          balanced / aggressive) from the cached snapshot; historical boards remain an
-          eleven because the bench was never persisted.
+          {historical
+            ? "The frozen V1 eleven for every scored gameweek, beside the official-xP eleven and the hindsight oracle."
+            : "The live season is a re-solved fifteen (safe / balanced / aggressive) from the cached snapshot; historical boards remain an eleven because the bench was never persisted."}
         </p>
+        {historical && manifest && (
+          <ModelProvenance
+            className="mt-3 max-w-2xl"
+            role="historical_control"
+            config={manifest.controls?.v1_gw1_baseline}
+            manifest={manifest}
+            compact
+          />
+        )}
       </div>
       <SeasonTabs seasons={seasons} current={season} basePath="squad" />
     </div>

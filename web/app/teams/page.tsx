@@ -1,3 +1,4 @@
+import { ModelProvenance } from "@/components/model-provenance";
 import { TeamTracker, type PoolPlayer } from "@/components/team-tracker";
 import { getFixtures, getLivePlayers, getManifest, getPredictions, getStrategies, getTeamCodes } from "@/lib/data";
 import { isGwInProgress } from "@/lib/gw-live";
@@ -44,10 +45,15 @@ export default async function TeamsPage() {
       <div>
         <h1 className="text-xl font-semibold tracking-tight">Teams</h1>
         <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-muted">
-          Track public FPL entries by ID. Mark yours, preview the pitch, then open a
-          team for Notes vs V1 or rival compare (overlap, xP gap, this-GW edge).
-          Scores use the frozen V1 pool — not live FPL xP.
+          Track public FPL entries by ID. Compare and GW edge score picks with the
+          frozen pool μ/σ below — not live FPL xP.
         </p>
+        <ModelProvenance
+          className="mt-3 max-w-2xl"
+          role="frozen_record"
+          config={predictions.model_config ?? manifest.controls?.v1_gw1_baseline}
+          manifest={manifest}
+        />
       </div>
       <TeamTracker
         gw={gw}

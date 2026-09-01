@@ -30,10 +30,19 @@ export function SiteNav({ manifest }: { manifest: Manifest }) {
   return (
     <header className="flex flex-wrap items-center gap-x-6 gap-y-3 py-6">
       <Link href="/" className="group flex items-baseline gap-2">
-        <span className="text-[15px] font-semibold tracking-tight">FPL</span>
-        <span className="rounded bg-model/12 px-1.5 py-0.5 font-mono text-[10px] font-medium tracking-wider text-model">
-          V1
-        </span>
+        <span className="text-[15px] font-semibold tracking-tight">FPL Research</span>
+        {manifest.engine.tag ? (
+          <span
+            className="rounded bg-model/12 px-1.5 py-0.5 font-mono text-[10px] font-medium tracking-wider text-model"
+            title={`Production: ${manifest.production?.minutes_version ?? "?"} · ${manifest.production?.rates_version ?? "?"}`}
+          >
+            {manifest.engine.tag}
+          </span>
+        ) : (
+          <span className="rounded bg-model/12 px-1.5 py-0.5 font-mono text-[10px] font-medium tracking-wider text-model">
+            viewer
+          </span>
+        )}
       </Link>
 
       <nav className="flex flex-wrap items-center gap-1">

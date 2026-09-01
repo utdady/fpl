@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ModelProvenance } from "@/components/model-provenance";
 import { PoolTable, type PoolRow } from "@/components/pool-table";
 import { Section } from "@/components/ui/section";
 import { Stat, StatRow } from "@/components/ui/stat";
@@ -76,10 +77,16 @@ export default async function PoolPage() {
             {seasonLabel(season)} · Gameweek {gw}
           </h1>
           <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-muted">
-            The frozen V1 prediction pool. Projections come from the record captured
-            before the deadline; prices, ownership and availability come from the cached
-            FPL snapshot{SNAPSHOT_DAY ? ` of ${SNAPSHOT_DAY}` : ""} and are not live.
+            The frozen prediction pool (V1 control). μ/σ come from the pre-deadline
+            capture; prices, ownership and availability come from the cached FPL
+            snapshot{SNAPSHOT_DAY ? ` of ${SNAPSHOT_DAY}` : ""} and are not live.
           </p>
+          <ModelProvenance
+            className="mt-3 max-w-2xl"
+            role="frozen_record"
+            config={predictions.model_config ?? manifest.controls?.v1_gw1_baseline}
+            manifest={manifest}
+          />
         </div>
         {latestLab && (
           <Link

@@ -3,9 +3,11 @@ import path from "node:path";
 import { cache } from "react";
 
 import type {
+  Audit,
   Compare,
   Decisions,
   Fixtures,
+  GwDiagnostics,
   Leakage,
   LivePlayers,
   Manifest,
@@ -62,6 +64,14 @@ export async function getTeamCodes(season: string): Promise<Record<number, strin
 
 export const getStrategies = (season: string) =>
   readJson<Strategies>(`season/${season}/strategies.json`);
+
+export const getAudit = (season: string) =>
+  readJson<Audit>(`season/${season}/audit.json`).catch(() => null);
+
+export const getGwDiagnostics = (season: string, gw: number) =>
+  readJson<GwDiagnostics>(`season/${season}/gw/${String(gw).padStart(2, "0")}/diagnostics.json`).catch(
+    () => null,
+  );
 
 /** Historical seasons that have both a Lab and an XI board. */
 export async function getLabSeasons(): Promise<string[]> {

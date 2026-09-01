@@ -15,9 +15,9 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FPL V1 — research viewer",
+  title: "FPL Research — projection viewer",
   description:
-    "Projection-first Fantasy Premier League research viewer. Frozen predictions, evaluation metrics, and calibration evidence.",
+    "Projection-first Fantasy Premier League research viewer. Frozen V1 control, live re-solves, evaluation metrics, and calibration evidence.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
