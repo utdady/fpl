@@ -6,3 +6,6 @@ __pycache__/
 .python-version
 .DS_Store
 data/vaastav/
+formal/.lake/
+formal/lake-packages/
+formal/build/

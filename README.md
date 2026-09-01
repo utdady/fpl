@@ -76,6 +76,15 @@ Observational E008/E009 (does not change V1):
 python -m engine.obs --season 2025-26
 ```
 
+Formal integrity (optional; not a V2 gate):
+
+```bash
+python -m unittest tests.test_e012_integrity -v   # regression on real artifacts
+cd formal && lake build                            # Lean 4 spec (requires elan)
+```
+
+See [`formal/README.md`](formal/README.md) and [`docs/FORMAL.md`](docs/FORMAL.md).
+
 ## Documentation
 
 | Doc | Purpose |
@@ -84,5 +93,7 @@ python -m engine.obs --season 2025-26
 | [`docs/LAB_LOG.md`](docs/LAB_LOG.md) | Hypotheses, E-codes, verdicts (append-only) |
 | [`ROADMAP.md`](ROADMAP.md) | Version ladder and production vs control |
 | [`docs/HARNESS_SPEC.md`](docs/HARNESS_SPEC.md) | As-of-T rules and validation gates |
+| [`docs/FORMAL.md`](docs/FORMAL.md) | Evaluation invariants; Lean spec in `formal/` |
+| [`formal/README.md`](formal/README.md) | Build Lean 4 formal core (`lake build`) |
 | [`docs/V2_INVESTIGATION.md`](docs/V2_INVESTIGATION.md) | Nested regret and evaluation protocol |
 | [`web/README.md`](web/README.md) | UI export, deploy, live strategy refresh |
