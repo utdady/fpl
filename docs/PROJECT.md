@@ -480,9 +480,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E034b concentrated)
+### Valuation / selection (E034c concentrated)
 
-E034b: forcing one entrant with treat utility reproduces full treat cap (Δ_cascade=0); ILP re-equilibrates entire 15. Tripwire not incremental cascade.
+E034c: layered damage on FAIL — pair swap already negative (Δ_pair ≈ −1), re-equilibration adds ~2.5 more (Δ_reeq), G_treat gap explains tripwire. Displacement chain E030→E034c closed.
 
 ---
 
@@ -534,6 +534,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E033** | Squad pool / μ-inflation diagnostic | **concentrated** — wrong-15 pool dominates FAIL |
 | **E034** | Squad entrant toxicology + boundary | **concentrated** — budget displacement signal |
 | **E034b** | Forced-swap counterfactual | **concentrated** — tripwire re-equilibration; Δ_cascade=0 |
+| **E034c** | Pairwise swap counterfactual | **concentrated** — layered pair + re-equilibration; chain closed |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

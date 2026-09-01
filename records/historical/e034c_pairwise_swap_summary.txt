@@ -1,0 +1,19 @@
+E034c: pairwise swap vs ILP re-equilibration
+pair = manual E<->L on ctrl 15; delta_reeq = delta_full - delta_pair
+
+=== FAIL pairs n=257 ===
+  mean_delta_pair=-0.973 mean_delta_reeq=-2.525 mean_delta_full=-3.498
+  mean_delta_ilp=-3.498
+  mean_abs_pair=4.125 mean_abs_reeq=7.272
+  |reeq|>|pair|: 55.3% (142/257)
+  mean_g_treat=1.346 mean_g_ctrl=0.394
+  mean_dpts_swap(ent-leaver)=-1.646
+
+=== PASS pairs n=171 ===
+  mean_delta_pair=1.064 mean_delta_reeq=2.269 mean_delta_full=3.333
+  mean_delta_ilp=3.333
+  mean_abs_pair=4.795 mean_abs_reeq=5.322
+  |reeq|>|pair|: 55.0% (94/171)
+  mean_g_treat=0.866 mean_g_ctrl=0.470
+  mean_dpts_swap(ent-leaver)=-0.860
+

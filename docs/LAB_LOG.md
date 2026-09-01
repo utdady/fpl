@@ -1,4 +1,4 @@
-c# Experiment Log
+# Experiment Log
 
 Living record of hypotheses, tests, and results. **Append new experiments; do not rewrite old verdicts.** If a later test overturns an earlier one, add a new row and link back.
 
@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E034b complete — single forced entrant triggers full treat re-equilibration (Δ_force=Δ_full). Pairwise-swap counterfactual earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E034c concentrated — layered pair displacement + re-equilibration on FAIL; displacement chain closed. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1445,17 +1445,53 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated.** Rejects incremental cascade-beyond-force decomposition. Supports **tripwire re-equilibration**: marginal admission with treat objective triggers full portfolio jump. Branch → **pairwise-swap** counterfactual (E in / L out only, no full re-solve) to isolate minimal displacement vs ILP re-equilibration.
 
 - **Artifacts:** `scripts/e034b_forced_swap.py`; `records/historical/e034b_forced_swap_entrants.csv`; `records/historical/e034b_forced_swap_gw.csv`; `records/historical/e034b_forced_swap_summary.txt`
-- **Follow-up:** E034c pairwise forced swap (must_include E + must_exclude L, or manual squad) vs ILP re-solve.
+- **Follow-up:** → **E034c** pairwise swap (manual E↔L, no squad re-solve).
+
+### E034c - Pairwise swap counterfactual
+- **Date:** 2026-09-01 (after E034b tripwire)
+- **Status:** **concentrated** — layered damage: pair displacement negative on FAIL; re-equilibration adds larger residual; G_treat explains tripwire
+- **Hypothesis:** E034b: must_include E → full treat 15. Open: does **minimal pair swap** (E↔L on ctrl 15) account for damage, or is `Δ_re-eq = Δ_full − Δ_pair` large?
+- **Question:** Same-position (E,L) pairs; manual squad swap + solve_xi only. Compare `Δ_pair`, `Δ_ilp`, `Δ_full`, G/G₀ objective gaps.
+
+- **Scope lock:**
+  ```text
+  pair: manual E in / L out on ctrl 15; no squad ILP
+  metrics: delta_pair, delta_reeq, g_treat, g_ctrl
+  forbidden: new utility, lambda, squad ILP rewrite
+  ```
+
+- **Method:** `python scripts/e034c_pairwise_swap.py` (428 pair-rows across 4 seasons).
+
+- **Results:**
+
+  | Metric | FAIL (n=257) | PASS (n=171) |
+  |---|---:|---:|
+  | mean Δ_pair | **−0.97** | +1.06 |
+  | mean Δ_reeq | **−2.53** | +2.27 |
+  | mean Δ_full | **−3.50** | +3.33 |
+  | mean \|Δ_pair\| | 4.13 | 4.80 |
+  | mean \|Δ_reeq\| | **7.27** | 5.32 |
+  | \|reeq\|>\|pair\| | 55% (142/257) | 55% (94/171) |
+  | mean G_treat | **1.35** | 0.87 |
+  | mean G_ctrl | 0.39 | 0.47 |
+  | mean dpts_swap (E−L) | **−1.65** | −0.86 |
+
+  `Δ_ilp = Δ_full` on every row (confirms E034b tripwire). Minimal E↔L swap is **already negative** on FAIL (mean Δ_pair ≈ −1). Re-equilibration adds ~2.5 more pts loss on average; \|Δ_reeq\| > \|Δ_pair\| in means but only ~55% of pairs. **G_treat** large on FAIL (1.35 vs 0.39 G_ctrl): treat utility strongly prefers full composition over pair-adjusted ctrl, explaining why ILP jumps away from minimal swap.
+
+- **Verdict:** **concentrated.** Rejects clean either/or decomposition. Damage is **layered**: (1) entrants worse than leavers at pair level on FAIL; (2) re-equilibration to full treat adds larger residual; (3) objective gap G drives tripwire. Closes displacement localization chain E030→E034c. No promote on FAIL evidence.
+
+- **Artifacts:** `scripts/e034c_pairwise_swap.py`; `records/historical/e034c_pairwise_swap.csv`; `records/historical/e034c_pairwise_swap_summary.txt`
+- **Follow-up:** displacement chain closed; no pre-registered E035. Do not promote `rates_v2b` on FAIL panel.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E034b concentrated):
+As of 2026-09-01 (E034c concentrated):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** E024–E034b; tripwire re-equilibration (force one entrant → full treat 15).
-3. **Next.** E034c pairwise-swap counterfactual. PASS ≠ auto-promote.
+2. **Closed:** E024–E034c displacement localization chain (layered pair + re-equilibration).
+3. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 
 ---
 
@@ -1495,6 +1531,7 @@ python scripts/e032_xi_objective_audit.py  # E032: XI objective audit (oracle XI
 python scripts/e033_squad_pool_diagnostic.py  # E033: squad pool / mu-inflation
 python scripts/e034_squad_entrant_toxicology.py  # E034: squad entrant toxicology
 python scripts/e034b_forced_swap.py  # E034b: forced entrant vs cascade
+python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibration
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers
