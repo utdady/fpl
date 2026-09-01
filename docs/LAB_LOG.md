@@ -2,11 +2,11 @@
 
 Living record of hypotheses, tests, and results. **Append new experiments; do not rewrite old verdicts.** If a later test overturns an earlier one, add a new row and link back.
 
-Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`, `docs/V2_SPEC.md`, `docs/FORMAL.md`, `docs/PORTFOLIO_VALUE_SPEC.md`.
+Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`, `docs/V2_SPEC.md`, `docs/FORMAL.md`, `docs/PORTFOLIO_VALUE_SPEC.md`, `docs/DECISION_CHARTER.md`.
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E037 concentrated (negative) — V_B ≈ V_A alignment; both anti-align on FAIL. V_C state spec or upstream μ regime. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E038 concentrated — Landing A (season-structural FAIL damage). Charter: `docs/DECISION_CHARTER.md`. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1603,18 +1603,50 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `scripts/e037_portfolio_value_alignment.py`; `records/historical/e037_portfolio_value_alignment_gw.csv`; `records/historical/e037_portfolio_value_alignment_summary.txt`
 - **Spec:** `docs/PORTFOLIO_VALUE_SPEC.md` §8
-- **Follow-up:** V_C state spec (Phase 0); no horizon-only ILP change on FAIL evidence.
+- **Follow-up:** → decision charter + E038 season payoff. See `docs/DECISION_CHARTER.md`.
+
+### E038 - Season payoff (rolling vs GW1-lock)
+- **Date:** 2026-09-02 (after decision charter)
+- **Status:** **concentrated** — both arms negative on FAIL seasons; Landing A (season-structural); Landing B rejected
+- **Hypothesis:** E037 closed separable V_A/V_B at GW level. Open: is FAIL damage season-structural (Landing A) or amplified by rolling re-squadding (Landing B)?
+- **Question:** On FAIL seasons, do rolling season ΣΔCap and GW1-lock season ΣΔCap differ in sign?
+
+- **Scope lock:**
+  ```text
+  rolling:   re-solve squad each GW; sum delta_cap (E024 stack)
+  gw1_lock:  fix GW1 treat/ctrl 15; XI+cap each GW on as-of-T mu
+  forbidden: transfers, V_C, new mu, optimizer integration
+  ```
+
+- **Method:** `python scripts/e038_season_payoff.py` (4 season-rows; 151 GW-rows).
+
+- **Results:**
+
+  | Season | Gate | rolling ΣΔCap | GW1-lock ΣΔCap |
+  |---|---|---:|---:|
+  | 2022-23 | FAIL | **−115** | **−88** |
+  | 2025-26 | FAIL | **−13** | **−383** |
+  | 2023-24 | PASS | +72 | +91 |
+  | 2024-25 | PASS | +61 | +57 |
+
+  FAIL: **both arms negative** (mean rolling −64, mean lock −236). GW1-lock is **not** better — 2025-26 lock far worse (−383 vs −13 rolling). PASS: both positive (~+67–74).
+
+- **Verdict:** **concentrated — Landing A.** Season-level damage is not an artifact of rolling re-squadding alone. Fixing GW1 15 does not rescue FAIL seasons; treat arm loses on cumulative Cap under both policies. **Landing B rejected** for promote narrative. Charter: stay conservative on treat displacement; GW-Cap FAIL gate is consistent with season sums. V_C still gated — state spec only if pursued; no automatic path from E038.
+
+- **Artifacts:** `scripts/e038_season_payoff.py`; `records/historical/e038_season_payoff_season.csv`; `records/historical/e038_season_payoff_gw.csv`; `records/historical/e038_season_payoff_summary.txt`
+- **Charter:** `docs/DECISION_CHARTER.md`
+- **Follow-up:** document Landing A as primary charter stance; V_C only with explicit new hypothesis (not re-squadding rescue)
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-02 (E037 concentrated negative):
+As of 2026-09-02 (E038 concentrated):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE (horizon squad objective).
-2. **Closed:** E024–E037 (incl. V_A vs V_B alignment).
-3. **Next.** V_C transfer/state vector spec (Phase 0 only). No horizon ILP promote on FAIL.
-4. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
+2. **Charter.** `docs/DECISION_CHARTER.md` — **Landing A** primary stance (E038).
+3. **Closed:** E024–E038 for GW/separable-V promote path.
+4. **No promote** `rates_v2b`. g_treat = caution signal. V_C gated.
 
 ---
 
@@ -1658,6 +1690,7 @@ python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibratio
 python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
 python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
 python scripts/e037_portfolio_value_alignment.py  # E037: V_A vs V_B alignment
+python scripts/e038_season_payoff.py  # E038: season payoff rolling vs GW1-lock
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

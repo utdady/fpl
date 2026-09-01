@@ -1,0 +1,19 @@
+E038: season payoff rolling vs GW1-lock (Landing A vs B)
+rolling = re-solve squad each GW; gw1_lock = fix GW1 15, XI/cap each GW
+
+=== FAIL seasons n=2 ===
+  rolling_sum_delta_cap:  [-115.0, -13.0]  mean=-64.0
+  gw1_lock_sum_delta_cap: [-88.0, -383.0]  mean=-235.5
+  2022-23: roll=-115.0 lock=-88.0
+  2025-26: roll=-13.0 lock=-383.0
+
+=== PASS seasons n=2 ===
+  rolling_sum_delta_cap:  [72.0, 61.0]  mean=66.5
+  gw1_lock_sum_delta_cap: [91.0, 57.0]  mean=74.0
+  2023-24: roll=72.0 lock=91.0
+  2024-25: roll=61.0 lock=57.0
+
+=== Branching guide ===
+  both roll and lock negative on FAIL -> Landing A (season-structural)
+  roll negative, lock neutral/positive on FAIL -> Landing B (re-squadding stress)
+

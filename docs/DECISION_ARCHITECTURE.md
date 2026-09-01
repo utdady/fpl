@@ -357,5 +357,5 @@ Do **not** promote `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 | **E036 / H-MC1** | **concentrated (negative)** — MC ≡ U; Phase C closed |
 | **E037** | **concentrated (negative)** — V_B ≈ V_A; both anti-align FAIL; E038 not earned |
 
-The next productive step is **V_C state vector spec** ([`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md)),
-not horizon-only ILP or another separable \(V\) tweak.
+The next productive step is **[`DECISION_CHARTER.md`](DECISION_CHARTER.md)** and
+pre-registered **E038** season payoff (rolling vs GW1-lock).

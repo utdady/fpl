@@ -1,0 +1,5 @@
+season,e024_gate,n_gw,rolling_sum_delta_cap,gw1_lock_sum_delta_cap,gw1_lock_ctrl_total_cap,gw1_lock_treat_total_cap,rolling_mean_delta_cap,gw1_lock_mean_delta_cap
+2022-23,FAIL,37,-115.0,-88.0,1398.0,1310.0,-3.1081,-2.3784
+2023-24,PASS,38,72.0,91.0,1512.0,1603.0,1.8947,2.3947
+2024-25,PASS,38,61.0,57.0,1590.0,1647.0,1.6053,1.5
+2025-26,FAIL,38,-13.0,-383.0,1408.0,1025.0,-0.3421,-10.0789

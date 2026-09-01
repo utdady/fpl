@@ -20,7 +20,8 @@ It does **not** replace the living experiment log. Numbers and verdicts live in
 | [`V2_SPEC.md`](V2_SPEC.md) | How a successor model earns a version number |
 | [`FORMAL.md`](FORMAL.md) | What Lean could prove vs what statistics prove (post-GW1) |
 | [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer history, failure modes, E030–E036 |
-| [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | Portfolio value estimand, candidate \(V(S)\), E037 plan |
+| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Estimand/action fork; Landing A vs B; E038 plan |
+| [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | Candidate \(V(S)\), E035–E037 results |
 | `ROADMAP.md` | Version ladder (may lag E013; do not treat it as the experiment log) |
 
 Python tells us what happened. Statistics tell us whether it is reproducible.
@@ -482,9 +483,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E037 concentrated negative)
+### Valuation / selection (E038 concentrated)
 
-E037: V_B does not beat V_A on FAIL (Δcorr +0.013); both anti-align (~−0.19). Horizon objective alone does not fix regime inversion. V_C state spec next.
+E038: both rolling and GW1-lock season ΣΔCap negative on FAIL — Landing A (season-structural). Charter: `docs/DECISION_CHARTER.md`.
 
 ---
 
@@ -540,6 +541,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E035** | Portfolio value decomposition | **concentrated** — g_treat cluster; MC hypothesis earned |
 | **E036** | Contextual marginal admission value (H-MC1) | **concentrated (negative)** — MC ≡ U; V(S) suspect |
 | **E037** | Portfolio value alignment (\(V_A\) vs \(V_B\)) | **concentrated (negative)** — V_B ≈ V_A; both anti-align FAIL |
+| **E038** | Season payoff (rolling vs GW1-lock) | **concentrated** — Landing A; both negative FAIL |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

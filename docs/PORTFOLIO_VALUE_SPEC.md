@@ -312,8 +312,8 @@ add a declaration to `formal/` before production integration.
 PRODUCTION     v2am_s + rates=v1 + fixtures v1  (horizon squad objective)
 CLOSED         E024–E036
 SPEC           this document (Phase 0)
-NEXT           V_C state vector spec (Phase 0); no E038 horizon promote
-NOT NEXT       horizon-only ILP switch on FAIL evidence
+NEXT           E038 season payoff (see DECISION_CHARTER.md)
+NOT NEXT       V_C code before E038 branches
 ```
 
-See [`LAB_LOG.md`](LAB_LOG.md) § E037 for frozen scope when implemented.
+See [`DECISION_CHARTER.md`](DECISION_CHARTER.md) and [`LAB_LOG.md`](LAB_LOG.md) § E038.
