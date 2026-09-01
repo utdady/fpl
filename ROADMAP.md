@@ -208,6 +208,7 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 **E034 concentrated:** budget displacement; entrants OK individually; vs_leaver −0.5 on FAIL.
 **E034b concentrated:** force one entrant → full treat 15; Δ_cascade=0.
 **E034c concentrated:** layered pair displacement + re-equilibration; G_treat explains tripwire; chain closed.
+**E035 concentrated:** g_treat cluster discriminates portfolio_bad; proxies collinear; MC hypothesis earned.
 
 ---
 
@@ -355,4 +356,5 @@ POST-GW1 (research)
   E034 concentrated: budget displacement signal; not toxic entrant; vs_leaver FAIL -0.5
   E034b concentrated: single forced entrant reproduces full treat; cascade residual 0
   E034c concentrated: layered pair + re-equilibration; G_treat tripwire; displacement chain closed
+  E035 concentrated: g_treat cluster AUROC 0.73 FAIL; replacement/budget weak; MC hypothesis
 ```

@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E034c concentrated — layered pair displacement + re-equilibration on FAIL; displacement chain closed. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E035 concentrated — g_treat/composition-shift cluster discriminates portfolio_bad; marginal/contextual value hypothesis earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. See `docs/DECISION_ARCHITECTURE.md`.
 
 ---
 
@@ -1481,17 +1481,59 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated.** Rejects clean either/or decomposition. Damage is **layered**: (1) entrants worse than leavers at pair level on FAIL; (2) re-equilibration to full treat adds larger residual; (3) objective gap G drives tripwire. Closes displacement localization chain E030→E034c. No promote on FAIL evidence.
 
 - **Artifacts:** `scripts/e034c_pairwise_swap.py`; `records/historical/e034c_pairwise_swap.csv`; `records/historical/e034c_pairwise_swap_summary.txt`
-- **Follow-up:** displacement chain closed; no pre-registered E035. Do not promote `rates_v2b` on FAIL panel.
+- **Follow-up:** displacement chain closed → **E035** portfolio-value decomposition. See `docs/DECISION_ARCHITECTURE.md`.
+
+### E035 - Portfolio value decomposition
+- **Date:** 2026-09-01 (after decision-architecture spec)
+- **Status:** **concentrated** — g_treat/composition-shift cluster discriminates portfolio_bad on FAIL; proxies collinear; replacement/budget weak; signal architecture-intrinsic (both gates)
+- **Hypothesis:** E030–E034c show standalone \(U_i = f(\mu_i)\) is insufficient for constrained 15-player selection. Open: which **portfolio-level quantity** best explains why treat portfolios are attractive under treat μ but inferior in realized Cap on FAIL?
+- **Question:** On FAIL treatment GWs, which pre-registered proxy discriminates `portfolio_bad` (treat Cap < ctrl Cap) from `portfolio_good` within the treatment arm?
+
+- **Scope lock:**
+  ```text
+  stack:    v2am_s + rates_v2b (treat) vs rates=v1 (ctrl); objective=next; balanced; seed=7
+  unit:     GW-level treatment squads on FAIL seasons (2022-23, 2025-26)
+  proxies:  budget_opp_cost, replacement_value, positional_scarcity, bench_mass,
+            composition_shift (n_diff, overlap, G/G₀), near_tie_bucket (E026 ε)
+  primary:  AUROC(proxy, portfolio_bad) per proxy; Mann-Whitney U as robustness
+  secondary (report only): same on PASS treat GWs; proxy collinearity matrix
+  forbidden: new objective term, MC_i(S) implementation, λ/ε/q fishing, promote on winner
+  ```
+
+- **Method:** `python scripts/e035_portfolio_decomposition.py` (151 GW-rows).
+
+- **Results (primary: AUROC within gate, higher = predicts portfolio_bad):**
+
+  | Proxy | FAIL AUROC | PASS AUROC |
+  |---|---:|---:|
+  | **g_treat** | **0.729** | 0.668 |
+  | n_squad_changes | 0.674 | 0.671 |
+  | delta_u_pred | 0.668 | 0.605 |
+  | near_tie_frac | 0.667 | 0.578 |
+  | replacement_value | 0.571 | 0.674 |
+  | bench_mass_delta | 0.568 | 0.576 |
+  | budget_opp_cost | 0.462 | 0.377 |
+  | positional_scarcity | 0.366 | 0.469 |
+  | mean_vs_leaver_pts | **0.210** | 0.152 |
+
+  FAIL: n=75 GWs, portfolio_bad=30. **g_treat** (treat-utility gap: full treat vs ctrl composition under treat μ) best discriminates bad portfolios. **Collinear cluster:** corr(g_treat, delta_u_pred)=0.74; corr(g_treat, n_squad_changes)=0.69. **replacement_value** and **budget_opp_cost** weak on FAIL. **mean_vs_leaver_pts inverted** (AUROC 0.21) — realized swap quality anti-predicts portfolio_bad, consistent with E032 μ inversion. FAIL vs PASS AUROC deltas small for top proxies (g_treat +0.06) — signal is **architecture-intrinsic**, not treatment-specific distortion only.
+
+- **Verdict:** **concentrated.** No novel proxy beyond the **objective-gap / composition-shift** cluster (g_treat, ΔU_pred, n_changes, near_tie). The missing quantity is not replacement value or budget opp cost in isolation — it is **how much the treat objective rewards moving away from the control composition**. Realized entrant-leaver quality does not discriminate (inverted). Branch → **mechanism hypothesis**: portfolio value = f(standalone μ, **admission context G/MC**) — formulate in spec, do not implement MC yet.
+
+- **Artifacts:** `scripts/e035_portfolio_decomposition.py`; `records/historical/e035_portfolio_decomposition_gw.csv`; `records/historical/e035_portfolio_decomposition_summary.txt`
+- **Spec:** `docs/DECISION_ARCHITECTURE.md`
+- **Follow-up:** mechanism hypothesis doc for marginal/contextual portfolio value; no optimizer change.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E034c concentrated):
+As of 2026-09-01 (E035 concentrated):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** E024–E034c displacement localization chain (layered pair + re-equilibration).
-3. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
+2. **Closed:** E024–E034c displacement chain; E035 proxy decomposition.
+3. **Next.** Mechanism hypothesis for contextual/marginal portfolio value (spec only). No optimizer change.
+4. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 
 ---
 
@@ -1532,6 +1574,7 @@ python scripts/e033_squad_pool_diagnostic.py  # E033: squad pool / mu-inflation
 python scripts/e034_squad_entrant_toxicology.py  # E034: squad entrant toxicology
 python scripts/e034b_forced_swap.py  # E034b: forced entrant vs cascade
 python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibration
+python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

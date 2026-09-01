@@ -19,6 +19,7 @@ It does **not** replace the living experiment log. Numbers and verdicts live in
 | [`V2_INVESTIGATION.md`](V2_INVESTIGATION.md) | Nested regret, evaluation status, H0–H3 protocol |
 | [`V2_SPEC.md`](V2_SPEC.md) | How a successor model earns a version number |
 | [`FORMAL.md`](FORMAL.md) | What Lean could prove vs what statistics prove (post-GW1) |
+| [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer spec: current V(S), failure modes, E035 proxies |
 | `ROADMAP.md` | Version ladder (may lag E013; do not treat it as the experiment log) |
 
 Python tells us what happened. Statistics tell us whether it is reproducible.
@@ -480,9 +481,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E034c concentrated)
+### Valuation / selection (E035 concentrated)
 
-E034c: layered damage on FAIL — pair swap already negative (Δ_pair ≈ −1), re-equilibration adds ~2.5 more (Δ_reeq), G_treat gap explains tripwire. Displacement chain E030→E034c closed.
+E035: g_treat/composition-shift cluster discriminates portfolio_bad (AUROC 0.73 FAIL); replacement/budget weak; realized swap inverted. Marginal/contextual value (MC_i(S)) hypothesis earned — spec only, no optimizer change.
 
 ---
 
@@ -535,6 +536,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E034** | Squad entrant toxicology + boundary | **concentrated** — budget displacement signal |
 | **E034b** | Forced-swap counterfactual | **concentrated** — tripwire re-equilibration; Δ_cascade=0 |
 | **E034c** | Pairwise swap counterfactual | **concentrated** — layered pair + re-equilibration; chain closed |
+| **E035** | Portfolio value decomposition | **concentrated** — g_treat cluster; MC hypothesis earned |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

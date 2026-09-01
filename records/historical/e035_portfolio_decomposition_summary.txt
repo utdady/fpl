@@ -1,0 +1,46 @@
+E035: portfolio-value decomposition (descriptive)
+primary: AUROC(proxy, portfolio_bad) within gate; higher = proxy predicts bad
+
+=== FAIL treat GWs n=75 portfolio_bad=30 ===
+  g_treat                AUROC=0.729  U=984.0  (bad=30 good=45)
+  n_squad_changes        AUROC=0.674  U=910.0  (bad=30 good=45)
+  delta_u_pred           AUROC=0.668  U=902.0  (bad=30 good=45)
+  near_tie_frac          AUROC=0.667  U=900.0  (bad=30 good=45)
+  replacement_value      AUROC=0.571  U=771.0  (bad=30 good=45)
+  bench_mass_delta       AUROC=0.568  U=766.5  (bad=30 good=45)
+  budget_opp_cost        AUROC=0.462  U=624.0  (bad=30 good=45)
+  positional_scarcity    AUROC=0.366  U=494.0  (bad=30 good=45)
+  squad_overlap          AUROC=0.326  U=440.0  (bad=30 good=45)
+  mean_vs_leaver_pts     AUROC=0.210  U=189.0  (bad=30 good=30)
+
+=== PASS treat GWs n=76 portfolio_bad=17 ===
+  replacement_value      AUROC=0.674  U=676.5  (bad=17 good=59)
+  n_squad_changes        AUROC=0.671  U=673.0  (bad=17 good=59)
+  g_treat                AUROC=0.668  U=670.0  (bad=17 good=59)
+  delta_u_pred           AUROC=0.605  U=607.0  (bad=17 good=59)
+  near_tie_frac          AUROC=0.578  U=579.5  (bad=17 good=59)
+  bench_mass_delta       AUROC=0.576  U=578.0  (bad=17 good=59)
+  positional_scarcity    AUROC=0.469  U=470.0  (bad=17 good=59)
+  budget_opp_cost        AUROC=0.377  U=378.5  (bad=17 good=59)
+  squad_overlap          AUROC=0.329  U=330.0  (bad=17 good=59)
+  mean_vs_leaver_pts     AUROC=0.152  U=98.5  (bad=17 good=38)
+
+=== FAIL vs PASS AUROC delta (architecture-intrinsic check) ===
+  budget_opp_cost        FAIL=0.462 PASS=0.377 delta=0.085
+  replacement_value      FAIL=0.571 PASS=0.674 delta=-0.103
+  positional_scarcity    FAIL=0.366 PASS=0.469 delta=-0.103
+  bench_mass_delta       FAIL=0.568 PASS=0.576 delta=-0.008
+  n_squad_changes        FAIL=0.674 PASS=0.671 delta=0.003
+  squad_overlap          FAIL=0.326 PASS=0.329 delta=-0.003
+  g_treat                FAIL=0.729 PASS=0.668 delta=0.061
+  near_tie_frac          FAIL=0.667 PASS=0.578 delta=0.089
+  mean_vs_leaver_pts     FAIL=0.210 PASS=0.152 delta=0.058
+  delta_u_pred           FAIL=0.668 PASS=0.605 delta=0.063
+
+=== FAIL proxy correlation (selected pairs) ===
+  corr(g_treat, n_squad_changes)=0.692
+  corr(g_treat, replacement_value)=0.014
+  corr(budget_opp_cost, replacement_value)=0.252
+  corr(near_tie_frac, positional_scarcity)=-0.175
+  corr(delta_u_pred, g_treat)=0.741
+
