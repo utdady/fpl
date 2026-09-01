@@ -1,7 +1,7 @@
 import Lake
 open Lake DSL
 
-package «fpl-formal» where
+package fpl_formal where
   leanOptions := #[
     ⟨`autoImplicit, false⟩,
     ⟨`relaxedAutoImplicit, false⟩

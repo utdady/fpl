@@ -47,6 +47,8 @@ def allowedStatusFlags : List String :=
     "zero_fixtures"
   ]
 
+private def noFlags : List String := []
+
 /--
 Port of `classify_week(n_fixtures, integ, n_snapshot)`.
 
@@ -59,28 +61,28 @@ def classifyWeek (nFixtures : Nat) (integ : WeekIntegrity) (nSnapshot : Nat) :
     if integ.missingFile || integ.nUniqueActuals == 0 then
       ["missing_actuals"]
     else
-      []
+      noFlags
   let jf := joinFloor nSnapshot
   let excluded₂ :=
     if integ.nUniqueActuals > 0 && integ.nUniqueActuals < jf then
       ["actuals_join_failure"]
     else
-      []
+      noFlags
   let excluded₃ :=
     if nFixtures == 0 && integ.nWithMinutes == 0 then
       ["no_fixtures_no_minutes"]
     else
-      []
+      noFlags
   let (excluded₄, flagDup) :=
     if integ.nDuplicateIds > max 20 integ.nUniqueActuals then
-      (["pathological_duplicate_rows"], [] : List String)
+      (["pathological_duplicate_rows"], noFlags)
     else if integ.nDuplicateIds > 5 then
-      ([], ["duplicate_gw_rows"])
+      (noFlags, ["duplicate_gw_rows"])
     else
-      ([], [])
-  let flags₁ := if nFixtures < 10 then ["bgw_or_short"] else []
-  let flags₂ := if nFixtures > 10 then ["dgw_or_long"] else []
-  let flags₃ := if nFixtures == 0 then ["zero_fixtures"] else []
+      (noFlags, noFlags)
+  let flags₁ := if nFixtures < 10 then ["bgw_or_short"] else noFlags
+  let flags₂ := if nFixtures > 10 then ["dgw_or_long"] else noFlags
+  let flags₃ := if nFixtures == 0 then ["zero_fixtures"] else noFlags
   let allFlags := flags₁ ++ flags₂ ++ flags₃ ++ flagDup
   let allExcluded := excluded₁ ++ excluded₂ ++ excluded₃ ++ excluded₄
   if allExcluded ≠ [] then
@@ -88,11 +90,11 @@ def classifyWeek (nFixtures : Nat) (integ : WeekIntegrity) (nSnapshot : Nat) :
   else if allFlags ≠ [] then
     (.flagged, allFlags)
   else
-    (.clean, [])
+    (.clean, noFlags)
 
 /-! ### Sanity checks (decidable instances on concrete weeks) -/
 
-example : classifyWeek 10 ⟨false, 100, 80, 0, 50⟩ 800 = (.clean, []) := by
+example : classifyWeek 10 ⟨false, 100, 80, 0, 50⟩ 800 = (.clean, noFlags) := by
   native_decide
 
 example : classifyWeek 8 ⟨false, 100, 80, 0, 50⟩ 800 = (.flagged, ["bgw_or_short"]) := by

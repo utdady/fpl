@@ -49,6 +49,12 @@ structure B0Gap (α : Type) [Sub α] where
   pB0XiCap : α
   pV1XiCap : α
 
-def B0Gap.gap (g : B0Gap α) : α := g.pB0XiCap - g.pV1XiCap
+namespace B0Gap
+
+variable {α : Type} [Sub α]
+
+def gap (g : B0Gap α) : α := g.pB0XiCap - g.pV1XiCap
+
+end B0Gap
 
 end FPL
