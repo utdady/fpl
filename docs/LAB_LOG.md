@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E029 treatment-lift outcome profile pre-registered (post E028 stability-class close). Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E030 complete — portfolio alignment poor on FAIL; objective-interface research earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1235,17 +1235,51 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated (negative).** Pre-decision observables on packaged rates **do not separate** good from bad promotions on FAIL seasons. Season regime dominates (46% vs 68% good rate). Rules out simple q(Δμ) or lift-threshold reliability gate. Incremental μ may exist at aggregate level (MAE) but uplift sign/magnitude at swap level is not decision-stable on toxic seasons. Do **not** implement q(Δμ) without new structural hypothesis. Stability class remains closed.
 
 - **Artifacts:** `scripts/e029_treatment_lift_profile.py`; `records/historical/e029_treatment_lift_pairs.csv`; `records/historical/e029_treatment_lift_summary.txt`
-- **Follow-up:** Decision architecture / objective rethink — not another packaging dose. Optional E029b on fixture source separately.
+- **Follow-up:** → **E030** objective-alignment diagnostic. Selection-packaging family closed (E022 availability separate).
+
+### E030 - Objective alignment
+- **Date:** 2026-09-01 (after E029; selection-packaging closed)
+- **Status:** **concentrated (negative)** — portfolio alignment poor on FAIL; predicted ΔU anti-aligns with realized Cap/XI pts
+- **Hypothesis:** E029 closed scalar-μ packaging. Open question: does predicted XI utility improvement align with realized portfolio outcomes? Local bad pairs may coexist with portfolio-good GWs (externality); if both local and portfolio fail, objective interface is suspect.
+- **Question:** On ctrl→packaged-rates GW changes, do `corr(ΔU_pred, Δpts_XI)` and `corr(ΔU_pred, ΔCap)` hold on FAIL vs PASS? Does `P(local bad | portfolio bad)` dominate? Does existing `safe` (μ−0.4σ) improve alignment vs `balanced`?
+
+- **Scope lock — frozen stack; existing objectives only:**
+  ```text
+  control:  v2am_s + rates=v1; treat: packaged rates_v2b (E024)
+  objective=next; seed=7; strategies: balanced, safe (no new lambda)
+  GW-level portfolio good/bad: treat Cap >= control Cap
+  local bad: >=1 same-pos pair both>=60, entrant pts < leaver pts
+  metrics: corr(dU,dXIpts), corr(dU,dCap), P(local_bad|port_good), P(local_bad|port_bad)
+  forbidden: new utility, packaging, promote safe
+  ```
+
+- **Method:** `python scripts/e030_objective_alignment.py` (302 GW-rows; 2022/23 FAIL, 2025/26 FAIL; 2023/24+2024/25 PASS).
+
+- **Results:**
+
+  | Strategy | Gate | n | corr(dU,dXI) | corr(dU,dCap) | P(local bad\|port good) | P(local bad\|port bad) | mean ΔU | mean ΔCap |
+  |---|---|---:|---:|---:|---:|---:|---:|---:|
+  | balanced | FAIL | 75 | **−0.197** | **−0.196** | 22.2% (10/45) | **70.0%** (21/30) | +2.17 | **−1.71** |
+  | balanced | PASS | 76 | +0.187 | +0.262 | 16.9% (10/59) | 88.2% (15/17) | +1.46 | +1.75 |
+  | safe | FAIL | 75 | **−0.200** | −0.061 | 13.0% (7/54) | **81.0%** (17/21) | +1.13 | **−0.68** |
+  | safe | PASS | 76 | +0.195 | +0.213 | 10.5% (6/57) | 78.9% (15/19) | +0.81 | +1.68 |
+
+  On **FAIL**, predicted utility rises (mean ΔU > 0) while realized Cap falls (mean ΔCap < 0) — sign flip at portfolio level. Correlations flip negative on FAIL vs modest positive on PASS. Externality present but secondary: 13–22% of portfolio-good FAIL GWs still carry ≥1 local bad swap. `P(local bad | portfolio bad)` dominates on FAIL (70–81%). Existing `safe` softens Cap damage and local-bad rate among portfolio-good GWs but **does not restore positive corr** on FAIL.
+
+- **Verdict:** **concentrated (negative).** On FAIL seasons, the current next-XI utility objective **anti-aligns** with realized portfolio outcomes — not merely noisy. PASS seasons show modest positive alignment. This earns **objective-interface / decision-architecture** research (not another packaging dose, q(Δμ), or ε retune). Do **not** promote `safe` on FAIL evidence alone. E022 availability packaging remains separate.
+
+- **Artifacts:** `scripts/e030_objective_alignment.py`; `records/historical/e030_objective_alignment_gw.csv`; `records/historical/e030_objective_alignment_summary.txt`
+- **Follow-up:** Pre-register objective-interface diagnostic (e.g. GW-level sign consistency, XI-only vs Cap decomposition) before any new λ or utility formula.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E029 concentrated negative):
+As of 2026-09-01 (E030 concentrated negative):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. Stability + lift-reliability classes closed.
-2. **E029 concentrated.** No pre-decision separator for good vs bad on FAIL; bad promotions have similar/higher Δμ.
-3. **Next.** Decision architecture hypothesis — not q/ε/margin fishing. PASS ≠ auto-promote.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
+2. **Closed:** selection-packaging (E024–E029); objective alignment poor on FAIL (E030). **Open:** E022 availability packaging (separate); objective-interface research earned.
+3. **Next.** Pre-register objective-interface diagnostic before new utility/λ. PASS ≠ auto-promote.
 
 ---
 
@@ -1279,6 +1313,7 @@ python scripts/calibrate_hpack1_epsilon.py  # E027: freeze ε (control-only)
 python -m engine.harness_pack_stability  # E027: H-PACK1 vs production
 python scripts/e028_local_substitution.py  # E028: local substitution pairs
 python scripts/e029_treatment_lift_profile.py  # E029: treatment-lift outcome profile
+python scripts/e030_objective_alignment.py  # E030: objective alignment diagnostic
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

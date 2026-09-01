@@ -199,9 +199,9 @@ E021: MAE✓ Cap/XI0✗. E021b: rates-like toxicology. E021c: cold cell = mostly
 Mechanism validated (E022). Does not clear production promote bars (E023 XI0; E024 Cap).
 **Reach ends:** availability risk only. E024b movers already at `q≈1` and still wrong picks — valuation/selection among players who play, not dosage. No q/α fishing. Production unchanged.
 
-**Valuation / selection (E025–E029)**
-E027/E028 REJECT: stability class closed.
-E029 concentrated (negative): no lift/σ/p_start separator on FAIL; bad promotions similar/higher Δμ.
+**Valuation / selection (E025–E030)**
+E029 concentrated (negative): selection-packaging closed (E022 availability separate).
+E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interface research earned.
 
 ---
 
@@ -341,5 +341,6 @@ POST-GW1 (research)
   E026 concentrated: FAIL rank_err ~91% near+mid ctrl gaps → H-PACK1 stability branch
   E027 REJECT (H-PACK1 stability): 1/4 PASS; binds 13-30%; no ε retune
   E028 REJECT (local branch): bad swaps margin-agnostic on FAIL; no H-PACK2 near-margin
-  E029 pre-registered: treatment-lift good vs bad promotion profile
+  E029 concentrated (negative): selection-packaging closed; q(dmu) not supported
+  E030 concentrated (negative): corr(dU,dCap) negative on FAIL; objective-interface earned
 ```

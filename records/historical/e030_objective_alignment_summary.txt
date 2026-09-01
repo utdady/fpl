@@ -1,0 +1,12 @@
+E030: objective alignment (ctrl vs packaged rates_v2b)
+Predicted: delta next_xi_utility; Realized: delta XI pts / delta Cap
+local bad: >=1 same-pos pair both>=60 with entrant pts < leaver pts
+
+=== strategy=balanced ===
+  FAIL: n=75 corr(dU,dXIpts)=-0.197 corr(dU,dCap)=-0.196 P(local_bad|port_good)=22.2% (10/45) P(local_bad|port_bad)=70.0% (21/30) mean_dU=2.173 mean_dCap=-1.707
+  PASS: n=76 corr(dU,dXIpts)=0.187 corr(dU,dCap)=0.262 P(local_bad|port_good)=16.9% (10/59) P(local_bad|port_bad)=88.2% (15/17) mean_dU=1.461 mean_dCap=1.750
+
+=== strategy=safe ===
+  FAIL: n=75 corr(dU,dXIpts)=-0.200 corr(dU,dCap)=-0.061 P(local_bad|port_good)=13.0% (7/54) P(local_bad|port_bad)=81.0% (17/21) mean_dU=1.134 mean_dCap=-0.680
+  PASS: n=76 corr(dU,dXIpts)=0.195 corr(dU,dCap)=0.213 P(local_bad|port_good)=10.5% (6/57) P(local_bad|port_bad)=78.9% (15/19) mean_dU=0.809 mean_dCap=1.684
+
