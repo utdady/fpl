@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E031 complete — sign flip is XI-level on FAIL; captain secondary. XI objective research earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E032 complete — μ inversion on FAIL (not utility transform or XI-solve bug). Squad-pool research earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1307,17 +1307,54 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated.** Sign flip enters at **XI ranking / XI objective layer**, not captain interface or bench-only squad externality. Branch → **XI objective research** before any captain co-optimization or new λ. Do not promote `safe` on FAIL.
 
 - **Artifacts:** `scripts/e031_objective_decomposition.py`; `records/historical/e031_objective_decomposition_gw.csv`; `records/historical/e031_objective_decomposition_summary.txt`
-- **Follow-up:** Pre-register first XI-objective interface treatment (e.g. squad→XI consistency audit) — not captain-first.
+- **Follow-up:** → **E032** XI objective audit. E032 concentrated: squad-pool / μ inversion.
+
+### E032 - XI objective audit
+- **Date:** 2026-09-01 (after E031 concentrated)
+- **Status:** **concentrated** — squad-pool / μ-vs-realized inversion on FAIL; not utility transform or XI-solve bug
+- **Hypothesis:** E031 localized sign flip to XI layer. Open: is misalignment from (A) picked-XI/utility ranking, (B) squad pool/μ inversion, or (C) utility transform (μ aligns, utility does not)?
+- **Question:** Does oracle XI on each squad restore alignment? Does `corr(ΔU, Δμ_xi)` beat `corr(ΔU, ΔXI_picked)`? Does squad-ILP implied starters agree with `solve_xi`?
+
+- **Scope lock:**
+  ```text
+  stack:    same as E030/E031; strategies balanced, safe
+  metrics:  delta_xi_oracle, delta_xi_picked, delta_mu_xi, delta_u_xi
+            treat_picked_regret, squad_xi_agree (ctrl)
+  forbidden: new utility, lambda, optimizer rewrite
+  ```
+
+- **Method:** `python scripts/e032_xi_objective_audit.py` (302 GW-rows).
+
+- **Results (balanced unless noted):**
+
+  | Metric | FAIL | PASS |
+  |---|---:|---:|
+  | corr(dU, dXI_picked) | **−0.197** | +0.187 |
+  | corr(dU, dXI_oracle) | **−0.171** | +0.225 |
+  | corr(dU, dMu_xi) | **+0.986** | +0.994 |
+  | corr(dU, dU_xi) | **+0.994** | +0.994 |
+  | mean Δμ_xi | **+2.10** | +1.33 |
+  | mean ΔXI_picked | **−1.61** | +0.99 |
+  | mean ΔXI_oracle | **−1.49** | +1.51 |
+  | squad_xi_agree | **100%** | 100% |
+  | picked_eq_oracle_treat | 1/75 | 1/76 |
+
+  On **FAIL**, predicted μ on picked XI tracks ΔU almost perfectly (+0.986) while realized XI points invert (−0.197) — **not** a utility-transform bug (μ ≈ utility: corr(dU,dU_xi)=0.994). Oracle XI on each squad **does not** restore alignment (corr still −0.17; mean ΔXI_oracle < 0). Squad-ILP starters always match `solve_xi` (100% agree) — no squad→XI pipeline split. Treatment faithfully optimizes inflated μ; even hindsight-best XI from each 15 loses on FAIL.
+
+- **Verdict:** **concentrated.** Sub-layer is **(B) squad pool / μ-vs-realized inversion** — not (A) picked-XI ranking alone, not (C) utility transform. Branch → squad-selection / μ-calibration under treatment on FAIL before XI-objective rewrite. Do not tune λ or utility shape first.
+
+- **Artifacts:** `scripts/e032_xi_objective_audit.py`; `records/historical/e032_xi_objective_audit_gw.csv`; `records/historical/e032_xi_objective_audit_summary.txt`
+- **Follow-up:** Pre-register squad-pool diagnostic (treat vs ctrl 15 overlap, μ inflation on entrants) — not new objective formula.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E031 concentrated):
+As of 2026-09-01 (E032 concentrated):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** selection-packaging (E024–E029); E030 portfolio anti-aligns on FAIL; E031 locates flip at XI layer.
-3. **Next.** Pre-register XI-objective interface treatment. PASS ≠ auto-promote.
+2. **Closed:** E024–E032 arc; μ-vs-realized inversion on FAIL (not utility transform).
+3. **Next.** Pre-register squad-pool / μ-inflation diagnostic. PASS ≠ auto-promote.
 
 ---
 
@@ -1353,6 +1390,7 @@ python scripts/e028_local_substitution.py  # E028: local substitution pairs
 python scripts/e029_treatment_lift_profile.py  # E029: treatment-lift outcome profile
 python scripts/e030_objective_alignment.py  # E030: objective alignment diagnostic
 python scripts/e031_objective_decomposition.py  # E031: XI vs captain decomposition
+python scripts/e032_xi_objective_audit.py  # E032: XI objective audit (oracle XI, mu vs utility)
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

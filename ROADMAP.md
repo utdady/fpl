@@ -203,6 +203,7 @@ Mechanism validated (E022). Does not clear production promote bars (E023 XI0; E0
 E029 concentrated (negative): selection-packaging closed (E022 availability separate).
 E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interface research earned.
 **E031 concentrated:** sign flip XI-level on FAIL; captain secondary.
+**E032 concentrated:** μ inversion on FAIL; not utility transform; squad_xi_agree=100%.
 
 ---
 
@@ -345,4 +346,5 @@ POST-GW1 (research)
   E029 concentrated (negative): selection-packaging closed; q(dmu) not supported
   E030 concentrated (negative): corr(dU,dCap) negative on FAIL; objective-interface earned
   E031 concentrated: XI-level sign flip on FAIL; captain secondary; oracle does not fix
+  E032 concentrated: mu inversion on FAIL; oracle XI still negative; squad pipeline OK
 ```

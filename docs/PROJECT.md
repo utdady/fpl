@@ -480,9 +480,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E031 concentrated)
+### Valuation / selection (E032 concentrated)
 
-E030: portfolio anti-aligns on FAIL. E031: sign flip is XI-level (97–100% dU>0 dCap<0 have ΔXI<0); oracle captain does not fix; captain_only=0. Branch → XI objective research.
+E032: corr(dU,dMu_xi)=+0.99 but corr(dU,dXI)=−0.20 on FAIL; oracle XI still negative; squad_xi_agree=100%. μ-vs-realized inversion at squad pool — not utility transform or XI-solve bug.
 
 ---
 
@@ -530,6 +530,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E029** | Treatment-lift outcome profile | **concentrated (negative)** — no FAIL separator |
 | **E030** | Objective alignment diagnostic | **concentrated (negative)** — portfolio anti-aligns on FAIL |
 | **E031** | Objective decomposition (XI vs captain) | **concentrated** — XI-level sign flip on FAIL |
+| **E032** | XI objective audit (oracle XI, μ vs utility) | **concentrated** — μ inversion; squad pool not XI-solve |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

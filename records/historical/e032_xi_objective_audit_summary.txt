@@ -1,0 +1,32 @@
+E032: XI objective audit (ctrl vs packaged rates_v2b)
+delta_xi_oracle = hindsight-best XI on each squad's 15
+delta_mu_xi = sum(next_mu) on picked XIs; delta_u_xi = sum(next_utility) on picked XIs
+
+=== strategy=balanced ===
+  FAIL: n=75 squad_xi_agree=100.0%
+    corr(dU,dXI_picked)=-0.197 corr(dU,dXI_oracle)=-0.171
+    corr(dU,dMu_xi)=0.986 corr(dU,dU_xi)=0.994
+    mean_dXI_picked=-1.613 mean_dXI_oracle=-1.493 mean_dMu_xi=2.103
+    mean_treat_picked_regret=-8.440 (0=oracle; negative=picked beat oracle)
+    picked_eq_oracle_treat=1/75
+  PASS: n=76 squad_xi_agree=100.0%
+    corr(dU,dXI_picked)=0.187 corr(dU,dXI_oracle)=0.225
+    corr(dU,dMu_xi)=0.994 corr(dU,dU_xi)=0.994
+    mean_dXI_picked=0.987 mean_dXI_oracle=1.513 mean_dMu_xi=1.325
+    mean_treat_picked_regret=-6.882 (0=oracle; negative=picked beat oracle)
+    picked_eq_oracle_treat=1/76
+
+=== strategy=safe ===
+  FAIL: n=75 squad_xi_agree=100.0%
+    corr(dU,dXI_picked)=-0.200 corr(dU,dXI_oracle)=-0.149
+    corr(dU,dMu_xi)=0.967 corr(dU,dU_xi)=0.993
+    mean_dXI_picked=-1.120 mean_dXI_oracle=-0.907 mean_dMu_xi=1.977
+    mean_treat_picked_regret=-9.907 (0=oracle; negative=picked beat oracle)
+    picked_eq_oracle_treat=0/75
+  PASS: n=76 squad_xi_agree=100.0%
+    corr(dU,dXI_picked)=0.195 corr(dU,dXI_oracle)=0.250
+    corr(dU,dMu_xi)=0.983 corr(dU,dU_xi)=0.994
+    mean_dXI_picked=1.355 mean_dXI_oracle=1.724 mean_dMu_xi=1.325
+    mean_treat_picked_regret=-7.908 (0=oracle; negative=picked beat oracle)
+    picked_eq_oracle_treat=2/76
+
