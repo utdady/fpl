@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E030 complete — portfolio alignment poor on FAIL; objective-interface research earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E031 complete — sign flip is XI-level on FAIL; captain secondary. XI objective research earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1269,17 +1269,55 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated (negative).** On FAIL seasons, the current next-XI utility objective **anti-aligns** with realized portfolio outcomes — not merely noisy. PASS seasons show modest positive alignment. This earns **objective-interface / decision-architecture** research (not another packaging dose, q(Δμ), or ε retune). Do **not** promote `safe` on FAIL evidence alone. E022 availability packaging remains separate.
 
 - **Artifacts:** `scripts/e030_objective_alignment.py`; `records/historical/e030_objective_alignment_gw.csv`; `records/historical/e030_objective_alignment_summary.txt`
-- **Follow-up:** Pre-register objective-interface diagnostic (e.g. GW-level sign consistency, XI-only vs Cap decomposition) before any new λ or utility formula.
+- **Follow-up:** → **E031** decomposition (XI vs captain). E031 concentrated: XI-level.
+
+### E031 - Objective alignment decomposition
+- **Date:** 2026-09-01 (after E030 concentrated negative)
+- **Status:** **concentrated** — XI-level sign flip on FAIL; captain interface secondary; not squad-only externality
+- **Hypothesis:** E030 showed portfolio-level sign flip on FAIL (mean ΔU > 0, mean ΔCap < 0; corr ≈ −0.2). Open question: where does the flip enter — XI ranking, captain double-count channel, or squad-level change?
+- **Question:** On ctrl→packaged-rates GW changes, decompose `ΔCap = ΔXI + ΔCaptain_bonus`. Do sign(ΔU) vs sign(ΔXI) / sign(ΔCap) tables on FAIL show XI-level vs captain-only reversal? Does oracle captain on fixed XI recover Cap loss?
+
+- **Scope lock — frozen stack; extends E030 rows only:**
+  ```text
+  control:  v2am_s + rates=v1; treat: packaged rates_v2b (E024)
+  objective=next; seed=7; strategies: balanced, safe
+  channels: delta_cap_bonus = delta_cap - delta_xi_pts
+            delta_cap_oracle = oracle_cap(treat XI) - oracle_cap(ctrl XI)
+  flags:    squad_changed, xi_changed, captain_changed, captain_only_changed
+  forbidden: new utility, lambda, optimizer rewrite, promote safe
+  ```
+
+- **Method:** `python scripts/e031_objective_decomposition.py` (302 GW-rows).
+
+- **Results (balanced FAIL unless noted):**
+
+  | Metric | FAIL balanced | FAIL safe | PASS balanced |
+  |---|---:|---:|---:|
+  | corr(dU, dXI) | **−0.197** | −0.200 | +0.187 |
+  | corr(dU, dCap) | **−0.196** | −0.061 | +0.262 |
+  | corr(dU, dBonus) | −0.080 | **+0.625** | +0.211 |
+  | corr(dU, dCap_oracle) | **−0.193** | −0.172 | +0.155 |
+  | mean ΔCap_oracle | **−1.61** | −1.67 | +0.83 |
+  | dU>0 dCap<0: xi_neg | **96.7%** (29/30) | 100% (21/21) | 100% (15/15) |
+  | dU>0 dCap<0: xi_pos_cap_neg | **0%** (0/30) | 0% (0/21) | 0% (0/15) |
+  | captain_only_changed | **0** | 0 | 0 |
+
+  Sign flip on FAIL is **XI-co-moving with Cap** — not captain-only reversal. Among predicted-up / realized-down GWs, 97–100% have ΔXI < 0; zero cases of XI↑ Cap↓ on balanced FAIL. Oracle captain does **not** restore alignment: corr(dU, dCap_oracle) ≈ −0.19, mean ΔCap_oracle still negative. `safe` softens Cap corr via captain bonus channel (+0.625) but XI alignment unchanged (−0.200). No captain-only GWs (squad and XI change together).
+
+- **Verdict:** **concentrated.** Sign flip enters at **XI ranking / XI objective layer**, not captain interface or bench-only squad externality. Branch → **XI objective research** before any captain co-optimization or new λ. Do not promote `safe` on FAIL.
+
+- **Artifacts:** `scripts/e031_objective_decomposition.py`; `records/historical/e031_objective_decomposition_gw.csv`; `records/historical/e031_objective_decomposition_summary.txt`
+- **Follow-up:** Pre-register first XI-objective interface treatment (e.g. squad→XI consistency audit) — not captain-first.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E030 concentrated negative):
+As of 2026-09-01 (E031 concentrated):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** selection-packaging (E024–E029); objective alignment poor on FAIL (E030). **Open:** E022 availability packaging (separate); objective-interface research earned.
-3. **Next.** Pre-register objective-interface diagnostic before new utility/λ. PASS ≠ auto-promote.
+2. **Closed:** selection-packaging (E024–E029); E030 portfolio anti-aligns on FAIL; E031 locates flip at XI layer.
+3. **Next.** Pre-register XI-objective interface treatment. PASS ≠ auto-promote.
 
 ---
 
@@ -1314,6 +1352,7 @@ python -m engine.harness_pack_stability  # E027: H-PACK1 vs production
 python scripts/e028_local_substitution.py  # E028: local substitution pairs
 python scripts/e029_treatment_lift_profile.py  # E029: treatment-lift outcome profile
 python scripts/e030_objective_alignment.py  # E030: objective alignment diagnostic
+python scripts/e031_objective_decomposition.py  # E031: XI vs captain decomposition
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

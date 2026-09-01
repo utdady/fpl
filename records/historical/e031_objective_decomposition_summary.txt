@@ -1,0 +1,44 @@
+E031: objective-alignment decomposition (ctrl vs packaged rates_v2b)
+delta_cap_bonus = delta_cap - delta_xi_pts (captain double-count channel)
+delta_cap_oracle = oracle captain on each XI (hindsight upper bound)
+
+=== strategy=balanced ===
+  FAIL: n=75 xi_changed=61
+    corr(dU,dXI)=-0.197 corr(dU,dCap)=-0.196 corr(dU,dBonus)=-0.080
+    corr(dU,dCap_oracle)=-0.193 mean_dCap_oracle=-1.613
+    sign(dU) x sign(dCap): u+cap+=26 u+cap-=30 u-cap+=0 u-cap-=0
+    sign(dU) x sign(dXI):  u+xi+=24 u+xi-=30 u-xi+=0 u-xi-=0
+    dU>0 dCap<0: n=30 xi_neg=96.7% (29/30) xi_pos_cap_neg=0.0% (0/30)
+    oracle - picked dCap on flip GWs: mean=0.17 (positive => oracle would improve vs picked)
+    xi_changed only: n=61 corr(dU,dXI)=-0.175 corr(dU,dCap)=-0.177
+    changes: squad=60 xi=61 captain=21 captain_only=0
+  PASS: n=76 xi_changed=51
+    corr(dU,dXI)=0.187 corr(dU,dCap)=0.262 corr(dU,dBonus)=0.211
+    corr(dU,dCap_oracle)=0.155 mean_dCap_oracle=0.829
+    sign(dU) x sign(dCap): u+cap+=29 u+cap-=15 u-cap+=1 u-cap-=2
+    sign(dU) x sign(dXI):  u+xi+=28 u+xi-=16 u-xi+=1 u-xi-=2
+    dU>0 dCap<0: n=15 xi_neg=100.0% (15/15) xi_pos_cap_neg=0.0% (0/15)
+    oracle - picked dCap on flip GWs: mean=-1.33 (positive => oracle would improve vs picked)
+    xi_changed only: n=51 corr(dU,dXI)=0.148 corr(dU,dCap)=0.202
+    changes: squad=55 xi=51 captain=12 captain_only=0
+
+=== strategy=safe ===
+  FAIL: n=75 xi_changed=49
+    corr(dU,dXI)=-0.200 corr(dU,dCap)=-0.061 corr(dU,dBonus)=0.625
+    corr(dU,dCap_oracle)=-0.172 mean_dCap_oracle=-1.667
+    sign(dU) x sign(dCap): u+cap+=25 u+cap-=21 u-cap+=0 u-cap-=0
+    sign(dU) x sign(dXI):  u+xi+=24 u+xi-=23 u-xi+=0 u-xi-=0
+    dU>0 dCap<0: n=21 xi_neg=100.0% (21/21) xi_pos_cap_neg=0.0% (0/21)
+    oracle - picked dCap on flip GWs: mean=-2.81 (positive => oracle would improve vs picked)
+    xi_changed only: n=49 corr(dU,dXI)=-0.174 corr(dU,dCap)=-0.037
+    changes: squad=55 xi=49 captain=11 captain_only=0
+  PASS: n=76 xi_changed=51
+    corr(dU,dXI)=0.195 corr(dU,dCap)=0.213 corr(dU,dBonus)=0.120
+    corr(dU,dCap_oracle)=0.146 mean_dCap_oracle=1.184
+    sign(dU) x sign(dCap): u+cap+=28 u+cap-=17 u-cap+=0 u-cap-=2
+    sign(dU) x sign(dXI):  u+xi+=28 u+xi-=17 u-xi+=0 u-xi-=2
+    dU>0 dCap<0: n=17 xi_neg=94.1% (16/17) xi_pos_cap_neg=5.9% (1/17)
+    oracle - picked dCap on flip GWs: mean=-1.06 (positive => oracle would improve vs picked)
+    xi_changed only: n=51 corr(dU,dXI)=0.149 corr(dU,dCap)=0.154
+    changes: squad=51 xi=51 captain=14 captain_only=0
+
