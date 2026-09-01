@@ -1,0 +1,29 @@
+E036 / H-MC1: contextual marginal vs standalone utility
+primary: concordance sign(score) vs sign(dpts) on both60 pairs
+
+=== FAIL both60 same-pos pairs n=122 ===
+  concordance MC: 42.3% (model_pref_nontie=52 nontie=103)
+  concordance U:  42.3% (model_pref_nontie=52 nontie=103)
+  spearman(delta_mc, dpts)=-0.075
+  spearman(delta_u, dpts)=-0.021
+  mean_dpts=-1.148
+
+  bucket near n=53: MC_conc=37.1% U_conc=37.1%
+  bucket mid n=47: MC_conc=53.3% U_conc=53.3%
+  bucket large n=22: MC_conc=50.0% U_conc=50.0%
+
+=== PASS both60 same-pos pairs n=100 ===
+  concordance MC: 43.3% (model_pref_nontie=30 nontie=77)
+  concordance U:  43.3% (model_pref_nontie=30 nontie=77)
+  spearman(delta_mc, dpts)=0.078
+  spearman(delta_u, dpts)=0.090
+  mean_dpts=-1.280
+
+  bucket near n=27: MC_conc=33.3% U_conc=33.3%
+  bucket mid n=46: MC_conc=37.5% U_conc=37.5%
+  bucket large n=27: MC_conc=80.0% U_conc=80.0%
+
+=== GW-level secondary (sum_delta_mc vs delta_cap) ===
+  FAIL n=59: spearman(sum_mc, dcap)=-0.190 spearman(sum_u, dcap)=-0.185
+  PASS n=55: spearman(sum_mc, dcap)=-0.111 spearman(sum_u, dcap)=-0.101
+

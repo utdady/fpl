@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E036 / H-MC1 pre-registered — contextual marginal admission value (Phase A diagnostic). Production stays `v2am_s` + `rates=v1` + fixtures `v1`. See `docs/DECISION_ARCHITECTURE.md`.
+**Active research question:** E036 / H-MC1 concentrated (negative) — MC ≡ U at boundary; \(V(S)\) suspect not admission ranking. Production stays `v2am_s` + `rates=v1` + fixtures `v1`. See `docs/DECISION_ARCHITECTURE.md`.
 
 ---
 
@@ -1524,10 +1524,10 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Spec:** `docs/DECISION_ARCHITECTURE.md`
 - **Follow-up:** → **E036 / H-MC1** contextual marginal admission value. See `docs/DECISION_ARCHITECTURE.md` §9.
 
-### E036 / H-MC1 - Contextual marginal admission value (pre-registered)
+### E036 / H-MC1 - Contextual marginal admission value
 - **Date:** 2026-09-01 (after E035 concentrated)
-- **Status:** **pre-registered** — Phase A diagnostic only; no optimizer integration
-- **Hypothesis (H-MC1):** A player's decision value should be measured by incremental contribution to the **current feasible portfolio**, not standalone μ. E035: g_treat cluster (portfolio displacement under treat μ) best discriminates portfolio_bad; replacement/budget weak; realized swap inverted. Open: does \(MC_E - MC_L\) rank boundary swaps better than \(U_E - U_L\) on **realized** outcomes?
+- **Status:** **concentrated (negative)** — MC ≡ U at pair boundary (100% same sign); neither beats random on realized concordance (~42% FAIL); problem is \(V\) not admission ranking
+- **Hypothesis (H-MC1):** A player's decision value should be measured by incremental contribution to the **current feasible portfolio**, not standalone μ. E035: g_treat cluster best discriminates portfolio_bad. Open: does \(MC_E - MC_L\) rank boundary swaps better than \(U_E - U_L\) on **realized** outcomes?
 - **Question:** On same-position ctrl→treat swap pairs (both≥60), does contextual marginal value concordance with realized dpts exceed standalone utility concordance on FAIL?
 
 - **Scope lock:**
@@ -1536,23 +1536,35 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
   MC_E:     V(S_ctrl \\ L ∪ E) - V(S_ctrl); manual swap, no squad ILP
   primary:  concordance sign(delta_mc) vs sign(dpts) vs sign(delta_u) vs sign(dpts) on FAIL
   secondary (report only): GW-level sum MC vs delta_cap; PASS pairs; near-tie buckets
-  phases:   A=estimate MC; B=test ranking; C=integrate (separate pre-reg)
   forbidden:  MC in optimizer; new mu/packaging/lambda; MC+justification score
   ```
 
-- **Method:** `python scripts/e036_contextual_marginal.py` (not yet implemented)
-- **Branching:** MC > U concordance on FAIL → integration spec; MC ≈ U → V itself suspect; MC < U → not the fix
+- **Method:** `python scripts/e036_contextual_marginal.py` (428 pair-rows; 115 GW-rows).
+
+- **Results (both60 same-pos pairs):**
+
+  | Gate | n | MC concordance | U concordance | spearman(MC,dpts) | spearman(U,dpts) | same sign MC/U |
+  |---|---:|---:|---:|---:|---:|---:|
+  | FAIL | 122 | 42.3% | **42.3%** | −0.075 | −0.021 | **100%** (122/122) |
+  | PASS | 100 | 43.3% | 43.3% | +0.078 | +0.090 | 100% |
+
+  **MC and U prefer the same entrant on every both60 pair** (identical sign). Concordance ~42% on FAIL — below coin flip among model-pref nontie pairs. Neither MC nor U aligns with realized dpts (mean dpts ≈ −1.15 FAIL). Near/mid/large buckets: no MC advantage. GW-level: spearman(sum_mc, ΔCap) ≈ −0.19 FAIL (secondary).
+
+- **Verdict:** **concentrated (negative).** Contextual marginal value under current \(V(S)\) **does not differ** from standalone treat \(U\) at the admission boundary — single-player swap + XI re-solve preserves the same ranking. Cannot fix E030–E035 misalignment by re-ranking admissions under the same treat utility. Branch → **\(V(S)\) itself is suspect** (payoff model / horizon / realized proxy), not admission scoring. Do **not** integrate MC into optimizer. Phase C closed without Phase B.
+
+- **Artifacts:** `scripts/e036_contextual_marginal.py`; `records/historical/e036_contextual_marginal_pairs.csv`; `records/historical/e036_contextual_marginal_gw.csv`; `records/historical/e036_contextual_marginal_summary.txt`
 - **Spec:** `docs/DECISION_ARCHITECTURE.md` §9
+- **Follow-up:** revisit what \(V(S)\) should approximate (multi-GW? realized Cap proxy?); no MC packaging.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E036 / H-MC1 pre-registered):
+As of 2026-09-01 (E036 concentrated negative):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** E024–E035 (displacement + proxy decomposition).
-3. **Next.** E036 Phase A: MC vs standalone U on realized swap concordance. Spec: `docs/DECISION_ARCHITECTURE.md` §9.
+2. **Closed:** E024–E036 (displacement, proxy decomposition, H-MC1 contextual marginal).
+3. **Next.** Revisit \(V(S)\) payoff model (not MC under same U). No optimizer integration.
 4. **No promote** `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 
 ---
@@ -1595,7 +1607,7 @@ python scripts/e034_squad_entrant_toxicology.py  # E034: squad entrant toxicolog
 python scripts/e034b_forced_swap.py  # E034b: forced entrant vs cascade
 python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibration
 python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
-# E036 (pre-registered): python scripts/e036_contextual_marginal.py
+python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

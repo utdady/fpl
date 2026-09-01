@@ -312,16 +312,29 @@ forbidden:  squad ILP rewrite; MC in optimizer; new mu/packaging/lambda;
 | MC worse than U | Contextual valuation under treat-\(U\) is not the fix |
 | MC helps FAIL only, not PASS | Treatment-specific; revisit upstream μ, not architecture |
 
-### 9.6 Method
+### 9.6 E036 results (2026-09-01)
 
-`python scripts/e036_contextual_marginal.py` (not yet implemented)
+H-MC1 Phase A ran. **Concentrated (negative).**
+
+| Finding | Implication |
+|---|---|
+| MC ≡ U sign on 100% of both60 pairs | Contextual swap under current \(V\) does not change admission ranking |
+| MC concordance 42.3% FAIL = U | Neither beats random on realized dpts |
+| spearman(MC, dpts) ≈ −0.08 FAIL | No realized alignment under treat \(V\) |
+| Same on PASS | Architecture-intrinsic failure of \(V\), not treatment-only |
+
+**Branch closed:** Do not integrate MC into optimizer. The problem is **\(V(S)\) built from treat next-utility**, not the ranking rule at the boundary. Next research must redefine what portfolio value should approximate (horizon, realized proxy, multi-GW), not re-score admissions under the same \(U\).
+
+### 9.7 Method
+
+`python scripts/e036_contextual_marginal.py`
 
 ---
 
 ## 10. Closed branches (do not reopen without new hypothesis)
 
 ```text
-E024–E035   selection packaging / proxy decomposition
+E024–E036   packaging / displacement / proxy decomposition / H-MC1
 ```
 
 Production unchanged: `v2am_s` + `rates=v1` + fixtures `v1`.
@@ -340,7 +353,7 @@ Do **not** promote `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 | **V4 correlation-aware optimizer** | one candidate quantity; deferred until E036 |
 | **V5 multi-GW engine** | transfer flexibility candidate; deferred |
 | **Decision architecture (this doc)** | **current research front** |
-| **E036 / H-MC1** | **pre-registered** — contextual marginal admission value, Phase A diagnostic |
+| **E036 / H-MC1** | **concentrated (negative)** — MC ≡ U; Phase C closed |
 
-The next productive step is **E036 Phase A** (MC vs standalone \(U\) on realized swap concordance),
-not another packaging rule or ε retune.
+The next productive step is **redefining \(V(S)\)** (payoff model / horizon),
+not MC under the same treat utility or another packaging rule.

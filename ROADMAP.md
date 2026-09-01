@@ -209,7 +209,7 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 **E034b concentrated:** force one entrant → full treat 15; Δ_cascade=0.
 **E034c concentrated:** layered pair displacement + re-equilibration; G_treat explains tripwire; chain closed.
 **E035 concentrated:** g_treat cluster discriminates portfolio_bad; proxies collinear; MC hypothesis earned.
-**E036 / H-MC1 pre-registered:** contextual marginal admission value; Phase A diagnostic.
+**E036 / H-MC1 concentrated (negative):** MC ≡ U at boundary; V(S) suspect not admission ranking.
 
 ---
 
@@ -358,5 +358,5 @@ POST-GW1 (research)
   E034b concentrated: single forced entrant reproduces full treat; cascade residual 0
   E034c concentrated: layered pair + re-equilibration; G_treat tripwire; displacement chain closed
   E035 concentrated: g_treat cluster AUROC 0.73 FAIL; replacement/budget weak; MC hypothesis
-  E036/H-MC1 pre-registered: contextual marginal admission value (Phase A)
+  E036/H-MC1 concentrated (negative): MC identical to U; V(S) payoff model next
 ```
