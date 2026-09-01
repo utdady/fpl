@@ -480,9 +480,9 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E028 REJECT local branch)
+### Valuation / selection (E029 concentrated negative)
 
-E028: bad swaps ~45% on FAIL across near/mid/large margins; no local near-margin concentration. H-PACK2 near-margin gate not supported.
+E029: no pre-decision observable separates good vs bad on FAIL; bad promotions have similar/higher Δμ. q(Δμ) not supported. Stability + lift-reliability closed.
 
 ---
 
@@ -527,6 +527,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E026** | Control-μ near-tie (H-PACK1 branch) | **concentrated** (rank_err ~91% near+mid) |
 | **E027** | H-PACK1 stability selection vs production | **REJECT** (1/4 PASS; binds 13–30%) |
 | **E028** | Local substitution stability diagnostic | **reject** (local branch; margin-agnostic FAIL) |
+| **E029** | Treatment-lift outcome profile | **pre-registered** |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

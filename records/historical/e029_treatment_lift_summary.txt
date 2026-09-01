@@ -1,0 +1,26 @@
+E029: treatment-lift outcome profile (ctrl->packaged rates)
+Treatment source: rates_v2b_packaged
+Primary: both>=60; good=dpts>0, bad=dpts<0, ties excluded from rates
+
+=== FAIL all ===: n=117 good=54 (46.2%) bad=63 mean_lift good=0.611 bad=0.627 mean_sigma good=2.734 bad=2.578 mean_p_start good=0.717 bad=0.727 mean_p10 good=0.029 bad=0.025 mean_recent4 good=282.0 bad=305.0
+  near: n=66 good=31 (47.0%) bad=35 mean_lift good=0.418 bad=0.555 mean_sigma good=2.813 bad=2.561 mean_p_start good=0.724 bad=0.725 mean_p10 good=0.031 bad=0.023 mean_recent4 good=314.7 bad=300.2
+  mid: n=37 good=16 (43.2%) bad=21 mean_lift good=0.770 bad=0.697 mean_sigma good=2.607 bad=2.622 mean_p_start good=0.720 bad=0.725 mean_p10 good=0.020 bad=0.024 mean_recent4 good=281.0 bad=307.1
+  large: n=14 good=7 (50.0%) bad=7 mean_lift good=1.101 bad=0.783 mean_sigma good=2.678 bad=2.533 mean_p_start good=0.676 bad=0.739 mean_p10 good=0.041 bad=0.038 mean_recent4 good=139.7 bad=322.7
+  GKP: n=4 good=1 (25.0%) bad=3 mean_lift good=0.000 bad=-0.003 mean_sigma good=2.438 bad=2.712 mean_p_start good=0.850 bad=0.850 mean_p10 good=0.003 bad=0.057 mean_recent4 good=360.0 bad=330.0
+  DEF: n=45 good=27 (60.0%) bad=18 mean_lift good=0.466 bad=0.543 mean_sigma good=2.709 bad=2.419 mean_p_start good=0.710 bad=0.711 mean_p10 good=0.023 bad=0.009 mean_recent4 good=313.3 bad=316.4
+  MID: n=57 good=24 (42.1%) bad=33 mean_lift good=0.816 bad=0.688 mean_sigma good=2.730 bad=2.626 mean_p_start good=0.720 bad=0.727 mean_p10 good=0.031 bad=0.029 mean_recent4 good=245.0 bad=310.2
+  FWD: n=11 good=2 (18.2%) bad=9 mean_lift good=0.412 bad=0.786 mean_sigma good=3.283 bad=2.675 mean_p_start good=0.700 bad=0.716 mean_p10 good=0.102 bad=0.036 mean_recent4 good=266.0 bad=254.4
+  lift>=0.5: n=65 good=29 (44.6%) bad=36 mean_lift good=0.957 bad=0.943 mean_sigma good=2.560 bad=2.380 mean_p_start good=0.711 bad=0.720 mean_p10 good=0.020 bad=0.015 mean_recent4 good=234.7 bad=293.4
+  lift>=1.0: n=24 good=10 (41.7%) bad=14 mean_lift good=1.436 bad=1.292 mean_sigma good=2.505 bad=2.433 mean_p_start good=0.693 bad=0.720 mean_p10 good=0.018 bad=0.019 mean_recent4 good=123.9 bad=240.3
+
+=== PASS all ===: n=87 good=59 (67.8%) bad=28 mean_lift good=0.476 bad=0.550 mean_sigma good=2.927 bad=2.858 mean_p_start good=0.721 bad=0.720 mean_p10 good=0.038 bad=0.035 mean_recent4 good=312.5 bad=288.1
+  near: n=45 good=34 (75.6%) bad=11 mean_lift good=0.348 bad=0.384 mean_sigma good=2.979 bad=2.864 mean_p_start good=0.730 bad=0.720 mean_p10 good=0.037 bad=0.032 mean_recent4 good=324.8 bad=324.0
+  mid: n=28 good=18 (64.3%) bad=10 mean_lift good=0.534 bad=0.736 mean_sigma good=2.918 bad=2.863 mean_p_start good=0.705 bad=0.720 mean_p10 good=0.035 bad=0.035 mean_recent4 good=311.0 bad=253.5
+  large: n=14 good=7 (50.0%) bad=7 mean_lift good=0.953 bad=0.545 mean_sigma good=2.697 bad=2.842 mean_p_start good=0.720 bad=0.720 mean_p10 good=0.050 bad=0.039 mean_recent4 good=256.6 bad=281.3
+  GKP: n=1 good=1 (100.0%) bad=0 mean_lift good=-0.016 bad=nan mean_sigma good=2.566 bad=nan mean_p_start good=0.850 bad=nan mean_p10 good=0.007 bad=nan mean_recent4 good=360.0 bad=nan
+  DEF: n=34 good=26 (76.5%) bad=8 mean_lift good=0.233 bad=0.342 mean_sigma good=2.792 bad=2.721 mean_p_start good=0.717 bad=0.720 mean_p10 good=0.023 bad=0.019 mean_recent4 good=322.0 bad=337.5
+  MID: n=32 good=23 (71.9%) bad=9 mean_lift good=0.687 bad=0.709 mean_sigma good=3.132 bad=3.027 mean_p_start good=0.720 bad=0.720 mean_p10 good=0.056 bad=0.043 mean_recent4 good=309.2 bad=228.6
+  FWD: n=20 good=9 (45.0%) bad=11 mean_lift good=0.694 bad=0.571 mean_sigma good=2.830 bad=2.820 mean_p_start good=0.720 bad=0.720 mean_p10 good=0.038 bad=0.039 mean_recent4 good=288.2 bad=301.0
+  lift>=0.5: n=38 good=24 (63.2%) bad=14 mean_lift good=0.848 bad=0.845 mean_sigma good=2.827 bad=2.710 mean_p_start good=0.720 bad=0.720 mean_p10 good=0.035 bad=0.031 mean_recent4 good=291.7 bad=239.1
+  lift>=1.0: n=11 good=7 (63.6%) bad=4 mean_lift good=1.234 bad=1.194 mean_sigma good=2.364 bad=2.521 mean_p_start good=0.720 bad=0.720 mean_p10 good=0.016 bad=0.024 mean_recent4 good=226.1 bad=136.5
+
