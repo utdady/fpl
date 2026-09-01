@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E032 complete — μ inversion on FAIL (not utility transform or XI-solve bug). Squad-pool research earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E033 complete — wrong-15 (pool) dominates on FAIL; ranking secondary. Squad-selection research earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1344,17 +1344,53 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated.** Sub-layer is **(B) squad pool / μ-vs-realized inversion** — not (A) picked-XI ranking alone, not (C) utility transform. Branch → squad-selection / μ-calibration under treatment on FAIL before XI-objective rewrite. Do not tune λ or utility shape first.
 
 - **Artifacts:** `scripts/e032_xi_objective_audit.py`; `records/historical/e032_xi_objective_audit_gw.csv`; `records/historical/e032_xi_objective_audit_summary.txt`
-- **Follow-up:** Pre-register squad-pool diagnostic (treat vs ctrl 15 overlap, μ inflation on entrants) — not new objective formula.
+- **Follow-up:** → **E033** squad-pool diagnostic (wrong 15 vs wrong ranking).
+
+### E033 - Squad pool / μ-inflation
+- **Date:** 2026-09-01 (after E032 concentrated)
+- **Status:** **concentrated** — wrong-15 (pool) dominates on FAIL; treat ranking on ctrl 15 nearly neutral
+- **Hypothesis:** E032: μ tracks ΔU but realized XI inverts on FAIL. Open: is toxicity **wrong 15** (bad squad entrants) or **wrong ranking** (treat utility mis-ranks even on ctrl 15)?
+- **Question:** On squad movers, what is μ lift vs realized on entrants? Do counterfactuals `treat-rank on ctrl 15` vs `ctrl-rank on treat 15` separate pool from ranking?
+
+- **Scope lock:**
+  ```text
+  stack:    same as E030–E032; strategies balanced, safe
+  cf_ctrl_pool:  solve_xi(ctrl 15, treat utility) realized - ctrl XI
+  cf_treat_pool: solve_xi(treat 15, ctrl utility) realized - ctrl XI
+  movers:   mu_lift, u_lift, v2b_mu_lift, actual_pts, mu_error on squad entrants
+  forbidden: new utility, lambda, objective rewrite
+  ```
+
+- **Method:** `python scripts/e033_squad_pool_diagnostic.py` (302 GW-rows; 1780 squad movers).
+
+- **Results (balanced):**
+
+  | Metric | FAIL | PASS |
+  |---|---:|---:|
+  | mean ΔXI_picked | **−1.61** | +0.99 |
+  | mean ΔXI_cf_ctrl_pool (treat rank, ctrl 15) | **−0.05** | +0.11 |
+  | mean ΔXI_cf_treat_pool (ctrl rank, treat 15) | **−1.19** | +1.07 |
+  | mean squad overlap | 11.4/15 | 12.1/15 |
+  | entrant mean μ_lift | +0.43 | +0.37 |
+  | entrant mean μ_error | **−0.32** | +0.06 |
+  | corr(μ_lift, actual) entrants | **0.10** | 0.13 |
+
+  Decomposition on FAIL: **pool ~−1.2 pts** (ctrl rank on treat 15 vs ctrl XI); **ranking on ctrl pool ~−0.05** (treat rank on ctrl 15 ≈ neutral); **residual ranking on treat pool ~−0.4** (picked vs cf_treat_pool). Entrant μ lift does not predict entrant points on FAIL (r≈0.10). Wrong **15** dominates; treat ranking on the **same** ctrl pool is not the primary failure mode.
+
+- **Verdict:** **concentrated.** FAIL toxicity is primarily **squad pool selection** (who enters the 15), not utility mis-ranking on a fixed pool. Branch → squad-ILP / entrant profiling on FAIL — not XI-objective rewrite or λ first.
+
+- **Artifacts:** `scripts/e033_squad_pool_diagnostic.py`; `records/historical/e033_squad_pool_gw.csv`; `records/historical/e033_squad_pool_movers.csv`; `records/historical/e033_squad_pool_summary.txt`
+- **Follow-up:** Pre-register FAIL entrant toxicology (μ_lift vs outcome on squad movers) — not new objective.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E032 concentrated):
+As of 2026-09-01 (E033 concentrated):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** E024–E032 arc; μ-vs-realized inversion on FAIL (not utility transform).
-3. **Next.** Pre-register squad-pool / μ-inflation diagnostic. PASS ≠ auto-promote.
+2. **Closed:** E024–E033; wrong-15 pool dominates FAIL (ranking on ctrl 15 neutral).
+3. **Next.** Pre-register FAIL entrant toxicology on squad movers. PASS ≠ auto-promote.
 
 ---
 
@@ -1391,6 +1427,7 @@ python scripts/e029_treatment_lift_profile.py  # E029: treatment-lift outcome pr
 python scripts/e030_objective_alignment.py  # E030: objective alignment diagnostic
 python scripts/e031_objective_decomposition.py  # E031: XI vs captain decomposition
 python scripts/e032_xi_objective_audit.py  # E032: XI objective audit (oracle XI, mu vs utility)
+python scripts/e033_squad_pool_diagnostic.py  # E033: squad pool / mu-inflation
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers

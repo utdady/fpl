@@ -204,6 +204,7 @@ E029 concentrated (negative): selection-packaging closed (E022 availability sepa
 E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interface research earned.
 **E031 concentrated:** sign flip XI-level on FAIL; captain secondary.
 **E032 concentrated:** μ inversion on FAIL; not utility transform; squad_xi_agree=100%.
+**E033 concentrated:** wrong-15 pool dominates FAIL; treat rank on ctrl 15 neutral.
 
 ---
 
@@ -347,4 +348,5 @@ POST-GW1 (research)
   E030 concentrated (negative): corr(dU,dCap) negative on FAIL; objective-interface earned
   E031 concentrated: XI-level sign flip on FAIL; captain secondary; oracle does not fix
   E032 concentrated: mu inversion on FAIL; oracle XI still negative; squad pipeline OK
+  E033 concentrated: wrong-15 pool dominates FAIL; ranking on ctrl 15 neutral
 ```

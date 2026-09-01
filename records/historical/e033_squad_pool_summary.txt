@@ -1,0 +1,31 @@
+E033: squad-pool / mu-inflation diagnostic
+cf_ctrl_pool = treat-ranked XI on control 15; cf_treat_pool = ctrl-ranked XI on treat 15
+
+=== strategy=balanced ===
+  FAIL: n=75 movers_entered=267
+    mean_squad_overlap=11.4 mean_n_entered=3.56
+    mean_dXI_picked=-1.613 mean_dXI_cf_ctrl_pool=-0.053 mean_dXI_cf_treat_pool=-1.187
+    cf_treat_pool_ctrl > picked: 14/75 cf_ctrl_pool_treat > picked: 29/75
+    entrants: mean_mu_lift=0.429 mean_u_lift=0.421 mean_v2b_lift=0.429 mean_actual=2.906 mean_mu_error=-0.321
+    corr(mu_lift,actual) entrants=0.097 corr(u_lift,actual)=0.099
+  PASS: n=76 movers_entered=224
+    mean_squad_overlap=12.1 mean_n_entered=2.95
+    mean_dXI_picked=0.987 mean_dXI_cf_ctrl_pool=0.105 mean_dXI_cf_treat_pool=1.066
+    cf_treat_pool_ctrl > picked: 8/76 cf_ctrl_pool_treat > picked: 18/76
+    entrants: mean_mu_lift=0.369 mean_u_lift=0.369 mean_v2b_lift=0.369 mean_actual=3.143 mean_mu_error=0.057
+    corr(mu_lift,actual) entrants=0.126 corr(u_lift,actual)=0.126
+
+=== strategy=safe ===
+  FAIL: n=75 movers_entered=208
+    mean_squad_overlap=12.2 mean_n_entered=2.77
+    mean_dXI_picked=-1.120 mean_dXI_cf_ctrl_pool=0.280 mean_dXI_cf_treat_pool=-0.507
+    cf_treat_pool_ctrl > picked: 16/75 cf_ctrl_pool_treat > picked: 24/75
+    entrants: mean_mu_lift=0.457 mean_u_lift=0.266 mean_v2b_lift=0.457 mean_actual=3.111 mean_mu_error=-0.123
+    corr(mu_lift,actual) entrants=0.087 corr(u_lift,actual)=0.088
+  PASS: n=76 movers_entered=191
+    mean_squad_overlap=12.5 mean_n_entered=2.51
+    mean_dXI_picked=1.355 mean_dXI_cf_ctrl_pool=0.303 mean_dXI_cf_treat_pool=2.145
+    cf_treat_pool_ctrl > picked: 14/76 cf_ctrl_pool_treat > picked: 18/76
+    entrants: mean_mu_lift=0.353 mean_u_lift=0.204 mean_v2b_lift=0.353 mean_actual=3.309 mean_mu_error=0.107
+    corr(mu_lift,actual) entrants=0.188 corr(u_lift,actual)=0.202
+
