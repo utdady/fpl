@@ -202,7 +202,7 @@ Mechanism validated (E022). Does not clear production promote bars (E023 XI0; E0
 **Valuation / selection (E025–E028)**
 E025/E026: relative ranking failure; near+mid control gaps.
 E027 REJECT: H-PACK1 global ε closed (1/4 PASS).
-**E028 pre-registered:** local substitution pairs; global admissibility vs local margin.
+E028 REJECT (local branch): bad swaps margin-agnostic on FAIL (~45% all buckets).
 
 ---
 
