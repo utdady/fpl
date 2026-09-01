@@ -206,6 +206,7 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 **E032 concentrated:** μ inversion on FAIL; not utility transform; squad_xi_agree=100%.
 **E033 concentrated:** wrong-15 pool dominates FAIL; treat rank on ctrl 15 neutral.
 **E034 concentrated:** budget displacement; entrants OK individually; vs_leaver −0.5 on FAIL.
+**E034b concentrated:** force one entrant → full treat 15; Δ_cascade=0; tripwire re-equilibration.
 
 ---
 
@@ -351,4 +352,5 @@ POST-GW1 (research)
   E032 concentrated: mu inversion on FAIL; oracle XI still negative; squad pipeline OK
   E033 concentrated: wrong-15 pool dominates FAIL; ranking on ctrl 15 neutral
   E034 concentrated: budget displacement signal; not toxic entrant; vs_leaver FAIL -0.5
+  E034b concentrated: single forced entrant reproduces full treat; cascade residual 0
 ```

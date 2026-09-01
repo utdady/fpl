@@ -1,0 +1,18 @@
+E034b: forced-swap counterfactual (one entrant at a time)
+delta_force = cap(forced must_include E) - cap(ctrl)
+delta_cascade = delta_full - delta_force
+
+=== FAIL entrants n=267 gws=60 ===
+  entrant mean_delta_force=-3.131 mean_delta_cascade=0.000
+  entrant mean_abs_force=8.022 mean_abs_cascade=0.000
+  |cascade|>|force|: 0.0% (0/267)
+  gw mean_delta_full=-2.283 mean_mean_delta_force=-2.283
+  gw mean_n_entrants=4.45 mean_overlap_full_ctrl=10.6
+
+=== PASS entrants n=224 gws=55 ===
+  entrant mean_delta_force=3.112 mean_delta_cascade=0.000
+  entrant mean_abs_force=7.308 mean_abs_cascade=0.000
+  |cascade|>|force|: 0.0% (0/224)
+  gw mean_delta_full=2.418 mean_mean_delta_force=2.418
+  gw mean_n_entrants=4.07 mean_overlap_full_ctrl=10.9
+

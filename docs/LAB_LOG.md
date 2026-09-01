@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E034 complete — budget displacement signal on FAIL (entrants OK individually, worse than leavers). E034b forced-swap earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** E034b complete — single forced entrant triggers full treat re-equilibration (Δ_force=Δ_full). Pairwise-swap counterfactual earned. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 
@@ -1413,17 +1413,49 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** **concentrated.** Supports **budget displacement (B)** over toxic-entrant (A): pool damage is not "bad players who play badly" but **entrants worse than leavers in portfolio context** under marginal boundary shifts. E017b cold-cell toxicology does not replicate at squad admission layer. Branch → **E034b** forced-swap counterfactual (single entrant into ctrl 15) to confirm displacement vs cascade.
 
 - **Artifacts:** `scripts/e034_squad_entrant_toxicology.py`; `records/historical/e034_squad_entrant_toxicology.csv`; `records/historical/e034_squad_entrant_toxicology_summary.txt`
-- **Follow-up:** E034b forced-swap counterfactual (A vs B/C separation).
+- **Follow-up:** → **E034b** forced-swap counterfactual.
+
+### E034b - Forced-swap counterfactual
+- **Date:** 2026-09-01 (after E034 concentrated)
+- **Status:** **concentrated** — single forced entrant reproduces full treat outcome; cascade residual zero; massive squad re-equilibration per force
+- **Hypothesis:** E034 consistent with budget displacement. Open: is damage from entrant E itself (`Δ_force`) or portfolio cascade (`Δ_full − Δ_force`)?
+- **Question:** Per squad entrant, force `must_include={E}` on treat utility vs full treat. On FAIL, is `|Δ_cascade| ≫ |Δ_force|`?
+
+- **Scope lock:**
+  ```text
+  arms:     ctrl cap; forced(E) cap; full treat cap
+  metrics:  delta_force, delta_full, delta_cascade, n_squad_diff_forced
+  forbidden: new utility, lambda, portfolio objective rewrite
+  ```
+
+- **Method:** `python scripts/e034b_forced_swap.py` (491 entrant-rows; 115 GW-rows).
+
+- **Results:**
+
+  | Metric | FAIL | PASS |
+  |---|---:|---:|
+  | mean Δ_force (entrant) | **−3.13** | +3.11 |
+  | mean Δ_full (GW) | **−2.28** | +2.42 |
+  | mean Δ_cascade | **0.00** | 0.00 |
+  | \|cascade\|>\|force\| | **0%** (0/267) | 0% (0/224) |
+  | mean n_squad_diff_forced | **~10+** | ~10+ |
+
+  **Every** forced entrant reproduces full treat cap exactly (`Δ_force = Δ_full`; `Δ_cascade = 0`). Forcing one entrant with treat utility does **not** produce a minimal 1-for-1 swap — the squad ILP **re-equilibrates to the full treat 15** (e.g. GW1 FAIL: 8 leavers, overlap 7/15). Portfolio damage is **bundled inside** `Δ_force`, not separable as incremental cascade beyond it. Single entrant acts as **tripwire** to global treat optimum.
+
+- **Verdict:** **concentrated.** Rejects incremental cascade-beyond-force decomposition. Supports **tripwire re-equilibration**: marginal admission with treat objective triggers full portfolio jump. Branch → **pairwise-swap** counterfactual (E in / L out only, no full re-solve) to isolate minimal displacement vs ILP re-equilibration.
+
+- **Artifacts:** `scripts/e034b_forced_swap.py`; `records/historical/e034b_forced_swap_entrants.csv`; `records/historical/e034b_forced_swap_gw.csv`; `records/historical/e034b_forced_swap_summary.txt`
+- **Follow-up:** E034c pairwise forced swap (must_include E + must_exclude L, or manual squad) vs ILP re-solve.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-01 (E034 concentrated):
+As of 2026-09-01 (E034b concentrated):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Closed:** E024–E034; wrong-15 pool; budget-displacement signal (not toxic entrant).
-3. **Next.** E034b forced-swap counterfactual. PASS ≠ auto-promote.
+2. **Closed:** E024–E034b; tripwire re-equilibration (force one entrant → full treat 15).
+3. **Next.** E034c pairwise-swap counterfactual. PASS ≠ auto-promote.
 
 ---
 
@@ -1462,6 +1494,7 @@ python scripts/e031_objective_decomposition.py  # E031: XI vs captain decomposit
 python scripts/e032_xi_objective_audit.py  # E032: XI objective audit (oracle XI, mu vs utility)
 python scripts/e033_squad_pool_diagnostic.py  # E033: squad pool / mu-inflation
 python scripts/e034_squad_entrant_toxicology.py  # E034: squad entrant toxicology
+python scripts/e034b_forced_swap.py  # E034b: forced entrant vs cascade
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points
 python scripts/e019_cap_fail_profile.py  # E019b Cap-fail demoted leavers
