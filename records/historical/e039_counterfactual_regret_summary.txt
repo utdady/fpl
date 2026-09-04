@@ -1,0 +1,40 @@
+E039-A: fixture-concentration V_ns vs separable U
+V_ns = sum_XI U - 0.5 * sum_f C(n_f, 2); production U; E024 pair sample
+primary FAIL both60: novelty (!= monotone U) AND concordance beats U
+
+=== FAIL both60 same-pos pairs n=122 ===
+  concordance V (pref enter): 39.3% (model_pref_nontie=28 nontie=103)
+  concordance U (pref enter): nan (model_pref_nontie=0)
+  sign_agreement V: 45.8% (n=72)
+  sign_agreement U: 61.2% (n=103)
+  novelty: sign_disagree=33/122 (27.0%); same_sign=89
+  spearman(delta_v, dpts)=-0.084
+  spearman(delta_u, dpts)=0.066
+  regret n=122: spearman(delta_v, -regret)=0.009 spearman(delta_u, -regret)=0.045
+  mean_regret_entrant=6.295
+  mean_dpts=-1.148
+
+=== PASS both60 same-pos pairs n=100 ===
+  concordance V (pref enter): 50.0% (model_pref_nontie=14 nontie=77)
+  concordance U (pref enter): nan (model_pref_nontie=0)
+  sign_agreement V: 54.4% (n=57)
+  sign_agreement U: 59.7% (n=77)
+  novelty: sign_disagree=19/100 (19.0%); same_sign=81
+  spearman(delta_v, dpts)=0.088
+  spearman(delta_u, dpts)=0.129
+  regret n=99: spearman(delta_v, -regret)=0.211 spearman(delta_u, -regret)=0.242
+  mean_regret_entrant=6.475
+  mean_dpts=-1.280
+
+=== GW-level secondary ===
+  FAIL n=59: spearman(sum_v, dcap)=0.093 spearman(sum_u, dcap)=-0.137
+  PASS n=55: spearman(sum_v, dcap)=0.020 spearman(sum_u, dcap)=-0.163
+
+=== PRIMARY GATE (FAIL both60) ===
+  novelty (any sign disagreement): True (33/122)
+  decision spearman(V>U on dpts): False (V=-0.084 U=0.066)
+  secondary sign_agreement(V>U): False (V=45.8% U=61.2%)
+  secondary regret spearman(V>U): False
+  decision_win (spearman primary): False
+  CALL: E039-A KILL — decision-fail (differs but does not beat U)
+

@@ -310,13 +310,12 @@ add a declaration to `formal/` before production integration.
 
 ```text
 PRODUCTION     v2am_s + rates=v1 + fixtures v1  (horizon squad objective)
-CLOSED         E024–E038 separable V / rates_v2b promote
-ACTIVE         E039-A — V_ns fixture-concentration, λ=0.5 frozen
-FIRST ARTIFACT counterfactual regret evaluator (no ILP)
-NOT NEXT       optimizer; λ sweep; parallel Upstream/Product implement
+CLOSED         E024–E038; rates_v2b promote; E039-A V_ns λ=0.5 (KILL)
+ACTIVE         none — Phase-0 fork open
+NOT NEXT       λ sweep; optimizer on dead E039-A
 ```
 
-See [`DECISION_CHARTER.md`](DECISION_CHARTER.md) §15–16 and [`LAB_LOG.md`](LAB_LOG.md) § E039-A.
+See [`DECISION_CHARTER.md`](DECISION_CHARTER.md) §16 and [`LAB_LOG.md`](LAB_LOG.md) § E039-A.
 
 ---
 
@@ -379,7 +378,7 @@ alternative formulations in the same peek, production changes, \(\lambda\) sensi
 
 ## 14. E039-A — Frozen candidate \(V_{\mathrm{ns}}\) (2026-09-04)
 
-**Status:** candidate frozen before evaluator code.
+**Status:** candidate frozen before evaluator code; **result: KILL** (see LAB_LOG E039-A).
 
 \[
 V_{\mathrm{ns}}(S)
@@ -399,8 +398,8 @@ V_{\mathrm{ns}}(S)
 
 \(\lambda=0.5\) is part of the **falsifiable candidate**. No sweep. No promote-by-sensitivity.
 
-**Falsification scope:** E039-A fail kills **this** candidate, not all non-separable \(V\). Successor needs a new prereg.
-
-**Structural claim:** \(\exists a,b\) with \(U(a)>U(b)\) but \(\Delta V(a\mid S)<\Delta V(b\mid S)\); ranking not monotone in \(U\).
+**Result (2026-09-04):** Novelty held (27% FAIL sign disagreement). Decision gate failed
+(spearman \(\Delta V\) vs dpts −0.084 < \(\Delta U\) +0.066). **E039-A killed.** Class of
+non-separable \(V\) not closed.
 
 Details: [`LAB_LOG.md`](LAB_LOG.md) § E039-A.

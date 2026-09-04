@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E039-A candidate frozen** — \(V_{\mathrm{ns}}\) = Σ XI \(U_i\) − 0.5 × same-PL-fixture pair count. Next: one regret evaluator (no ILP). Upstream/Product parked. Production unchanged.
+**Active research question:** **E039-A KILL** (decision-fail; novelty held). Research lane idle. Phase-0 fork open for Product or Upstream prereg (one lane). Production unchanged.
 
 ---
 
@@ -1718,7 +1718,7 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 ### E039-A — Candidate \(V\) freeze: fixture-concentration portfolio (amendment)
 - **Date:** 2026-09-04 (dated amendment to E039; before any evaluator code)
-- **Status:** **candidate frozen** — Option A; \(\lambda = 0.5\); no evaluator yet
+- **Status:** **concentrated (negative) — KILL** — novelty yes; decision-fail on FAIL
 - **Scope of falsification:** Failure of E039-A **kills this candidate**, not the entire class of non-separable \(V\). A later Research candidate requires a **new** preregistered hypothesis (new structural card). Do not retune \(\lambda\) or swap formulations inside this peek.
 
 - **Candidate ID:** **E039-A** / \(V_{\mathrm{ns}}\) (fixture-concentration)
@@ -1751,36 +1751,41 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
   =
   V_{\mathrm{ns}}(S_{-L}\cup\{a\})
   -
-  V_{\mathrm{ns}}(S_{-L})
+  V_{\mathrm{ns}}(S)
   \]
-  (XI re-solved on the swapped 15 under the same rules as E036; no squad ILP). Rank admissions by \(\Delta V\). Compare to ranking by \(\Delta U = U_a - U_L\) (or \(U_a\) among same-\(L\) entrants — report both; **primary** = same-position both≥60 pairs as E036).
+  (XI re-solved on the swapped 15; no squad ILP). Sample = E024 ctrl→treat same-pos pairs; scores use production \(U\).
 
-- **Intended structural difference (must be checkable):**
-  \[
-  \exists\, a,b:\quad
-  U(a) > U(b)
-  \quad\text{but}\quad
-  \Delta V(a\mid S) < \Delta V(b\mid S)
-  \]
-  and the induced ranking is **not** a monotone transform of \(U\). The interaction term is non-additive: two high-\(U\) players can have different marginal value depending on who already shares PL match \(f\).
+- **Method:** `python scripts/e039_counterfactual_regret.py`
 
-- **Primary gate (FAIL):** (1) ranking differs from \(U\) (novelty), **and** (2) better concordance with counterfactual admission regret / realized swap outcomes than \(U\). Else **kill E039-A**.
+- **Results (FAIL both60 n=122):**
 
-- **Forbidden:** \(\lambda\) retune; alternative \(V\) in this peek; optimizer; new μ; production changes; promoting on secondary Cap alone.
+  | Metric | \(V_{\mathrm{ns}}\) | \(U\) |
+  |---|---:|---:|
+  | spearman(Δ, dpts) | **−0.084** | +0.066 |
+  | sign_agreement | 45.8% | **61.2%** |
+  | spearman(Δ, −regret) | +0.009 | +0.045 |
+  | sign_disagree vs \(U\) | 33/122 (27.0%) | — |
 
-- **Next:** implement **one** counterfactual regret evaluator for E039-A only. Historical gate. Optimizer only if primary gate wins (separate prereg).
+  PASS (n=100): same pattern — \(V\) does not beat \(U\). GW secondary: spearman(sum_ΔV, ΔCap)=+0.093 FAIL (report only; not promote).
+
+- **Verdict:** **concentrated (negative) — KILL E039-A.** Novelty holds (27% sign disagreement — not a monotone re-expression of \(U\)). **Decision gate fails:** fixture-concentration at \(\lambda=0.5\) worsens admission ordering vs separable \(U\) on FAIL (spearman and sign_agreement). No \(\lambda\) retune. No optimizer. Research lane returns control to Phase-0 fork; Product or Upstream may be preregistered independently. Successor non-separable \(V\) needs a **new** prereg.
+
+- **Artifacts:** `scripts/e039_counterfactual_regret.py`; `records/historical/e039_counterfactual_regret_pairs.csv`; `records/historical/e039_counterfactual_regret_gw.csv`; `records/historical/e039_counterfactual_regret_summary.txt`
+- **Spec:** `docs/PORTFOLIO_VALUE_SPEC.md` §14; `docs/DECISION_CHARTER.md` §16
+- **Follow-up:** park Research until new structural card; Phase-0 fork open for Product/Upstream prereg.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-04 (E039-A candidate frozen):
+As of 2026-09-04 (E039-A KILL):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Unchanged.**
-2. **Active.** E039-A — \(V_{\mathrm{ns}}\) with \(\lambda=0.5\) same-fixture pairs; E036-style units.
-3. **Next code.** One counterfactual regret evaluator. No ILP / new μ / \(\lambda\) sweep / optimizer.
-4. **Falsification.** E039-A fail ≠ “all non-separable \(V\) impossible”; requires new prereg for a successor.
-5. **Parked.** Upstream / Product. **Closed.** rates_v2b promote path.
+2. **E039-A.** Killed — novelty yes, decision-fail. Not all non-separable \(V\) ruled out.
+3. **Research.** No active candidate. New non-separable \(V\) needs fresh prereg.
+4. **Fork open.** Product (chips) or Upstream (role/minutes) may be preregistered — one lane.
+5. **Closed.** rates_v2b promote; E039-A fixture-concentration \(\lambda=0.5\).
+6. **Not next.** \(\lambda\) sweep; optimizer; silent V_D in same peek.
 
 ---
 
@@ -1825,6 +1830,7 @@ python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibratio
 python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
 python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
 python scripts/e037_portfolio_value_alignment.py  # E037: V_A vs V_B alignment
+python scripts/e039_counterfactual_regret.py  # E039-A: V_ns vs U regret gate
 python scripts/e038_season_payoff.py  # E038: season payoff rolling vs GW1-lock
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology
 python scripts/e021c_cold_minutes_breakdown.py  # E021c: cold/warm minutes x points

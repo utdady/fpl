@@ -243,12 +243,12 @@ then** optimizer integration.
 
 ```text
 CHARTER        Landing A (E038 concentrated)
-CLOSED         rates_v2b decision/season promote (reopen = new prereg only)
+CLOSED         rates_v2b promote; E039-A fixture-concentration λ=0.5
 POLICY         prediction without decision improvement = kill
-ACTIVE LANE    Research — E039-A candidate frozen (λ=0.5 V_ns)
-PARKED         Upstream | Product (roadmap only until E039 stop)
+ACTIVE LANE    none — Phase-0 fork open (Product | Upstream | new Research card)
+PARKED         prior Research candidate E039-A killed
 PRODUCTION     v2am_s + rates=v1 + fixtures v1 (unchanged)
-NOT NEXT       ILP; λ sweep; new μ; rates reopen; parallel implement lanes
+NOT NEXT       λ sweep; optimizer on E039-A; silent V_D
 ```
 
 ---
@@ -306,24 +306,15 @@ Upstream and Product stay **roadmap-only** until E039’s stop rule fires or is 
 
 ---
 
-## 16. E039-A — Candidate \(V\) locked (2026-09-04)
+## 16. E039-A — Candidate \(V\) locked (2026-09-04); **KILL** after gate
 
 Amendment to §15. Full math: `LAB_LOG.md` § E039-A; `PORTFOLIO_VALUE_SPEC.md` §14.
 
 ```text
 CANDIDATE   E039-A / V_ns
 FORMULA     Σ_{i in XI} U_i  −  0.5 × Σ_f C(n_f, 2)
-f           Premier League match identity in GW T (as-of-T)
-UNITS       E036-style same-position swap pairs
-λ           0.5 frozen; no sweep; no sensitivity for promote
-FAIL SCOPE  kills E039-A only — not all non-separable V
-NEXT        one regret evaluator → historical gate → optimizer only if win
-```
-
-Current call:
-
-```text
-ACTIVE LANE    Research — E039-A candidate frozen
-PRODUCTION     v2am_s + rates=v1 + fixtures v1
-PARKED         Upstream | Product
+RESULT      concentrated (negative) KILL
+            novelty YES (27% sign disagree FAIL)
+            decision NO (spearman V=-0.084 < U=+0.066 FAIL both60)
+NEXT        Phase-0 fork open; no optimizer; no λ retune
 ```

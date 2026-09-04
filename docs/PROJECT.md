@@ -483,12 +483,11 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E038 concentrated; Phase 0 freeze; E039 prereg)
+### Valuation / selection (E038 concentrated; Phase 0 freeze; E039-A KILL)
 
-E038: both rolling and GW1-lock season ΣΔCap negative on FAIL — Landing A (season-structural).
-**`rates_v2b` promote CLOSED** — reopen requires new prereg. **E039** activates Research lane:
-structural non-separable \(V\); counterfactual regret evaluator first; Upstream/Product parked.
-Charter: `docs/DECISION_CHARTER.md` §15. Production unchanged: `v2am_s` + `rates=v1` + fixtures `v1`.
+E038: Landing A. **`rates_v2b` promote CLOSED.** E039-A fixture-concentration \(V_{\mathrm{ns}}\)
+(\(\lambda=0.5\)): novelty held, **decision-fail → KILL**. Research idle; Phase-0 fork open
+for Product/Upstream/new Research card. Production unchanged.
 
 ---
 
@@ -546,7 +545,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E037** | Portfolio value alignment (\(V_A\) vs \(V_B\)) | **concentrated (negative)** — V_B ≈ V_A; both anti-align FAIL |
 | **E038** | Season payoff (rolling vs GW1-lock) | **concentrated** — Landing A; both negative FAIL |
 | **E039** | Structural non-separable \(V(S,z,F)\); counterfactual regret | **preregistered** — Research lane |
-| **E039-A** | Fixture-concentration \(V_{\mathrm{ns}}\), \(\lambda=0.5\) | **candidate frozen** — evaluator next |
+| **E039-A** | Fixture-concentration \(V_{\mathrm{ns}}\), \(\lambda=0.5\) | **KILL** — novelty yes; decision-fail |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.
