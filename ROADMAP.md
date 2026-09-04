@@ -245,6 +245,35 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 **E037 concentrated (negative):** V_B ≈ V_A; both anti-align on FAIL.
 **Charter + E038:** Landing A; `docs/DECISION_CHARTER.md`.
 
+**Phase 0 (2026-09-04) — permanent boundary + forked roadmap**
+
+```text
+Production:        v2am_s + rates=v1 + fixtures v1
+Closed research:   rates_v2b (decision/season promote CLOSED; reopen = new prereg)
+Research candidates: structural V_C / non-separable portfolio value (E039+)
+Upstream candidates: role/minutes (new hyp; E038 gates; not E017 reopen)
+Product candidates:  chips → price → transfers → season agent
+```
+
+```text
+                   E038
+                    │
+        ┌───────────┼────────────┐
+        │           │            │
+   RESEARCH      UPSTREAM      PRODUCT
+        │           │            │
+      E039       Role/Minutes   Chips
+   V(S,z,F)      decision gate  action ROI
+   regret first                 frozen μ
+        │           │            │
+        └───────────┼────────────┘
+                    │
+              only successful branches → Transfers → Full season agent
+```
+
+**Policy:** prediction without decision improvement = kill. One implement lane at a time.
+Do not collapse into a linear `E039 → E040 → …` ladder. Details: `docs/DECISION_CHARTER.md`.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -401,6 +430,7 @@ POST-GW1 (research)
   E037 concentrated (negative): V_B does not beat V_A; both anti-align FAIL
   DECISION_CHARTER: Landing A (E038 concentrated)
   E038 concentrated: both season arms negative FAIL; Landing B rejected
+  Phase 0: rates_v2b promote CLOSED; fork Research|Upstream|Product; one lane
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

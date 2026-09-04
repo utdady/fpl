@@ -114,7 +114,9 @@ production is V2A-M) is an appendix, not a pass.
 
 **E024:** Packaged `rates=v2b` vs production — MAE✓ XI0✓ 4/4; Cap✗ 2022/23+2025/26. Reject promote. No q fishing. See `LAB_LOG.md` E024.
 
-**Not:** q fishing; silent promote; V2C reopen; E017/E018 reopen.
+**E024–E038 (Phase 0, 2026-09-04):** Decision/season promote path for `rates_v2b` is **CLOSED** under the current architecture. Season ΣΔCap negative on FAIL under both rolling and GW1-lock (E038). Reopening requires a **new pre-registered hypothesis** — not packaging/α/q retunes. Policy: prediction improvement without decision improvement = kill. See `docs/DECISION_CHARTER.md` §§10–14.
+
+**Not:** q fishing; silent promote; V2C reopen; E017/E018 reopen; rates_v2b reopen without new prereg.
 
 ---
 
@@ -268,9 +270,10 @@ See §0h / `LAB_LOG.md` E022. Cap+XI0 PASS 4/4; not a production promote.
 
 See §0h / `LAB_LOG.md` E023. XI0✗ 4/4 as named risk. Packaging mechanism (E022) remains validated; production fixtures stay `v1`. No q fishing.
 
-### B10 — Packaged rates=v2b vs production rates=v1 (E024) — **REJECT for promote**
+### B10 — Packaged rates=v2b vs production rates=v1 (E024) — **REJECT for promote**; path **CLOSED** (E038 / Phase 0)
 
-See `LAB_LOG.md` E024. XI0✓ 4/4 but Cap✗ on toxic seasons. rates stay v1. No q/α fishing.
+See `LAB_LOG.md` E024–E038. XI0✓ 4/4 but Cap✗ on toxic seasons; season payoff also negative on FAIL under both policies. rates stay v1. **Do not reopen without a new pre-registered hypothesis.** No q/α fishing.
+
 
 ---
 

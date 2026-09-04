@@ -20,7 +20,7 @@ It does **not** replace the living experiment log. Numbers and verdicts live in
 | [`V2_SPEC.md`](V2_SPEC.md) | How a successor model earns a version number |
 | [`FORMAL.md`](FORMAL.md) | What Lean could prove vs what statistics prove (post-GW1) |
 | [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer history, failure modes, E030–E036 |
-| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Estimand/action fork; Landing A vs B; E038 plan |
+| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; rates_v2b closed; Research / Upstream / Product fork |
 | [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | Candidate \(V(S)\), E035–E037 results |
 | `ROADMAP.md` | Version ladder (may lag E013; do not treat it as the experiment log) |
 
@@ -483,9 +483,12 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E038 concentrated)
+### Valuation / selection (E038 concentrated; Phase 0 freeze)
 
-E038: both rolling and GW1-lock season ΣΔCap negative on FAIL — Landing A (season-structural). Charter: `docs/DECISION_CHARTER.md`.
+E038: both rolling and GW1-lock season ΣΔCap negative on FAIL — Landing A (season-structural).
+**`rates_v2b` promote CLOSED** — reopen requires new prereg. Post-E038 roadmap forks
+Research / Upstream / Product (one implement lane). Charter: `docs/DECISION_CHARTER.md`.
+Production unchanged: `v2am_s` + `rates=v1` + fixtures `v1`.
 
 ---
 

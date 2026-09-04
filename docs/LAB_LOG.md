@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** E038 concentrated — Landing A (season-structural FAIL damage). Charter: `docs/DECISION_CHARTER.md`. Production stays `v2am_s` + `rates=v1` + fixtures `v1`.
+**Active research question:** Phase 0 freeze — E038 Landing A; `rates_v2b` promote **closed** (reopen = new prereg only). Roadmap forks: **Research** (structural \(V\)) | **Upstream** (role/minutes) | **Product** (chips first). One implement lane at a time. Production unchanged: `v2am_s` + `rates=v1` + fixtures `v1`. Charter: `docs/DECISION_CHARTER.md`.
 
 ---
 
@@ -1635,20 +1635,26 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `scripts/e038_season_payoff.py`; `records/historical/e038_season_payoff_season.csv`; `records/historical/e038_season_payoff_gw.csv`; `records/historical/e038_season_payoff_summary.txt`
 - **Charter:** `docs/DECISION_CHARTER.md`
-- **Follow-up:** document Landing A as primary charter stance; V_C only with explicit new hypothesis (not re-squadding rescue)
+- **Follow-up:** Phase 0 docs (2026-09-04): permanent `rates_v2b` boundary; three-track fork; promotion policy. See charter §§10–14.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-02 (E038 concentrated):
+As of 2026-09-04 (Phase 0 after E038):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE.
-2. **Charter.** `docs/DECISION_CHARTER.md` — **Landing A** primary stance (E038).
-3. **Closed:** E024–E038 for GW/separable-V promote path.
-4. **No promote** `rates_v2b`. g_treat = caution signal. V_C gated.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Do not touch while choosing the next track.**
+2. **Charter.** Landing A; `docs/DECISION_CHARTER.md` §§10–14.
+3. **Closed.** `rates_v2b` decision/season promote under current architecture. Reopening requires a **new pre-registered hypothesis**. Packaging / stability / displacement / MC≡U arcs closed.
+4. **Policy.** Prediction improvement without decision improvement = **kill**. `g_treat` = caution monitor only.
+5. **Fork (pick one implement lane):**
+   - **Research** — E039 structural \(V(S,z,F) \neq \sum U_i\); counterfactual regret first; no optimizer first
+   - **Upstream** — role/minutes beyond `v2am_s` (new hyp, not E017); E038 decision gates
+   - **Product** — chips ROI under frozen production stack → price → transfers
+6. **Not next by default.** Linear E039→E040…; transfer ILP; V_C without prereg; rates variants.
 
 ---
+
 
 ## Index of commands
 

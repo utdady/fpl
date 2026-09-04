@@ -2,11 +2,12 @@
 
 > **Which payoff are we optimizing, and which action are we taking?**
 
-This document resolves the Landing A / Landing B fork **before** any V_C code or
-transfer-engine work. It does not pick a winner — it names the questions, maps them
-to existing harness behavior, and pre-registers how to discriminate them.
+This document records the estimand/action charter after E024–E038. **Landing A**
+was adopted (E038). **`rates_v2b` promote is permanently closed** under the
+current architecture (Phase 0). Post-E038 work forks into Research / Upstream /
+Product — not a linear experiment ladder.
 
-Related: [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md), [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md), [`LAB_LOG.md`](LAB_LOG.md).
+Related: [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md), [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md), [`LAB_LOG.md`](LAB_LOG.md), `ROADMAP.md`.
 
 Numbers and verdicts: LAB_LOG wins on conflict.
 
@@ -157,21 +158,103 @@ Primary estimand for promote: **R_GW / season cumulative Cap**. No `rates_v2b` p
 
 ---
 
-## 10. Current call
+## 10. Permanent boundary — rates_v2b (Phase 0, 2026-09-04)
+
+**`rates_v2b` is closed at the decision/season level under the current architecture.**
+
+E024–E038 localized FAIL-regime season losses under both rolling and GW1-lock
+policies. Predictive gains and PASS-season payoff are insufficient for promote.
+
+**Reopening requires a new pre-registered hypothesis** — not a packaging retune,
+α/q search, shrink variant, or “one more season look.” Do not mutate production
+while choosing the next track.
+
+**Promotion policy (all future candidates):**
+
+```text
+Prediction improvement without decision improvement = kill
+```
+
+MAE/Spearman alone never promote. Decision gates + season payoff required.
+`g_treat` is a required **monitor/caution** on candidate reports — not an
+optimizer feature.
+
+---
+
+## 11. Post-E038 fork — three tracks (not a linear ladder)
+
+Experiments after E038 answer **different questions**. Do not collapse into
+`E039 → E040 → …` as a single roadmap.
+
+```text
+                   E038
+                    │
+        ┌───────────┼────────────┐
+        │           │            │
+   RESEARCH      UPSTREAM      PRODUCT
+        │           │            │
+      E039       Role/Minutes   Chips
+   structural V   (new hyp)     ROI
+   regret gate   decision gate  frozen μ
+        │           │            │
+        └───────────┼────────────┘
+                    │
+              only successful
+                branches
+                    │
+                 Transfers
+                    │
+             Full season agent
+```
+
+| Track | Question | First artifact | Gate |
+|---|---|---|---|
+| **Research** | What should \(V(S,z,F)\) mean? | Counterfactual regret evaluator (not an optimizer) | Candidate \(V\) must explain regret; \(V \neq \sum U_i\) in principle (survive E036) |
+| **Upstream** | Better minutes/role beyond `v2am_s`? | New structural card — **not** E017 reopen | Same production stack, decision gates, `g_treat`, season payoff; no MAE-only promote |
+| **Product** | First sequential FPL action? | Chip ROI under frozen `v2am_s + rates=v1` | \(E[Y_{\text{chip}}-Y_{\text{normal}}]\); then price → transfers |
+
+**Discipline:** only **one implementation lane** active at a time. Parallel
+pre-registration is fine; parallel coding is not.
+
+**Product sequence (if that lane wins):** chips → price state → transfers →
+full season planner. Do not jump to transfer ILP first.
+
+**Research sequence (if that lane wins):** historical treatment → counterfactual
+alternatives → realized regret → does candidate \(V\) explain regret? → **only
+then** optimizer integration.
+
+---
+
+## 12. Institutional inventory
+
+| Bucket | Contents |
+|---|---|
+| **Production** | `v2am_s` + `rates=v1` + fixtures `v1` |
+| **Closed research** | `rates_v2b` promote path; packaging/stability/displacement/MC-under-same-U arcs (E022–E038) |
+| **Research candidates** | Structural \(V_C\) / non-separable portfolio value (E039+); gated until prereg |
+| **Upstream candidates** | Role-transition / availability dynamics (new hyp, E038 discipline) |
+| **Product candidates** | Chips → price → transfers → season agent |
+
+---
+
+## 13. Current call
 
 ```text
 CHARTER        Landing A (E038 concentrated)
-CLOSED         E024–E038 promote path for rates_v2b
-NOT NEXT       V_C without new hypothesis; horizon ILP promote
-PRODUCTION     v2am_s + rates=v1 + fixtures v1 (unchanged)
+CLOSED         rates_v2b decision/season promote (reopen = new prereg only)
+POLICY         prediction without decision improvement = kill
+FORK           Research | Upstream | Product  (one active implement lane)
+PRODUCTION     v2am_s + rates=v1 + fixtures v1 (do not touch while choosing)
+NOT NEXT       linear E039→E040…; transfer ILP as default; V_C without prereg
 ```
 
 ---
 
-## 11. Amendment protocol
+## 14. Amendment protocol
 
-To change primary estimand or primary action:
+To change primary estimand, primary action, or reopen a closed branch:
 
 1. Append a dated note to this file (do not rewrite history)
 2. Pre-register the next experiment in LAB_LOG
-3. Do not retro-fit past E024–E037 verdicts
+3. Do not retro-fit past E024–E038 verdicts
+4. Do not change production while the choice is open
