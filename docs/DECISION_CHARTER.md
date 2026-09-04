@@ -123,12 +123,14 @@ evidence alone. PASS ≠ auto-promote.
 
 ---
 
-## 7. V_C — gated (E038: Landing A; no automatic path)
+## 7. V_C — gated until E039; Research lane owns structural V
 
-E038 concentrated: **Landing A.** V_C is **not** the next default step.
+E038 concentrated: **Landing A.** Separable \(V_A/V_B\) closed.
 
-Pursue V_C only with a **new pre-registered hypothesis** (not "re-squadding rescue").
-If pursued, still requires minimal \(z\) state spec before code.
+**E039 (2026-09-04)** is the pre-registered Research-lane entry for structurally
+non-separable \(V(S,z,F)\). First artifact = counterfactual regret evaluator.
+Optimizer / transfer engine still forbidden until E039 passes its primary gate
+and a separate prereg amends this charter.
 
 ---
 
@@ -243,9 +245,10 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b decision/season promote (reopen = new prereg only)
 POLICY         prediction without decision improvement = kill
-FORK           Research | Upstream | Product  (one active implement lane)
-PRODUCTION     v2am_s + rates=v1 + fixtures v1 (do not touch while choosing)
-NOT NEXT       linear E039→E040…; transfer ILP as default; V_C without prereg
+ACTIVE LANE    Research — E039 preregistered (regret evaluator first)
+PARKED         Upstream | Product (roadmap only until E039 stop)
+PRODUCTION     v2am_s + rates=v1 + fixtures v1 (unchanged)
+NOT NEXT       ILP; new μ; rates reopen; parallel implement lanes
 ```
 
 ---
@@ -258,3 +261,45 @@ To change primary estimand, primary action, or reopen a closed branch:
 2. Pre-register the next experiment in LAB_LOG
 3. Do not retro-fit past E024–E038 verdicts
 4. Do not change production while the choice is open
+
+---
+
+## 15. E039 — Research lane activated (prereg 2026-09-04)
+
+Phase-0 fork choice: **Research**. See `LAB_LOG.md` E039.
+
+**Contract (frozen):**
+
+```text
+HYPOTHESIS
+Realized admission regret contains information from z and F that cannot be
+represented by any monotone transform of separable treatment utility U.
+
+NULL
+Novelty-fail:  V ranking ≡ monotone(U) on feasible admissions → kill (E036 class)
+Decision-fail: V differs but fails primary gate → kill/park; return to Phase-0 fork
+
+ESTIMAND
+regret(i|S,T) = Y(best feasible alt|S,T) − Y(admit i|S,T)
+
+PRIMARY GATE
+V ranks feasible admissions better than U on FAIL historical eval,
+AND ranking is not monotone-equivalent to U.
+
+SECONDARY
+GW Cap / XI+Cap / season payoff (report only).
+
+LEAKAGE
+HARNESS_SPEC as-of-T allowlist only. No post-GW info in z, F, V, or scores.
+
+FORBIDDEN AFTER PEEK
+No λ / V retune / V_D·V_E in same peek / optimizer / outcome-motivated features.
+
+FIRST ARTIFACT
+Counterfactual regret evaluator. No ILP. No new model. No production changes.
+
+BEFORE HISTORICAL GATE
+Append dated LAB_LOG amendment naming ONE candidate V formula.
+```
+
+Upstream and Product stay **roadmap-only** until E039’s stop rule fires or is amended here.

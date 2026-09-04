@@ -310,10 +310,70 @@ add a declaration to `formal/` before production integration.
 
 ```text
 PRODUCTION     v2am_s + rates=v1 + fixtures v1  (horizon squad objective)
-CLOSED         E024–E036
-SPEC           this document (Phase 0)
-NEXT           E038 season payoff (see DECISION_CHARTER.md)
-NOT NEXT       V_C code before E038 branches
+CLOSED         E024–E038 separable V / rates_v2b promote
+ACTIVE         E039 preregistered — structural non-separable V (Research lane)
+FIRST ARTIFACT counterfactual regret evaluator (no ILP)
+NOT NEXT       optimizer; parallel Upstream/Product implement; rates reopen
 ```
 
-See [`DECISION_CHARTER.md`](DECISION_CHARTER.md) and [`LAB_LOG.md`](LAB_LOG.md) § E038.
+See [`DECISION_CHARTER.md`](DECISION_CHARTER.md) §15 and [`LAB_LOG.md`](LAB_LOG.md) § E039.
+
+---
+
+## 13. E039 — Structural non-separable \(V(S,z,F)\) (preregistered 2026-09-04)
+
+**Status:** preregistered. Docs freeze before any evaluator code.
+
+### Hypothesis
+
+Realized admission regret contains information from state/context \(z\) and feasible
+alternative set \(F\) that **cannot be represented by any monotone transform** of
+separable treatment utility \(U\).
+
+### Null (must be precise)
+
+| Null | Meaning | Action |
+|---|---|---|
+| **Novelty-fail** | Ranking by \(V\) ≡ monotone transform of ranking by \(U\) on feasible admissions | Kill — reproduces E036; not structural |
+| **Decision-fail** | \(V\) differs from \(U\) but fails primary gate | Kill/park E039; return to Phase-0 fork |
+
+The evaluator must answer:
+
+> Does \(V\) produce a **different and better** ordering of feasible admissions than \(U\)?
+
+“Contextual” without that test is insufficient.
+
+### Estimand
+
+\[
+\mathrm{regret}(i \mid S,T)
+= Y(\text{best feasible alternative} \mid S,T)
+- Y(\text{admit } i \mid S,T)
+\]
+
+### Gates
+
+| Gate | Role |
+|---|---|
+| **Primary (FAIL)** | \(V\) ranking concordance with realized regret / outcomes **beats** \(U\), **and** ranking \(\neq\) monotone(\(U\)) |
+| **Secondary** | GW Cap, XI+Cap, season payoff — report only |
+| **Kill** | Prediction/value improvement without decision improvement |
+
+### Leakage allowlist
+
+Decision-time \(z\), \(F\), \(V\): only [`HARNESS_SPEC.md`](HARNESS_SPEC.md) as-of-T provenance
++ squad/constraints + frozen production projections. No GW-\(T\)+ actuals, no
+post-deadline xP, no outcome-motivated features after peek.
+
+### Sequence
+
+```text
+prereg (this §) → freeze → regret evaluator → name one V (LAB_LOG amendment)
+→ historical test → decision gate → only then optimizer (separate prereg)
+```
+
+**Forbidden in E039:** ILP changes, new μ/rates/minutes, λ/V retune after peek,
+alternative \(V_D/V_E\) in the same peek, production changes.
+
+Candidate \(V\) formula is **not** fixed in this prereg — it must be appended as a
+dated LAB_LOG amendment **before** the historical gate run.

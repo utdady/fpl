@@ -274,6 +274,11 @@ Product candidates:  chips → price → transfers → season agent
 **Policy:** prediction without decision improvement = kill. One implement lane at a time.
 Do not collapse into a linear `E039 → E040 → …` ladder. Details: `docs/DECISION_CHARTER.md`.
 
+**E039 preregistered (2026-09-04):** Research lane active. Structural non-separable
+\(V(S,z,F)\); precise null = not monotone-equivalent to \(U\), **and** better decision
+ranking. First artifact = counterfactual regret evaluator. Upstream/Product parked.
+No ILP / new μ / production changes. See `docs/LAB_LOG.md` E039; charter §15.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -431,6 +436,7 @@ POST-GW1 (research)
   DECISION_CHARTER: Landing A (E038 concentrated)
   E038 concentrated: both season arms negative FAIL; Landing B rejected
   Phase 0: rates_v2b promote CLOSED; fork Research|Upstream|Product; one lane
+  E039 preregistered: structural V; regret evaluator first; Upstream/Product parked
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

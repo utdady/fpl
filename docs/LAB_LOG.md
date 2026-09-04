@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** Phase 0 freeze — E038 Landing A; `rates_v2b` promote **closed** (reopen = new prereg only). Roadmap forks: **Research** (structural \(V\)) | **Upstream** (role/minutes) | **Product** (chips first). One implement lane at a time. Production unchanged: `v2am_s` + `rates=v1` + fixtures `v1`. Charter: `docs/DECISION_CHARTER.md`.
+**Active research question:** **E039 preregistered** — structural non-separable portfolio value; Research lane active. Counterfactual regret evaluator first; no ILP / no new μ / no production changes. Upstream + Product = roadmap only until E039 stop rule. Charter: `docs/DECISION_CHARTER.md` §15.
 
 ---
 
@@ -1635,23 +1635,100 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `scripts/e038_season_payoff.py`; `records/historical/e038_season_payoff_season.csv`; `records/historical/e038_season_payoff_gw.csv`; `records/historical/e038_season_payoff_summary.txt`
 - **Charter:** `docs/DECISION_CHARTER.md`
-- **Follow-up:** Phase 0 docs (2026-09-04): permanent `rates_v2b` boundary; three-track fork; promotion policy. See charter §§10–14.
+- **Follow-up:** Phase 0 docs (2026-09-04): permanent `rates_v2b` boundary; three-track fork; promotion policy. See charter §§10–14. → **E039** Research lane prereg.
+
+### E039 - Structural non-separable portfolio value (preregistered)
+- **Date:** 2026-09-04 (after Phase 0 / `2de7724`)
+- **Status:** **preregistered** — Research lane; no code yet; freeze before implement
+- **Track:** Research (Phase-0 fork). Upstream / Product remain roadmap-only while E039 is open.
+- **Hypothesis:** Realized admission regret contains information from state/context \(z\) and feasible alternative set \(F\) that **cannot be represented by any monotone transform** of the existing separable treatment utility \(U\).
+- **Question:** Does a candidate \(V(S,z,F)\) produce a **different and better** ordering of feasible admissions than separable \(U\) on preregistered historical evaluation (esp. FAIL), before any optimizer work?
+
+- **Null (precise):**
+  ```text
+  H0 (novelty-fail):  ranking induced by candidate V on feasible admissions
+                      is identical to, or a monotone transform of, ranking by U
+                      → reproduces E036; kill for novelty (do not call it structural)
+
+  H0 (decision-fail): V differs from U but does not improve primary decision gate
+                      → kill / park E039; return control to Phase-0 fork
+  ```
+  “Contextual” alone is **not** enough. The evaluator must answer:
+  \(\text{Does }V\text{ produce a different and better ordering of feasible admissions than }U?\)
+
+- **Estimand — counterfactual admission regret:**
+  \[
+  \mathrm{regret}(i \mid S,T)
+  = Y(\text{best feasible alternative} \mid S,T)
+  - Y(\text{admit } i \mid S,T)
+  \]
+  Primary decision comparison is ranking / concordance vs this regret (and realized swap outcomes), **not** MAE.
+
+- **Scope lock:**
+  ```text
+  stack:     frozen production μ — v2am_s + rates=v1 + fixtures v1
+             (treat/ctrl historical admissions from E024-class harness for labels)
+  first artifact: counterfactual regret EVALUATOR (no ILP, no new model)
+  before historical gate: append dated amendment naming ONE candidate V formula
+  primary gate (FAIL): candidate V ranks feasible admissions better than U
+             AND ranking differs from U (not monotone-equivalent)
+  secondary: GW Cap / XI+Cap / season payoff (report; not sole promote)
+  g_treat:   report as caution monitor
+  ```
+
+- **Leakage boundary (allowlist at as-of-T):**
+  ```text
+  ALLOWED in z, F, candidate V, and decision-time scores:
+    - HARNESS_SPEC field provenance at cutoff T (players, prices, prior GWs,
+      fixtures unfinished, team strength season-start, frozen projections)
+    - Squad S, FPL constraints, strategy label
+    - Feasible alternatives F constructed only from as-of-T pool + constraints
+    - State z only if every component is as-of-T (no future transfers/prices)
+
+  FORBIDDEN (must not enter z, F, V, or decision scores):
+    - GW T (or later) actual points / minutes
+    - Post-deadline official xP / ep_next
+    - chance_this / news (not timestamped historically)
+    - Outcomes from other model arms under comparison (E012)
+    - Any post-peek feature motivated by observed FAIL outcomes
+  ```
+  Realized \(Y\) / Cap used **only** for evaluation after freeze — never as V inputs.
+
+- **Forbidden after peek:**
+  ```text
+  No λ tuning
+  No V retuning / alternative V_D/V_E formulations in the same peek
+  No optimizer changes
+  No feature additions motivated by observed outcomes
+  No rates / minutes / fixtures / production stack changes
+  ```
+
+- **Stop rule:** If the candidate fails the **primary decision gate** (different **and** better than \(U\) on FAIL), **E039 is killed/parked**. Research returns control to the Phase-0 fork; Product or Upstream may be preregistered independently. Prediction-only wins = kill.
+
+- **Implementation sequence (locked):**
+  ```text
+  this prereg → freeze → regret evaluator → name+freeze one V → historical test
+  → decision gate → ONLY THEN any optimizer (separate prereg)
+  ```
+  No ILP. No new model. No rates changes. No production changes.
+
+- **Method (planned):** `python scripts/e039_counterfactual_regret.py` (not written yet)
+- **Spec:** `docs/PORTFOLIO_VALUE_SPEC.md` §E039; `docs/DECISION_CHARTER.md` §15
+- **Follow-up:** implement evaluator only after this prereg is on main; freeze candidate \(V\) in a dated LAB_LOG amendment before the historical run.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-04 (Phase 0 after E038):
+As of 2026-09-04 (E039 preregistered; Phase 0 standing):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Do not touch while choosing the next track.**
-2. **Charter.** Landing A; `docs/DECISION_CHARTER.md` §§10–14.
-3. **Closed.** `rates_v2b` decision/season promote under current architecture. Reopening requires a **new pre-registered hypothesis**. Packaging / stability / displacement / MC≡U arcs closed.
-4. **Policy.** Prediction improvement without decision improvement = **kill**. `g_treat` = caution monitor only.
-5. **Fork (pick one implement lane):**
-   - **Research** — E039 structural \(V(S,z,F) \neq \sum U_i\); counterfactual regret first; no optimizer first
-   - **Upstream** — role/minutes beyond `v2am_s` (new hyp, not E017); E038 decision gates
-   - **Product** — chips ROI under frozen production stack → price → transfers
-6. **Not next by default.** Linear E039→E040…; transfer ILP; V_C without prereg; rates variants.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Unchanged.**
+2. **Active lane.** Research — **E039** (structural non-separable \(V\); regret evaluator first).
+3. **Parked.** Upstream and Product = roadmap entries only until E039 stop rule.
+4. **Closed.** `rates_v2b` promote; packaging / stability / displacement / MC≡U / separable V_A≈V_B.
+5. **Policy.** Prediction without decision improvement = **kill**. Precise null: not monotone-equivalent to \(U\), **and** better decision ranking.
+6. **Next code.** Counterfactual regret evaluator only. No ILP / new μ / optimizer / rates.
+7. **Before historical gate.** Append one frozen candidate \(V\) formula to LAB_LOG.
 
 ---
 
