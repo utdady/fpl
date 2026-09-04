@@ -545,7 +545,8 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E036** | Contextual marginal admission value (H-MC1) | **concentrated (negative)** — MC ≡ U; V(S) suspect |
 | **E037** | Portfolio value alignment (\(V_A\) vs \(V_B\)) | **concentrated (negative)** — V_B ≈ V_A; both anti-align FAIL |
 | **E038** | Season payoff (rolling vs GW1-lock) | **concentrated** — Landing A; both negative FAIL |
-| **E039** | Structural non-separable \(V(S,z,F)\); counterfactual regret | **preregistered** — Research lane; evaluator first |
+| **E039** | Structural non-separable \(V(S,z,F)\); counterfactual regret | **preregistered** — Research lane |
+| **E039-A** | Fixture-concentration \(V_{\mathrm{ns}}\), \(\lambda=0.5\) | **candidate frozen** — evaluator next |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

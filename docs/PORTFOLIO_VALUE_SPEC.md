@@ -311,12 +311,12 @@ add a declaration to `formal/` before production integration.
 ```text
 PRODUCTION     v2am_s + rates=v1 + fixtures v1  (horizon squad objective)
 CLOSED         E024–E038 separable V / rates_v2b promote
-ACTIVE         E039 preregistered — structural non-separable V (Research lane)
+ACTIVE         E039-A — V_ns fixture-concentration, λ=0.5 frozen
 FIRST ARTIFACT counterfactual regret evaluator (no ILP)
-NOT NEXT       optimizer; parallel Upstream/Product implement; rates reopen
+NOT NEXT       optimizer; λ sweep; parallel Upstream/Product implement
 ```
 
-See [`DECISION_CHARTER.md`](DECISION_CHARTER.md) §15 and [`LAB_LOG.md`](LAB_LOG.md) § E039.
+See [`DECISION_CHARTER.md`](DECISION_CHARTER.md) §15–16 and [`LAB_LOG.md`](LAB_LOG.md) § E039-A.
 
 ---
 
@@ -368,12 +368,39 @@ post-deadline xP, no outcome-motivated features after peek.
 ### Sequence
 
 ```text
-prereg (this §) → freeze → regret evaluator → name one V (LAB_LOG amendment)
-→ historical test → decision gate → only then optimizer (separate prereg)
+prereg (§13) → E039-A V freeze (§14) → regret evaluator → historical gate
+→ decision gate → only then optimizer (separate prereg)
 ```
 
-**Forbidden in E039:** ILP changes, new μ/rates/minutes, λ/V retune after peek,
-alternative \(V_D/V_E\) in the same peek, production changes.
+**Forbidden in E039 / E039-A:** ILP changes, new μ/rates/minutes, \(\lambda\)/V retune after peek,
+alternative formulations in the same peek, production changes, \(\lambda\) sensitivity for promote.
 
-Candidate \(V\) formula is **not** fixed in this prereg — it must be appended as a
-dated LAB_LOG amendment **before** the historical gate run.
+---
+
+## 14. E039-A — Frozen candidate \(V_{\mathrm{ns}}\) (2026-09-04)
+
+**Status:** candidate frozen before evaluator code.
+
+\[
+V_{\mathrm{ns}}(S)
+=
+\sum_{i \in \mathrm{XI}(S)} U_i
+-
+\lambda \sum_{f} \binom{n_f(S)}{2},
+\quad \lambda = 0.5
+\]
+
+| Symbol | Meaning |
+|---|---|
+| \(U_i\) | next utility, production stack |
+| \(f\) | Premier League **match** in GW \(T\) (as-of-T fixture identity) |
+| \(n_f(S)\) | # of XI players whose club plays in match \(f\) |
+| Admission score | \(\Delta V_{\mathrm{ns}}\) on E036-style swap into \(S\) |
+
+\(\lambda=0.5\) is part of the **falsifiable candidate**. No sweep. No promote-by-sensitivity.
+
+**Falsification scope:** E039-A fail kills **this** candidate, not all non-separable \(V\). Successor needs a new prereg.
+
+**Structural claim:** \(\exists a,b\) with \(U(a)>U(b)\) but \(\Delta V(a\mid S)<\Delta V(b\mid S)\); ranking not monotone in \(U\).
+
+Details: [`LAB_LOG.md`](LAB_LOG.md) § E039-A.

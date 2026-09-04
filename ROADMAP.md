@@ -279,6 +279,11 @@ Do not collapse into a linear `E039 → E040 → …` ladder. Details: `docs/DEC
 ranking. First artifact = counterfactual regret evaluator. Upstream/Product parked.
 No ILP / new μ / production changes. See `docs/LAB_LOG.md` E039; charter §15.
 
+**E039-A candidate frozen (2026-09-04):**
+\(V_{\mathrm{ns}}(S)=\sum_{XI} U_i - 0.5\sum_f\binom{n_f}{2}\);
+\(f\) = PL match in GW \(T\); E036-style units; no \(\lambda\) sweep.
+Fail kills E039-A only. Next = one regret evaluator.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -437,6 +442,7 @@ POST-GW1 (research)
   E038 concentrated: both season arms negative FAIL; Landing B rejected
   Phase 0: rates_v2b promote CLOSED; fork Research|Upstream|Product; one lane
   E039 preregistered: structural V; regret evaluator first; Upstream/Product parked
+  E039-A: V_ns fixture-concentration λ=0.5 frozen; fail = kill candidate only
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

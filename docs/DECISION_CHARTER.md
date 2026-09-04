@@ -245,10 +245,10 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b decision/season promote (reopen = new prereg only)
 POLICY         prediction without decision improvement = kill
-ACTIVE LANE    Research — E039 preregistered (regret evaluator first)
+ACTIVE LANE    Research — E039-A candidate frozen (λ=0.5 V_ns)
 PARKED         Upstream | Product (roadmap only until E039 stop)
 PRODUCTION     v2am_s + rates=v1 + fixtures v1 (unchanged)
-NOT NEXT       ILP; new μ; rates reopen; parallel implement lanes
+NOT NEXT       ILP; λ sweep; new μ; rates reopen; parallel implement lanes
 ```
 
 ---
@@ -303,3 +303,27 @@ Append dated LAB_LOG amendment naming ONE candidate V formula.
 ```
 
 Upstream and Product stay **roadmap-only** until E039’s stop rule fires or is amended here.
+
+---
+
+## 16. E039-A — Candidate \(V\) locked (2026-09-04)
+
+Amendment to §15. Full math: `LAB_LOG.md` § E039-A; `PORTFOLIO_VALUE_SPEC.md` §14.
+
+```text
+CANDIDATE   E039-A / V_ns
+FORMULA     Σ_{i in XI} U_i  −  0.5 × Σ_f C(n_f, 2)
+f           Premier League match identity in GW T (as-of-T)
+UNITS       E036-style same-position swap pairs
+λ           0.5 frozen; no sweep; no sensitivity for promote
+FAIL SCOPE  kills E039-A only — not all non-separable V
+NEXT        one regret evaluator → historical gate → optimizer only if win
+```
+
+Current call:
+
+```text
+ACTIVE LANE    Research — E039-A candidate frozen
+PRODUCTION     v2am_s + rates=v1 + fixtures v1
+PARKED         Upstream | Product
+```

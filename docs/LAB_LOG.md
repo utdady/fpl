@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E039 preregistered** — structural non-separable portfolio value; Research lane active. Counterfactual regret evaluator first; no ILP / no new μ / no production changes. Upstream + Product = roadmap only until E039 stop rule. Charter: `docs/DECISION_CHARTER.md` §15.
+**Active research question:** **E039-A candidate frozen** — \(V_{\mathrm{ns}}\) = Σ XI \(U_i\) − 0.5 × same-PL-fixture pair count. Next: one regret evaluator (no ILP). Upstream/Product parked. Production unchanged.
 
 ---
 
@@ -1714,21 +1714,73 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Method (planned):** `python scripts/e039_counterfactual_regret.py` (not written yet)
 - **Spec:** `docs/PORTFOLIO_VALUE_SPEC.md` §E039; `docs/DECISION_CHARTER.md` §15
-- **Follow-up:** implement evaluator only after this prereg is on main; freeze candidate \(V\) in a dated LAB_LOG amendment before the historical run.
+- **Follow-up:** → **E039-A** candidate \(V\) frozen (2026-09-04 amendment below). Then implement evaluator; historical gate; no optimizer until gate wins.
+
+### E039-A — Candidate \(V\) freeze: fixture-concentration portfolio (amendment)
+- **Date:** 2026-09-04 (dated amendment to E039; before any evaluator code)
+- **Status:** **candidate frozen** — Option A; \(\lambda = 0.5\); no evaluator yet
+- **Scope of falsification:** Failure of E039-A **kills this candidate**, not the entire class of non-separable \(V\). A later Research candidate requires a **new** preregistered hypothesis (new structural card). Do not retune \(\lambda\) or swap formulations inside this peek.
+
+- **Candidate ID:** **E039-A** / \(V_{\mathrm{ns}}\) (fixture-concentration)
+
+- **Definitions:**
+
+  | Symbol | Definition |
+  |---|---|
+  | \(S\) | 15-player squad; XI via same post-solve rules as E036 (`solve_xi` on next U) |
+  | \(U_i\) | Separable next-GW utility from frozen production stack (`v2am_s` + `rates=v1` + fixtures `v1`) |
+  | \(z\) | As-of-T GW-\(T\) fixture map only (club → PL match ids); no bank/transfers/chips |
+  | \(F\) | Feasible same-position replacements for leaver \(L\) under as-of-T pool + FPL constraints (E036-style) |
+  | \(f\) | A **Premier League match** scheduled for GW \(T\) (fixture identity: the unique match involving two clubs). Not “same opponent across different matches.” |
+  | \(n_f(S)\) | Count of **XI** players in \(S\) whose club is `team_h` or `team_a` of match \(f\) in GW \(T\) (as-of-T fixtures). Blank GW → contributes to no \(f\). DGW → player may enter multiple \(f\); pairs counted **per** \(f\). |
+
+- **Portfolio value (frozen):**
+  \[
+  V_{\mathrm{ns}}(S)
+  =
+  \sum_{i \in \mathrm{XI}(S)} U_i
+  -
+  \lambda \sum_{f} \binom{n_f(S)}{2}
+  \]
+  with **\(\lambda = 0.5\)** points per same-fixture pair. \(\lambda\) is part of the **falsifiable candidate**, not a claim of the true interaction coefficient. **No \(\lambda\) sweep. No sensitivity analysis for promotion.**
+
+- **Admission ordering (E036-style pair units):**
+  For candidate entrant \(a\) replacing leaver \(L\) in context squad \(S\) (typically control 15):
+  \[
+  \Delta V(a \mid S, L)
+  =
+  V_{\mathrm{ns}}(S_{-L}\cup\{a\})
+  -
+  V_{\mathrm{ns}}(S_{-L})
+  \]
+  (XI re-solved on the swapped 15 under the same rules as E036; no squad ILP). Rank admissions by \(\Delta V\). Compare to ranking by \(\Delta U = U_a - U_L\) (or \(U_a\) among same-\(L\) entrants — report both; **primary** = same-position both≥60 pairs as E036).
+
+- **Intended structural difference (must be checkable):**
+  \[
+  \exists\, a,b:\quad
+  U(a) > U(b)
+  \quad\text{but}\quad
+  \Delta V(a\mid S) < \Delta V(b\mid S)
+  \]
+  and the induced ranking is **not** a monotone transform of \(U\). The interaction term is non-additive: two high-\(U\) players can have different marginal value depending on who already shares PL match \(f\).
+
+- **Primary gate (FAIL):** (1) ranking differs from \(U\) (novelty), **and** (2) better concordance with counterfactual admission regret / realized swap outcomes than \(U\). Else **kill E039-A**.
+
+- **Forbidden:** \(\lambda\) retune; alternative \(V\) in this peek; optimizer; new μ; production changes; promoting on secondary Cap alone.
+
+- **Next:** implement **one** counterfactual regret evaluator for E039-A only. Historical gate. Optimizer only if primary gate wins (separate prereg).
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-04 (E039 preregistered; Phase 0 standing):
+As of 2026-09-04 (E039-A candidate frozen):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Unchanged.**
-2. **Active lane.** Research — **E039** (structural non-separable \(V\); regret evaluator first).
-3. **Parked.** Upstream and Product = roadmap entries only until E039 stop rule.
-4. **Closed.** `rates_v2b` promote; packaging / stability / displacement / MC≡U / separable V_A≈V_B.
-5. **Policy.** Prediction without decision improvement = **kill**. Precise null: not monotone-equivalent to \(U\), **and** better decision ranking.
-6. **Next code.** Counterfactual regret evaluator only. No ILP / new μ / optimizer / rates.
-7. **Before historical gate.** Append one frozen candidate \(V\) formula to LAB_LOG.
+2. **Active.** E039-A — \(V_{\mathrm{ns}}\) with \(\lambda=0.5\) same-fixture pairs; E036-style units.
+3. **Next code.** One counterfactual regret evaluator. No ILP / new μ / \(\lambda\) sweep / optimizer.
+4. **Falsification.** E039-A fail ≠ “all non-separable \(V\) impossible”; requires new prereg for a successor.
+5. **Parked.** Upstream / Product. **Closed.** rates_v2b promote path.
 
 ---
 
