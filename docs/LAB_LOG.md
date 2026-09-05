@@ -6,8 +6,8 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E042-A KILL** (`v2am_share`). Production `v2am_s` unchanged.
-TC/BB frozen with independence disclaimer. Phase-0 fork open — new prereg only.
+**Active research question:** **E042-A family CLOSED** (club–position recent-minutes-share).
+Production `v2am_s` unchanged. TC/BB frozen. Phase-0 fork open — new as-of-T signal only.
 
 ---
 
@@ -2206,17 +2206,30 @@ E015 cold/hot / E019 rung / E020 recent4-eligibility reopen appears in the diff.
   (`v2am_share_diagnostics.csv`, not required in git).
 - **Follow-up:** upstream lane closed for this hypothesis. Return to Phase-0 fork
   (new card only) — do not fish share parameters.
+  → **family CLOSED** below.
+
+### E042-A family closure (2026-09-06)
+- **Status:** **CLOSED** (institutional; not a new experiment)
+- **Note:** Club–position recent-minutes-share adjustments to \(p_{\mathrm{start}}\) are
+  **CLOSED** under the current stack. This includes changes to lookback \(W\), blend
+  \(\lambda\), caps, or blend shape using the same current-club/position
+  recent-minutes-share observable. Reopening requires a distinct, pre-registered
+  as-of-T causal signal—not parameter retuning or a recency/role-share variant.
+- **Production:** remains `minutes_version=v2am_s`.
+- **Follow-up:** Phase-0 fork open for Research / Upstream / Product with a **new**
+  observable only.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E042-A **KILL**):
+As of 2026-09-06 (E042-A family **CLOSED**):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
 2. **TC / BB.** Frozen with independence disclaimer.
-3. **Upstream.** E042-A club–position share **KILL** — no λ/W retune.
-4. **Next.** New Phase-0 prereg only (Research / Upstream / Product). Not FH/WC joint ILP
+3. **Closed upstream.** Club–position recent-minutes-share family (E042-A) — no \(W\)/\(\lambda\)
+   /blend variants.
+4. **Next.** New Phase-0 prereg only (distinct as-of-T causal signal). Not FH/WC joint ILP
    without a card; not another share-knob pass.
 
 ---

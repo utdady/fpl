@@ -318,6 +318,10 @@ Implement `v2am_share` next — no retune after peek.
 **E042-A gate (2026-09-05):** **KILL** — XI0 fails 2022-23; MAE worsens 4/4; FAIL Cap
 fails 2022-23. Production stays `v2am_s`. No λ/W fishing.
 
+**E042-A family CLOSED (2026-09-06):** Club–position recent-minutes-share adjustments to
+\(p_{\mathrm{start}}\) closed under current stack (any \(W\)/\(\lambda\)/caps/blend shape
+on that observable). Reopen only with a distinct as-of-T causal signal.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -488,6 +492,7 @@ POST-GW1 (research)
   E042 preregistered: upstream club–position minutes share; amendment before code
   E042-A freeze: W=4 λ=0.35 adjust-on-v2am_s; implement v2am_share next
   E042-A KILL: XI0/MAE/FAIL-Cap miss; production stays v2am_s; no λ/W retune
+  E042-A family CLOSED: club–position recent-minutes-share; distinct signal to reopen
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

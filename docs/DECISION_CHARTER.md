@@ -243,11 +243,12 @@ then** optimizer integration.
 
 ```text
 CHARTER        Landing A (E038 concentrated)
-CLOSED         rates_v2b promote; E039-A V_ns λ=0.5; E042-A v2am_share
+CLOSED         rates_v2b promote; E039-A V_ns λ=0.5;
+               E042-A club–position recent-minutes-share family
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       joint chip planner; U_bench in squad ILP; λ/W retune
+NOT NEXT       joint chip planner; U_bench in squad ILP; share W/λ retune
 ```
 
 ---
@@ -504,6 +505,9 @@ GATES         XI0 non-inferior 4/4; MAE_60+ non-worse 4/4;
 KILL          MAE-only; FAIL Cap loss; any E015/E019/E020 reopen
 NO TUNE       λ, W, floors, cold/hot after peek
 RESULT        KILL (2026-09-05) — XI0✗ MAE✗ FAIL-Cap✗; no promote; no λ/W retune
+FAMILY        CLOSED (2026-09-06) — no W/λ/caps/blend-shape variants of the same
+              current-club/position recent-minutes-share observable; reopen only
+              with a distinct as-of-T causal signal (not recency/role-share retune)
 ```
 
-Details: `LAB_LOG.md` § E042-A gate.
+Details: `LAB_LOG.md` § E042-A gate + family closure.
