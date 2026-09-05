@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E039-A KILL** (decision-fail; novelty held). Research lane idle. Phase-0 fork open for Product or Upstream prereg (one lane). Production unchanged.
+**Active research question:** **E040 preregistered** — Product lane (Triple Captain ROI). B0 never-TC / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{capt}}\). Candidate details in dated amendment before run. Research/Upstream parked. Production unchanged.
 
 ---
 
@@ -1772,20 +1772,96 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `scripts/e039_counterfactual_regret.py`; `records/historical/e039_counterfactual_regret_pairs.csv`; `records/historical/e039_counterfactual_regret_gw.csv`; `records/historical/e039_counterfactual_regret_summary.txt`
 - **Spec:** `docs/PORTFOLIO_VALUE_SPEC.md` §14; `docs/DECISION_CHARTER.md` §16
-- **Follow-up:** park Research until new structural card; Phase-0 fork open for Product/Upstream prereg.
+- **Follow-up:** park Research until new structural card; Phase-0 fork open for Product/Upstream prereg. → **E040** Product lane (TC).
+
+### E040 - Triple Captain chip ROI (preregistered)
+- **Date:** 2026-09-05 (after E039-A KILL / `a1a4fd1`)
+- **Status:** **preregistered** — Product lane active; no evaluator yet; candidate details via dated amendment
+- **Track:** Product (Phase-0 fork). Research / Upstream remain roadmap-only while E040 is open.
+- **Primary question:** Does the as-of-T production signal contain sufficient information to select a Triple Captain action whose cumulative realized Cap is **robustly better than both** a no-chip baseline **and** a simple fixed-calendar benchmark?
+- **Hypothesis:** Under frozen production projections, an as-of-T deterministic Triple Captain policy can select a TC action that produces positive, season-level robust incremental Cap relative to no-TC and a preregistered non-model calendar stake — not merely that an oracle TC can help.
+
+- **Arm roles (structurally distinct — do not collapse):**
+
+  | Arm | Uses \(U\)? | Timing | Purpose |
+  |---|---:|---|---|
+  | **B0** | Yes (normal captain) | No chip | Floor |
+  | **B1** | No | Fixed calendar \(g^\star\) | Non-model benchmark |
+  | **C** | Yes | Full-season \(\arg\max U_{\mathrm{capt}}\) | Actual test |
+
+  **B1 must not equal C.** B1 is a dumb calendar stake with **no** projection input. C is projection-informed timing. A C-vs-B1 win means timing from \(U\) beats timing from nothing.
+
+- **Scope lock:**
+  ```text
+  stack:     v2am_s + rates=v1 + fixtures v1 (frozen production)
+  chip:      Triple Captain only (one use per season)
+  W:         {1,...,38} unless HARNESS_SPEC excludes a GW for integrity
+  B0:        never TC; normal captain every GW
+  B1:        TC exactly once at fixed g* (g* in dated amendment; no U)
+  C:         t* = argmax_{t in W} U_capt(t);
+             captain at t* = same deterministic captain policy as production;
+             TC once at t*; elsewhere normal captain
+  tie-break: lowest GW, then lowest element_id (exact text in amendment)
+  squad:     rolling as-of-T production squad/XI each GW (objective=next or
+             production horizon — freeze in amendment; same for all arms)
+  forbidden: BB/FH/WC; transfers/hits; new μ; λ/threshold fishing;
+             manual DGW/BGW "save" rules; live UI; optimizer changes;
+             B1 redefined as argmax-U
+  ```
+
+- **Estimand:**
+  \[
+  R_{\mathrm{season}}(\pi)
+  =
+  \sum_{t \in W} \mathrm{Cap}_t(\pi)
+  \]
+  with TC doubling the chosen captain's realized points in the single chip GW.
+  Incremental: \(\Delta R(\pi) = R(\pi) - R(\mathrm{B0})\). Primary comparisons: C vs B0 and C vs B1.
+
+- **Primary gate:**
+  ```text
+  Report FAIL seasons (2022-23, 2025-26) and PASS (2023-24, 2024-25) separately.
+  C must beat B0 and beat B1 on aggregate season Cap across the four seasons
+  (exact aggregate rule + FAIL robustness clause in dated amendment before run).
+  Single-GW fireworks alone do not promote.
+  ```
+
+- **Leakage boundary:**
+  ```text
+  ALLOWED at decision time T: HARNESS_SPEC as-of-T fields; frozen production
+    projections; fixture schedule known at T (already inside U)
+  FORBIDDEN: GW-T+ actuals in policy; post-deadline xP; manual DGW/BGW overlays
+    not encoded in the frozen formula; outcome-motivated retunes after peek
+  ```
+  Realized Cap evaluates arms only after freeze.
+
+- **Forbidden after peek:** retune \(g^\star\); change \(W\) without integrity cite; threshold-on-\(U\) variants; BB/FH/WC in same peek; new μ; promote on Cap without beating B1.
+
+- **Stop rule:** If C fails the primary gate → **kill/park E040-TC**. Failure ≠ all chips impossible; BB may be preregistered separately. Return control to Phase-0 fork if Product stops.
+
+- **Implementation sequence:**
+  ```text
+  this prereg → dated amendment (g*, tie-break, squad objective, aggregate rule)
+  → historical evaluator (B0/B1/C season Cap) → gate → only then product wiring
+  ```
+  No live UI. No optimizer modifications. No new projections.
+
+- **Method (planned):** `python scripts/e040_triple_captain_roi.py` (not written yet)
+- **Charter:** `docs/DECISION_CHARTER.md` §17
+- **Follow-up:** freeze \(g^\star\) + tie-break + aggregate gate in dated LAB_LOG amendment before the historical run.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-04 (E039-A KILL):
+As of 2026-09-05 (E040 preregistered):
 
 1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Unchanged.**
-2. **E039-A.** Killed — novelty yes, decision-fail. Not all non-separable \(V\) ruled out.
-3. **Research.** No active candidate. New non-separable \(V\) needs fresh prereg.
-4. **Fork open.** Product (chips) or Upstream (role/minutes) may be preregistered — one lane.
-5. **Closed.** rates_v2b promote; E039-A fixture-concentration \(\lambda=0.5\).
-6. **Not next.** \(\lambda\) sweep; optimizer; silent V_D in same peek.
+2. **Active lane.** Product — **E040** Triple Captain ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{capt}}\)).
+3. **Parked.** Research (E039-A killed; class not closed); Upstream.
+4. **Closed.** rates_v2b promote; E039-A \(V_{\mathrm{ns}}\) \(\lambda=0.5\).
+5. **Next.** Dated amendment freezing \(g^\star\), tie-break, squad objective, aggregate rule — then evaluator only.
+6. **Not next.** BB/FH/WC; transfer ILP; λ/V fishing; live chip UI before gate.
 
 ---
 

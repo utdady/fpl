@@ -245,10 +245,10 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A fixture-concentration λ=0.5
 POLICY         prediction without decision improvement = kill
-ACTIVE LANE    none — Phase-0 fork open (Product | Upstream | new Research card)
-PARKED         prior Research candidate E039-A killed
+ACTIVE LANE    Product — E040 Triple Captain ROI (preregistered)
+PARKED         Research (E039-A killed); Upstream
 PRODUCTION     v2am_s + rates=v1 + fixtures v1 (unchanged)
-NOT NEXT       λ sweep; optimizer on E039-A; silent V_D
+NOT NEXT       BB/FH/WC; transfer ILP; B1≡C collapse; live UI before gate
 ```
 
 ---
@@ -318,3 +318,36 @@ RESULT      concentrated (negative) KILL
             decision NO (spearman V=-0.084 < U=+0.066 FAIL both60)
 NEXT        Phase-0 fork open; no optimizer; no λ retune
 ```
+
+---
+
+## 17. E040 — Product lane activated (prereg 2026-09-05)
+
+Phase-0 fork choice after E039-A KILL: **Product**. See `LAB_LOG.md` E040.
+
+**Primary question:** Does the as-of-T production signal contain sufficient information
+to select a Triple Captain action whose cumulative realized Cap is robustly better
+than both a no-chip baseline and a simple fixed-calendar benchmark?
+
+**Arm roles (frozen; B1 ≠ C):**
+
+| Arm | Definition | Purpose |
+|---|---|---|
+| **B0** | Never TC; normal captain | Floor |
+| **B1** | TC once at fixed \(g^\star\) (no \(U\)) | Non-model calendar stake |
+| **C** | \(t^*=\arg\max_{t\in W} U_{\mathrm{capt}}(t)\); TC once at \(t^*\) | Projection-informed timing |
+
+\[
+W = \{1,\ldots,38\}
+\]
+
+unless `HARNESS_SPEC` excludes a GW for integrity. Exact \(g^\star\), tie-break
+(lowest GW, then lowest `element_id`), squad objective, and aggregate gate rule
+are frozen in a **dated LAB_LOG amendment** before the historical run.
+
+**Stack:** `v2am_s + rates=v1 + fixtures v1`. No new μ.
+
+**First artifact:** historical B0/B1/C season-Cap evaluator. No live UI, no optimizer
+changes, no BB/FH/WC in this peek.
+
+**Stop:** E040-TC fail kills this chip wedge only; return to Phase-0 fork or prereg BB.

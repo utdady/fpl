@@ -20,7 +20,7 @@ It does **not** replace the living experiment log. Numbers and verdicts live in
 | [`V2_SPEC.md`](V2_SPEC.md) | How a successor model earns a version number |
 | [`FORMAL.md`](FORMAL.md) | What Lean could prove vs what statistics prove (post-GW1) |
 | [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer history, failure modes, E030–E036 |
-| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; rates_v2b closed; E039 Research lane |
+| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; rates_v2b closed; E039-A KILL; E040 Product TC |
 | [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | Candidate \(V(S)\); E037 results; E039 prereg |
 | `ROADMAP.md` | Version ladder (may lag E013; do not treat it as the experiment log) |
 
@@ -483,11 +483,12 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E038 concentrated; Phase 0 freeze; E039-A KILL)
+### Valuation / selection (E038; E039-A KILL; E040 Product)
 
-E038: Landing A. **`rates_v2b` promote CLOSED.** E039-A fixture-concentration \(V_{\mathrm{ns}}\)
-(\(\lambda=0.5\)): novelty held, **decision-fail → KILL**. Research idle; Phase-0 fork open
-for Product/Upstream/new Research card. Production unchanged.
+E038 Landing A; `rates_v2b` CLOSED. E039-A \(V_{\mathrm{ns}}\) KILL (novelty yes, decision-fail).
+**E040** activates Product lane: Triple Captain ROI under frozen production μ
+(B0 never-TC / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{capt}}\); B1 ≠ C).
+Charter §17. Production unchanged.
 
 ---
 
@@ -546,6 +547,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E038** | Season payoff (rolling vs GW1-lock) | **concentrated** — Landing A; both negative FAIL |
 | **E039** | Structural non-separable \(V(S,z,F)\); counterfactual regret | **preregistered** — Research lane |
 | **E039-A** | Fixture-concentration \(V_{\mathrm{ns}}\), \(\lambda=0.5\) | **KILL** — novelty yes; decision-fail |
+| **E040** | Triple Captain ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U\)) | **preregistered** — Product lane |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

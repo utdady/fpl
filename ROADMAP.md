@@ -284,6 +284,10 @@ No ILP / new μ / production changes. See `docs/LAB_LOG.md` E039; charter §15.
 \(f\) = PL match in GW \(T\); E036-style units; no \(\lambda\) sweep.
 **Result: KILL** (novelty yes; decision-fail). Phase-0 fork open.
 
+**E040 preregistered (2026-09-05):** Product lane — Triple Captain ROI.
+B0 never-TC / B1 fixed-\(g^\star\) (no \(U\)) / C \(\arg\max_t U_{\mathrm{capt}}(t)\).
+B1 ≠ C. \(W=\{1..38\}\). Amendment freezes \(g^\star\) before run. See charter §17.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -444,6 +448,7 @@ POST-GW1 (research)
   E039 preregistered: structural V; regret evaluator first; Upstream/Product parked
   E039-A: V_ns fixture-concentration λ=0.5 frozen; fail = kill candidate only
   E039-A KILL: novelty 27% disagree; spearman V worse than U on FAIL; fork open
+  E040 preregistered: Product TC ROI; B0/B1-fixed-g*/C-argmax-U; B1≠C
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels
