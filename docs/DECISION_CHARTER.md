@@ -245,10 +245,10 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5
 POLICY         prediction without decision improvement = kill
-ACTIVE LANE    Product — E040-TC SURVIVES (wiring not yet preregistered)
-PARKED         Research; Upstream
-PRODUCTION     v2am_s + rates=v1 + fixtures v1 (unchanged; no silent UI ship)
-NOT NEXT       g* retune; FH/WC; treat SURVIVES as live promote
+ACTIVE         E040-A TC product wired (frozen policy)
+NEXT           E041-BB prereg (docs first)
+PRODUCTION     v2am_s + rates=v1 + fixtures v1 (μ unchanged)
+NOT NEXT       TC retune; BB without prereg; silent policy drift
 ```
 
 ---
@@ -370,3 +370,23 @@ NEXT         product-wiring prereg OR BB wedge; no silent UI ship
 ```
 
 Details: `LAB_LOG.md` § E040-A.
+
+---
+
+## 19. E040-A product surface (wired 2026-09-05)
+
+TC recommendation is an **implementation of the frozen E040-A contract**, not a new experiment.
+
+```text
+MODULE       engine.e040_tc_policy (shared offline ↔ product)
+CLI          python fpl.py tc | python -m engine.e040_tc_recommend
+CLAIM        Under the frozen E040-A policy, recommend TC in the GW where
+             projected captain utility is highest.
+LIVE         Past: as-of-t when rebuildable. Current+future: under I_N only.
+GATE         Historical t*/captain must match E040 evaluator artifacts
+             (tests/test_e040_tc_policy.py).
+FORBIDDEN    DGW heuristics; thresholds; confidence; new μ; BB/FH/WC;
+             policy retune without new prereg.
+```
+
+Any policy change → new preregistered experiment, not a wiring tweak.

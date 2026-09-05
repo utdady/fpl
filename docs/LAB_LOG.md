@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E040-TC SURVIVES** primary gate (AGG+FAIL). Product wiring still needs separate prereg. Research/Upstream parked. Production unchanged.
+**Active research question:** **E040-A TC wired** (`fpl.py tc`). Product surface frozen to E040-A policy. Next: E041-BB prereg (not started). Production μ unchanged.
 
 ---
 
@@ -1905,19 +1905,29 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `scripts/e040_triple_captain_roi.py`; `records/historical/e040_triple_captain_roi_season.csv`; `records/historical/e040_triple_captain_roi_gw.csv`; `records/historical/e040_triple_captain_roi_summary.txt`
 - **Charter:** `docs/DECISION_CHARTER.md` §18
-- **Follow-up:** optional product-wiring prereg (recommend TC from frozen C policy); or prereg BB as next Product wedge; do not silently ship UI.
+- **Follow-up:** → **E040-A product wiring** (shared `engine.e040_tc_policy`; `fpl.py tc`). Then E041-BB prereg.
+
+### E040-A wiring — product surface (2026-09-05)
+- **Status:** **wired** — frozen E040-A policy exposed; not a new experiment
+- **Module:** `engine/e040_tc_policy.py` (shared with historical evaluator)
+- **CLI:** `python fpl.py tc` (live remaining GWs under \(I_N\)); `python fpl.py tc --season 2024-25` (as-of-t)
+- **Claim:** Under the frozen E040-A policy, recommend TC in the GW where projected captain utility is highest.
+- **Live semantics:** Past as-of-t when rebuildable; current+future under \(I_N\) only (charter §19).
+- **Engineering gate:** `tests/test_e040_tc_policy.py` — \(t^*\)/captain must match E040 CSV artifacts.
+- **Forbidden:** policy retune; DGW/threshold/confidence; BB/FH/WC in this surface.
+- **Follow-up:** preregister **E041 Bench Boost** (separate wedge).
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E040-TC SURVIVES):
+As of 2026-09-05 (E040-A TC wired):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Unchanged** (no silent UI promote).
-2. **E040-TC.** Survives AGG+FAIL vs B0 and B1 (\(g^\star=20\)).
-3. **Parked.** Research (E039-A killed); Upstream.
-4. **Next (choose one prereg):** product wiring for TC policy **or** Bench Boost wedge **or** return to fork.
-5. **Not next.** Retune \(g^\star\); treat SURVIVES as live ship; FH/WC/transfer ILP.
+1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
+2. **TC product.** `fpl.py tc` / `engine.e040_tc_recommend` — frozen E040-A only.
+3. **Next.** Docs prereg for **E041-BB** (not implementation yet).
+4. **Parked.** Research (E039-A killed); Upstream.
+5. **Not next.** Retune TC; ship BB/FH/WC without prereg; silent policy drift in wiring.
 
 ---
 
@@ -1963,6 +1973,9 @@ python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decompos
 python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
 python scripts/e037_portfolio_value_alignment.py  # E037: V_A vs V_B alignment
 python scripts/e040_triple_captain_roi.py  # E040-A: TC ROI B0/B1/C
+python -m engine.e040_tc_recommend         # E040-A product: TC recommendation
+python fpl.py tc                           # same
+python -m unittest tests.test_e040_tc_policy -v
 python scripts/e039_counterfactual_regret.py  # E039-A: V_ns vs U regret gate
 python scripts/e038_season_payoff.py  # E038: season payoff rolling vs GW1-lock
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology

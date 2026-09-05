@@ -291,6 +291,9 @@ B1 ≠ C. \(W=\{1..38\}\). Amendment freezes \(g^\star\) before run. See charter
 **E040-A / gate (2026-09-05):** \(g^\star=20\); **SURVIVES** AGG+FAIL
 (ΣR(C)=8275 > B0 8218 and > B1 8251; FAIL robust). Wiring not auto-promoted.
 
+**E040-A product wired (2026-09-05):** `engine.e040_tc_policy` + `fpl.py tc`.
+Frozen claim only. Next: E041-BB prereg.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -453,6 +456,7 @@ POST-GW1 (research)
   E039-A KILL: novelty 27% disagree; spearman V worse than U on FAIL; fork open
   E040 preregistered: Product TC ROI; B0/B1-fixed-g*/C-argmax-U; B1≠C
   E040-A: g*=20 frozen; SURVIVES AGG+FAIL; wiring not auto-promoted
+  E040-A wired: fpl.py tc / e040_tc_policy; E041-BB next prereg
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

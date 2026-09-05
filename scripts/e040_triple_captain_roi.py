@@ -1,19 +1,11 @@
 """E040 / E040-A: Triple Captain ROI under frozen production stack.
 
+Uses engine.e040_tc_policy for the C-policy function (shared with product).
+
 Arms (B1 != C):
   B0: never TC; normal captain every GW
   B1: TC once at fixed g*=20 (no U in timing)
   C:  TC once at t* = argmax_t U_capt(t); tie -> lowest GW
-
-U_capt(t) = next_utility of engine.optimize.pick_captains at GW t.
-Stack: v2am_s + rates=v1 + fixtures v1; balanced; objective=next; seed=7.
-
-Cap_normal = sum(XI pts) + capt_pts
-Cap_TC     = Cap_normal + capt_pts
-
-Gates (E040-A):
-  AGG:  sum_4 R(C) > sum R(B0) AND sum R(C) > sum R(B1)
-  FAIL: sum_FAIL R(C) >= sum_FAIL R(B0) AND sum_FAIL R(C) >= sum_FAIL R(B1)
 
 Usage:
     python scripts/e040_triple_captain_roi.py
@@ -30,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from engine.e040_tc_policy import G_STAR, project_e040, select_t_star
 from engine.harness import (
     SUPPORTED_SEASONS,
     build_snapshot,
@@ -38,15 +31,15 @@ from engine.harness import (
 )
 from engine.metrics import record_path
 from engine.optimize import pick_captains, solve_squad
-from engine.project import project_all
+from engine.e040_tc_policy import (
+    OBJECTIVE,
+    STRATEGY,
+    CaptRow,
+)
 
 OUT_SEASON = Path("records") / "historical" / "e040_triple_captain_roi_season.csv"
 OUT_GW = Path("records") / "historical" / "e040_triple_captain_roi_gw.csv"
 OUT_TXT = Path("records") / "historical" / "e040_triple_captain_roi_summary.txt"
-SEED = 7
-STRATEGY = "balanced"
-OBJECTIVE = "next"
-G_STAR = 20
 FAIL_SEASONS = {"2022-23", "2025-26"}
 PASS_SEASONS = {"2023-24", "2024-25"}
 
@@ -60,6 +53,7 @@ def analyze_season(season: str) -> tuple[list[dict], dict]:
     gate = "FAIL" if season in FAIL_SEASONS else ("PASS" if season in PASS_SEASONS else "?")
     print(f"\n=== {season} E040-A TC ROI gate={gate} ===")
     gw_rows: list[dict] = []
+    capt_rows: list[CaptRow] = []
 
     for gw in range(1, 39):
         if not record_path(gw, season=season).exists():
@@ -68,25 +62,26 @@ def analyze_season(season: str) -> tuple[list[dict], dict]:
         act = gw_actuals(season, gw)
         if not act:
             continue
-        v1 = project_all(
-            snap, horizon=1, strategy=STRATEGY, seed=SEED,
-            minutes_version="v2am_s", rates_version="v1", fixtures_version="v1",
-        )
+        v1 = project_e040(snap, horizon=1)
         by_id = {p.player.id: p for p in v1}
         try:
             sol = solve_squad(snap, v1, strategy=STRATEGY, objective=OBJECTIVE)
         except RuntimeError:
             continue
-        capt = sol.captain
-        # Prefer pick_captains on solved XI for consistency with amendment wording.
-        try:
-            capt, _ = pick_captains(sol.xi, by_id)
-        except Exception:
-            pass
+        capt, _ = pick_captains(sol.xi, by_id)
         u_capt = by_id[capt.id].next_utility
         capt_y = _pts(act, capt.id)
         xi_y = sum(_pts(act, p.id) for p in sol.xi)
         cap_normal = xi_y + capt_y
+        capt_rows.append(
+            CaptRow(
+                gw=gw,
+                captain_id=capt.id,
+                captain_name=capt.web_name,
+                u_capt=float(u_capt),
+                source="as_of_t",
+            )
+        )
         gw_rows.append({
             "season": season,
             "e024_gate": gate,
@@ -114,19 +109,17 @@ def analyze_season(season: str) -> tuple[list[dict], dict]:
             "captain_b1": "",
         }
 
-    # C: argmax U_capt; tie -> lowest GW
-    best = sorted(gw_rows, key=lambda r: (-r["u_capt"], r["gw"]))[0]
-    t_star = int(best["gw"])
+    best = select_t_star(capt_rows)
+    t_star = best.gw
 
     r_b0 = sum(r["cap_normal"] for r in gw_rows)
-    # B1 / C: add one extra captain copy on chip GW if that GW exists
     by_gw = {int(r["gw"]): r for r in gw_rows}
 
     def season_with_tc(chip_gw: int) -> float:
         total = r_b0
         row = by_gw.get(chip_gw)
         if row is not None:
-            total += row["capt_pts"]  # Cap_TC - Cap_normal
+            total += row["capt_pts"]
         return total
 
     r_b1 = season_with_tc(G_STAR)
@@ -145,15 +138,15 @@ def analyze_season(season: str) -> tuple[list[dict], dict]:
         "delta_b1_b0": round(r_b1 - r_b0, 4),
         "t_star": t_star,
         "g_star": G_STAR,
-        "u_capt_star": best["u_capt"],
-        "captain_c": best["captain_name"],
-        "captain_c_id": best["captain_id"],
+        "u_capt_star": round(best.u_capt, 4),
+        "captain_c": best.captain_name,
+        "captain_c_id": best.captain_id,
         "captain_b1": b1_row["captain_name"] if b1_row else "",
         "captain_b1_id": b1_row["captain_id"] if b1_row else "",
         "g_star_present": int(b1_row is not None),
     }
     print(
-        f"  n_gw={len(gw_rows)} t*={t_star} ({best['captain_name']} U={best['u_capt']:.2f}) "
+        f"  n_gw={len(gw_rows)} t*={t_star} ({best.captain_name} U={best.u_capt:.2f}) "
         f"R(C)-R(B0)={season_row['delta_c_b0']:.1f} R(C)-R(B1)={season_row['delta_c_b1']:.1f}"
     )
     for r in gw_rows:
@@ -229,7 +222,7 @@ def summarize(season_rows: list[dict]) -> str:
         lines.append(f"  AGG: {agg_ok}")
         lines.append(f"  FAIL robustness: {fail_ok}")
         if agg_ok and fail_ok:
-            lines.append("  CALL: E040-TC SURVIVES (product wiring still needs separate prereg)")
+            lines.append("  CALL: E040-TC SURVIVES")
         else:
             lines.append("  CALL: E040-TC KILL — as-of-T argmax-U TC does not clear B0+B1 gates")
         lines.append("")
