@@ -243,12 +243,12 @@ then** optimizer integration.
 
 ```text
 CHARTER        Landing A (E038 concentrated)
-CLOSED         rates_v2b promote; E039-A fixture-concentration λ=0.5
+CLOSED         rates_v2b promote; E039-A V_ns λ=0.5
 POLICY         prediction without decision improvement = kill
-ACTIVE LANE    Product — E040 Triple Captain ROI (preregistered)
-PARKED         Research (E039-A killed); Upstream
-PRODUCTION     v2am_s + rates=v1 + fixtures v1 (unchanged)
-NOT NEXT       BB/FH/WC; transfer ILP; B1≡C collapse; live UI before gate
+ACTIVE LANE    Product — E040-TC SURVIVES (wiring not yet preregistered)
+PARKED         Research; Upstream
+PRODUCTION     v2am_s + rates=v1 + fixtures v1 (unchanged; no silent UI ship)
+NOT NEXT       g* retune; FH/WC; treat SURVIVES as live promote
 ```
 
 ---
@@ -351,3 +351,22 @@ are frozen in a **dated LAB_LOG amendment** before the historical run.
 changes, no BB/FH/WC in this peek.
 
 **Stop:** E040-TC fail kills this chip wedge only; return to Phase-0 fork or prereg BB.
+
+---
+
+## 18. E040-A — Policy freeze (2026-09-05); **SURVIVES** after gate
+
+```text
+g*           = 20
+W            = {1..38}
+OBJECTIVE    = next
+U_capt(t)    = next_utility of pick_captains at GW t
+C            = TC at argmax_t U_capt(t); tie → lowest GW
+B1           = TC at GW 20 (no U)
+RESULT       SURVIVES AGG+FAIL
+             Σ4 R(C)=8275 > B0 8218 >? B1 8251 (C>B1)
+             FAIL Σ R(C)=4057 >= B0 4028 and >= B1 4038
+NEXT         product-wiring prereg OR BB wedge; no silent UI ship
+```
+
+Details: `LAB_LOG.md` § E040-A.

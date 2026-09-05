@@ -288,6 +288,9 @@ No ILP / new μ / production changes. See `docs/LAB_LOG.md` E039; charter §15.
 B0 never-TC / B1 fixed-\(g^\star\) (no \(U\)) / C \(\arg\max_t U_{\mathrm{capt}}(t)\).
 B1 ≠ C. \(W=\{1..38\}\). Amendment freezes \(g^\star\) before run. See charter §17.
 
+**E040-A / gate (2026-09-05):** \(g^\star=20\); **SURVIVES** AGG+FAIL
+(ΣR(C)=8275 > B0 8218 and > B1 8251; FAIL robust). Wiring not auto-promoted.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -449,6 +452,7 @@ POST-GW1 (research)
   E039-A: V_ns fixture-concentration λ=0.5 frozen; fail = kill candidate only
   E039-A KILL: novelty 27% disagree; spearman V worse than U on FAIL; fork open
   E040 preregistered: Product TC ROI; B0/B1-fixed-g*/C-argmax-U; B1≠C
+  E040-A: g*=20 frozen; SURVIVES AGG+FAIL; wiring not auto-promoted
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

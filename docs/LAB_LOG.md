@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E040 preregistered** — Product lane (Triple Captain ROI). B0 never-TC / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{capt}}\). Candidate details in dated amendment before run. Research/Upstream parked. Production unchanged.
+**Active research question:** **E040-TC SURVIVES** primary gate (AGG+FAIL). Product wiring still needs separate prereg. Research/Upstream parked. Production unchanged.
 
 ---
 
@@ -1848,20 +1848,76 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Method (planned):** `python scripts/e040_triple_captain_roi.py` (not written yet)
 - **Charter:** `docs/DECISION_CHARTER.md` §17
-- **Follow-up:** freeze \(g^\star\) + tie-break + aggregate gate in dated LAB_LOG amendment before the historical run.
+- **Follow-up:** → **E040-A** amendment freezing \(g^\star\) and gate (below).
+
+### E040-A — Policy freeze (amendment before historical run)
+- **Date:** 2026-09-05 (dated amendment to E040; before evaluator run)
+- **Status:** **policy frozen** — then historical gate
+
+- **Frozen constants:**
+  ```text
+  g*              = 20
+  W               = {1,...,38}  (no endpoint buffer; HARNESS_SPEC does not exclude)
+  OBJECTIVE       = next        (same as E024–E038 harness stress)
+  STRATEGY        = balanced
+  SEED            = 7
+  minutes/rates   = v2am_s / v1 / fixtures v1
+  captain policy  = engine.optimize.pick_captains (max next_utility on XI)
+  U_capt(t)       = next_utility of pick_captains XI at GW t
+  C tie-break     = if U_capt tied across GWs → lowest GW wins
+  B1              = TC once at GW 20 on that GW's production captain (no U in timing)
+  ```
+
+- **Cap definition:**
+  \[
+  \mathrm{Cap}_t^{\mathrm{normal}} = \sum_{i\in\mathrm{XI}} Y_i + Y_{\mathrm{capt}}
+  \]
+  \[
+  \mathrm{Cap}_t^{\mathrm{TC}} = \sum_{i\in\mathrm{XI}} Y_i + 2\,Y_{\mathrm{capt}}
+  = \mathrm{Cap}_t^{\mathrm{normal}} + Y_{\mathrm{capt}}
+  \]
+  Same rolling production squad/XI for all arms; arms differ only in which GW (if any) applies TC.
+
+- **Aggregate gate (promote / kill):**
+  ```text
+  Let R(π) = sum_t Cap_t(π) over available GWs in W for that season.
+  AGG:   sum_{4 seasons} R(C) > sum R(B0)  AND  sum R(C) > sum R(B1)
+  FAIL:  sum_{FAIL} R(C) >= sum_{FAIL} R(B0)  AND  sum_{FAIL} R(C) >= sum_{FAIL} R(B1)
+  Promote/survive only if AGG and FAIL both hold.
+  Else KILL E040-TC. No g* retune. No W change. No BB in same peek.
+  ```
+
+- **Method:** `python scripts/e040_triple_captain_roi.py`
+
+- **Results:**
+
+  | Season | Gate | \(t^*\) | Cap C−B0 | Cap C−B1 |
+  |---|---|---:|---:|---:|
+  | 2022-23 | FAIL | 34 (Salah) | +18 | +10 |
+  | 2023-24 | PASS | 35 (Palmer) | +8 | **−8** |
+  | 2024-25 | PASS | 25 (M.Salah) | +20 | +13 |
+  | 2025-26 | FAIL | 36 (Haaland) | +11 | +9 |
+
+  Aggregate: ΣR(B0)=8218, ΣR(B1)=8251, ΣR(C)=**8275** → C>B0 and C>B1.
+  FAIL: ΣR(C)=4057 ≥ B0 4028 and ≥ B1 4038.
+
+- **Verdict:** **concentrated — E040-TC SURVIVES** primary AGG+FAIL gates. As-of-T \(\arg\max U_{\mathrm{capt}}\) beats never-TC and fixed-GW20 calendar stake in aggregate and on FAIL seasons. Note: C loses to B1 in 2023-24 alone (−8); gate uses sums, not per-season unanimity. **Not** auto-promote to live UI — product wiring requires a separate prereg. No \(g^\star\) retune. No BB/FH/WC in this peek.
+
+- **Artifacts:** `scripts/e040_triple_captain_roi.py`; `records/historical/e040_triple_captain_roi_season.csv`; `records/historical/e040_triple_captain_roi_gw.csv`; `records/historical/e040_triple_captain_roi_summary.txt`
+- **Charter:** `docs/DECISION_CHARTER.md` §18
+- **Follow-up:** optional product-wiring prereg (recommend TC from frozen C policy); or prereg BB as next Product wedge; do not silently ship UI.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E040 preregistered):
+As of 2026-09-05 (E040-TC SURVIVES):
 
-1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Unchanged.**
-2. **Active lane.** Product — **E040** Triple Captain ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{capt}}\)).
-3. **Parked.** Research (E039-A killed; class not closed); Upstream.
-4. **Closed.** rates_v2b promote; E039-A \(V_{\mathrm{ns}}\) \(\lambda=0.5\).
-5. **Next.** Dated amendment freezing \(g^\star\), tie-break, squad objective, aggregate rule — then evaluator only.
-6. **Not next.** BB/FH/WC; transfer ILP; λ/V fishing; live chip UI before gate.
+1. **Production.** `v2am_s` + `rates=v1` + fixtures hand ATK/CONCEDE. **Unchanged** (no silent UI promote).
+2. **E040-TC.** Survives AGG+FAIL vs B0 and B1 (\(g^\star=20\)).
+3. **Parked.** Research (E039-A killed); Upstream.
+4. **Next (choose one prereg):** product wiring for TC policy **or** Bench Boost wedge **or** return to fork.
+5. **Not next.** Retune \(g^\star\); treat SURVIVES as live ship; FH/WC/transfer ILP.
 
 ---
 
@@ -1906,6 +1962,7 @@ python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibratio
 python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
 python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
 python scripts/e037_portfolio_value_alignment.py  # E037: V_A vs V_B alignment
+python scripts/e040_triple_captain_roi.py  # E040-A: TC ROI B0/B1/C
 python scripts/e039_counterfactual_regret.py  # E039-A: V_ns vs U regret gate
 python scripts/e038_season_payoff.py  # E038: season payoff rolling vs GW1-lock
 python scripts/e021_fixture_movers.py  # E021b: fixture XI mover toxicology

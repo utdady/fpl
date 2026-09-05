@@ -1,0 +1,25 @@
+E040-A: Triple Captain ROI (production stack)
+B0=never TC; B1=TC@GW20; C=argmax U_capt (tie=lowest GW)
+Gates: AGG sum4 C>B0 and C>B1; FAIL sum_FAIL C>=B0 and C>=B1
+
+  2022-23 [FAIL] n=37 t*=34 C=Salah | R0=2113.0 R1=2121.0 Rc=2131.0 | C-B0=18.0 C-B1=10.0
+  2023-24 [PASS] n=38 t*=35 C=Palmer | R0=2040.0 R1=2056.0 Rc=2048.0 | C-B0=8.0 C-B1=-8.0
+  2024-25 [PASS] n=38 t*=25 C=M.Salah | R0=2150.0 R1=2157.0 Rc=2170.0 | C-B0=20.0 C-B1=13.0
+  2025-26 [FAIL] n=38 t*=36 C=Haaland | R0=1915.0 R1=1917.0 Rc=1926.0 | C-B0=11.0 C-B1=9.0
+
+=== AGGREGATE (4 seasons) ===
+  sum R(B0)=8218.0  sum R(B1)=8251.0  sum R(C)=8275.0
+  AGG C>B0: True  AGG C>B1: True
+
+=== FAIL seasons ===
+  sum R(B0)=4028.0  sum R(B1)=4038.0  sum R(C)=4057.0
+  FAIL C>=B0: True  FAIL C>=B1: True
+
+=== PASS seasons (report) ===
+  sum R(B0)=4190.0  sum R(B1)=4213.0  sum R(C)=4218.0
+
+=== PRIMARY GATE ===
+  AGG: True
+  FAIL robustness: True
+  CALL: E040-TC SURVIVES (product wiring still needs separate prereg)
+
