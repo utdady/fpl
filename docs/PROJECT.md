@@ -489,10 +489,11 @@ E040-TC and E041-BB both **SURVIVE** and are product-wired (`fpl.py tc` / `fpl.p
 Outputs state **independence** (not a combined chip calendar). Policies frozen;
 do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged. Chip lane paused.
 
-### Upstream (E042-A + E043-A families CLOSED)
+### Upstream (E044 preregistered; E042/E043 families CLOSED)
 
-Share family and lagged PL short-turnaround-gap family both **CLOSED**. Minutes stay
-`v2am_s`. Reopen only with a distinct as-of-T signal. See LAB_LOG.
+Share + lagged-turnaround families closed. **E044:** find a dated pre-deadline
+availability archive (provenance only). No minutes heuristic until source PASSes.
+See LAB_LOG E044.
 
 ---
 
@@ -557,6 +558,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E042-A** | Freeze \(W=4\), \(\lambda=0.35\); gate vs `v2am_s` | **KILL** + **family CLOSED** |
 | **E043** | PL schedule features → minutes | **prereg** + provenance **PASS_WITH_CAVEAT** |
 | **E043-A** | Lagged short-turnaround \(d_{\mathrm{prev\_gap}}\); `v2am_sched` | **KILL** + **family CLOSED** |
+| **E044** | Historical decision-time availability-source feasibility | **preregistered** — provenance only |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

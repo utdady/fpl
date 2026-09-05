@@ -6,9 +6,9 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E043-A family CLOSED** (lagged PL short-turnaround-gap).
-E042-A share family CLOSED. Production `v2am_s`. TC/BB frozen. Phase-0 fork open —
-distinct as-of-T signal only.
+**Active research question:** **E044 preregistered** — historical decision-time
+availability-source feasibility (provenance only). E042/E043 families CLOSED.
+Production `v2am_s`. No minutes heuristic until a dated source PASSes.
 
 ---
 
@@ -2431,17 +2431,74 @@ SOURCE       Vaastav fixtures.csv kickoffs with event < T only (PL)
 - **Production:** remains `minutes_version=v2am_s`.
 - **Follow-up:** Phase-0 fork open for Research / Upstream / Product with a **new**
   observable only (not gap/cap/eligibility retunes on this signal).
+  → **E044** data-capability card below.
+
+### E044 - Historical decision-time availability-source feasibility (preregistered)
+- **Date:** 2026-09-06
+- **Status:** **preregistered** — **provenance / data-capability only**
+- **Lane:** Upstream infrastructure (Phase-0). Not a minutes-model experiment.
+  E042/E043 families CLOSED. Production `v2am_s` unchanged.
+- **Why now:** E042 (club–position share) and E043 (lagged PL turnaround gap) exhausted
+  two plausible transforms of the **current** Vaastav/harness information set. Stronger
+  availability signals (injury status, `chance_of_playing`, team-sheet/news,
+  target-fixture timing, transfers) are blocked by `HARNESS_SPEC` because they are not
+  reliably dated as-of-T. Do not invent a third proxy from recency fields.
+- **Primary question:** Can we obtain a **dated, pre-deadline archive** across enough of
+  the four-season panel to support the existing decision gates?
+- **Scope lock (frozen):**
+
+  ```text
+  IN SCOPE     find / evaluate candidate historical sources; document coverage,
+               timestamps, joins, retrieval reproducibility
+  OUT OF SCOPE projection code; minutes_version; optimizer; Cap/MAE/XI0 peeks;
+               any treat-vs-control prediction run
+  ```
+
+- **Candidate observables (examples; pick none until source passes):** FPL
+  `status` / `chance_of_playing_*` / news flags; dated team-sheet; dated fixture book
+  with target-GW kickoffs; transfer/status timelines — **only if** timestamped before
+  the relevant GW decision cutoff.
+- **Pass criteria (all required):**
+  1. **Pre-deadline timestamps** — observations dated before each relevant GW deadline
+     (or an explicit, frozen decision cutoff), not season-end / static retrospective dumps.
+  2. **Panel coverage** — enough of {2022-23, 2023-24, 2024-25, 2025-26} × GWs to support
+     the existing four-season FAIL/PASS gate design (exact minimum coverage frozen in
+     E044 amendment before any downstream minutes card).
+  3. **New observable** — contains a clearly defined field **unavailable** (or excluded)
+     in the current harness (e.g. FPL availability/status), not a re-label of recent
+     minutes / share / turnaround gap.
+  4. **Identity joins** — stable player join keys (FPL element id and/or `code`) with
+     documented failure modes.
+  5. **Reproducible retrieval** — scripted fetch or pinned archive path; same inputs →
+     same rows.
+  6. **Provenance-only evaluation** — no prediction, Cap, MAE, or XI peeks in E044.
+
+- **Outcomes:**
+  - **PASS** → open **E044-A** (or next id) to preregister **exactly one** new
+    availability signal + map under frozen production stack / E042-A-style gates.
+  - **FAIL** → do **not** manufacture a third Vaastav recency proxy; keep `v2am_s`
+    frozen; treat the blocker as a **state/provenance** research problem, not a
+    minutes-heuristic problem.
+
+- **Stop / discipline:** Prediction without decision-time provenance = kill.
+  Parallel minutes fishing while E044 is open = out of lane.
+- **Follow-up:** survey candidate archives (FPL API history mirrors, third-party
+  snapshots, self-capture going forward); run provenance checklist; log PASS/FAIL
+  before any availability minutes card.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-06 (E043-A family **CLOSED**):
+As of 2026-09-06 (E044 **preregistered**):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
 2. **TC / BB.** Frozen with independence disclaimer.
-3. **Closed upstream.** E042-A share family; E043-A lagged PL short-turnaround-gap family.
-4. **Next.** New Phase-0 prereg only (distinct as-of-T signal). Not threshold fishing.
+3. **Closed.** E042-A share; E043-A lagged turnaround-gap.
+4. **Active lane.** **E044** — historical decision-time availability-source feasibility
+   (provenance only; no projection/optimizer).
+5. **Not next.** Another Vaastav minutes proxy; Cap peeking; E044-A signal map before
+   source PASS.
 
 ---
 

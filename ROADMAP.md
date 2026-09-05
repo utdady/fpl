@@ -343,6 +343,11 @@ minutes≥800. No target-GW KO. Treat `v2am_sched`. Implement next.
 variants on that observable. Reopen needs a distinct signal (+ dated fixture book
 if target-fixture timing).
 
+**E044 preregistered (2026-09-06):** Upstream **data-capability** — historical
+decision-time availability-source feasibility. Provenance only (no projection /
+Cap peek). PASS → one availability signal card; FAIL → keep `v2am_s`, no third
+Vaastav minutes proxy. See `docs/LAB_LOG.md` E044; charter §26.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -519,6 +524,7 @@ POST-GW1 (research)
   E043-A freeze: lagged short-turnaround d_prev_gap; v2am_sched next
   E043-A KILL: XI0/MAE/FAIL-Cap miss; production stays v2am_s; no threshold retune
   E043-A family CLOSED: lagged PL short-turnaround-gap; distinct signal to reopen
+  E044 preregistered: decision-time availability-source feasibility (provenance only)
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

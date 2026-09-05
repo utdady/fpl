@@ -246,11 +246,12 @@ CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5;
                E042-A club–position recent-minutes-share family;
                E043-A lagged PL short-turnaround-gap demotion family
-UPSTREAM       fork open — distinct as-of-T signal only
+UPSTREAM       E044 prereg — decision-time availability-source feasibility
+               (provenance only; no projection)
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       E042/E043 family retunes; target-GW KO without dated fixture book
+NOT NEXT       Vaastav minutes proxies; Cap peek in E044; E042/E043 retunes
 ```
 
 ---
@@ -543,3 +544,21 @@ FAMILY        CLOSED (2026-09-06) — lagged PL short-turnaround-gap demotions o
 ```
 
 See `LAB_LOG.md` § E043-A gate + family closure.
+
+---
+
+## 26. E044 — Decision-time availability-source feasibility (prereg 2026-09-06)
+
+**Lane:** Upstream **infrastructure**. One implement lane. **No projection / optimizer.**
+
+**Question:** Can we obtain a dated, pre-deadline archive across enough of the panel
+to support existing gates, carrying an availability observable absent from the
+current harness?
+
+**Pass (all):** pre-deadline timestamps; panel coverage; new observable; stable joins;
+reproducible retrieval; provenance-only (no Cap/MAE/XI peek).
+
+**PASS →** E044-A freezes exactly one availability signal + map.  
+**FAIL →** keep `v2am_s`; no third Vaastav minutes proxy; pivot to state/provenance.
+
+See `LAB_LOG.md` § E044.
