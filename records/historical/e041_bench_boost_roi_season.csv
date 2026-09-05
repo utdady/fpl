@@ -1,0 +1,5 @@
+season,e024_gate,n_gw,r_b0,r_b1,r_c,delta_c_b0,delta_c_b1,delta_b1_b0,t_star,g_star,u_bench_star,bench_c,bench_b1,g_star_present
+2022-23,FAIL,37,2113.0,2129.0,2140.0,27.0,11.0,16.0,29,20,22.832,Arrizabalaga|Harrison|Dalot|Ayling,Forster|Aurier|Pinnock|Nketiah,1
+2023-24,PASS,38,2040.0,2054.0,2059.0,19.0,5.0,14.0,34,20,25.7308,Henderson|Cunha|Gabriel|Kilman,Areola|Mengi|Archer|C.Richards,1
+2024-25,PASS,38,2150.0,2152.0,2155.0,5.0,3.0,2.0,33,20,15.724,Olsen|Raúl|Dalot|Murillo,Arrizabalaga|Digne|Postecoglou|Rusk,1
+2025-26,FAIL,38,1915.0,1928.0,1946.0,31.0,18.0,13.0,33,20,25.1404,Verbruggen|Gomez|Van Hecke|Bijol,Dúbravka|J.Cuenca|Bijol|Kroupi.Jr,1

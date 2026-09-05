@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E041 preregistered** — Bench Boost ROI (Product). B0 never-BB / B1 fixed-\(g^\star\) / C \(\arg\max U_{\mathrm{bench}}\). Amendment freezes \(g^\star\) before run. TC surface stays frozen E040-A. Production μ unchanged.
+**Active research question:** **E041-BB SURVIVES** AGG+FAIL. TC wired (E040-A). BB wiring optional next. Production μ unchanged.
 
 ---
 
@@ -1978,19 +1978,67 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Method (planned):** `python scripts/e041_bench_boost_roi.py` (not written yet)
 - **Charter:** `docs/DECISION_CHARTER.md` §20
-- **Follow-up:** freeze \(g^\star\) (may differ from E040’s 20) in dated amendment before the historical run.
+- **Follow-up:** → **E041-A** amendment (below).
+
+### E041-A — Policy freeze (amendment before historical run)
+- **Date:** 2026-09-05 (dated amendment to E041; before evaluator run)
+- **Status:** **policy frozen** — then historical gate
+
+- **Frozen constants:**
+  ```text
+  g*              = 20
+  W               = {1,...,38}
+  OBJECTIVE       = next
+  STRATEGY        = balanced
+  SEED            = 7
+  minutes/rates   = v2am_s / v1 / fixtures v1
+  U_bench(t)      = sum_{i in sol.bench} next_utility(i)
+                    after solve_squad(..., objective=next)
+  Cap_normal(t)   = sum(XI pts) + capt_pts
+  Cap_BB(t)       = Cap_normal(t) + sum(bench pts)
+  C tie-break     = if U_bench tied → lowest GW
+  B1              = BB once at GW 20 (no U in timing)
+  ```
+
+- **Aggregate gate (identical structure to E040-A):**
+  ```text
+  AGG:  sum_4 R(C) > sum R(B0) AND sum R(C) > sum R(B1)
+  FAIL: sum_FAIL R(C) >= sum_FAIL R(B0) AND sum_FAIL R(C) >= sum_FAIL R(B1)
+  Survive only if both hold. Else KILL E041-BB.
+  No g* retune. No W change. No TC joint planner.
+  ```
+
+- **Method:** `python scripts/e041_bench_boost_roi.py`
+
+- **Results:**
+
+  | Season | Gate | \(t^*\) | Cap C−B0 | Cap C−B1 |
+  |---|---|---:|---:|---:|
+  | 2022-23 | FAIL | 29 | +27 | +11 |
+  | 2023-24 | PASS | 34 | +19 | +5 |
+  | 2024-25 | PASS | 33 | +5 | +3 |
+  | 2025-26 | FAIL | 33 | +31 | +18 |
+
+  Aggregate: ΣR(B0)=8218, ΣR(B1)=8263, ΣR(C)=**8300** → C>B0 and C>B1.
+  FAIL: ΣR(C)=4086 ≥ B0 4028 and ≥ B1 4057. C beats B1 in **every** season.
+
+- **Verdict:** **concentrated — E041-BB SURVIVES** primary AGG+FAIL gates. As-of-T \(\arg\max U_{\mathrm{bench}}\) beats never-BB and fixed-GW20. Independent of TC. **Not** auto-wired — BB product surface needs a separate wiring step (mirror E040-A). No \(g^\star\) retune.
+
+- **Artifacts:** `scripts/e041_bench_boost_roi.py`; `records/historical/e041_bench_boost_roi_*.{csv,txt}`
+- **Charter:** `docs/DECISION_CHARTER.md` §21
+- **Follow-up:** optional BB product wiring (frozen E041-A); do not retune TC or BB.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E041 preregistered):
+As of 2026-09-05 (E041-BB SURVIVES):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
-2. **TC product.** Frozen E040-A — `fpl.py tc`. **Do not retune.**
-3. **Active prereg.** **E041-BB** — B0 / B1 fixed-\(g^\star\) / C \(\arg\max U_{\mathrm{bench}}\).
-4. **Next.** Dated amendment freezing \(g^\star\) + exact \(U_{\mathrm{bench}}\) → evaluator.
-5. **Not next.** BB UI before gate; joint TC+BB planner; TC policy drift.
+2. **TC product.** Frozen E040-A — `fpl.py tc`.
+3. **E041-BB.** SURVIVES AGG+FAIL; wiring not yet shipped.
+4. **Next.** Wire frozen E041-A BB (narrow) **or** pause Product chips.
+5. **Not next.** Joint TC+BB planner; \(g^\star\) retune; FH/WC without prereg.
 
 ---
 
@@ -2035,6 +2083,7 @@ python scripts/e034c_pairwise_swap.py  # E034c: pairwise swap vs re-equilibratio
 python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decomposition
 python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
 python scripts/e037_portfolio_value_alignment.py  # E037: V_A vs V_B alignment
+python scripts/e041_bench_boost_roi.py     # E041-A: BB ROI B0/B1/C
 python scripts/e040_triple_captain_roi.py  # E040-A: TC ROI B0/B1/C
 python -m engine.e040_tc_recommend         # E040-A product: TC recommendation
 python fpl.py tc                           # same

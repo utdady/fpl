@@ -244,11 +244,10 @@ then** optimizer integration.
 ```text
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5
-POLICY         prediction without decision improvement = kill
-TC PRODUCT     E040-A wired (frozen; do not retune)
-ACTIVE PREREG  E041 Bench Boost ROI
-PRODUCTION     v2am_s + rates=v1 + fixtures v1 (μ unchanged)
-NOT NEXT       BB UI before gate; joint chip planner; TC drift
+TC PRODUCT     E040-A wired (frozen)
+E041-BB        SURVIVES AGG+FAIL (wiring not shipped)
+PRODUCTION     v2am_s + rates=v1 + fixtures v1
+NOT NEXT       joint chip planner; g* retune; silent BB UI ship
 ```
 
 ---
@@ -418,3 +417,23 @@ and Cap_BB definition frozen in dated LAB_LOG amendment before the historical ru
 **Independent of TC** (not a joint planner). No BB UI until gate survives.
 
 See `LAB_LOG.md` § E041.
+
+---
+
+## 21. E041-A — Policy freeze (2026-09-05); **SURVIVES** after gate
+
+```text
+g*           = 20
+W            = {1..38}
+OBJECTIVE    = next
+U_bench(t)   = sum next_utility over sol.bench
+C            = BB at argmax_t U_bench(t); tie → lowest GW
+B1           = BB at GW 20 (no U)
+RESULT       SURVIVES AGG+FAIL
+             Σ4 R(C)=8300 > B0 8218 and > B1 8263
+             FAIL Σ R(C)=4086 >= B0 and >= B1
+             C beat B1 in every season
+NEXT         optional BB wiring (mirror E040-A); no silent UI ship
+```
+
+Details: `LAB_LOG.md` § E041-A.

@@ -297,6 +297,9 @@ Frozen claim only. Next: E041-BB prereg.
 **E041 preregistered (2026-09-05):** Bench Boost ROI — B0 never-BB / B1 fixed-\(g^\star\) /
 C \(\arg\max_t U_{\mathrm{bench}}(t)\). B1 ≠ C. Amendment before evaluator. See charter §20.
 
+**E041-A / gate (2026-09-05):** \(g^\star=20\); **SURVIVES** AGG+FAIL
+(ΣR(C)=8300 > B0/B1; FAIL robust; C>B1 every season). Wiring not auto-shipped.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -461,6 +464,7 @@ POST-GW1 (research)
   E040-A: g*=20 frozen; SURVIVES AGG+FAIL; wiring not auto-promoted
   E040-A wired: fpl.py tc / e040_tc_policy; E041-BB next prereg
   E041 preregistered: BB ROI; B0/B1-fixed-g*/C-argmax-U_bench; B1≠C
+  E041-A: g*=20; SURVIVES AGG+FAIL; wiring not auto-shipped
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels
