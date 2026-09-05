@@ -6,6 +6,8 @@ Usage:
     python fpl.py suggest --squad myteam.json --allow-hit --json
     python fpl.py tc
     python fpl.py tc --season 2024-25
+    python fpl.py bb
+    python fpl.py bb --season 2024-25
 """
 from __future__ import annotations
 
@@ -32,6 +34,10 @@ def main() -> int:
         from engine.e040_tc_recommend import main as tc_main
 
         return tc_main(sys.argv[2:])
+    if len(sys.argv) > 1 and sys.argv[1] == "bb":
+        from engine.e041_bb_recommend import main as bb_main
+
+        return bb_main(sys.argv[2:])
     return _greenfield_cli()
 
 

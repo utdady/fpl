@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E041-BB SURVIVES** AGG+FAIL. TC wired (E040-A). BB wiring optional next. Production μ unchanged.
+**Active research question:** **E040-A TC + E041-A BB both wired.** Product chip surfaces frozen. No FH/WC without prereg. Production μ unchanged.
 
 ---
 
@@ -2026,19 +2026,28 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 
 - **Artifacts:** `scripts/e041_bench_boost_roi.py`; `records/historical/e041_bench_boost_roi_*.{csv,txt}`
 - **Charter:** `docs/DECISION_CHARTER.md` §21
-- **Follow-up:** optional BB product wiring (frozen E041-A); do not retune TC or BB.
+- **Follow-up:** optional BB product wiring (frozen E041-A); do not retune TC or BB. → **wired** below.
+
+### E041-A wiring — product surface (2026-09-05)
+- **Status:** **wired** — frozen E041-A policy exposed; mirror of E040-A TC
+- **Module:** `engine/e041_bb_policy.py`
+- **CLI:** `python fpl.py bb` (live \(I_N\)); `python fpl.py bb --season 2024-25` (as-of-t)
+- **Claim:** Under the frozen E041-A policy, recommend Bench Boost in the GW where projected bench utility is highest.
+- **Engineering gate:** `tests/test_e041_bb_policy.py`
+- **Forbidden:** joint TC+BB planner; policy retune; FH/WC in this surface.
+- **Follow-up:** both chip surfaces frozen; open FH/WC only with new prereg.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E041-BB SURVIVES):
+As of 2026-09-05 (E041-A BB wired):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
-2. **TC product.** Frozen E040-A — `fpl.py tc`.
-3. **E041-BB.** SURVIVES AGG+FAIL; wiring not yet shipped.
-4. **Next.** Wire frozen E041-A BB (narrow) **or** pause Product chips.
-5. **Not next.** Joint TC+BB planner; \(g^\star\) retune; FH/WC without prereg.
+2. **TC.** `fpl.py tc` — frozen E040-A.
+3. **BB.** `fpl.py bb` — frozen E041-A.
+4. **Next.** Pause chips, or prereg FH/WC / price / transfers with a new card.
+5. **Not next.** Joint chip ILP; bake \(U_{\mathrm{bench}}\) into production squad objective; retune \(g^\star\).
 
 ---
 
@@ -2084,6 +2093,9 @@ python scripts/e035_portfolio_decomposition.py  # E035: portfolio proxy decompos
 python scripts/e036_contextual_marginal.py  # E036: H-MC1 contextual marginal vs U
 python scripts/e037_portfolio_value_alignment.py  # E037: V_A vs V_B alignment
 python scripts/e041_bench_boost_roi.py     # E041-A: BB ROI B0/B1/C
+python -m engine.e041_bb_recommend         # E041-A product: BB recommendation
+python fpl.py bb                           # same
+python -m unittest tests.test_e041_bb_policy -v
 python scripts/e040_triple_captain_roi.py  # E040-A: TC ROI B0/B1/C
 python -m engine.e040_tc_recommend         # E040-A product: TC recommendation
 python fpl.py tc                           # same

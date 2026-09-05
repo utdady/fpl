@@ -244,10 +244,10 @@ then** optimizer integration.
 ```text
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5
-TC PRODUCT     E040-A wired (frozen)
-E041-BB        SURVIVES AGG+FAIL (wiring not shipped)
+TC PRODUCT     E040-A wired (fpl.py tc)
+BB PRODUCT     E041-A wired (fpl.py bb)
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       joint chip planner; g* retune; silent BB UI ship
+NOT NEXT       joint chip planner; U_bench in squad ILP; g* retune
 ```
 
 ---
@@ -437,3 +437,19 @@ NEXT         optional BB wiring (mirror E040-A); no silent UI ship
 ```
 
 Details: `LAB_LOG.md` § E041-A.
+
+---
+
+## 22. E041-A product surface (wired 2026-09-05)
+
+BB recommendation is an **implementation of the frozen E041-A contract**, not a new experiment.
+
+```text
+MODULE       engine.e041_bb_policy (shared offline ↔ product)
+CLI          python fpl.py bb | python -m engine.e041_bb_recommend
+CLAIM        Under the frozen E041-A policy, recommend BB in the GW where
+             projected bench utility is highest.
+LIVE         Same I_N semantics as E040-A (§19)
+GATE         Historical t*/U_bench match E041 artifacts (tests/test_e041_bb_policy.py)
+FORBIDDEN    Joint TC+BB planner; bake U_bench into squad ILP; policy retune
+```

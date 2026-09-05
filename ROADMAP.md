@@ -300,6 +300,9 @@ C \(\arg\max_t U_{\mathrm{bench}}(t)\). B1 ≠ C. Amendment before evaluator. Se
 **E041-A / gate (2026-09-05):** \(g^\star=20\); **SURVIVES** AGG+FAIL
 (ΣR(C)=8300 > B0/B1; FAIL robust; C>B1 every season). Wiring not auto-shipped.
 
+**E041-A product wired (2026-09-05):** `engine.e041_bb_policy` + `fpl.py bb`.
+Both TC and BB surfaces frozen. No FH/WC without new prereg.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -465,6 +468,7 @@ POST-GW1 (research)
   E040-A wired: fpl.py tc / e040_tc_policy; E041-BB next prereg
   E041 preregistered: BB ROI; B0/B1-fixed-g*/C-argmax-U_bench; B1≠C
   E041-A: g*=20; SURVIVES AGG+FAIL; wiring not auto-shipped
+  E041-A wired: fpl.py bb / e041_bb_policy; TC+BB surfaces frozen
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

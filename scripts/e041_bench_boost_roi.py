@@ -31,6 +31,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from engine.e040_tc_policy import OBJECTIVE, STRATEGY, project_e040
+from engine.e041_bb_policy import select_t_star, BenchRow
 from engine.harness import (
     SUPPORTED_SEASONS,
     build_snapshot,
@@ -57,6 +58,7 @@ def analyze_season(season: str) -> tuple[list[dict], dict]:
     gate = "FAIL" if season in FAIL_SEASONS else ("PASS" if season in PASS_SEASONS else "?")
     print(f"\n=== {season} E041-A BB ROI gate={gate} ===")
     gw_rows: list[dict] = []
+    bench_rows: list[BenchRow] = []
 
     for gw in range(1, 39):
         if not record_path(gw, season=season).exists():
@@ -79,6 +81,15 @@ def analyze_season(season: str) -> tuple[list[dict], dict]:
         bench_y = sum(_pts(act, p.id) for p in bench)
         cap_normal = xi_y + capt_y
         cap_bb = cap_normal + bench_y
+        bench_rows.append(
+            BenchRow(
+                gw=gw,
+                u_bench=float(u_bench),
+                bench_ids=tuple(p.id for p in bench),
+                bench_names=tuple(p.web_name for p in bench),
+                source="as_of_t",
+            )
+        )
         gw_rows.append({
             "season": season,
             "e024_gate": gate,
@@ -104,9 +115,8 @@ def analyze_season(season: str) -> tuple[list[dict], dict]:
             "u_bench_star": "",
         }
 
-    # C: argmax U_bench; tie -> lowest GW
-    best = sorted(gw_rows, key=lambda r: (-r["u_bench"], r["gw"]))[0]
-    t_star = int(best["gw"])
+    best = select_t_star(bench_rows)
+    t_star = best.gw
 
     r_b0 = sum(r["cap_normal"] for r in gw_rows)
     by_gw = {int(r["gw"]): r for r in gw_rows}
@@ -134,13 +144,13 @@ def analyze_season(season: str) -> tuple[list[dict], dict]:
         "delta_b1_b0": round(r_b1 - r_b0, 4),
         "t_star": t_star,
         "g_star": G_STAR,
-        "u_bench_star": best["u_bench"],
-        "bench_c": best["bench_names"],
+        "u_bench_star": round(best.u_bench, 4),
+        "bench_c": "|".join(best.bench_names),
         "bench_b1": b1_row["bench_names"] if b1_row else "",
         "g_star_present": int(b1_row is not None),
     }
     print(
-        f"  n_gw={len(gw_rows)} t*={t_star} U_bench={best['u_bench']:.2f} "
+        f"  n_gw={len(gw_rows)} t*={t_star} U_bench={best.u_bench:.2f} "
         f"R(C)-R(B0)={season_row['delta_c_b0']:.1f} R(C)-R(B1)={season_row['delta_c_b1']:.1f}"
     )
     for r in gw_rows:
