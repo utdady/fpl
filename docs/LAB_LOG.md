@@ -6,9 +6,8 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E042-A frozen** — implement `v2am_share` (club–position
-minutes share) vs `v2am_s` under the amendment contract. TC/BB frozen with independence
-disclaimer. Production μ unchanged. No FH/WC / joint chips without prereg.
+**Active research question:** **E042-A KILL** (`v2am_share`). Production `v2am_s` unchanged.
+TC/BB frozen with independence disclaimer. Phase-0 fork open — new prereg only.
 
 ---
 
@@ -2182,17 +2181,43 @@ E015 cold/hot / E019 rung / E020 recent4-eligibility reopen appears in the diff.
 - No parallel \(V(S)\), chips, rates, or fixtures work in this lane.
 
 - **Follow-up:** implement `v2am_share` + harness compare vs `v2am_s` → gate → log verdict.
+  → **implemented; KILL** below.
+
+### E042-A gate — v2am_share vs v2am_s (2026-09-05)
+- **Status:** complete — **KILL**
+- **Code:** `engine/minutes_v2am_share.py`; `minutes_version=v2am_share` in `project.py`;
+  `python -m engine.harness_v2am_share`
+- **Stack:** treat `v2am_share` vs control `v2am_s`; rates=v1; fixtures=v1; seed=7; λ=0.35; W=4
+- **Results (mean XI+Cap / XI0% / MAE₆₀₊):**
+
+  | Season | gate | XI0 c→t | MAE60 c→t | Cap c→t | g_treat |
+  |---|---|---|---|---|---|
+  | 2022-23 | FAIL | 11.5→**12.3** ✗ | 2.576→2.655 ✗ | 57.1→**54.8** ✗ | 0.685 |
+  | 2023-24 | PASS | 11.0→8.9 ✓ | 2.482→2.506 ✗ | 53.7→55.0 ✓ | 0.594 |
+  | 2024-25 | PASS | 10.5→9.3 ✓ | 2.400→2.444 ✗ | 56.6→58.4 ✓ | 0.557 |
+  | 2025-26 | FAIL | 14.1→10.8 ✓ | 2.572→2.641 ✗ | 50.4→54.1 ✓ | 0.795 |
+
+- **Gates:** XI0 non-inferior 4/4 **FAIL** (2022-23 worsens). MAE₆₀₊ non-worse 4/4 **FAIL** (all four).
+  FAIL Cap non-neg each **FAIL** (2022-23 Cap down). AGG Cap mean improves (report only; not enough).
+- **Verdict:** **KILL.** Share blend does not clear E042-A. Do not retune λ/W. Production
+  remains `v2am_s`. No promote.
+- **Artifacts:** `records/historical/v2am_share_summary.csv`;
+  `records/historical/e042_v2am_share_run.log`; diagnostics regenerable via harness
+  (`v2am_share_diagnostics.csv`, not required in git).
+- **Follow-up:** upstream lane closed for this hypothesis. Return to Phase-0 fork
+  (new card only) — do not fish share parameters.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E042-A **frozen**; implement next):
+As of 2026-09-05 (E042-A **KILL**):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
-2. **TC / BB.** Frozen; independence disclaimer on outputs.
-3. **Active lane.** **E042-A** → implement `v2am_share` exactly as frozen; then gate.
-4. **Not next.** Retune λ/W; FH/WC; joint chips; structural \(V\); E019/E020 reopen.
+2. **TC / BB.** Frozen with independence disclaimer.
+3. **Upstream.** E042-A club–position share **KILL** — no λ/W retune.
+4. **Next.** New Phase-0 prereg only (Research / Upstream / Product). Not FH/WC joint ILP
+   without a card; not another share-knob pass.
 
 ---
 
@@ -2217,6 +2242,7 @@ python -m engine.harness_v2c   # E019: v2c vs v2am_s under rates=v1
 python -m engine.harness_v2c_e  # E020: v2c_e vs v2am_s (cold-eligible demotion)
 python -m engine.harness_v2d    # E021: fixtures_v2d vs v1 under v2am_s + rates=v1
 python -m engine.harness_pack_v2d  # E022: packaged U vs raw v2d
+python -m engine.harness_v2am_share  # E042-A: v2am_share vs v2am_s (KILL)
 python -m engine.harness_pack_vs_v1  # E023: packaged v2d vs production v1
 python -m unittest tests.test_e012_integrity -v  # E012: evaluation integrity
 python -m engine.harness_pack_rates  # E024: packaged rates_v2b vs production

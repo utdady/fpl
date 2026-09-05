@@ -243,12 +243,11 @@ then** optimizer integration.
 
 ```text
 CHARTER        Landing A (E038 concentrated)
-CLOSED         rates_v2b promote; E039-A V_ns λ=0.5
+CLOSED         rates_v2b promote; E039-A V_ns λ=0.5; E042-A v2am_share
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
-UPSTREAM       E042-A frozen — implement v2am_share next
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       joint chip planner; U_bench in squad ILP; g*/λ/W retune
+NOT NEXT       joint chip planner; U_bench in squad ILP; λ/W retune
 ```
 
 ---
@@ -504,6 +503,7 @@ GATES         XI0 non-inferior 4/4; MAE_60+ non-worse 4/4;
               FAIL Cap non-neg each; AGG Cap non-worse; g_treat report
 KILL          MAE-only; FAIL Cap loss; any E015/E019/E020 reopen
 NO TUNE       λ, W, floors, cold/hot after peek
+RESULT        KILL (2026-09-05) — XI0✗ MAE✗ FAIL-Cap✗; no promote; no λ/W retune
 ```
 
-Details: `LAB_LOG.md` § E042-A.
+Details: `LAB_LOG.md` § E042-A gate.

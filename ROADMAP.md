@@ -315,6 +315,9 @@ See `docs/LAB_LOG.md` E042; charter §24.
 base; identity on thin/transfer/zero-denom; availability unchanged; gates XI0+MAE_60++FAIL Cap.
 Implement `v2am_share` next — no retune after peek.
 
+**E042-A gate (2026-09-05):** **KILL** — XI0 fails 2022-23; MAE worsens 4/4; FAIL Cap
+fails 2022-23. Production stays `v2am_s`. No λ/W fishing.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -484,6 +487,7 @@ POST-GW1 (research)
   Product: TC/BB independence disclaimer; chip lane paused
   E042 preregistered: upstream club–position minutes share; amendment before code
   E042-A freeze: W=4 λ=0.35 adjust-on-v2am_s; implement v2am_share next
+  E042-A KILL: XI0/MAE/FAIL-Cap miss; production stays v2am_s; no λ/W retune
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels
