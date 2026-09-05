@@ -6,9 +6,9 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E042 preregistered** (upstream club–position minutes share).
-TC/BB product surfaces frozen with independence disclaimer. No FH/WC / joint chips without prereg.
-Production μ unchanged.
+**Active research question:** **E042-A frozen** — implement `v2am_share` (club–position
+minutes share) vs `v2am_s` under the amendment contract. TC/BB frozen with independence
+disclaimer. Production μ unchanged. No FH/WC / joint chips without prereg.
 
 ---
 
@@ -2094,18 +2094,105 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Amendment before implement:** freeze \(W\) and the monotone share→base-\(p_{\mathrm{start}}\)
   map in a dated LAB_LOG entry; then implement. No silent promote.
 - **Follow-up:** amendment → implement → gate. No FH/WC / joint chips / \(V(S)\) in this lane.
+  → **E042-A** below.
+
+### E042-A — Policy freeze (amendment before implement)
+- **Date:** 2026-09-05 (dated amendment to E042; **before any minutes code**)
+- **Status:** **frozen contract** — implement only this; no knob search after peek
+- **Invariant:** same player-level information set and same decision stack; **only** the
+  minutes base probability changes through frozen club–position share. Rates, fixtures,
+  ILP, objective, chips, payoff, panel, and `availability()` are unchanged.
+
+#### Panel and as-of-T minutes source
+```text
+SEASONS      2022-23, 2023-24, 2024-25, 2025-26  (full panel)
+GWs          1..38 per season (skip GW if harness record / actuals missing, same as E015)
+CONTROL      minutes_version=v2am_s, rates=v1, fixtures=v1, balanced, seed=7
+TREAT        minutes_version=v2am_share  (name reserved; not yet in code)
+FAIL set     {2022-23, 2025-26}   # E024 gate labels
+PASS set     {2023-24, 2024-25}
+MINUTES SRC  Vaastav merged_gw.csv rows with GW in [T-W, T-1]
+             columns: element, GW, minutes, team  (as-of-T only; no GW≥T)
+LIVE         If historical season_key + merged_gw available → same formula;
+             else identity to v2am_s (no new live-only fields)
+EXCLUDED     chance_*, news, season-end players_raw status as share inputs
+```
+
+#### Share definition (frozen)
+\[
+s_i(T)=\frac{m_i^{\mathrm{club}}(T-W:T-1)}{\sum_{j\in G(c,p)} m_j^{\mathrm{club}}(T-W:T-1)}
+\]
+- \(W=4\) (window length matches E015 data machinery; **signal is relative share**, not
+  cold/hot absolute thresholds — those knobs stay frozen and untouched).
+- Partial early season: if \(T>1\), window is \(\max(1,T-W)..(T-1)\). If \(T=1\): no
+  completed GWs → **identity** for all players (pure `v2am_s`).
+- Peer group \(G(c,p)\): players in the as-of-T snapshot with the same current
+  `team_id` \(c\) and `position` \(p\) (including GKP).
+- \(m_i^{\mathrm{club}}\): sum of `minutes` over window GWs where that row’s `team`
+  equals the player’s **current** snapshot `team_id`. Prior-club minutes do not enter.
+
+#### Edge cases (frozen)
+| Case | Rule |
+|---|---|
+| Transfer / new / promoted (0 GWs on current club in window) | **Identity** for that player (leave `v2am_s` base) |
+| Zero denominator (\(\sum m^{\mathrm{club}}=0\)) | **Identity** for entire \(G(c,p)\) |
+| \(\|G(c,p)\|<2\) | **Identity** for that group |
+| Blanks / injuries | Only via observed zero minutes in \(m^{\mathrm{club}}\); do **not** change `availability()` |
+| DGW rows in merged_gw | Sum minutes for the element in that GW (same as harness actuals collapse) |
+
+#### Composition: adjust, do not replace
+```text
+1. b0 = v2am_s base role_start  (season ladder + soft max 0.85 + cold/hot
+   if as_of_gw>4 — COLD_CAP/HOT_FLOOR/MAX_BASE UNCHANGED)
+2. If identity rule triggers → b1 = b0
+3. Else:
+     b1 = (1-λ)*b0 + λ*MAX_BASE*s_i
+     b1 = clip(b1, 0.04, MAX_BASE)      # MAX_BASE=0.85
+4. p_start = min(0.97, b1 * availability(player, offset))   # availability unchanged
+5. p_sub / p_60 follow existing minutes_probs leftovers from p_start
+```
+```text
+λ = 0.35     # single frozen blend; monotone: higher share → higher b1
+direction    higher s → pull base toward MAX_BASE * s
+NO TUNE      do not retune λ, W, floors, or v2am_s cold/hot after peek
+```
+
+#### Comparator and gates (all required to SURVIVE)
+**Player-level (treat vs control, each of 4 seasons):**
+1. XI 0-min rate: treat ≤ control (non-inferiority) on **all four** seasons
+2. MAE among actual minutes ≥ 60: treat ≤ control on **all four** (guardrail; flat OK)
+3. Report only (not sole promote): upper-tail / start-bucket calibration, Spearman
+
+**Decision / payoff:**
+4. FAIL-season mean XI+Cap: treat ≥ control on **each** FAIL season (non-negative)
+5. AGG: mean XI+Cap treat ≥ control across the four-season mean (or equivalently
+   no AGG Cap regression vs control)
+6. Season payoff report: rolling re-solve season Cap (E038-style arm) treat vs control
+   — required **report**; primary kill uses (4)–(5) + player gates
+7. `g_treat` caution: report mean/distribution of \(g_{\mathrm{treat}}\) on FAIL vs PASS
+   (warning monitor; not an auto-pass)
+
+**SURVIVE** only if (1)(2)(4)(5) hold. Else **KILL**.
+**KILL immediately** if MAE improves but FAIL Cap falls (rates_v2b pattern), or if any
+E015 cold/hot / E019 rung / E020 recent4-eligibility reopen appears in the diff.
+
+#### Implementation rule
+- Code may add `minutes_version=v2am_share` implementing **only** this contract.
+- No production default flip until SURVIVE + explicit promote note.
+- No parallel \(V(S)\), chips, rates, or fixtures work in this lane.
+
+- **Follow-up:** implement `v2am_share` + harness compare vs `v2am_s` → gate → log verdict.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E042 preregistered; chips paused):
+As of 2026-09-05 (E042-A **frozen**; implement next):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
-2. **TC / BB.** Frozen E040-A / E041-A; outputs state independence (not a joint calendar).
-3. **Active lane.** **E042** upstream club–position minutes share — amendment before code.
-4. **Not next.** FH/WC; joint chip ILP; another structural \(V\); E019/E020 reopen;
-   retune `v2am_s` cold/hot knobs.
+2. **TC / BB.** Frozen; independence disclaimer on outputs.
+3. **Active lane.** **E042-A** → implement `v2am_share` exactly as frozen; then gate.
+4. **Not next.** Retune λ/W; FH/WC; joint chips; structural \(V\); E019/E020 reopen.
 
 ---
 

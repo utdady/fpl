@@ -311,6 +311,10 @@ Minutes path only; rates/fixtures/ILP/chips fixed; player-level + FAIL Cap + `g_
 MAE-only = kill. Not E019/E020/`recent4` reopen. Amendment freezes \(W\) + map before code.
 See `docs/LAB_LOG.md` E042; charter §24.
 
+**E042-A freeze (2026-09-05):** \(W=4\), \(\lambda=0.35\), adjust-not-replace on `v2am_s`
+base; identity on thin/transfer/zero-denom; availability unchanged; gates XI0+MAE_60++FAIL Cap.
+Implement `v2am_share` next — no retune after peek.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -479,6 +483,7 @@ POST-GW1 (research)
   E041-A wired: fpl.py bb / e041_bb_policy; TC+BB surfaces frozen
   Product: TC/BB independence disclaimer; chip lane paused
   E042 preregistered: upstream club–position minutes share; amendment before code
+  E042-A freeze: W=4 λ=0.35 adjust-on-v2am_s; implement v2am_share next
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

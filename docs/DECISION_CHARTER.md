@@ -246,8 +246,9 @@ CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
+UPSTREAM       E042-A frozen — implement v2am_share next
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       joint chip planner; U_bench in squad ILP; g* retune
+NOT NEXT       joint chip planner; U_bench in squad ILP; g*/λ/W retune
 ```
 
 ---
@@ -484,20 +485,25 @@ Chip lane **paused** after E041. Next product chip requires a new prereg.
 
 **Lane:** Upstream. One implement lane.
 
-**Signal (named before code):** as-of-T minutes share \(s_i(T)\) within club+position
-over lookback \(W\) completed GWs (exact \(W\) and share→\(p_{\mathrm{start}}\) map in
-dated amendment before implement).
+**Signal:** as-of-T minutes share \(s_i(T)\) within club+position (see LAB_LOG E042).
 
-**Boundary:**
+**E042-A freeze (2026-09-05) — before code:**
 
 ```text
-change:   minutes / availability only
-fixed:    rates, fixtures, ILP, objective, chips, Cap payoff, panel
-control:  minutes_version=v2am_s
+INVARIANT     same Snapshot + decision stack; only minutes base via share
+W             = 4
+λ             = 0.35
+map           b1=(1-λ)b0+λ·MAX_BASE·s; clip to [0.04, 0.85]; then × availability
+b0            full v2am_s base (cold/hot UNCHANGED)
+identity      T=1; |G|<2; denom=0; no GWs on current club in window
+minutes src   merged_gw element/GW/minutes/team; team must match current club
+control       minutes_version=v2am_s
+treat         minutes_version=v2am_share
+FAIL          {2022-23, 2025-26}
+GATES         XI0 non-inferior 4/4; MAE_60+ non-worse 4/4;
+              FAIL Cap non-neg each; AGG Cap non-worse; g_treat report
+KILL          MAE-only; FAIL Cap loss; any E015/E019/E020 reopen
+NO TUNE       λ, W, floors, cold/hot after peek
 ```
 
-**Gates:** player-level improvement + non-negative FAIL-season Cap + `g_treat` caution.
-**Kill:** MAE-only; FAIL Cap loss with player-metric gain (rates_v2b pattern);
-E019/E020/`recent4` reopen.
-
-See `LAB_LOG.md` § E042.
+Details: `LAB_LOG.md` § E042-A.

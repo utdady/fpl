@@ -489,9 +489,10 @@ E040-TC and E041-BB both **SURVIVE** and are product-wired (`fpl.py tc` / `fpl.p
 Outputs state **independence** (not a combined chip calendar). Policies frozen;
 do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged. Chip lane paused.
 
-### Upstream (E042 preregistered)
+### Upstream (E042-A frozen)
 
-Club–position as-of-T minutes share vs `v2am_s`. Amendment before code. See LAB_LOG E042.
+Club–position as-of-T minutes share: \(W=4\), \(\lambda=0.35\), adjust `v2am_s` base only.
+Implement `v2am_share` next. See LAB_LOG E042-A.
 
 ---
 
@@ -552,7 +553,8 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E039-A** | Fixture-concentration \(V_{\mathrm{ns}}\), \(\lambda=0.5\) | **KILL** — novelty yes; decision-fail |
 | **E040** | Triple Captain ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U\)) | **SURVIVES** + **wired** (`fpl.py tc`) |
 | **E041** | Bench Boost ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{bench}}\)) | **SURVIVES** + **wired** (`fpl.py bb`) |
-| **E042** | Upstream club–position minutes share vs `v2am_s` | **preregistered** — amendment before code |
+| **E042** | Upstream club–position minutes share vs `v2am_s` | **preregistered** |
+| **E042-A** | Freeze \(W=4\), \(\lambda=0.35\), identity rules, gates | **frozen** — implement next |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.
