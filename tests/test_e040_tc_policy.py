@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from engine.e040_tc_policy import CaptRow, recommend_historical, select_t_star
+from tests.historical_data import unavailable_reason
 
 ROOT = Path(__file__).resolve().parents[1]
 SEASON_CSV = ROOT / "records" / "historical" / "e040_triple_captain_roi_season.csv"
@@ -66,21 +67,23 @@ class TestE040TcPolicy(unittest.TestCase):
             )
 
     def test_recommend_historical_one_season_matches_csv(self) -> None:
-        """Full as-of-t recompute for one season (slow); skip if no vaastav cache."""
-        if not SEASON_CSV.exists():
-            self.skipTest("no season CSV")
+        """Full as-of-t recompute for one season (slow).
+
+        Skip only when optional Vaastav/GW records are explicitly missing.
+        Projection/optimizer regressions must fail, not skip.
+        """
+        self.assertTrue(SEASON_CSV.exists(), "missing E040 season CSV")
         with SEASON_CSV.open(encoding="utf-8") as f:
             season_rows = {
                 r["season"]: r
                 for r in csv.DictReader(f)
             }
         season = "2024-25"
-        if season not in season_rows:
-            self.skipTest("2024-25 not in CSV")
-        try:
-            rec = recommend_historical(season)
-        except Exception as exc:  # noqa: BLE001 — harness may lack data in CI
-            self.skipTest(f"historical rebuild unavailable: {exc}")
+        self.assertIn(season, season_rows, f"{season} missing from season CSV")
+        reason = unavailable_reason(season)
+        if reason:
+            self.skipTest(reason)
+        rec = recommend_historical(season)
         expected = season_rows[season]
         self.assertEqual(rec.t_star, int(expected["t_star"]))
         self.assertEqual(rec.captain_id, int(expected["captain_c_id"]))

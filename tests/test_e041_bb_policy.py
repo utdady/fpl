@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from engine.e041_bb_policy import BenchRow, recommend_historical, select_t_star
+from tests.historical_data import unavailable_reason
 
 ROOT = Path(__file__).resolve().parents[1]
 SEASON_CSV = ROOT / "records" / "historical" / "e041_bench_boost_roi_season.csv"
@@ -57,17 +58,20 @@ class TestE041BbPolicy(unittest.TestCase):
             )
 
     def test_recommend_historical_one_season_matches_csv(self) -> None:
-        if not SEASON_CSV.exists():
-            self.skipTest("no season CSV")
+        """Full as-of-t recompute for one season (slow).
+
+        Skip only when optional Vaastav/GW records are explicitly missing.
+        Projection/optimizer regressions must fail, not skip.
+        """
+        self.assertTrue(SEASON_CSV.exists(), "missing E041 season CSV")
         with SEASON_CSV.open(encoding="utf-8") as f:
             season_rows = {r["season"]: r for r in csv.DictReader(f)}
         season = "2024-25"
-        if season not in season_rows:
-            self.skipTest("2024-25 missing")
-        try:
-            rec = recommend_historical(season)
-        except Exception as exc:  # noqa: BLE001
-            self.skipTest(f"historical rebuild unavailable: {exc}")
+        self.assertIn(season, season_rows, f"{season} missing from season CSV")
+        reason = unavailable_reason(season)
+        if reason:
+            self.skipTest(reason)
+        rec = recommend_historical(season)
         expected = season_rows[season]
         self.assertEqual(rec.t_star, int(expected["t_star"]))
         self.assertAlmostEqual(rec.u_bench, float(expected["u_bench_star"]), places=2)
