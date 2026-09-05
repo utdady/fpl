@@ -24,6 +24,25 @@ class TestE040TcPolicy(unittest.TestCase):
         self.assertEqual(best.gw, 1)
         self.assertEqual(best.captain_name, "B")
 
+    def test_format_states_independence_from_bb(self) -> None:
+        from engine.e040_tc_policy import INDEPENDENCE, TCRecommendation, format_recommendation
+
+        text = format_recommendation(
+            TCRecommendation(
+                policy_id="E040-A",
+                t_star=1,
+                captain_id=1,
+                captain_name="X",
+                u_capt=1.0,
+                claim="c",
+                rows=(),
+                live_semantics="L",
+            )
+        )
+        self.assertIn("not a combined chip calendar", text)
+        self.assertIn("Bench Boost", text)
+        self.assertEqual(INDEPENDENCE in text, True)
+
     def test_season_csv_matches_shared_policy(self) -> None:
         """Recompute C from frozen artifacts' GW U_capt rows via select_t_star."""
         self.assertTrue(SEASON_CSV.exists(), "missing E040 season CSV")

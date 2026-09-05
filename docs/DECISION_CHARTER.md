@@ -381,11 +381,13 @@ MODULE       engine.e040_tc_policy (shared offline ↔ product)
 CLI          python fpl.py tc | python -m engine.e040_tc_recommend
 CLAIM        Under the frozen E040-A policy, recommend TC in the GW where
              projected captain utility is highest.
+INDEPENDENCE Independent of BB (E041-A); not a combined chip calendar;
+             joint feasibility not claimed (§23)
 LIVE         Past: as-of-t when rebuildable. Current+future: under I_N only.
 GATE         Historical t*/captain must match E040 evaluator artifacts
              (tests/test_e040_tc_policy.py).
 FORBIDDEN    DGW heuristics; thresholds; confidence; new μ; BB/FH/WC;
-             policy retune without new prereg.
+             joint chip calendar; policy retune without new prereg.
 ```
 
 Any policy change → new preregistered experiment, not a wiring tweak.
@@ -449,7 +451,53 @@ MODULE       engine.e041_bb_policy (shared offline ↔ product)
 CLI          python fpl.py bb | python -m engine.e041_bb_recommend
 CLAIM        Under the frozen E041-A policy, recommend BB in the GW where
              projected bench utility is highest.
+INDEPENDENCE Independent of TC (E040-A); not a combined chip calendar;
+             joint feasibility not claimed (§23)
 LIVE         Same I_N semantics as E040-A (§19)
 GATE         Historical t*/U_bench match E041 artifacts (tests/test_e041_bb_policy.py)
 FORBIDDEN    Joint TC+BB planner; bake U_bench into squad ILP; policy retune
 ```
+
+---
+
+## 23. Chip product surfaces — independence + freeze checklist (2026-09-05)
+
+TC (E040-A) and BB (E041-A) are **separately** identified policies. Outputs must state
+that recommendations are independent and may conflict; using both at their respective
+\(t^\star\) is **not** a validated joint policy.
+
+```text
+CHECKLIST (do not change without new prereg)
+  policy_id          E040-A / E041-A
+  claim + independence in CLI text and JSON
+  artifact parity    tests/test_e040_tc_policy.py, tests/test_e041_bb_policy.py
+  optional data skip tests.historical_data.unavailable_reason only
+  production μ       unchanged (v2am_s + rates=v1 + fixtures v1)
+FORBIDDEN            joint chip calendar; FH/WC in these surfaces; g* retune
+```
+
+Chip lane **paused** after E041. Next product chip requires a new prereg.
+
+---
+
+## 24. E042 — Upstream club–position minutes share (prereg 2026-09-05)
+
+**Lane:** Upstream. One implement lane.
+
+**Signal (named before code):** as-of-T minutes share \(s_i(T)\) within club+position
+over lookback \(W\) completed GWs (exact \(W\) and share→\(p_{\mathrm{start}}\) map in
+dated amendment before implement).
+
+**Boundary:**
+
+```text
+change:   minutes / availability only
+fixed:    rates, fixtures, ILP, objective, chips, Cap payoff, panel
+control:  minutes_version=v2am_s
+```
+
+**Gates:** player-level improvement + non-negative FAIL-season Cap + `g_treat` caution.
+**Kill:** MAE-only; FAIL Cap loss with player-metric gain (rates_v2b pattern);
+E019/E020/`recent4` reopen.
+
+See `LAB_LOG.md` § E042.

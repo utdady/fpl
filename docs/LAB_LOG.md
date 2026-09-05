@@ -6,7 +6,9 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E040-A TC + E041-A BB both wired.** Product chip surfaces frozen. No FH/WC without prereg. Production μ unchanged.
+**Active research question:** **E042 preregistered** (upstream club–position minutes share).
+TC/BB product surfaces frozen with independence disclaimer. No FH/WC / joint chips without prereg.
+Production μ unchanged.
 
 ---
 
@@ -2036,18 +2038,74 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Engineering gate:** `tests/test_e041_bb_policy.py`
 - **Forbidden:** joint TC+BB planner; policy retune; FH/WC in this surface.
 - **Follow-up:** both chip surfaces frozen; open FH/WC only with new prereg.
+  → product independence disclaimer + **E042** upstream prereg (below).
+
+### E040/E041 product hardening — independence disclaimer (2026-09-05)
+- **Status:** product communication only (not a new experiment)
+- **Change:** `INDEPENDENCE` string on TC/BB CLI + JSON: each policy is frozen alone;
+  not a combined chip calendar; joint feasibility not claimed.
+- **Checklist (frozen surfaces):** policy_id E040-A / E041-A; artifact parity tests;
+  optional-data skip via `tests.historical_data.unavailable_reason`; claim + independence
+  in format/JSON. Do not retune without new prereg.
+
+### E042 - Upstream minutes: club–position share (preregistered)
+- **Date:** 2026-09-05
+- **Status:** **preregistered** — no code / no `minutes_version` until amendment freezes
+  lookback \(W\) and share→\(p_{\mathrm{start}}\) map
+- **Lane:** Upstream (Phase-0 fork). Chip lane paused. Research \(V\) parked.
+- **Hypothesis:** Within a club and position, minutes are approximately zero-sum.
+  A player's **as-of-T minutes share** among current club+position peers predicts
+  next-GW availability better than season-total / absolute recent-form alone
+  (already encoded in frozen `v2am_s`).
+- **Observable (named before code):** for player \(i\) at club \(c\), position \(p\),
+  prediction GW \(T\):
+
+  \[
+  s_i(T)=\frac{m_i(T-W:T-1)}{\sum_{j\in(c,p)} m_j(T-W:T-1)}
+  \]
+
+  where \(m\) = completed-GW minutes only (harness as-of-T). If the denominator is 0,
+  leave that player's minutes path on control (`v2am_s`). Peers = same `team_id` and
+  `position` in the as-of-T snapshot.
+- **Causal story:** managers allocate a finite minutes budget inside a unit; relative
+  share is the role signal, not an absolute form threshold.
+- **Data-availability rule (frozen):** minutes from current-season GWs \(< T\) only
+  (`HARNESS_SPEC` current-season cumulative through \(N-1\)). No `chance_*` / `news`
+  (explicitly excluded historically). No season-end `players_raw` status as the signal.
+- **Not a reopen:** not E015 cold/hot retune; not E019 competition rungs / \(n_{\mathrm{comp}}\);
+  not E020 `recent4<90` eligibility; not E017 club-prior; not LOSO bucket remap (E014).
+- **Treatment boundary:**
+
+  ```text
+  change:     minutes / availability path only (new minutes_version after amendment)
+  fixed:      rates=v1, fixtures v1, ILP, objective, chips (E040/E041), payoff Cap,
+              panel (four seasons), production default until promote
+  control:    minutes_version=v2am_s
+  ```
+
+- **Gates (all required to survive):**
+  1. Player-level improvement vs control (prereg metrics: start-calibration / XI 0-min
+     and MAE among relevant cells — exact metric list frozen in amendment).
+  2. Non-negative FAIL-season Cap (Σ Cap_treat ≥ Σ Cap_ctrl on FAIL seasons;
+     and AGG season Cap non-worse per E038-style bar — exact inequality in amendment).
+  3. `g_treat` caution report (required monitor; large displacement is warning, not auto-pass).
+- **Kill rules:** MAE-only win = **KILL**. Cap loss on FAIL with player-metric gain =
+  **KILL** (rates_v2b pattern). Any knob search after peek = invalid.
+- **Amendment before implement:** freeze \(W\) and the monotone share→base-\(p_{\mathrm{start}}\)
+  map in a dated LAB_LOG entry; then implement. No silent promote.
+- **Follow-up:** amendment → implement → gate. No FH/WC / joint chips / \(V(S)\) in this lane.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E041-A BB wired):
+As of 2026-09-05 (E042 preregistered; chips paused):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
-2. **TC.** `fpl.py tc` — frozen E040-A.
-3. **BB.** `fpl.py bb` — frozen E041-A.
-4. **Next.** Pause chips, or prereg FH/WC / price / transfers with a new card.
-5. **Not next.** Joint chip ILP; bake \(U_{\mathrm{bench}}\) into production squad objective; retune \(g^\star\).
+2. **TC / BB.** Frozen E040-A / E041-A; outputs state independence (not a joint calendar).
+3. **Active lane.** **E042** upstream club–position minutes share — amendment before code.
+4. **Not next.** FH/WC; joint chip ILP; another structural \(V\); E019/E020 reopen;
+   retune `v2am_s` cold/hot knobs.
 
 ---
 

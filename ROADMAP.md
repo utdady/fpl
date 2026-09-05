@@ -303,6 +303,14 @@ C \(\arg\max_t U_{\mathrm{bench}}(t)\). B1 ≠ C. Amendment before evaluator. Se
 **E041-A product wired (2026-09-05):** `engine.e041_bb_policy` + `fpl.py bb`.
 Both TC and BB surfaces frozen. No FH/WC without new prereg.
 
+**Product hardening (2026-09-05):** TC/BB CLI+JSON state independence (not a joint
+chip calendar). Chip lane paused.
+
+**E042 preregistered (2026-09-05):** Upstream — as-of-T **club–position minutes share**.
+Minutes path only; rates/fixtures/ILP/chips fixed; player-level + FAIL Cap + `g_treat`;
+MAE-only = kill. Not E019/E020/`recent4` reopen. Amendment freezes \(W\) + map before code.
+See `docs/LAB_LOG.md` E042; charter §24.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -469,6 +477,8 @@ POST-GW1 (research)
   E041 preregistered: BB ROI; B0/B1-fixed-g*/C-argmax-U_bench; B1≠C
   E041-A: g*=20; SURVIVES AGG+FAIL; wiring not auto-shipped
   E041-A wired: fpl.py bb / e041_bb_policy; TC+BB surfaces frozen
+  Product: TC/BB independence disclaimer; chip lane paused
+  E042 preregistered: upstream club–position minutes share; amendment before code
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

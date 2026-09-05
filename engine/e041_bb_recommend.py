@@ -13,6 +13,7 @@ import sys
 
 from engine.api import load_snapshot
 from engine.e041_bb_policy import (
+    INDEPENDENCE,
     format_recommendation,
     recommend_historical,
     recommend_live,
@@ -51,6 +52,7 @@ def main(argv: list[str] | None = None) -> int:
                     "bench_ids": list(rec.bench_ids),
                     "bench_names": list(rec.bench_names),
                     "claim": rec.claim,
+                    "independence": INDEPENDENCE,
                     "live_semantics": rec.live_semantics,
                     "n_scored_gws": len(rec.rows),
                     "rows": [

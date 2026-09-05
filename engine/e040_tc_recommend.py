@@ -13,6 +13,7 @@ import sys
 
 from engine.api import load_snapshot
 from engine.e040_tc_policy import (
+    INDEPENDENCE,
     format_recommendation,
     recommend_historical,
     recommend_live,
@@ -51,6 +52,7 @@ def main(argv: list[str] | None = None) -> int:
                     "captain_name": rec.captain_name,
                     "u_capt": rec.u_capt,
                     "claim": rec.claim,
+                    "independence": INDEPENDENCE,
                     "live_semantics": rec.live_semantics,
                     "n_scored_gws": len(rec.rows),
                     "rows": [

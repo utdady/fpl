@@ -38,6 +38,12 @@ LIVE_SEMANTICS = (
     "(unique online completion of argmax U_bench)."
 )
 
+# Product guardrail — not a joint-chip policy (charter §22 / §23).
+INDEPENDENCE = (
+    "Independent of Triple Captain (E040-A): this is not a combined chip calendar. "
+    "TC and BB may recommend different GWs; joint feasibility is not claimed."
+)
+
 
 @dataclass(frozen=True)
 class BenchRow:
@@ -157,6 +163,7 @@ def format_recommendation(rec: BBRecommendation) -> str:
     lines = [
         f"Policy: {rec.policy_id} (frozen Bench Boost)",
         rec.claim,
+        INDEPENDENCE,
         "",
         f"  planned GW:  {rec.t_star}",
         f"  bench:       {bench}",

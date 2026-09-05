@@ -20,7 +20,7 @@ It does **not** replace the living experiment log. Numbers and verdicts live in
 | [`V2_SPEC.md`](V2_SPEC.md) | How a successor model earns a version number |
 | [`FORMAL.md`](FORMAL.md) | What Lean could prove vs what statistics prove (post-GW1) |
 | [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer history, failure modes, E030–E036 |
-| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; rates_v2b closed; E039-A KILL; E040 Product TC |
+| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; E039-A KILL; E040/E041 wired; E042 upstream prereg |
 | [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | Candidate \(V(S)\); E037 results; E039 prereg |
 | `ROADMAP.md` | Version ladder (may lag E013; do not treat it as the experiment log) |
 
@@ -486,7 +486,12 @@ E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when
 ### Valuation / selection (E040-A + E041-A both wired)
 
 E040-TC and E041-BB both **SURVIVE** and are product-wired (`fpl.py tc` / `fpl.py bb`).
-Policies frozen; do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged.
+Outputs state **independence** (not a combined chip calendar). Policies frozen;
+do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged. Chip lane paused.
+
+### Upstream (E042 preregistered)
+
+Club–position as-of-T minutes share vs `v2am_s`. Amendment before code. See LAB_LOG E042.
 
 ---
 
@@ -547,6 +552,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E039-A** | Fixture-concentration \(V_{\mathrm{ns}}\), \(\lambda=0.5\) | **KILL** — novelty yes; decision-fail |
 | **E040** | Triple Captain ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U\)) | **SURVIVES** + **wired** (`fpl.py tc`) |
 | **E041** | Bench Boost ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{bench}}\)) | **SURVIVES** + **wired** (`fpl.py bb`) |
+| **E042** | Upstream club–position minutes share vs `v2am_s` | **preregistered** — amendment before code |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

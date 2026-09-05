@@ -63,6 +63,12 @@ LIVE_SEMANTICS = (
     "(unique online completion of argmax U_capt)."
 )
 
+# Product guardrail — not a joint-chip policy (charter §19 / §23).
+INDEPENDENCE = (
+    "Independent of Bench Boost (E041-A): this is not a combined chip calendar. "
+    "TC and BB may recommend different GWs; joint feasibility is not claimed."
+)
+
 
 def select_t_star(rows: Iterable[CaptRow]) -> CaptRow:
     """C: argmax U_capt; tie → lowest GW."""
@@ -225,6 +231,7 @@ def format_recommendation(rec: TCRecommendation) -> str:
     lines = [
         f"Policy: {rec.policy_id} (frozen Triple Captain)",
         rec.claim,
+        INDEPENDENCE,
         "",
         f"  planned GW:  {rec.t_star}",
         f"  captain:     {rec.captain_name} (id={rec.captain_id})",

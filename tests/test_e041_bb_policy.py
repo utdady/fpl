@@ -23,6 +23,25 @@ class TestE041BbPolicy(unittest.TestCase):
         best = select_t_star(rows)
         self.assertEqual(best.gw, 1)
 
+    def test_format_states_independence_from_tc(self) -> None:
+        from engine.e041_bb_policy import BBRecommendation, INDEPENDENCE, format_recommendation
+
+        text = format_recommendation(
+            BBRecommendation(
+                policy_id="E041-A",
+                t_star=1,
+                u_bench=1.0,
+                bench_ids=(1,),
+                bench_names=("X",),
+                claim="c",
+                rows=(),
+                live_semantics="L",
+            )
+        )
+        self.assertIn("not a combined chip calendar", text)
+        self.assertIn("Triple Captain", text)
+        self.assertIn(INDEPENDENCE, text)
+
     def test_season_csv_matches_shared_policy(self) -> None:
         self.assertTrue(SEASON_CSV.exists())
         self.assertTrue(GW_CSV.exists())
