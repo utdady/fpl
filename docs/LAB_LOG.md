@@ -6,7 +6,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E040-A TC wired** (`fpl.py tc`). Product surface frozen to E040-A policy. Next: E041-BB prereg (not started). Production μ unchanged.
+**Active research question:** **E041 preregistered** — Bench Boost ROI (Product). B0 never-BB / B1 fixed-\(g^\star\) / C \(\arg\max U_{\mathrm{bench}}\). Amendment freezes \(g^\star\) before run. TC surface stays frozen E040-A. Production μ unchanged.
 
 ---
 
@@ -1915,19 +1915,82 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Live semantics:** Past as-of-t when rebuildable; current+future under \(I_N\) only (charter §19).
 - **Engineering gate:** `tests/test_e040_tc_policy.py` — \(t^*\)/captain must match E040 CSV artifacts.
 - **Forbidden:** policy retune; DGW/threshold/confidence; BB/FH/WC in this surface.
-- **Follow-up:** preregister **E041 Bench Boost** (separate wedge).
+- **Follow-up:** preregister **E041 Bench Boost** (separate wedge). → **E041** below.
+
+### E041 - Bench Boost chip ROI (preregistered)
+- **Date:** 2026-09-05 (after E040-A TC wired / `e9a6a5a`)
+- **Status:** **preregistered** — Product lane; no evaluator yet; \(g^\star\) via dated amendment
+- **Track:** Product. TC surface remains frozen E040-A (no retune). Research / Upstream parked.
+- **Primary question:** Does the as-of-T production signal contain sufficient information to select a Bench Boost action whose cumulative realized Cap is **robustly better than both** a no-BB baseline **and** a simple fixed-calendar benchmark?
+- **Hypothesis:** Under frozen production projections, an as-of-T deterministic Bench Boost policy can select a BB week whose season Cap exceeds never-BB and a non-model calendar stake — testing **bench portfolio value**, not captain timing (E040).
+
+- **Arm roles (structurally distinct — B1 ≠ C):**
+
+  | Arm | Uses \(U\)? | Timing | Purpose |
+  |---|---:|---|---|
+  | **B0** | Yes (normal XI+captain Cap) | No chip | Floor |
+  | **B1** | No | Fixed calendar \(g^\star\) | Non-model benchmark |
+  | **C** | Yes | Full-season \(\arg\max U_{\mathrm{bench}}\) | Actual test |
+
+  **B1 must not equal C.** Same discipline as E040.
+
+- **Scope lock:**
+  ```text
+  stack:     v2am_s + rates=v1 + fixtures v1 (frozen production)
+  chip:      Bench Boost only (one use per season); evaluated independently of TC
+  W:         {1,...,38} unless HARNESS_SPEC excludes a GW for integrity
+  B0:        never BB; Cap = sum(XI pts) + capt_pts (same as E040 B0)
+  B1:        BB exactly once at fixed g* (g* in dated amendment; no U)
+  C:         t* = argmax_{t in W} U_bench(t); tie → lowest GW
+  U_bench(t): sum of next_utility over the 4 bench players after
+             solve_squad + solve_xi under objective=next (production stack)
+  Cap_BB(t): Cap_normal(t) + sum(bench realized pts)   # BB counts bench once extra
+  squad:     rolling as-of-T production squad/XI each GW (freeze objective in amendment)
+  forbidden: TC/FH/WC in this peek; transfers; new μ; threshold fishing;
+             manual DGW/BGW overlays; joint chip planner; live BB UI before gate;
+             B1 redefined as argmax-U_bench; retuning E040-A TC
+  ```
+
+- **Estimand:**
+  \[
+  R_{\mathrm{season}}(\pi)=\sum_{t\in W}\mathrm{Cap}_t(\pi)
+  \]
+  Primary: C vs B0 and C vs B1 on season sums.
+
+- **Primary gate (mirror E040-A; exact numbers in amendment):**
+  ```text
+  AGG:  sum_4 R(C) > sum R(B0) AND sum R(C) > sum R(B1)
+  FAIL: sum_FAIL R(C) >= sum_FAIL R(B0) AND sum_FAIL R(C) >= sum_FAIL R(B1)
+  Survive only if both hold. Else KILL E041-BB.
+  ```
+
+- **Leakage:** HARNESS_SPEC as-of-T only for decisions; realized pts for evaluation only.
+
+- **Forbidden after peek:** retune \(g^\star\) / \(W\) / \(U_{\mathrm{bench}}\) definition; BB+TC joint optimize; new μ.
+
+- **Stop rule:** Fail → kill/park E041-BB (not all chips). TC product stays. Return to fork or prereg FH/WC only with new card.
+
+- **Implementation sequence:**
+  ```text
+  this prereg → dated amendment (g*, tie-break, squad objective, U_bench exact)
+  → historical evaluator → gate → only then BB product wiring
+  ```
+
+- **Method (planned):** `python scripts/e041_bench_boost_roi.py` (not written yet)
+- **Charter:** `docs/DECISION_CHARTER.md` §20
+- **Follow-up:** freeze \(g^\star\) (may differ from E040’s 20) in dated amendment before the historical run.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-05 (E040-A TC wired):
+As of 2026-09-05 (E041 preregistered):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
-2. **TC product.** `fpl.py tc` / `engine.e040_tc_recommend` — frozen E040-A only.
-3. **Next.** Docs prereg for **E041-BB** (not implementation yet).
-4. **Parked.** Research (E039-A killed); Upstream.
-5. **Not next.** Retune TC; ship BB/FH/WC without prereg; silent policy drift in wiring.
+2. **TC product.** Frozen E040-A — `fpl.py tc`. **Do not retune.**
+3. **Active prereg.** **E041-BB** — B0 / B1 fixed-\(g^\star\) / C \(\arg\max U_{\mathrm{bench}}\).
+4. **Next.** Dated amendment freezing \(g^\star\) + exact \(U_{\mathrm{bench}}\) → evaluator.
+5. **Not next.** BB UI before gate; joint TC+BB planner; TC policy drift.
 
 ---
 

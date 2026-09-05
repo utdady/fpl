@@ -245,10 +245,10 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5
 POLICY         prediction without decision improvement = kill
-ACTIVE         E040-A TC product wired (frozen policy)
-NEXT           E041-BB prereg (docs first)
+TC PRODUCT     E040-A wired (frozen; do not retune)
+ACTIVE PREREG  E041 Bench Boost ROI
 PRODUCTION     v2am_s + rates=v1 + fixtures v1 (μ unchanged)
-NOT NEXT       TC retune; BB without prereg; silent policy drift
+NOT NEXT       BB UI before gate; joint chip planner; TC drift
 ```
 
 ---
@@ -390,3 +390,31 @@ FORBIDDEN    DGW heuristics; thresholds; confidence; new μ; BB/FH/WC;
 ```
 
 Any policy change → new preregistered experiment, not a wiring tweak.
+
+---
+
+## 20. E041 — Bench Boost ROI (prereg 2026-09-05)
+
+Product lane continues after TC wiring. **Different capability:** bench portfolio value.
+
+**Primary question:** Does as-of-T production signal select a BB action whose season Cap
+robustly beats no-BB **and** a fixed-calendar stake?
+
+**Arms (B1 ≠ C):**
+
+| Arm | Definition |
+|---|---|
+| **B0** | Never BB |
+| **B1** | BB once at fixed \(g^\star\) (no \(U\)) |
+| **C** | \(t^*=\arg\max_{t\in W} U_{\mathrm{bench}}(t)\); BB once at \(t^*\) |
+
+\[
+U_{\mathrm{bench}}(t)=\sum_{i\in\mathrm{bench}(t)} U_i^{\mathrm{next}}
+\]
+
+after production `solve_squad` + XI. \(W=\{1,\ldots,38\}\). Exact \(g^\star\), tie-break,
+and Cap_BB definition frozen in dated LAB_LOG amendment before the historical run.
+
+**Independent of TC** (not a joint planner). No BB UI until gate survives.
+
+See `LAB_LOG.md` § E041.

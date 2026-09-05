@@ -483,11 +483,11 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E038; E039-A KILL; E040-A TC wired)
+### Valuation / selection (E038; E039-A KILL; E040-A wired; E041 prereg)
 
-E038 Landing A; `rates_v2b` CLOSED. E039-A KILL. E040-TC **SURVIVES** AGG+FAIL;
-product surface `fpl.py tc` / `engine.e040_tc_policy` implements frozen E040-A only.
-Next Product prereg: E041 Bench Boost. Production μ unchanged.
+E040-TC SURVIVES + wired (`fpl.py tc`). **E041** preregisters Bench Boost ROI
+(B0 / B1 fixed-\(g^\star\) / C \(\arg\max U_{\mathrm{bench}}\); B1 ≠ C). TC policy frozen.
+Production μ unchanged.
 
 ---
 
@@ -547,6 +547,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E039** | Structural non-separable \(V(S,z,F)\); counterfactual regret | **preregistered** — Research lane |
 | **E039-A** | Fixture-concentration \(V_{\mathrm{ns}}\), \(\lambda=0.5\) | **KILL** — novelty yes; decision-fail |
 | **E040** | Triple Captain ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U\)) | **SURVIVES** + **wired** (`fpl.py tc`) |
+| **E041** | Bench Boost ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{bench}}\)) | **preregistered** — Product lane |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.
