@@ -489,10 +489,9 @@ E040-TC and E041-BB both **SURVIVE** and are product-wired (`fpl.py tc` / `fpl.p
 Outputs state **independence** (not a combined chip calendar). Policies frozen;
 do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged. Chip lane paused.
 
-### Upstream (E043-A frozen; E042-A family CLOSED)
+### Upstream (E043-A KILL; E042-A family CLOSED)
 
-**E043-A:** lagged short-turnaround load → `v2am_sched` (as-of-T; no target-GW KO).
-Implement next. See LAB_LOG E043-A.
+E043-A lagged short-turnaround **KILL**. Minutes stay `v2am_s`. See LAB_LOG E043-A.
 
 ---
 
@@ -556,7 +555,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E042** | Upstream club–position minutes share vs `v2am_s` | **preregistered** |
 | **E042-A** | Freeze \(W=4\), \(\lambda=0.35\); gate vs `v2am_s` | **KILL** + **family CLOSED** |
 | **E043** | PL schedule features → minutes | **prereg** + provenance **PASS_WITH_CAVEAT** |
-| **E043-A** | Lagged short-turnaround \(d_{\mathrm{prev\_gap}}\); `v2am_sched` | **frozen** — implement next |
+| **E043-A** | Lagged short-turnaround \(d_{\mathrm{prev\_gap}}\); `v2am_sched` | **KILL** — no promote |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

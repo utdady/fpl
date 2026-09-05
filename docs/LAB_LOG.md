@@ -6,8 +6,8 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E043-A frozen** — lagged short-turnaround load
-(`v2am_sched` next). No target-GW KO in signal. Share family CLOSED. Production `v2am_s`.
+**Active research question:** **E043-A KILL** (`v2am_sched`). Production `v2am_s` unchanged.
+Share family CLOSED. TC/BB frozen. Phase-0 fork open — new prereg or E043 family close.
 
 ---
 
@@ -2394,19 +2394,42 @@ SOURCE       Vaastav fixtures.csv kickoffs with event < T only (PL)
 - No production default flip until SURVIVE + explicit promote.
 
 - **Follow-up:** implement `v2am_sched` + harness vs `v2am_s` → gate → log verdict.
+  → **implemented; KILL** below.
+
+### E043-A gate — v2am_sched vs v2am_s (2026-09-06)
+- **Status:** complete — **KILL**
+- **Code:** `engine/minutes_v2am_sched.py`; `minutes_version=v2am_sched`;
+  `python -m engine.harness_v2am_sched`
+- **Stack:** lagged short-turnaround \(d_{\mathrm{prev\_gap}}<5.0\) → \(\min(b_0,0.60)\);
+  outfield minutes≥800; no target-GW KO
+- **Results:**
+
+  | Season | gate | XI0 c→t | MAE60 c→t | Cap c→t | triggers |
+  |---|---|---|---|---|---|
+  | 2022-23 | FAIL | 11.5→**12.0** ✗ | 2.576→2.583 ✗ | 57.1→**52.7** ✗ | 2160 |
+  | 2023-24 | PASS | 11.0→**11.5** ✗ | 2.482→2.479 ✓ | 53.7→55.1 ✓ | 2337 |
+  | 2024-25 | PASS | 10.5→10.0 ✓ | 2.400→2.399 ✓ | 56.6→**55.7** ✗ | 1794 |
+  | 2025-26 | FAIL | 14.1→**14.4** ✗ | 2.572→2.575 ✗ | 50.4→**48.7** ✗ | 2020 |
+
+- **Gates:** XI0 4/4 **FAIL**; MAE 4/4 **FAIL**; FAIL Cap **FAIL** (both FAIL seasons).
+- **Verdict:** **KILL.** Lagged short-turnaround demotion does not clear E043-A.
+  Do not retune 5.0 / 0.60 / 800. Production remains `v2am_s`.
+- **Artifacts:** `records/historical/v2am_sched_summary.csv`;
+  `records/historical/e043_v2am_sched_run.log`
+- **Follow-up:** do not fish thresholds. New upstream card needs a distinct signal;
+  consider family-close for lagged-turnaround PL-gap demotions if desired.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-06 (E043-A **frozen**; implement next):
+As of 2026-09-06 (E043-A **KILL**):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
 2. **TC / BB.** Frozen with independence disclaimer.
 3. **Closed.** E042-A share family.
-4. **Active lane.** **E043-A** lagged short-turnaround → `v2am_sched` — implement exactly;
-   no target-GW KO in the signal.
-5. **Not next.** Static-calendar “rest into target KO”; non-league expand; share retune.
+4. **Upstream.** E043-A lagged short-turnaround **KILL** — no threshold retune.
+5. **Next.** Phase-0 fork / new prereg only (or explicit E043 family close).
 
 ---
 
@@ -2433,6 +2456,7 @@ python -m engine.harness_v2d    # E021: fixtures_v2d vs v1 under v2am_s + rates=
 python -m engine.harness_pack_v2d  # E022: packaged U vs raw v2d
 python -m engine.harness_v2am_share  # E042-A: v2am_share vs v2am_s (KILL)
 python scripts/e043_schedule_provenance.py  # E043: PL kickoff provenance
+python -m engine.harness_v2am_sched  # E043-A: v2am_sched vs v2am_s (KILL)
 python -m engine.harness_pack_vs_v1  # E023: packaged v2d vs production v1
 python -m unittest tests.test_e012_integrity -v  # E012: evaluation integrity
 python -m engine.harness_pack_rates  # E024: packaged rates_v2b vs production

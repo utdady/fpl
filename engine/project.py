@@ -305,12 +305,14 @@ def project_all(
     rates_version: str = "v1",
     fixtures_version: str = "v1",
     share_diags_out: list | None = None,
+    sched_diags_out: list | None = None,
 ) -> list[PlayerProjection]:
     if strategy not in STRATEGIES:
         raise ValueError(f"strategy must be one of {STRATEGIES}")
-    if minutes_version not in {"v1", "v2am", "v2am_s", "v2am_share", "v2c", "v2c_e"}:
+    if minutes_version not in {"v1", "v2am", "v2am_s", "v2am_share", "v2am_sched", "v2c", "v2c_e"}:
         raise ValueError(
-            "minutes_version must be 'v1', 'v2am', 'v2am_s', 'v2am_share', 'v2c', or 'v2c_e'"
+            "minutes_version must be 'v1', 'v2am', 'v2am_s', 'v2am_share', "
+            "'v2am_sched', 'v2c', or 'v2c_e'"
         )
     if rates_version not in {"v1", "v2b", "v2b_d", "v2b_e"}:
         raise ValueError("rates_version must be 'v1', 'v2b', 'v2b_d', or 'v2b_e'")
@@ -347,14 +349,16 @@ def project_all(
     recent: dict[int, int] = {}
     apply_recent = False
     season_key: str | None = None
-    if minutes_version in {"v2am_s", "v2am_share", "v2c", "v2c_e"} or rates_version == "v2b_e":
+    if minutes_version in {"v2am_s", "v2am_share", "v2am_sched", "v2c", "v2c_e"} or rates_version == "v2b_e":
         from engine.harness import SEASON_LABEL, recent_minutes_by_element
 
         label_to_season = {v: k for k, v in SEASON_LABEL.items()}
         season_key = label_to_season.get(snapshot.season_label)
         if season_key and as_of_gw > RECENT_WINDOW:
             recent = recent_minutes_by_element(season_key, as_of_gw, window=RECENT_WINDOW)
-            apply_recent = minutes_version in {"v2am_s", "v2am_share", "v2c", "v2c_e"}
+            apply_recent = minutes_version in {
+                "v2am_s", "v2am_share", "v2am_sched", "v2c", "v2c_e"
+            }
     if minutes_version in {"v2c", "v2c_e"}:
         from engine.minutes_v2c import build_role_start_v2c, build_role_start_v2c_e
 
@@ -395,6 +399,23 @@ def project_all(
         )
         if share_diags_out is not None:
             share_diags_out.extend(diags)
+    elif minutes_version == "v2am_sched":
+        from engine.minutes_v2am_sched import build_role_start_v2am_sched
+
+        if not season_key:
+            from engine.harness import SEASON_LABEL
+
+            label_to_season = {v: k for k, v in SEASON_LABEL.items()}
+            season_key = label_to_season.get(snapshot.season_label)
+        role_start, diags = build_role_start_v2am_sched(
+            snapshot.players,
+            season=season_key,
+            as_of_gw=as_of_gw,
+            recent_minutes=recent,
+            apply_recent=apply_recent,
+        )
+        if sched_diags_out is not None:
+            sched_diags_out.extend(diags)
     elif minutes_version == "v2am_s":
         role_start = build_role_start_struct(
             snapshot.players, recent_minutes=recent, apply_recent=apply_recent
