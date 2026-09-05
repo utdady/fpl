@@ -245,10 +245,11 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5;
                E042-A club–position recent-minutes-share family
+UPSTREAM       E043 prereg — PL schedule-pressure → minutes (amendment before code)
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       joint chip planner; U_bench in squad ILP; share W/λ retune
+NOT NEXT       share W/λ retune; non-league expand without prereg; joint chips
 ```
 
 ---
@@ -511,3 +512,29 @@ FAMILY        CLOSED (2026-09-06) — no W/λ/caps/blend-shape variants of the s
 ```
 
 Details: `LAB_LOG.md` § E042-A gate + family closure.
+
+---
+
+## 25. E043 — PL schedule-pressure minutes (prereg 2026-09-06)
+
+**Lane:** Upstream. One implement lane.
+
+**Signal:** Club-level PL short-rest / fixture-density features from dated
+`fixtures.csv` kickoffs as-of-T → bounded adjustment of minutes base \(p_{\mathrm{start}}\).
+
+**Honesty:** Premier League FPL fixtures **only**. Cups/Europe out of scope. Missing
+kickoff provenance for the panel → kill before code.
+
+**Boundary:**
+
+```text
+change:   minutes path only (after E043-A amendment)
+fixed:    rates=v1, fixtures_version=v1, ILP, objective, chips, Cap, panel
+control:  minutes_version=v2am_s
+not:      E042 share family; E021 fixtures_v2d reopen; DGW chip heuristics
+```
+
+**Gates:** XI0 + MAE₆₀₊ + FAIL Cap + AGG Cap + `g_treat` report (E042-A discipline).
+**Amendment** freezes windows, thresholds, eligibility, map, identity before code.
+
+See `LAB_LOG.md` § E043.

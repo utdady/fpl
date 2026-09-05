@@ -322,6 +322,11 @@ fails 2022-23. Production stays `v2am_s`. No λ/W fishing.
 \(p_{\mathrm{start}}\) closed under current stack (any \(W\)/\(\lambda\)/caps/blend shape
 on that observable). Reopen only with a distinct as-of-T causal signal.
 
+**E043 preregistered (2026-09-06):** Upstream — **PL schedule-pressure → minutes**.
+PL-only fixtures/kickoffs as-of-T; cups/Europe out of scope; minutes path only;
+same hard gates as E042-A. Amendment freezes windows/eligibility/map before code.
+See `docs/LAB_LOG.md` E043; charter §25.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -493,6 +498,7 @@ POST-GW1 (research)
   E042-A freeze: W=4 λ=0.35 adjust-on-v2am_s; implement v2am_share next
   E042-A KILL: XI0/MAE/FAIL-Cap miss; production stays v2am_s; no λ/W retune
   E042-A family CLOSED: club–position recent-minutes-share; distinct signal to reopen
+  E043 preregistered: PL schedule-pressure → minutes; amendment before code
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

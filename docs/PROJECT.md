@@ -489,10 +489,10 @@ E040-TC and E041-BB both **SURVIVE** and are product-wired (`fpl.py tc` / `fpl.p
 Outputs state **independence** (not a combined chip calendar). Policies frozen;
 do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged. Chip lane paused.
 
-### Upstream (E042-A family CLOSED)
+### Upstream (E043 preregistered; E042-A family CLOSED)
 
-Club–position recent-minutes-share `v2am_share` **KILL** + family **CLOSED**. Minutes stay
-`v2am_s`. Reopen only with a distinct as-of-T causal signal. See LAB_LOG E042-A.
+E042-A share family closed. **E043:** PL schedule-pressure → minutes (docs only;
+amendment before code). See LAB_LOG E043.
 
 ---
 
@@ -555,6 +555,7 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E041** | Bench Boost ROI (B0 / B1 fixed-\(g^\star\) / C argmax-\(U_{\mathrm{bench}}\)) | **SURVIVES** + **wired** (`fpl.py bb`) |
 | **E042** | Upstream club–position minutes share vs `v2am_s` | **preregistered** |
 | **E042-A** | Freeze \(W=4\), \(\lambda=0.35\); gate vs `v2am_s` | **KILL** + **family CLOSED** |
+| **E043** | PL schedule-pressure → minutes (short-rest / density) | **preregistered** — amendment before code |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

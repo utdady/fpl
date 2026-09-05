@@ -6,8 +6,8 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E042-A family CLOSED** (club–position recent-minutes-share).
-Production `v2am_s` unchanged. TC/BB frozen. Phase-0 fork open — new as-of-T signal only.
+**Active research question:** **E043 preregistered** (PL schedule-pressure → minutes).
+E042-A share family CLOSED. Production `v2am_s` unchanged. TC/BB frozen. Amendment before code.
 
 ---
 
@@ -2218,19 +2218,92 @@ E015 cold/hot / E019 rung / E020 recent4-eligibility reopen appears in the diff.
 - **Production:** remains `minutes_version=v2am_s`.
 - **Follow-up:** Phase-0 fork open for Research / Upstream / Product with a **new**
   observable only.
+  → **E043** below.
+
+### E043 - Upstream minutes: PL schedule-pressure (preregistered)
+- **Date:** 2026-09-06
+- **Status:** **preregistered** — docs only; no `minutes_version` until amendment freezes
+  windows, thresholds, eligibility, and map
+- **Lane:** Upstream (Phase-0 fork). Share family CLOSED. Chip products frozen.
+  Research \(V\) parked.
+- **Hypothesis:** Short rest / fixture density known at \(T\) from the club’s **Premier
+  League** calendar causes rotation that is not captured by frozen `v2am_s` form knobs.
+  Encoding that pressure into base \(p_{\mathrm{start}}\) (high-minute incumbents) can
+  improve XI blanks and Cap without new rates/fixtures/ILP.
+- **Observable (named before code):** club-level schedule features at prediction GW \(T\),
+  derived only from dated FPL/Vaastav fixtures known as-of-T:
+
+  ```text
+  days_since_prior  = days from club's last finished PL kickoff before GW T
+                      to the GW T kickoff (or deadline proxy)
+  days_to_next      = days from GW T kickoff to club's next scheduled PL kickoff
+                      after GW T (if any in horizon)
+  n_fx_window       = count of known PL fixtures for the club with kickoff in a
+                      frozen calendar window around T  (exact window in amendment)
+  ```
+
+  Player-level treatment applies a frozen function of these club features to eligible
+  players’ minutes base (not to rates / FDR / attack_mult).
+- **Causal story:** managers rotate when PL rest is short or density is high; incumbents
+  with high recent minutes are the ones who lose starts.
+- **Data source and limitation (frozen honesty rule):**
+  - **Source:** Vaastav `fixtures.csv` / snapshot `Fixture.kickoff` (same as harness).
+  - **Coverage:** **Premier League FPL fixtures only.** Cups and European midweeks are
+    **out of scope** and must not be imputed. If the causal story requires non-league
+    calendars that cannot be reconstructed as-of-T for the panel → **kill before code**
+    (this prereg already chooses PL-only; do not silently expand).
+  - **Excluded:** `chance_*`, `news`, season-end status; E042 share; E019 competition rungs.
+- **Not a reopen:** not E042 share family; not E015 cold/hot retune; not E019/E020;
+  not E021 `fixtures_v2d` (that path changed attack/defence rates — E043 changes
+  **minutes only**). Not a DGW chip/calendar heuristic.
+- **Treatment boundary:**
+
+  ```text
+  change:     minutes / availability path only (new minutes_version after amendment)
+  fixed:      rates=v1, fixtures_version=v1 (strength tables), ILP, objective, chips,
+              Cap payoff, panel, production default until promote
+  control:    minutes_version=v2am_s
+  ```
+
+- **Composition intent (amendment will freeze exact map):** adjust-not-replace on full
+  `v2am_s` base \(b_0\) (cold/hot unchanged); then \(\times\) existing `availability()`;
+  do not invent a second availability model.
+- **Eligibility intent (amendment freezes):** prefer **high-minute incumbents** only
+  (so already-bench players are not further demoted). Exact minute threshold in amendment.
+- **Identity / edge cases (to freeze in amendment):** missing kickoff timestamps;
+  GW1 / no prior PL match; blank GWs; clubs with incomplete fixture rows → identity to
+  `v2am_s` for that club/player.
+- **Gates (all required to SURVIVE — same discipline as E042-A):**
+  1. XI 0-min: treat ≤ control on all four seasons
+  2. MAE among minutes ≥ 60: treat ≤ control on all four
+  3. FAIL-season mean XI+Cap: treat ≥ control on each FAIL season
+  4. AGG mean XI+Cap: treat ≥ control
+  5. `g_treat` caution report (required; not auto-pass)
+  6. Season Cap Σ report (required report)
+- **Kill rules:** MAE-only win = **KILL**. FAIL Cap loss with player-metric gain = **KILL**.
+  Any post-peek window/threshold search = invalid. Expanding to non-league fixtures
+  without a new prereg = invalid.
+- **Amendment before implement:** dated LAB_LOG freeze of (a) feature definitions with
+  exact day-count rules, (b) windows/thresholds and direction, (c) eligibility,
+  (d) blend/map and identity table, (e) treat `minutes_version` name. Then code only
+  that contract.
+- **Follow-up:** provenance check that kickoffs reconstruct for all four seasons →
+  E043-A amendment → implement → gate. If kickoff provenance fails the panel → kill
+  before code.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-06 (E042-A family **CLOSED**):
+As of 2026-09-06 (E043 **preregistered**):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
 2. **TC / BB.** Frozen with independence disclaimer.
-3. **Closed upstream.** Club–position recent-minutes-share family (E042-A) — no \(W\)/\(\lambda\)
-   /blend variants.
-4. **Next.** New Phase-0 prereg only (distinct as-of-T causal signal). Not FH/WC joint ILP
-   without a card; not another share-knob pass.
+3. **Closed.** E042-A club–position recent-minutes-share family.
+4. **Active lane.** **E043** PL schedule-pressure → minutes — amendment before code;
+   PL-only limitation frozen.
+5. **Not next.** Share \(W\)/\(\lambda\) retune; non-league calendar without new prereg;
+   E021 fixtures reopen; joint chips.
 
 ---
 
