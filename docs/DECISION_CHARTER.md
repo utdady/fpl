@@ -244,12 +244,13 @@ then** optimizer integration.
 ```text
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5;
-               E042-A club–position recent-minutes-share family
-UPSTREAM       E043-A KILL (lagged short-turnaround); fork open
+               E042-A club–position recent-minutes-share family;
+               E043-A lagged PL short-turnaround-gap demotion family
+UPSTREAM       fork open — distinct as-of-T signal only
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       E043 threshold retune; target-GW KO rest; share W/λ retune
+NOT NEXT       E042/E043 family retunes; target-GW KO without dated fixture book
 ```
 
 ---
@@ -535,6 +536,10 @@ GATES         XI0 4/4; MAE_60+ 4/4; FAIL Cap each; AGG Cap; g_treat report
 NO TUNE       5.0 / 0.60 / 800 after peek
 PROVENANCE    completed fixtures only → as-of-T reconstructible on panel
 RESULT        KILL (2026-09-06) — XI0✗ MAE✗ FAIL-Cap✗; no promote; no threshold retune
+FAMILY        CLOSED (2026-09-06) — lagged PL short-turnaround-gap demotions of
+              p_start from completed PL KOs only; no gap/cap/eligibility/map
+              variants on same observable; reopen needs distinct signal (+ dated
+              fixture book if target-fixture timing)
 ```
 
-See `LAB_LOG.md` § E043-A gate.
+See `LAB_LOG.md` § E043-A gate + family closure.

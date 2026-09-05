@@ -338,6 +338,11 @@ minutes≥800. No target-GW KO. Treat `v2am_sched`. Implement next.
 **E043-A gate (2026-09-06):** **KILL** — XI0/MAE/FAIL-Cap miss. Production stays
 `v2am_s`. No 5.0/0.60/800 retune.
 
+**E043-A family CLOSED (2026-09-06):** Lagged PL short-turnaround-gap demotions of
+\(p_{\mathrm{start}}\) (completed PL KOs only) closed — no gap/cap/eligibility/map
+variants on that observable. Reopen needs a distinct signal (+ dated fixture book
+if target-fixture timing).
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -513,6 +518,7 @@ POST-GW1 (research)
   E043 provenance PASS_WITH_CAVEAT; E043-A amendment next
   E043-A freeze: lagged short-turnaround d_prev_gap; v2am_sched next
   E043-A KILL: XI0/MAE/FAIL-Cap miss; production stays v2am_s; no threshold retune
+  E043-A family CLOSED: lagged PL short-turnaround-gap; distinct signal to reopen
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

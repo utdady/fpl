@@ -6,8 +6,9 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E043-A KILL** (`v2am_sched`). Production `v2am_s` unchanged.
-Share family CLOSED. TC/BB frozen. Phase-0 fork open — new prereg or E043 family close.
+**Active research question:** **E043-A family CLOSED** (lagged PL short-turnaround-gap).
+E042-A share family CLOSED. Production `v2am_s`. TC/BB frozen. Phase-0 fork open —
+distinct as-of-T signal only.
 
 ---
 
@@ -2416,20 +2417,31 @@ SOURCE       Vaastav fixtures.csv kickoffs with event < T only (PL)
   Do not retune 5.0 / 0.60 / 800. Production remains `v2am_s`.
 - **Artifacts:** `records/historical/v2am_sched_summary.csv`;
   `records/historical/e043_v2am_sched_run.log`
-- **Follow-up:** do not fish thresholds. New upstream card needs a distinct signal;
-  consider family-close for lagged-turnaround PL-gap demotions if desired.
+- **Follow-up:** do not fish thresholds. New upstream card needs a distinct signal.
+  → **family CLOSED** below.
+
+### E043-A family closure (2026-09-06)
+- **Status:** **CLOSED** (institutional; not a new experiment)
+- **Note:** Lagged Premier League short-turnaround-gap demotions of \(p_{\mathrm{start}}\),
+  derived solely from completed PL fixture kickoffs, are **CLOSED** under the current
+  stack. This includes changes to the gap threshold, probability cap, eligibility bar,
+  or monotone demotion map on the same observable. Reopening requires a distinct,
+  pre-registered as-of-T schedule/availability signal and, if it depends on
+  target-fixture timing, a dated fixture-book source.
+- **Production:** remains `minutes_version=v2am_s`.
+- **Follow-up:** Phase-0 fork open for Research / Upstream / Product with a **new**
+  observable only (not gap/cap/eligibility retunes on this signal).
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-06 (E043-A **KILL**):
+As of 2026-09-06 (E043-A family **CLOSED**):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
 2. **TC / BB.** Frozen with independence disclaimer.
-3. **Closed.** E042-A share family.
-4. **Upstream.** E043-A lagged short-turnaround **KILL** — no threshold retune.
-5. **Next.** Phase-0 fork / new prereg only (or explicit E043 family close).
+3. **Closed upstream.** E042-A share family; E043-A lagged PL short-turnaround-gap family.
+4. **Next.** New Phase-0 prereg only (distinct as-of-T signal). Not threshold fishing.
 
 ---
 
