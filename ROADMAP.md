@@ -330,6 +330,11 @@ See `docs/LAB_LOG.md` E043; charter §25.
 **E043 provenance (2026-09-06):** **PASS_WITH_CAVEAT** — kickoffs OK; order OK;
 static `fixtures.csv` caveat. Next: E043-A amendment (not code yet).
 
+**E043-A freeze (2026-09-06):** **Lagged short-turnaround load** —
+\(d_{\mathrm{prev\_gap}}=(\mathrm{prior}-\mathrm{prior2}).\mathrm{total\_seconds}()/86400\)
+with both KOs `event < T`; trigger \(<5.0\)d → `b1=min(b0,0.60)` for outfield
+minutes≥800. No target-GW KO. Treat `v2am_sched`. Implement next.
+
 ---
 
 ### V3 — Probabilistic calibration ⏳
@@ -503,6 +508,7 @@ POST-GW1 (research)
   E042-A family CLOSED: club–position recent-minutes-share; distinct signal to reopen
   E043 preregistered: PL schedule-pressure → minutes; amendment before code
   E043 provenance PASS_WITH_CAVEAT; E043-A amendment next
+  E043-A freeze: lagged short-turnaround d_prev_gap; v2am_sched next
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

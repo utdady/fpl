@@ -245,11 +245,11 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5;
                E042-A club–position recent-minutes-share family
-UPSTREAM       E043 provenance PASS_WITH_CAVEAT — E043-A amendment next
+UPSTREAM       E043-A frozen — lagged short-turnaround → v2am_sched next
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       implement before E043-A; non-league expand; share W/λ retune
+NOT NEXT       target-GW KO rest; non-league expand; share W/λ retune
 ```
 
 ---
@@ -519,26 +519,21 @@ Details: `LAB_LOG.md` § E042-A gate + family closure.
 
 **Lane:** Upstream. One implement lane.
 
-**Signal:** Club-level PL short-rest / fixture-density features from dated
-`fixtures.csv` kickoffs as-of-T → bounded adjustment of minutes base \(p_{\mathrm{start}}\).
-
-**Honesty:** Premier League FPL fixtures **only**. Cups/Europe out of scope. Missing
-kickoff provenance for the panel → kill before code.
-
-**Boundary:**
+**E043-A freeze (2026-09-06) — before code:**
 
 ```text
-change:   minutes path only (after E043-A amendment)
-fixed:    rates=v1, fixtures_version=v1, ILP, objective, chips, Cap, panel
-control:  minutes_version=v2am_s
-not:      E042 share family; E021 fixtures_v2d reopen; DGW chip heuristics
+NAME          lagged short-turnaround load (NOT target-GW rest)
+SIGNAL        d_prev_gap = (prior_utc - prior2_utc).total_seconds()/86400
+              prior, prior2 = last two PL kickoffs with event < T
+TRIGGER       d_prev_gap < 5.0  →  demote eligible outfield incumbents
+ELIGIBLE      outfield & season minutes >= 800; GKP identity
+MAP           b0=v2am_s; b1=min(b0, 0.60) if trigger else b0; × availability
+FORBIDDEN     target-GW KO; deadline rest; forward density; non-PL; E042 share
+TREAT         minutes_version=v2am_sched
+CONTROL       minutes_version=v2am_s
+GATES         XI0 4/4; MAE_60+ 4/4; FAIL Cap each; AGG Cap; g_treat report
+NO TUNE       5.0 / 0.60 / 800 after peek
+PROVENANCE    completed fixtures only → as-of-T reconstructible on panel
 ```
 
-**Gates:** XI0 + MAE₆₀₊ + FAIL Cap + AGG Cap + `g_treat` report (E042-A discipline).
-**Amendment** freezes windows, thresholds, eligibility, map, identity before code.
-
-**Provenance (2026-09-06):** **PASS_WITH_CAVEAT** — all kickoffs parseable; cross-event
-order OK; BGW/DGW characterizable; static season `fixtures.csv` caveat frozen
-(`scripts/e043_schedule_provenance.py`). E043-A may proceed.
-
-See `LAB_LOG.md` § E043.
+See `LAB_LOG.md` § E043-A.

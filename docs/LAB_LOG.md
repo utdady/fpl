@@ -6,8 +6,8 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E043 provenance PASS_WITH_CAVEAT** — next E043-A amendment
-(windows/eligibility/map). Share family CLOSED. Production `v2am_s` unchanged.
+**Active research question:** **E043-A frozen** — lagged short-turnaround load
+(`v2am_sched` next). No target-GW KO in signal. Share family CLOSED. Production `v2am_s`.
 
 ---
 
@@ -2307,20 +2307,106 @@ E015 cold/hot / E019 rung / E020 recent4-eligibility reopen appears in the diff.
   `build_snapshot` / HARNESS_SPEC — **not** a mid-season fixture-book archive. Future
   kickoffs may equal final published times. Cups/Europe remain out of scope.
 - **Artifacts:** `records/historical/e043_schedule_provenance.{csv,txt}`
-- **Follow-up:** → **E043-A** amendment (windows, eligibility, map) under this caveat.
+- **Follow-up:** → **E043-A** amendment (lagged short-turnaround; no target-GW KO).
   Do not expand to non-league calendars.
+
+### E043-A — Policy freeze (amendment before implement)
+- **Date:** 2026-09-06 (dated amendment to E043; **before any minutes code**)
+- **Status:** **frozen contract** — implement only this; no knob search after peek
+- **Mechanism name:** **lagged short-turnaround load** (not “rest into the target GW”)
+- **Invariant:** same Snapshot + decision stack; **only** minutes base changes via a
+  club-level as-of-T PL turnaround gap. Rates, `fixtures_version`, ILP, chips, payoff,
+  panel, and `availability()` unchanged. **No** target-GW kickoff, target-GW rest, or
+  deadline-time fixture knowledge enters the signal.
+
+#### Why this reference (option 2)
+Target-GW kickoff from static `fixtures.csv` is **not** proven known/unchanged at each
+historical decision time. E043-A therefore uses **only completed** PL fixtures with
+`event < T`. Historical GW deadlines are unavailable (`Event.deadline=None` in harness).
+
+#### Signal (frozen)
+For club \(c\) at prediction GW \(T\), let the club’s PL fixtures with `event < T` be
+ordered by kickoff UTC. Let \(\mathrm{prior}\) = latest such kickoff,
+\(\mathrm{prior2}\) = second-latest.
+
+\[
+d_{\mathrm{prev\_gap}}(T)
+=
+\frac{(\mathrm{prior\_utc}-\mathrm{prior2\_utc}).\mathrm{total\_seconds}()}{86400}
+\]
+
+- **Lagged short-turnaround trigger:** \(d_{\mathrm{prev\_gap}}(T) < 5.0\)
+- **Direction:** trigger → **lower** base \(p_{\mathrm{start}}\) for eligible incumbents
+- **Not used:** upcoming density, days-to-next, target-GW KO, GW deadline, non-PL fixtures
+
+#### Causal claim (frozen wording)
+A recently compressed PL match interval (short gap between the last two completed PL
+fixtures) may affect **next-GW** selection / availability for high-minute outfield
+incumbents — rotation/recovery load carried into \(T\), not “rest until this GW’s KO.”
+
+#### Panel / versions
+```text
+SEASONS      2022-23, 2023-24, 2024-25, 2025-26
+CONTROL      minutes_version=v2am_s, rates=v1, fixtures=v1, balanced, seed=7
+TREAT        minutes_version=v2am_sched
+FAIL set     {2022-23, 2025-26}
+SOURCE       Vaastav fixtures.csv kickoffs with event < T only (PL)
+```
+
+#### Eligibility (frozen)
+- Outfield only (**GKP → identity**)
+- Incumbent: as-of-T season `minutes >= 800` (same numeric bar as `COLD_SEASON_MIN`;
+  **not** a cold/hot retune — those knobs stay untouched)
+
+#### Map (adjust, do not replace)
+```text
+1. b0 = full v2am_s role_start (soft max / cold / hot UNCHANGED)
+2. If identity → b1 = b0
+3. Else if eligible AND d_prev_gap < 5.0:
+     b1 = min(b0, 0.60)
+4. Else b1 = b0
+5. p_start = min(0.97, b1 * availability(...))   # availability unchanged
+```
+
+#### Identity cases (frozen)
+| Case | Rule |
+|---|---|
+| Fewer than 2 completed PL fixtures (`event < T`) | identity (includes GW1) |
+| Missing / unparseable `prior` or `prior2` kickoff | identity |
+| Club has **zero** fixtures with `event == T` (club blank) | identity |
+| League BGW (`event == T` empty for all) | identity for all |
+| GKP or season minutes `< 800` | identity |
+| DGW (`event == T` has 2+ fixtures for club) | compute \(d_{\mathrm{prev\_gap}}\) once from pre-\(T\) history; apply **once** per player-GW (no target-KO ref) |
+
+#### Gates (SURVIVE iff all hold)
+1. XI 0-min: treat ≤ control on **all four** seasons  
+2. MAE₆₀₊: treat ≤ control on **all four**  
+3. FAIL mean XI+Cap: treat ≥ control on **each** FAIL season  
+4. AGG mean XI+Cap: treat ≥ control  
+5. `g_treat` report + season Cap Σ report (required; not auto-pass)
+
+**KILL** if any of (1)–(4) fail; MAE-only / FAIL Cap loss pattern; any post-peek retune of
+`5.0`, `0.60`, or `800`; any use of target-GW KO / forward density / non-PL calendar.
+
+#### No-tune / implementation
+- Do not retune thresholds after peek.
+- Code may add `minutes_version=v2am_sched` implementing **only** this contract.
+- No production default flip until SURVIVE + explicit promote.
+
+- **Follow-up:** implement `v2am_sched` + harness vs `v2am_s` → gate → log verdict.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-06 (E043 provenance **PASS_WITH_CAVEAT**):
+As of 2026-09-06 (E043-A **frozen**; implement next):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
 2. **TC / BB.** Frozen with independence disclaimer.
-3. **Closed.** E042-A club–position recent-minutes-share family.
-4. **Active lane.** **E043** — provenance OK; next is **E043-A amendment** (no code yet).
-5. **Not next.** Implement before amendment; non-league expand; share retune.
+3. **Closed.** E042-A share family.
+4. **Active lane.** **E043-A** lagged short-turnaround → `v2am_sched` — implement exactly;
+   no target-GW KO in the signal.
+5. **Not next.** Static-calendar “rest into target KO”; non-league expand; share retune.
 
 ---
 
