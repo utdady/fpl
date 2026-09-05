@@ -6,8 +6,8 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 
 **Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
 **Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E043 preregistered** (PL schedule-pressure → minutes).
-E042-A share family CLOSED. Production `v2am_s` unchanged. TC/BB frozen. Amendment before code.
+**Active research question:** **E043 provenance PASS_WITH_CAVEAT** — next E043-A amendment
+(windows/eligibility/map). Share family CLOSED. Production `v2am_s` unchanged.
 
 ---
 
@@ -2290,20 +2290,37 @@ E015 cold/hot / E019 rung / E020 recent4-eligibility reopen appears in the diff.
 - **Follow-up:** provenance check that kickoffs reconstruct for all four seasons →
   E043-A amendment → implement → gate. If kickoff provenance fails the panel → kill
   before code.
+  → **provenance PASS_WITH_CAVEAT** below.
+
+### E043 provenance — PL fixture kickoffs (2026-09-06)
+- **Status:** complete — **PASS_WITH_CAVEAT** (E043-A amendment may proceed)
+- **Script:** `python scripts/e043_schedule_provenance.py`
+- **Hard checks (all four seasons):**
+  - 380 fixtures each; **0** missing / unparseable `kickoff_time`
+  - Cross-event kickoff order: **0** violations (\(\max ko_e \le \min ko_{e+1}\))
+  - Blank / thin / doubleish GWs characterizable by event fixture count; team-in-event
+    doubles countable (DGW)
+  - GW1: all clubs lack a prior PL match → identity case for rest features
+- **Defined BGW/DGW behavior (descriptive):** e.g. 2022-23 blank GW7; thin/doubleish
+  lists in `e043_schedule_provenance.csv`
+- **Caveat (frozen into E043):** source is the same static Vaastav `fixtures.csv` as
+  `build_snapshot` / HARNESS_SPEC — **not** a mid-season fixture-book archive. Future
+  kickoffs may equal final published times. Cups/Europe remain out of scope.
+- **Artifacts:** `records/historical/e043_schedule_provenance.{csv,txt}`
+- **Follow-up:** → **E043-A** amendment (windows, eligibility, map) under this caveat.
+  Do not expand to non-league calendars.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-06 (E043 **preregistered**):
+As of 2026-09-06 (E043 provenance **PASS_WITH_CAVEAT**):
 
 1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
 2. **TC / BB.** Frozen with independence disclaimer.
 3. **Closed.** E042-A club–position recent-minutes-share family.
-4. **Active lane.** **E043** PL schedule-pressure → minutes — amendment before code;
-   PL-only limitation frozen.
-5. **Not next.** Share \(W\)/\(\lambda\) retune; non-league calendar without new prereg;
-   E021 fixtures reopen; joint chips.
+4. **Active lane.** **E043** — provenance OK; next is **E043-A amendment** (no code yet).
+5. **Not next.** Implement before amendment; non-league expand; share retune.
 
 ---
 
@@ -2329,6 +2346,7 @@ python -m engine.harness_v2c_e  # E020: v2c_e vs v2am_s (cold-eligible demotion)
 python -m engine.harness_v2d    # E021: fixtures_v2d vs v1 under v2am_s + rates=v1
 python -m engine.harness_pack_v2d  # E022: packaged U vs raw v2d
 python -m engine.harness_v2am_share  # E042-A: v2am_share vs v2am_s (KILL)
+python scripts/e043_schedule_provenance.py  # E043: PL kickoff provenance
 python -m engine.harness_pack_vs_v1  # E023: packaged v2d vs production v1
 python -m unittest tests.test_e012_integrity -v  # E012: evaluation integrity
 python -m engine.harness_pack_rates  # E024: packaged rates_v2b vs production

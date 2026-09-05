@@ -1,0 +1,3 @@
+verdict=PASS_WITH_CAVEAT
+hard_ok=True
+caveat=static_season_fixtures_csv

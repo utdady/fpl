@@ -245,11 +245,11 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5;
                E042-A club–position recent-minutes-share family
-UPSTREAM       E043 prereg — PL schedule-pressure → minutes (amendment before code)
+UPSTREAM       E043 provenance PASS_WITH_CAVEAT — E043-A amendment next
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
 PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       share W/λ retune; non-league expand without prereg; joint chips
+NOT NEXT       implement before E043-A; non-league expand; share W/λ retune
 ```
 
 ---
@@ -536,5 +536,9 @@ not:      E042 share family; E021 fixtures_v2d reopen; DGW chip heuristics
 
 **Gates:** XI0 + MAE₆₀₊ + FAIL Cap + AGG Cap + `g_treat` report (E042-A discipline).
 **Amendment** freezes windows, thresholds, eligibility, map, identity before code.
+
+**Provenance (2026-09-06):** **PASS_WITH_CAVEAT** — all kickoffs parseable; cross-event
+order OK; BGW/DGW characterizable; static season `fixtures.csv` caveat frozen
+(`scripts/e043_schedule_provenance.py`). E043-A may proceed.
 
 See `LAB_LOG.md` § E043.
