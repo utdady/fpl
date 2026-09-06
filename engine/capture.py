@@ -28,6 +28,10 @@ from engine.model_config import PRODUCTION, V1_CONTROL
 from engine.models import GWProjection, PlayerProjection
 from engine.optimize import solve_squad
 from engine.project import STRATEGIES, project_all, project_player_gw
+from engine.avail_monitor import (
+    availability_application_report,
+    format_availability_monitor_line,
+)
 
 RECORDS_DIR = Path("records")
 RECORDS_DIR.mkdir(exist_ok=True)
@@ -141,15 +145,18 @@ def _write_diagnostics(gw: int, snapshot, strategy: str = "balanced") -> None:
         "gw": gw,
         "captured_at": datetime.now(timezone.utc).isoformat(),
         "model_config": {**PRODUCTION, "role": "live_resolv", "horizon": PRODUCTION["horizon_resolv"]},
+        "availability_monitor": availability_application_report(snapshot.players),
         "note": (
             "Quantiles and mu_components come from 2500 Monte Carlo draws per player. "
-            "Not a fitted Normal. P(0) is P(total <= 0), distinct from 1 - p_start."
+            "Not a fitted Normal. P(0) is P(total <= 0), distinct from 1 - p_start. "
+            "availability_monitor checks non-trivial live API availability application."
         ),
         "players": players,
         "squads": squads,
     }
     path = _diagnostics_path(gw)
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    print(format_availability_monitor_line(payload["availability_monitor"]))
     print(f"[capture] Wrote diagnostics ({len(players)} players) -> {path}")
 
 

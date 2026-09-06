@@ -7,8 +7,9 @@ stay aligned with engine.project.project_all defaults.
 from __future__ import annotations
 
 # Live CLI / re-solve defaults (engine.project.project_all)
+# E044-A promote (2026-09-06): v2am_fpla. Pre-fpla ablation control = v2am_s.
 PRODUCTION = {
-    "minutes_version": "v2am_s",
+    "minutes_version": "v2am_fpla",
     "rates_version": "v1",
     "strategy": "balanced",
     "horizon_resolv": 6,

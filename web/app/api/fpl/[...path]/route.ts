@@ -4,27 +4,27 @@ import { NextResponse } from "next/server";
  * Server-side proxy for the FPL API, which sends no Access-Control-Allow-Origin
  * header and so cannot be called from the browser.
  *
- * Only the read-only endpoints the UI needs are allowed through, and each has a
- * revalidate window so Vercel's data cache absorbs traffic. Without this a live
- * gameweek would hit the upstream API once per viewer per poll.
+ * Calendar / entry state (bootstrap, entry) is never cached — My team and
+ * deadlines must track live FPL. Short revalidate windows remain only for
+ * high-churn or high-traffic reads (live points, fixtures, leagues).
  */
 const UPSTREAM = "https://fantasy.premierleague.com/api";
 
+/** revalidate: 0 → fetch with cache: "no-store" and Cache-Control: no-store */
 const ALLOWED: { pattern: RegExp; revalidate: number }[] = [
-  // Prices, ownership and injury news. Changes at most a few times a day.
-  { pattern: /^bootstrap-static$/, revalidate: 600 },
+  // Current / next GW flags and deadlines — must stay live.
+  { pattern: /^bootstrap-static$/, revalidate: 0 },
   { pattern: /^fixtures$/, revalidate: 60 },
-  // In-play points. The only endpoint that needs to be near-live.
   { pattern: /^event\/\d{1,2}\/live$/, revalidate: 60 },
-  // A manager's own squad.
-  { pattern: /^entry\/\d+$/, revalidate: 300 },
-  { pattern: /^entry\/\d+\/event\/\d{1,2}\/picks$/, revalidate: 300 },
-  { pattern: /^entry\/\d+\/history$/, revalidate: 300 },
-  { pattern: /^entry\/\d+\/transfers$/, revalidate: 300 },
-  { pattern: /^element-summary\/\d+$/, revalidate: 600 },
+  // Manager entry state — current_event, points, history.
+  { pattern: /^entry\/\d+$/, revalidate: 0 },
+  { pattern: /^entry\/\d+\/event\/\d{1,2}\/picks$/, revalidate: 0 },
+  { pattern: /^entry\/\d+\/history$/, revalidate: 0 },
+  { pattern: /^entry\/\d+\/transfers$/, revalidate: 0 },
+  { pattern: /^element-summary\/\d+$/, revalidate: 300 },
   { pattern: /^leagues-classic\/\d+\/standings$/, revalidate: 120 },
   { pattern: /^leagues-h2h\/\d+\/standings$/, revalidate: 120 },
-  { pattern: /^dream-team\/\d{1,2}$/, revalidate: 300 },
+  { pattern: /^dream-team\/\d{1,2}$/, revalidate: 120 },
 ];
 
 export async function GET(
@@ -44,9 +44,12 @@ export async function GET(
 
   try {
     const qs = new URL(request.url).search;
+    const live = rule.revalidate === 0;
     const upstream = await fetch(`${UPSTREAM}/${route}/${qs}`, {
       headers: { "User-Agent": "fpl-model/1.0 (research viewer)" },
-      next: { revalidate: rule.revalidate },
+      ...(live
+        ? { cache: "no-store" as const }
+        : { next: { revalidate: rule.revalidate } }),
     });
 
     if (!upstream.ok) {
@@ -58,9 +61,11 @@ export async function GET(
 
     return NextResponse.json(await upstream.json(), {
       headers: {
-        "Cache-Control": `public, s-maxage=${rule.revalidate}, stale-while-revalidate=${
-          rule.revalidate * 4
-        }`,
+        "Cache-Control": live
+          ? "no-store, must-revalidate"
+          : `public, s-maxage=${rule.revalidate}, stale-while-revalidate=${
+              rule.revalidate * 4
+            }`,
       },
     });
   } catch {

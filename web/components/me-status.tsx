@@ -13,6 +13,7 @@ import {
   type MyTeamPick,
 } from "@/lib/fpl-account";
 import { fplFetch, type FplEntry, type FplHistoryRow } from "@/lib/fpl-entry";
+import { deadlineUpcoming, resolveCurrentGw, resolveNextEvent } from "@/lib/fpl-events";
 import { dec, formatDeadline, pct, price } from "@/lib/format";
 import { ELEMENT_POS } from "@/lib/fpl-rules";
 import type { ComparePoolPlayer } from "@/lib/team-compare";
@@ -374,9 +375,13 @@ function StatusHero({
   teams: Map<number, string>;
   projections: Map<number, ComparePoolPlayer>;
 }) {
-  const next = events.find((e) => e.is_next) ?? events.find((e) => !e.finished);
+  const next = resolveNextEvent(events);
   const upcoming = events
-    .filter((e) => !e.finished && e.id !== next?.id && e.id > (next?.id ?? 0))
+    .filter((e) => e.id !== next?.id && deadlineUpcoming(e.deadline_time))
+    .sort(
+      (a, b) =>
+        new Date(a.deadline_time!).getTime() - new Date(b.deadline_time!).getTime(),
+    )
     .slice(0, 3);
   const clock = useCountdown(next?.deadline_time ?? null);
 
@@ -525,7 +530,8 @@ function StatusInner({ pool }: { pool: ComparePoolPlayer[] }) {
     if (bootRes.ok) setBoot(bootRes.data);
     if (teamRes.ok) setTeam(teamRes.data);
 
-    const gw = entryRes.data.current_event ?? 1;
+    const events = bootRes.ok ? (bootRes.data.events ?? []) : [];
+    const gw = resolveCurrentGw(entryRes.data.current_event, events);
     const dreamRes = await fplFetch<{ team?: DreamPick[] }>(`dream-team/${gw}`);
     setDream(dreamRes.ok ? (dreamRes.data.team ?? []) : []);
     setLoading(false);
@@ -536,7 +542,7 @@ function StatusInner({ pool }: { pool: ComparePoolPlayer[] }) {
   }, [load]);
 
   const events = boot?.events ?? [];
-  const gw = entry?.current_event ?? events.find((e) => e.is_current)?.id ?? 1;
+  const gw = resolveCurrentGw(entry?.current_event, events);
   const eventRow = events.find((e) => e.id === gw);
   const latestHist = history.find((h) => h.event === gw) ?? history.at(-1);
   const seasonTransfers = history.reduce((sum, h) => sum + (h.event_transfers ?? 0), 0);

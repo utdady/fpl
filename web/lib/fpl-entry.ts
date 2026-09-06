@@ -59,7 +59,7 @@ export type FplTransfer = {
 export async function fplFetch<T>(
   path: string,
 ): Promise<{ ok: true; data: T } | { ok: false; status: number }> {
-  const response = await fetch(`/api/fpl/${path}`);
+  const response = await fetch(`/api/fpl/${path}`, { cache: "no-store" });
   if (!response.ok) return { ok: false, status: response.status };
   return { ok: true, data: (await response.json()) as T };
 }

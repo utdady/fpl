@@ -1,0 +1,2 @@
+season,e024_gate,ctrl_mae60,treat_mae60,ctrl_xicap_mean,treat_xicap_mean,ctrl_season_cap,treat_season_cap,ctrl_xi0,treat_xi0,ctrl_xi0_n,treat_xi0_n,g_treat_mean,n_blended,n_gw,xi0_ok,mae60_ok,xicap_ok
+2025-26,FAIL,2.470642,2.448055,55.815789,54.052632,2121.0,2054.0,6.937799,3.827751,418,418,5.085973,29645,38,True,True,False

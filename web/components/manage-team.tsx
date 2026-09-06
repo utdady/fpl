@@ -19,6 +19,7 @@ import {
   type PendingTransfer,
 } from "@/lib/fpl-account";
 import { fplFetch } from "@/lib/fpl-entry";
+import { resolveCurrentGw, resolveNextEvent } from "@/lib/fpl-events";
 import { formatDeadline, price } from "@/lib/format";
 import {
   CHIP_LABEL,
@@ -31,7 +32,9 @@ import {
 import type { ComparePoolPlayer } from "@/lib/team-compare";
 import type { Position } from "@/lib/types";
 import { useSession } from "@/lib/use-session";
+import { SuggestPlans } from "./suggest-plans";
 import { TransferPickerPanel } from "./transfer-picker";
+import type { SuggestPlan } from "@/lib/suggest";
 
 type EventRow = {
   id: number;
@@ -39,6 +42,7 @@ type EventRow = {
   deadline_time: string | null;
   is_current: boolean;
   is_next: boolean;
+  finished: boolean;
 };
 
 function ensureCaptainInXi(picks: MyTeamPick[]): MyTeamPick[] {
@@ -203,8 +207,8 @@ export function ManageTeam({
     return map;
   }, [elements, pool]);
 
-  const nextEvent = events.find((e) => e.is_next) ?? events.find((e) => e.is_current);
-  const eventId = nextEvent?.id ?? gw;
+  const nextEvent = resolveNextEvent(events);
+  const eventId = nextEvent?.id ?? resolveCurrentGw(gw, events);
 
   const wcActive =
     team?.chips.some(
@@ -383,6 +387,66 @@ export function ManageTeam({
     setInspectId(null);
     setQuery("");
     setError(null);
+  }
+
+  function stagePlan(plan: SuggestPlan) {
+    if (!team) return;
+    setError(null);
+    const nextPicks = team.picks.map((p) => ({ ...p }));
+    const pendingNext: PendingTransfer[] = [];
+    for (const m of plan.moves) {
+      const idx = nextPicks.findIndex((p) => p.element === m.out_id);
+      if (idx < 0) {
+        setError(`Plan outgoing ${m.out_name} is not in the saved squad`);
+        return;
+      }
+      const outgoing = nextPicks[idx];
+      const incoming = elements.get(m.in_id);
+      if (!incoming) {
+        setError(`Unknown player ${m.in_name}`);
+        return;
+      }
+      if (nextPicks.some((p) => p.element === incoming.id)) {
+        setError(`${incoming.web_name} is already in the squad`);
+        return;
+      }
+      pendingNext.push({
+        element_in: incoming.id,
+        element_out: outgoing.element,
+        purchase_price: incoming.now_cost,
+        selling_price: outgoing.selling_price,
+      });
+      nextPicks[idx] = {
+        ...outgoing,
+        element: incoming.id,
+        purchase_price: incoming.now_cost,
+        selling_price: incoming.now_cost,
+      };
+    }
+    const teamIds = nextPicks
+      .map((p) => elements.get(p.element)?.team ?? byElement.get(p.element)?.teamId)
+      .filter((id): id is number => id != null);
+    const clubs = clubLegal(teamIds);
+    if (clubs) {
+      setError(clubs);
+      return;
+    }
+    const nextBank =
+      (team.transfers.bank ?? 0) +
+      pendingNext.reduce((sum, t) => sum + t.selling_price - t.purchase_price, 0);
+    if (nextBank < 0) {
+      setError(`Need ${price(-nextBank)} more in the bank`);
+      return;
+    }
+    setPending(pendingNext);
+    setPicks(nextPicks);
+    setNotice(
+      pendingNext.length === 1
+        ? "Staged 1 transfer — confirm below"
+        : `Staged ${pendingNext.length} transfers — confirm below`,
+    );
+    setInspectId(null);
+    setPickerFor(null);
   }
 
   async function savePicks(chip: string | null) {
@@ -727,6 +791,8 @@ export function ManageTeam({
           </div>
 
           {clubError && <p className="text-[12px] text-risk">{clubError}</p>}
+
+          <SuggestPlans pendingCount={pending.length} onStage={stagePlan} />
 
           <ManagePitch
             xi={cells.xi}

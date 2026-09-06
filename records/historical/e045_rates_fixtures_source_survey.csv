@@ -1,0 +1,7 @@
+source,snapshot_timestamp,pre_deadline_proof,seasons_gws_covered,fields,identity_join,reproducible,harness_gap,verdict
+Randdalf/fplcache bootstrap — ep_this/ep_next,path UTC (E044 selection: last snap <= deadline),same as E044; 152/152 panel cells,panel 152/152; sample ep_full=36/36,"ep_this, ep_next (official FPL expected points)",elements[].id / code,yes — pin SHA + E044 coverage CSV,HARNESS_SPEC excludes ep_next; harness forces None,PASS
+Randdalf/fplcache bootstrap — teams[] strengths,path UTC (E044 selection),same as E044,"sampled GWs (1, 5, 10, 15, 20, 25, 30, 35, 38); drift_max_teams=20","strength,strength_overall_home,strength_overall_away,strength_attack_home,strength_attack_away,strength_defence_home,strength_defence_away",teams[].id,yes,harness uses season teams.csv (often static/end); mid-season path unclear,PASS_CANDIDATE
+Randdalf/fplcache bootstrap — fixture book,n/a,n/a,none — fixtures array absent from bootstrap-static,kickoff_time / event assignment,n/a,n/a,static Vaastav fixtures.csv (E043 caveat),REJECT
+Vaastav season-end / static teams.csv + fixtures.csv,none / season dump,no,full panel as static files,strength_*; kickoff_time,id,yes,already used; not a new dated archive,REJECT
+Live FPL api/bootstrap-static + api/fixtures,request time,N/A historical,current only,"ep_*, strengths, fixtures",id,live only,no historical panel,REJECT
+Internet Archive fixtures endpoint,Wayback ts,when ts <= deadline,sparse (not surveyed to panel density),kickoffs,fixture id,CDX,dated fixture book candidate class,REJECT_FOR_PANEL_PENDING_SPARSE

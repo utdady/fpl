@@ -119,7 +119,7 @@ def resolve_rates(
     as_of_gw: int = 1,
     recent_minutes: dict[int, int] | None = None,
 ) -> dict[str, float]:
-    if rates_version == "v1":
+    if rates_version in {"v1", "v1_ep"}:
         return rates_for_v1(player)
     if rates_version in {"v2b", "v2b_d", "v2b_e"}:
         from engine.rates_v2b import rates_for_v2b, rates_for_v2b_d, rates_for_v2b_e
@@ -138,7 +138,7 @@ def resolve_rates(
                 recent4=(recent_minutes or {}).get(player.id, 0),
             )
         return rates_for_v2b(player, px, pa)
-    raise ValueError("rates_version must be 'v1', 'v2b', 'v2b_d', or 'v2b_e'")
+    raise ValueError("rates_version must be 'v1', 'v1_ep', 'v2b', 'v2b_d', or 'v2b_e'")
 
 
 
@@ -300,28 +300,37 @@ def project_all(
     horizon: int,
     strategy: str,
     seed: int = 7,
-    minutes_version: str = "v2am_s",
+    minutes_version: str = "v2am_fpla",
     p_start_map: dict[str, float] | None = None,
     rates_version: str = "v1",
     fixtures_version: str = "v1",
     share_diags_out: list | None = None,
     sched_diags_out: list | None = None,
+    fpla_diags_out: list | None = None,
+    ep_diags_out: list | None = None,
+    fpls_diags_out: list | None = None,
 ) -> list[PlayerProjection]:
     if strategy not in STRATEGIES:
         raise ValueError(f"strategy must be one of {STRATEGIES}")
-    if minutes_version not in {"v1", "v2am", "v2am_s", "v2am_share", "v2am_sched", "v2c", "v2c_e"}:
+    if minutes_version not in {
+        "v1", "v2am", "v2am_s", "v2am_share", "v2am_sched", "v2am_fpla", "v2c", "v2c_e"
+    }:
         raise ValueError(
             "minutes_version must be 'v1', 'v2am', 'v2am_s', 'v2am_share', "
-            "'v2am_sched', 'v2c', or 'v2c_e'"
+            "'v2am_sched', 'v2am_fpla', 'v2c', or 'v2c_e'"
         )
-    if rates_version not in {"v1", "v2b", "v2b_d", "v2b_e"}:
-        raise ValueError("rates_version must be 'v1', 'v2b', 'v2b_d', or 'v2b_e'")
-    if fixtures_version not in {"v1", "v2d"}:
-        raise ValueError("fixtures_version must be 'v1' or 'v2d'")
+    if rates_version not in {"v1", "v1_ep", "v2b", "v2b_d", "v2b_e"}:
+        raise ValueError("rates_version must be 'v1', 'v1_ep', 'v2b', 'v2b_d', or 'v2b_e'")
+    if fixtures_version not in {"v1", "v1_fpls", "v2d"}:
+        raise ValueError("fixtures_version must be 'v1', 'v1_fpls', or 'v2d'")
     if minutes_version == "v2am" and p_start_map is None:
         raise ValueError("v2am requires a leave-one-season-out p_start_map")
     if minutes_version != "v2am":
         p_start_map = None
+    # v1_ep uses v1 event rates internally; ep blend applied after projections.
+    rates_for_sim = "v1" if rates_version == "v1_ep" else rates_version
+    # v1_fpls uses v1 ATK/CONCEDE after hydrating Team.strength_* from fplcache.
+    fixtures_for_sim = "v1" if fixtures_version == "v1_fpls" else fixtures_version
     next_e = snapshot.next_event()
     gw_ids = []
     for e in snapshot.events:
@@ -330,16 +339,16 @@ def project_all(
 
     rates_priors: dict[int, tuple[float, float]] | None = None
     fixture_strengths = None
-    if rates_version in {"v2b", "v2b_d", "v2b_e"} or fixtures_version == "v2d":
+    if rates_for_sim in {"v2b", "v2b_d", "v2b_e"} or fixtures_for_sim == "v2d":
         from engine.harness import SEASON_LABEL
 
         label_to_season = {v: k for k, v in SEASON_LABEL.items()}
         season_key = label_to_season.get(snapshot.season_label)
-        if season_key and rates_version in {"v2b", "v2b_d", "v2b_e"}:
+        if season_key and rates_for_sim in {"v2b", "v2b_d", "v2b_e"}:
             from engine.rates_v2b import build_rates_priors_for_snapshot
 
             rates_priors = build_rates_priors_for_snapshot(season_key, snapshot)
-        if season_key and fixtures_version == "v2d":
+        if season_key and fixtures_for_sim == "v2d":
             from engine.fixtures_v2d import strengths_for_season
 
             fixture_strengths = strengths_for_season(season_key)
@@ -349,7 +358,9 @@ def project_all(
     recent: dict[int, int] = {}
     apply_recent = False
     season_key: str | None = None
-    if minutes_version in {"v2am_s", "v2am_share", "v2am_sched", "v2c", "v2c_e"} or rates_version == "v2b_e":
+    if minutes_version in {
+        "v2am_s", "v2am_share", "v2am_sched", "v2am_fpla", "v2c", "v2c_e"
+    } or rates_for_sim == "v2b_e" or rates_version == "v1_ep" or fixtures_version == "v1_fpls":
         from engine.harness import SEASON_LABEL, recent_minutes_by_element
 
         label_to_season = {v: k for k, v in SEASON_LABEL.items()}
@@ -357,8 +368,23 @@ def project_all(
         if season_key and as_of_gw > RECENT_WINDOW:
             recent = recent_minutes_by_element(season_key, as_of_gw, window=RECENT_WINDOW)
             apply_recent = minutes_version in {
-                "v2am_s", "v2am_share", "v2am_sched", "v2c", "v2c_e"
+                "v2am_s", "v2am_share", "v2am_sched", "v2am_fpla", "v2c", "v2c_e"
             }
+
+    fpls_diags: list = []
+    if fixtures_version == "v1_fpls":
+        from engine.fplcache_strength import hydrate_snapshot_teams
+
+        if not season_key:
+            from engine.harness import SEASON_LABEL
+
+            label_to_season = {v: k for k, v in SEASON_LABEL.items()}
+            season_key = label_to_season.get(snapshot.season_label)
+        snapshot, fpls_diags = hydrate_snapshot_teams(
+            snapshot, season=season_key, as_of_gw=as_of_gw
+        )
+        if fpls_diags_out is not None:
+            fpls_diags_out.extend(fpls_diags)
     if minutes_version in {"v2c", "v2c_e"}:
         from engine.minutes_v2c import build_role_start_v2c, build_role_start_v2c_e
 
@@ -416,6 +442,23 @@ def project_all(
         )
         if sched_diags_out is not None:
             sched_diags_out.extend(diags)
+    elif minutes_version == "v2am_fpla":
+        from engine.minutes_v2am_fpla import build_role_start_v2am_fpla
+
+        if not season_key:
+            from engine.harness import SEASON_LABEL
+
+            label_to_season = {v: k for k, v in SEASON_LABEL.items()}
+            season_key = label_to_season.get(snapshot.season_label)
+        role_start, players_for_proj, diags = build_role_start_v2am_fpla(
+            snapshot.players,
+            season=season_key,
+            as_of_gw=as_of_gw,
+            recent_minutes=recent,
+            apply_recent=apply_recent,
+        )
+        if fpla_diags_out is not None:
+            fpla_diags_out.extend(diags)
     elif minutes_version == "v2am_s":
         role_start = build_role_start_struct(
             snapshot.players, recent_minutes=recent, apply_recent=apply_recent
@@ -423,7 +466,10 @@ def project_all(
     else:
         role_start = build_role_start(snapshot.players)
     out: list[PlayerProjection] = []
-    for player in snapshot.players:
+    proj_players = (
+        players_for_proj if minutes_version == "v2am_fpla" else snapshot.players
+    )
+    for player in proj_players:
         by_gw = {}
         h_mu = 0.0
         h_var = 0.0
@@ -439,11 +485,11 @@ def project_all(
                 gw_rng,
                 role_start,
                 p_start_map=p_start_map,
-                rates_version=rates_version,
+                rates_version=rates_for_sim,
                 rates_priors=rates_priors,
                 as_of_gw=as_of_gw,
                 recent_minutes=recent,
-                fixtures_version=fixtures_version,
+                fixtures_version=fixtures_for_sim,
                 fixture_strengths=fixture_strengths,
             )
             by_gw[gw] = pred
@@ -467,4 +513,23 @@ def project_all(
                 next_utility=utility(nxt.mu, nxt.sigma, nxt.p_10_plus, strategy),
             )
         )
+    if rates_version == "v1_ep":
+        from engine.rates_v1_ep import apply_ep_blend
+
+        live_ep = None
+        if not season_key:
+            live_ep = {
+                p.id: float(p.ep_next)
+                for p in snapshot.players
+                if p.ep_next is not None
+            } or None
+        out, ep_diags = apply_ep_blend(
+            out,
+            season=season_key,
+            as_of_gw=as_of_gw,
+            strategy=strategy,
+            live_ep=live_ep,
+        )
+        if ep_diags_out is not None:
+            ep_diags_out.extend(ep_diags)
     return out

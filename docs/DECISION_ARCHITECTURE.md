@@ -338,7 +338,8 @@ H-MC1 Phase A ran. **Concentrated (negative).**
 E024–E036   packaging / displacement / proxy decomposition / H-MC1
 ```
 
-Production unchanged: `v2am_s` + `rates=v1` + fixtures `v1`.
+Production (as of E044-A promote): `v2am_fpla` + `rates=v1` + fixtures `v1`.
+(`v2am_s` remains the pre-fpla minutes ablation control.)
 
 Do **not** promote `rates_v2b` on FAIL evidence. PASS ≠ auto-promote.
 

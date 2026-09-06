@@ -1,0 +1,11 @@
+verdict=PASS
+primary_observable=fplcache_bootstrap_ep_next
+e044_panel_cells=152
+ep_sample_full=36/36
+strength_drift_max_teams=20
+strength_any_diff_vs_vaastav=True
+fixture_book_in_fplcache_bootstrap=False
+note=Randdalf/fplcache pre-deadline bootstrap carries ep_this/ep_next for all sampled cells; E044 already proved 152/152 snap<=deadline coverage. Harness currently forces ep_next=None (excluded). This is a new dated rates-adjacent observable — not a rates_v2b/fixtures_v2d reopen. Fixture kickoff book is NOT in bootstrap-static (fixtures key absent). Team strength mid-season drift_max=20; any_diff_vs_vaastav_teams=True.
+survey_csv=C:/Users/addyb/fpl/records/historical/e045_rates_fixtures_source_survey.csv
+sample_csv=C:/Users/addyb/fpl/records/historical/e045_fplcache_ep_strength_sample.csv
+drift_csv=C:/Users/addyb/fpl/records/historical/e045_fplcache_strength_drift.csv

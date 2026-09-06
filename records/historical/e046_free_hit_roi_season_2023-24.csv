@@ -1,0 +1,2 @@
+season,e024_gate,n_gw,n_excluded,held_freeze_gw,r_b0,r_b1,r_c,delta_c_b0,delta_c_b1,delta_b1_b0,t_star,g_star,g_star_effective,u_fh_star,u_blank_star,u_held_star
+2023-24,PASS,38,0,1,1660.0,1700.0,1668.0,8.0,-32.0,40.0,25,20,20,57.5168,86.2136,28.6968

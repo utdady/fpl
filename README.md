@@ -15,9 +15,11 @@ The **ILP optimizer** picks a legal fifteen, XI, and captain. The **research vie
 python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 python fpl.py --horizon 6 --strategy balanced
+python fpl.py suggest --squad myteam.json
+python fpl.py suggest --squad myteam.json --allow-hit --json
 ```
 
-Strategies: `safe`, `balanced`, `aggressive`.
+Strategies: `safe`, `balanced`, `aggressive`. `suggest` ranks transfers from an owned 15 (current production projections; not V5/V7). My team Transfers can run the same command locally.
 
 ## Live track (2026/27)
 

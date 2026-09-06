@@ -57,8 +57,11 @@ Required seasons:
 | Current-season cumulative stats | Only through GW N-1 | Current season merged GW files |
 | Team strength | Yes (season-start) | `teams.csv` strength_overall_home/away |
 | Fixtures for GW N | Yes, marked unfinished | `fixtures.csv` |
-| `ep_next` / official xP | **Excluded** | Vaastav documents xP timing leakage risk |
-| `chance_this` / `news` | **Excluded** | Not reliably timestamped historically |
+| `ep_next` / official xP (undated Vaastav) | **Excluded** | Vaastav documents xP timing leakage risk (E008) |
+| `ep_next` from dated fplcache | **Allowed only for `rates_version=v1_ep`** | Last Randdalf/fplcache snap ≤ GW deadline (E045 / E045-A); never Vaastav `xP` |
+| `chance_this` / `news` (undated) | **Excluded** | Not reliably timestamped in Vaastav season dumps |
+| `teams[]` `strength_overall_*` from dated fplcache | **Allowed only for `fixtures_version=v1_fpls`** | Last snap ≤ deadline (E047 / E047-A); replaces static `teams.csv` strengths only; ATK/CONCEDE unchanged; not `fixtures_v2d` |
+| `status` / `chance_*` / `can_select` from dated fplcache | **Allowed only for `minutes_version=v2am_fpla`** | Last Randdalf/fplcache snap ≤ GW deadline (E044 / E044-A); never season-end `players_raw` |
 | GW N actual points | **Scoring only** | `gws/gw{N}.csv` after freeze |
 
 ### Critical rule

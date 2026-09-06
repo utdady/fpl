@@ -309,7 +309,8 @@ add a declaration to `formal/` before production integration.
 ## 12. Current research call
 
 ```text
-PRODUCTION     v2am_s + rates=v1 + fixtures v1  (horizon squad objective)
+PRODUCTION     v2am_fpla + rates=v1 + fixtures v1  (horizon squad objective)
+               (v2am_s = pre-fpla minutes control; V1 = permanent historical)
 CLOSED         E024–E038; rates_v2b promote; E039-A V_ns λ=0.5 (KILL)
 ACTIVE         none — Phase-0 fork open
 NOT NEXT       λ sweep; optimizer on dead E039-A

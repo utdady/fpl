@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from engine.models import PlayerProjection, Snapshot, SquadSolution
+from engine.suggest import SuggestResult
 
 
 def _money(tenths: int) -> str:
@@ -114,4 +115,35 @@ def render(
         "Notes: xP is minutes- and fixture-adjusted. sd / P10+ come from an event simulation, "
         "not a second ML model. FDR is not used as the fixture engine; team overall strength is."
     )
+    return "\n".join(lines)
+
+
+def render_suggestions(result: SuggestResult) -> str:
+    lines = [
+        f"source: {result.source}",
+        f"Next GW {result.next_gw}   roll XI+C μ {result.roll_mu:.2f}",
+        "",
+        _row(["k", "hit", "Δμ", "XI+C μ", "bank", "moves", "C"], [3, 4, 7, 7, 6, 36, 14]),
+    ]
+    for plan in result.plans:
+        if plan.moves:
+            moves = ", ".join(f"{m.out_name}→{m.in_name}" for m in plan.moves)
+        else:
+            moves = "(roll)"
+        lines.append(
+            _row(
+                [
+                    str(plan.k),
+                    str(plan.hit),
+                    f"{plan.delta_mu:+.2f}",
+                    f"{plan.next_xi_mu:.2f}",
+                    _money(plan.bank),
+                    moves,
+                    plan.captain,
+                ],
+                [3, 4, 7, 7, 6, 36, 14],
+            )
+        )
+    lines.append("")
+    lines.append("Not advice to hit confirm. Score is next-GW XI+C μ minus hit.")
     return "\n".join(lines)

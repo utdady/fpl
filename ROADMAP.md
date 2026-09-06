@@ -168,7 +168,7 @@ python -m engine.capture --gw 1 --diagnostics
 
 **Model provenance:** UI labels **frozen record** vs **live re-solve** via
 `engine/model_config.py` → `manifest.json` (`production` vs `controls.v1_gw1_baseline`).
-Frozen GW1 pool stays V1 even when production runs `v2am_s`.
+Frozen GW1 pool stays V1 even when production runs `v2am_fpla`.
 
 See `web/README.md` for deploy, export cadence, and colour law.
 
@@ -198,7 +198,8 @@ See docs/FORMAL.md for post-GW1 evaluation invariants (not a V2 gate).
 **Research tree (parallel branches, not a forced ladder):**
 
 ```text
-V2A-M / v2am_s + rates_v1     ✅ production baseline
+V2A-M / v2am_fpla + rates_v1     ✅ production baseline (E044-A promote)
+V2A-M / v2am_s                   pre-fpla minutes control / ablation
   │
   ├── Rate research
   │     E016 → E017 → E018 → ❌ club-prior family retired (E018s: B)
@@ -216,7 +217,9 @@ V2A-M / v2am_s + rates_v1     ✅ production baseline
 **V2A-M - Minutes / availability (FROZEN)**
 Implementation: `minutes_version=v2am_s` — soft max 0.85; cold 0.55 / hot 0.72 from last-4 GW minutes post-GW4; no new-club prior; no bucket remap.
 E015: XI 0-min roughly halved on all four seasons; XI+Cap / upper-tail / MAE_60+ all PASS.
-**Do not retune.** Production default = `v2am_s`. V1 remains permanent historical control (harnesses pin `minutes_version=v1`).
+**Do not retune `availability()`.** Production default = `v2am_fpla` (E044-A).
+`v2am_s` remains the pre-fpla minutes control. V1 remains permanent historical
+control (harnesses pin `minutes_version=v1`).
 
 **V2B / rates — Club-prior family (RETIRED after E018s)**
 E016/E017/E018 all improved MAE/Sp; decision gates never clean. E018s: information useful but unsafe under ILP (**B**). **rates stay v1.** Packaged rates (E024/E024b) cleared XI0 but Cap remains valuation error among reliable players — not fixed by prior retunes or q.
@@ -248,7 +251,8 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 **Phase 0 (2026-09-04) — permanent boundary + forked roadmap**
 
 ```text
-Production:        v2am_s + rates=v1 + fixtures v1
+Production:        v2am_fpla + rates=v1 + fixtures v1
+                   (v2am_s = pre-fpla minutes control; V1 = permanent historical)
 Closed research:   rates_v2b (decision/season promote CLOSED; reopen = new prereg)
 Research candidates: structural V_C / non-separable portfolio value (E039+)
 Upstream candidates: role/minutes (new hyp; E038 gates; not E017 reopen)
@@ -343,10 +347,16 @@ minutes≥800. No target-GW KO. Treat `v2am_sched`. Implement next.
 variants on that observable. Reopen needs a distinct signal (+ dated fixture book
 if target-fixture timing).
 
-**E044 preregistered (2026-09-06):** Upstream **data-capability** — historical
-decision-time availability-source feasibility. Provenance only (no projection /
-Cap peek). PASS → one availability signal card; FAIL → keep `v2am_s`, no third
-Vaastav minutes proxy. See `docs/LAB_LOG.md` E044; charter §26.
+**E045-A KILL + family CLOSED (2026-09-06):** Dated fplcache `ep_next` μ-blend
+(`rates=v1_ep`, λ=0.35) killed — XI0 regress on 2023-24; FAIL Cap regress on
+2025-26. No λ/`ep_this`/Vaastav reopen on that map. Production stays
+`v2am_fpla` + `rates=v1`. Strengths-drift and fixture-book remain separate
+parked cards. See `docs/LAB_LOG.md` E045-A gate; charter §29.
+
+**E047-A SURVIVES identity-null + family CLOSED (2026-09-06):** Dated
+`strength_overall_*` replace into v1 ATK/CONCEDE is inert (`_str`→5). No promote.
+Strength→xg redesign needs a **new** prereg. See `docs/LAB_LOG.md` E047-A gate;
+charter §32.
 
 ---
 
@@ -525,6 +535,20 @@ POST-GW1 (research)
   E043-A KILL: XI0/MAE/FAIL-Cap miss; production stays v2am_s; no threshold retune
   E043-A family CLOSED: lagged PL short-turnaround-gap; distinct signal to reopen
   E044 preregistered: decision-time availability-source feasibility (provenance only)
+  E044 survey PASS: Randdalf/fplcache 152/152 pre-deadline; E044-A next
+  E044-A freeze: v2am_fpla = fplcache hydrate → existing availability(); gate next
+  E044-A SURVIVES + promoted: v2am_fpla production default; XI0/MAE/FAIL-Cap/AGG clear
+  Tier-1: doc drift fixed to v2am_fpla; live availability_monitor in capture diagnostics
+  E045 preregistered: rates/fixtures archival feasibility (provenance only; not derived reopen)
+  E045 survey PASS: fplcache ep_next (152/152); strengths drift; no fixture book in bootstrap
+  E045-A freeze: rates=v1_ep = (1-λ)μ0+λ·ep_next, λ=0.35; not Vaastav xP; gate next
+  E045-A KILL + family CLOSED: XI0✗ 2023-24; FAIL Cap✗ 2025-26; production stays rates=v1
+  E046 preregistered: FH-only; sticky-held/0-FT; U_FH=XI lift; WC out; degeneracy lock
+  E046-A freeze: g*=20; U_FH=next_xi_utility blank-held; evaluator next
+  E046-A SURVIVES: AGG+FAIL clear (C beats B1 by +2 AGG); FH unwired (fragile)
+  E047-A freeze: fixtures=v1_fpls = dated strength_overall replace; not v2d; gate next
+  E047-A SURVIVES identity-null + CLOSED: _str clamps all overall to 5; no promote
+  NEXT: optional FH wire / WC / strength→xg redesign prereg; no silent _str patch
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

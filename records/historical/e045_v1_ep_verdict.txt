@@ -1,0 +1,2 @@
+VERDICT: KILL
+XI0_all=False MAE_all=True FAIL_Cap=False AGG_ok=True

@@ -4,17 +4,17 @@ Living record of hypotheses, tests, and results. **Append new experiments; do no
 
 Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`, `docs/V2_SPEC.md`, `docs/FORMAL.md`, `docs/PORTFOLIO_VALUE_SPEC.md`, `docs/DECISION_CHARTER.md`.
 
-**Production (post E015 promote):** `minutes_version=v2am_s` (`v2am-s-baseline`).  
-**Permanent historical control:** V1 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.  
-**Active research question:** **E044 preregistered** — historical decision-time
-availability-source feasibility (provenance only). E042/E043 families CLOSED.
-Production `v2am_s`. No minutes heuristic until a dated source PASSes.
+**Production (post E044-A promote):** `minutes_version=v2am_fpla` + `rates=v1` +
+fixtures `v1`. Pre-fpla minutes control: `v2am_s`. Permanent historical control: V1
+(`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.
+**Active research question:** none forced. E047-A closed as identity-null
+(strength hydrate inert under `_str`→5). FH unwired. Production unchanged.
 
 ---
 
 ## Two freezes (pre-registered 2026-08-18, before E008/E009)
 
-**Production freeze (GW1 era)** — V1.0 projection, minutes, fixtures, coefficients, optimizer, objective. Generated the Friday GW1 team. Superseded for *live* production by `v2am-s-baseline` after E015; V1 remains the permanent historical benchmark.
+**Production freeze (GW1 era)** — V1.0 projection, minutes, fixtures, coefficients, optimizer, objective. Generated the Friday GW1 team. Superseded for *live* production by `v2am-s-baseline` after E015, then by **`v2am_fpla`** after E044-A (2026-09-06). V1 remains the permanent historical benchmark.
 
 **Research calendar** — Historical Lab, E008, E009, conditional MAE, decomposition, V2 spec. May run anytime. Informed **post-GW1** development.
 
@@ -2435,7 +2435,7 @@ SOURCE       Vaastav fixtures.csv kickoffs with event < T only (PL)
 
 ### E044 - Historical decision-time availability-source feasibility (preregistered)
 - **Date:** 2026-09-06
-- **Status:** **preregistered** — **provenance / data-capability only**
+- **Status:** **PASS** (survey) — see survey subsection below
 - **Lane:** Upstream infrastructure (Phase-0). Not a minutes-model experiment.
   E042/E043 families CLOSED. Production `v2am_s` unchanged.
 - **Why now:** E042 (club–position share) and E043 (lagged PL turnaround gap) exhausted
@@ -2485,20 +2485,795 @@ SOURCE       Vaastav fixtures.csv kickoffs with event < T only (PL)
 - **Follow-up:** survey candidate archives (FPL API history mirrors, third-party
   snapshots, self-capture going forward); run provenance checklist; log PASS/FAIL
   before any availability minutes card.
+  → **survey PASS** below.
+
+### E044 survey — availability archive feasibility (2026-09-06)
+- **Status:** **PASS** (provenance / data-capability only)
+- **Script:** `python scripts/e044_availability_source_survey.py`
+- **Artifacts:**
+  - `records/historical/e044_availability_source_survey.{csv,txt}`
+  - `records/historical/e044_fplcache_deadline_coverage.csv`
+- **Primary source:** [Randdalf/fplcache](https://github.com/Randdalf/fplcache) —
+  LZMA `bootstrap-static` snapshots at `cache/{year}/{month}/{day}/{HHMM}.json.xz`
+  (~4×/day). Filename HHMM treated as **UTC**.
+- **Coverage (panel):** **152/152** GW×season cells have a last snapshot
+  \(\le\) `events[].deadline_time` (deadlines read from a near-final season
+  bootstrap). Mean lag ≈ 3.6h; max lag ≈ 6.2h. Same-day **post**-deadline snaps
+  exist and must be excluded.
+- **Fields (new vs harness):** `status`, `chance_of_playing_this_round`,
+  `chance_of_playing_next_round`, `news`, `news_added`.
+- **Join:** `elements[].id` and `elements[].code`.
+- **Rejected (examples):** Vaastav season-end `players_raw` (undated); live API
+  (no history); FPL-Core-Insights By-GW (end-of-GW, incomplete panel); Wayback
+  (sparse); Understat/FBRef lineups (post-KO / wrong observable).
+- **Coverage minimum (frozen for E044-A):** require **38/38** GWs with a
+  pre-deadline fplcache snap on each of {2022-23, 2023-24, 2024-25, 2025-26}
+  under the selection rule above — **met**.
+- **Caveats:** (1) path timestamps assumed UTC; (2) deadlines from near-final
+  bootstrap (final published times), not a mid-season fixture book.
+- **Production:** unchanged (`v2am_s`).
+- **Follow-up:** open **E044-A** to preregister **exactly one** availability
+  signal + map (still no projection until that amendment freezes). Do not fish
+  alternate archives while fplcache PASS stands.
+  → **E044-A** amendment below.
+
+### E044-A — Policy freeze (amendment before implement)
+- **Date:** 2026-09-06 (dated amendment to E044; **before any minutes code**)
+- **Status:** **frozen contract** — implement only this; no knob search after peek
+- **Invariant:** same Snapshot + decision stack as production control; **only** the
+  minutes path may consume decision-time FPL availability fields. Rates,
+  `fixtures_version=v1`, ILP, objective, chips, Cap payoff, panel, and `v2am_s`
+  cold/hot / soft-max **unchanged**. Control harness behavior unchanged
+  (`chance_*=None`; GW1 `status="a"`).
+
+#### Why this reference (exactly one signal)
+E044 cleared a dated archive. The gap vs live is that historical players lack
+official FPL availability at T, so `availability()` is effectively 1.0 for almost
+everyone. E044-A hydrates **only** `status` / `chance_*` / `can_select` from the
+last fplcache snap \(\le\) deadline, then reuses the **existing**
+`engine.minutes.availability(player, 0)` map. No new λ, share, gap, or probability
+caps.
+
+#### Source selection (frozen — E044 survey)
+```text
+ARCHIVE     Randdalf/fplcache  cache/{Y}/{M}/{D}/{HHMM}.json.xz
+SELECT      last snapshot with path-UTC timestamp ≤ events[T].deadline_time
+DEADLINES   events[].deadline_time (near-final bootstrap; 152/152 coverage)
+TZ          filename HHMM = UTC
+JOIN        prefer elements[].id; fallback elements[].code
+PIN         pin fplcache git SHA at implement; optional slim per-GW extracts
+            (id, code, status, chance_this, chance_next, can_select)
+FORBIDDEN   Vaastav season-end players_raw status/chance/news as this signal
+```
+
+#### Signal (frozen)
+From the selected snap, overlay onto treat-arm `Player`s:
+
+| Player field | Snapshot key |
+|---|---|
+| `status` | `status` |
+| `chance_this` | `chance_of_playing_this_round` |
+| `chance_next` | `chance_of_playing_next_round` |
+| `can_select` | `can_select` if present; else `status not in {"u","n"}` |
+
+- **Do not** parse `news` text; `news` may be stored for audit only.
+- **Do not** change `availability()` source code in this card.
+- Horizon: gate uses next-GW / offset-0 path only (same as historical XI+Cap gates).
+
+#### Causal claim (frozen wording)
+Players whom FPL marks unavailable / injured / doubtful / suspended at the decision
+deadline have lower true start probability in that GW than a minutes model that
+ignores those flags.
+
+#### Panel / versions
+```text
+SEASONS      2022-23, 2023-24, 2024-25, 2025-26
+CONTROL      minutes_version=v2am_s, rates=v1, fixtures=v1, balanced, seed=7
+TREAT        minutes_version=v2am_fpla
+FAIL set     {2022-23, 2025-26}
+LIVE         If no historical fplcache path → identity to v2am_s
+             (live API Player fields already feed availability(); do not dual-apply)
+```
+
+#### Eligibility (frozen)
+- **All** positions and minute totals (no 800-minute bar — official flags apply to everyone).
+- Join miss for a player → that player keeps control-side fields (identity for that row).
+- Missing snap for a GW → **entire GW** identity to `v2am_s` (should not occur on panel).
+
+#### Map (adjust via existing availability; do not replace v2am_s)
+```text
+1. b0 = full v2am_s role_start (soft max / cold / hot UNCHANGED)
+2. Overlay fplcache availability fields on treat Players (signal above)
+3. p_start = min(0.97, b0 * availability(player, 0))   # EXISTING function
+4. p_sub / p_60 follow existing minutes_probs leftovers
+```
+```text
+NO NEW KNOBS   no λ, no chance remapping, no extra caps beyond availability()
+NO TUNE        do not edit availability() branches after peek
+```
+
+#### Identity cases (frozen)
+| Case | Rule |
+|---|---|
+| No fplcache snap ≤ deadline for GW T | identity GW → `v2am_s` |
+| Player id/code not in snap | identity for that player |
+| Live / non-historical run | identity (`v2am_s` / existing live Player fields) |
+| Control arm | never read fplcache |
+
+#### HARNESS_SPEC amendment (scoped)
+`chance_*` / decision-time `status` / `can_select` are **allowed for `v2am_fpla` only**
+when sourced from the dated fplcache selection rule above. They remain **excluded** for
+control `v2am_s` and all other minutes versions. Season-end `players_raw` status is
+**not** an allowed source for this signal.
+
+#### Gates (SURVIVE iff all hold — same discipline as E042-A / E043-A)
+1. XI 0-min: treat ≤ control on **all four** seasons
+2. MAE₆₀₊: treat ≤ control on **all four**
+3. FAIL mean XI+Cap: treat ≥ control on **each** FAIL season
+4. AGG mean XI+Cap: treat ≥ control
+5. `g_treat` report + season Cap Σ report (required; not auto-pass)
+
+**KILL** if any of (1)–(4) fail; MAE-only win with FAIL Cap loss; any post-peek edit of
+`availability()` or alternate chance→\(p_{\mathrm{start}}\) map; any use of undated
+Vaastav status/chance; combining E042 share / E043 gap into this card.
+
+#### No-tune / implementation
+- Code may add `minutes_version=v2am_fpla` implementing **only** this contract.
+- No production default flip until SURVIVE + explicit promote.
+- Materialize pinned per-GW extracts if needed for reproducible harness I/O.
+
+- **Follow-up:** implement `v2am_fpla` + harness vs `v2am_s` → gate → log verdict.
+  No projection until this freeze is what the code matches.
+  → **implemented; SURVIVES** below.
+
+### E044-A gate — v2am_fpla vs v2am_s (2026-09-06)
+- **Status:** complete — **SURVIVES**
+- **Code:** `engine/fplcache_avail.py`, `engine/minutes_v2am_fpla.py`;
+  `minutes_version=v2am_fpla`; `python -m engine.harness_v2am_fpla`
+- **Stack:** fplcache hydrate → existing `availability(player, 0)` × `v2am_s` base;
+  rates=v1; fixtures=v1; seed=7
+- **Results (mean XI+Cap / XI0% / MAE₆₀₊):**
+
+  | Season | gate | XI0 c→t | MAE60 c→t | Cap c→t | joined | avail&lt;1 |
+  |---|---|---|---|---|---|---|
+  | 2022-23 | FAIL | 11.5→**6.6** ✓ | 2.576→**2.420** ✓ | 57.1→**59.2** ✓ | 25574 | 8464 |
+  | 2023-24 | PASS | 11.0→**3.6** ✓ | 2.482→**2.361** ✓ | 53.7→**59.8** ✓ | 29510 | 11212 |
+  | 2024-25 | PASS | 10.5→**6.2** ✓ | 2.400→**2.265** ✓ | 56.6→**58.6** ✓ | 27479 | 8666 |
+  | 2025-26 | FAIL | 14.1→**6.9** ✓ | 2.572→**2.471** ✓ | 50.4→**55.8** ✓ | 29645 | 10111 |
+
+- **AGG Cap:** control mean ≈ 54.4 → treat ≈ 58.3 ✓
+- **Artifacts:** `records/historical/v2am_fpla_summary.csv`,
+  `v2am_fpla_diagnostics.csv`, `e044_v2am_fpla_run.log`;
+  slim extracts `data/fplcache_avail/` (gitignored; pin SHA in manifest)
+- **Verdict:** **SURVIVES.** All four XI0/MAE gates; both FAIL Caps; AGG Cap.
+  Decision-time FPL availability is the first minutes lever to clear the full
+  E042-A-style gate set since `v2am_s`.
+- **Follow-up:** → **promote** below (explicit).
+
+### Promote — V2A-M fpla freeze (`v2am_fpla`)
+- **Date:** 2026-09-06
+- **Status:** **promoted** to production minutes default
+- **Production:** `minutes_version=v2am_fpla` + `rates=v1` + fixtures `v1`
+- **Note:** Live without historical fplcache path is identity on API-hydrated
+  `Player` fields (same `availability()` as before). Historical harness uses
+  dated fplcache overlays only.
+- **Control:** `v2am_s` remains the permanent pre-fpla minutes control for
+  ablation; V1 remains the permanent historical benchmark.
+  → **Tier-1 closeout** below.
+
+### Tier-1 closeout — production doc drift + live avail monitor (2026-09-06)
+- **Status:** complete (ops / provenance hygiene; not an experiment)
+- **Why:** After E044-A promote, canonical docs disagreed on current production
+  (`v2am_s` vs `v2am_fpla`). That is load-bearing baseline drift, not cosmetic.
+- **Docs aligned:** LAB_LOG header; DECISION_CHARTER §12 inventory; ROADMAP
+  production baseline; PROJECT / PORTFOLIO_VALUE_SPEC / DECISION_ARCHITECTURE
+  current-production lines. Historical experiment rows that said “production
+  stays `v2am_s`” **at that time** are left unchanged.
+- **Live monitor:** `engine/avail_monitor.py` — share of non-`a` status and count
+  of `availability(player,0)<1` on the live snapshot. Wired into
+  `capture` diagnostics as `availability_monitor` (+ stdout line). Warns on
+  zero demotions (soft API “everyone’s fine” failure mode). **Not** an
+  fplcache reachability check.
+- **Tests:** `tests/test_avail_monitor.py`
+- **Sequencing (logged):** next Upstream card, if taken, is rates/fixtures
+  **archival feasibility** (E044-shaped provenance only — not a reopen of
+  closed derived rates/fixtures families). FH/WC and joint TC/BB remain
+  Product-lane preregs; transfers stay gated.
+  → **E045** preregistered below.
+
+### E045 - Rates/fixtures archival-source feasibility (preregistered)
+- **Date:** 2026-09-06
+- **Status:** **preregistered** — **provenance / data-capability only**
+- **Lane:** Upstream infrastructure (Phase-0). Not a rates or fixtures model card.
+  E044-A promoted. `rates_v2b` promote CLOSED. E021 fixtures_v2d family REJECTED.
+  Production `v2am_fpla` + `rates=v1` + fixtures `v1` **unchanged**.
+- **Why now:** E044’s meta-lesson — derived minutes proxies plateaued until a dated
+  archive restored information live already had. Rates (E016–E018, E024) and
+  fixtures (E021–E023) failed as **derived-signal** branches under the current
+  stack. Before any further rates/fixtures modeling, ask whether the harness
+  **blanks or invents** rates/fixtures-relevant fields the way it used to blank
+  `chance_*`.
+- **Primary question:** Across the four-season panel, is there a **dated,
+  pre-deadline archive** that carries a rates- or fixtures-relevant observable
+  **excluded or only statically available** in the current harness, with enough
+  coverage to support existing decision gates?
+- **Scope lock (frozen):**
+
+  ```text
+  IN SCOPE     survey candidate archives for rates/fixtures-relevant fields;
+               timestamps, coverage, joins, reproducibility; document blanking
+               vs invention in current harness
+  OUT OF SCOPE projection / minutes_version changes; rates_v2b or fixtures_v2d
+               reopen; Cap/MAE/XI0 peeks; any treat-vs-control prediction run;
+               λ/threshold fishing on closed families
+  ```
+
+- **Harness blanking / invention hypotheses (survey targets — pick none until PASS):**
+  1. **Official `ep_this` / `ep_next` from dated bootstrap** — harness forces
+     `ep_next=None` (HARNESS_SPEC / E008 leakage vs undated Vaastav). Question:
+     do pre-deadline fplcache (or equivalent) snaps make official xP as-of-T safe?
+  2. **Mid-season team strength / FDR from dated bootstrap** — harness uses
+     season-start `teams.csv` strength tables. Question: do archived bootstrap
+     `teams[]` strengths (or fixture difficulty) change pre-deadline in ways the
+     static file does not reconstruct?
+  3. **Dated fixture book (kickoffs / event assignment)** — harness uses static
+     season `fixtures.csv` (E043 caveat: final published times). Question: is
+     there a pre-deadline fixture-book archive for target-GW KO / DGW assignment?
+  4. **Other dated rate-adjacent bootstrap fields** (e.g. form, ict, ppg at T) —
+     only if clearly **new vs** current as-of-T merged_gw cumulative stats, not a
+     re-label of fields already allowed through GW N−1.
+
+- **Pass criteria (all required — same shape as E044):**
+  1. **Pre-deadline timestamps** — capture clock ≤ GW deadline (or frozen cutoff).
+  2. **Panel coverage** — enough of {2022-23…2025-26} × GWs for existing gates
+     (exact minimum frozen in E045 amendment before any downstream model card).
+  3. **New observable** — field unavailable / excluded / only static in current
+     harness; **not** a re-label of club-prior, learned ATK/CONCEDE, packaging q,
+     or other closed derived signals.
+  4. **Identity joins** — stable keys (element id / `code` / team id) with
+     failure modes documented.
+  5. **Reproducible retrieval** — scripted or pinned archive path.
+  6. **Provenance-only** — no prediction, Cap, MAE, or XI peeks in E045.
+
+- **Explicit non-goals (discipline):**
+  - This card does **not** reopen `rates_v2b` promote or `fixtures_v2d` /
+    packaging families.
+  - FAIL here leaves production rates/fixtures frozen; it does **not** authorize
+    another derived rates/fixtures heuristic.
+
+- **Outcomes:**
+  - **PASS** → open **E045-A** to freeze **exactly one** rates **or** fixtures
+    signal + map under production stack (`v2am_fpla` + rates=v1 + fixtures v1
+    control) with E042-A-style gates.
+  - **FAIL** → keep `rates=v1` / fixtures `v1`; treat remaining rates/fixtures
+    upside as a state/provenance problem or a different lane — not derived-signal
+    fishing.
+
+- **Stop / discipline:** Prediction without decision-time provenance = kill.
+  Parallel rates/fixtures modeling while E045 is open = out of lane.
+- **Follow-up:** run the survey (likely start from Randdalf/fplcache bootstrap
+  fields already proven dated in E044; then other mirrors only if needed);
+  log PASS/FAIL before any rates/fixtures model card.
+  → **survey PASS** below.
+
+### E045 survey — rates/fixtures archive feasibility (2026-09-06)
+- **Status:** **PASS** (provenance / data-capability only)
+- **Script:** `python scripts/e045_rates_fixtures_source_survey.py`
+- **Artifacts:**
+  - `records/historical/e045_rates_fixtures_source_survey.{csv,txt}`
+  - `records/historical/e045_fplcache_ep_strength_sample.csv`
+  - `records/historical/e045_fplcache_strength_drift.csv`
+- **Primary observable:** official FPL `ep_this` / `ep_next` from the same
+  Randdalf/fplcache pre-deadline bootstrap selection as E044
+  (last snap ≤ deadline; **152/152** panel cells already proven).
+- **Sample check:** 36/36 sampled GW×season boots have `ep_next` set for
+  **every** element.
+- **Harness gap:** HARNESS_SPEC / harness force `ep_next=None` (E008 Vaastav xP
+  leakage). Dated fplcache ep is a **different provenance claim** than undated
+  Vaastav `xP` scrapes.
+- **Secondary:** bootstrap `teams[]` strengths **do** drift within season
+  (max 20/20 teams changed vs GW1 sample) and differ from Vaastav `teams.csv`
+  early/mid season (late GWs match dump → Vaastav file is end-state-like).
+  Strength path is a PASS_CANDIDATE, not the primary freeze target yet.
+- **Rejected for fixture book:** `bootstrap-static` has **no** `fixtures` array
+  in fplcache — cannot clear dated kickoff-book from this archive alone
+  (E043 static `fixtures.csv` caveat stands until a fixtures-endpoint archive
+  PASSes).
+- **Coverage minimum (frozen for E045-A):** same E044 selection rule; require
+  pre-deadline fplcache snap with `ep_next` present for panel GWs — **met** via
+  E044 coverage + sample.
+- **Discipline:** This is **not** a `rates_v2b` or `fixtures_v2d` reopen.
+  Production stays `v2am_fpla` + `rates=v1` + fixtures `v1` until E045-A.
+- **Follow-up:** open **E045-A** to freeze **exactly one** signal + map
+  (default candidate: dated fplcache `ep_next` under rates path — amendment
+  chooses). No Cap/MAE peek before freeze.
+  → **E045-A** amendment below.
+
+### E045-A — Policy freeze (amendment before implement)
+- **Date:** 2026-09-06 (dated amendment to E045; **before any rates code**)
+- **Status:** **frozen contract** — implement only this; no knob search after peek
+- **Invariant:** production minutes (`v2am_fpla`) and fixtures (`v1`) unchanged.
+  **Only** next-GW μ (rates/points path) may see dated official `ep_next`.
+  ILP, objective, chips, Cap payoff, panel unchanged. Control keeps harness
+  `ep_next=None` (no minutes-side ep effects on either arm from this card).
+
+#### Why this reference (exactly one signal)
+E045 cleared dated bootstrap `ep_*` and also saw mid-season strength drift.
+Those are **different** gaps. E045-A freezes **only** dated `ep_next`.
+Team-strength drift is parked for a future card. Fixture-book stays rejected
+from fplcache alone.
+
+#### Explicit non-identity with B0 / Vaastav xP
+| | E008 B0 / Vaastav `xP` | E045-A signal |
+|---|---|---|
+| Source | Vaastav GW scrapes (timing contested) | Randdalf/fplcache bootstrap |
+| Clock | not proven ≤ deadline | last snap ≤ GW deadline (E044 rule) |
+| Harness today | excluded / LeakFlag diagnostic | forced `None` historically |
+| Allowed here | **FORBIDDEN as this signal** | **only** fplcache `ep_next` |
+
+Do **not** read Vaastav `xP` / `ep_next` columns. Do **not** treat B0 as the treat arm.
+
+#### Source selection (frozen — E044 / E045)
+```text
+ARCHIVE     Randdalf/fplcache bootstrap-static
+SELECT      last snap with path-UTC ≤ events[T].deadline_time
+FIELD       elements[].ep_next only   # NOT ep_this; NOT teams[] strengths
+JOIN        elements[].id (fallback code if needed)
+PIN         same coverage rule as E044 (152/152); pin SHA at implement
+```
+
+#### Signal (frozen)
+For player \(i\) at prediction GW \(T\):
+
+\[
+e_i(T) = \texttt{ep\_next}(i) \text{ from selected snap}
+\]
+
+- Horizon: **next GW / offset-0 only** (gate harness uses horizon=1).
+- Multi-GW horizon slots: identity to production μ (no ep_this chain).
+
+#### Causal claim (frozen wording)
+Official FPL next-GW expected points, as published in a pre-deadline bootstrap
+snapshot, carry scoring information absent from the harness’s blanked `ep_next`
+and not identical to our event-rate μ under `rates=v1`.
+
+#### Panel / versions
+```text
+SEASONS      2022-23, 2023-24, 2024-25, 2025-26
+CONTROL      minutes=v2am_fpla, rates=v1, fixtures=v1, balanced, seed=7
+TREAT        minutes=v2am_fpla, rates=v1_ep, fixtures=v1
+FAIL set     {2022-23, 2025-26}
+LIVE         If Player.ep_next already set from live API → use that as e_i
+             for treat blend only; do not dual-apply Vaastav xP
+```
+
+#### Map (adjust next-GW μ; do not replace rates_v1 internals)
+```text
+1. μ0 = production next-GW μ (v2am_fpla + rates=v1 + fixtures=v1)
+2. If identity → μ1 = μ0
+3. Else:
+     μ1 = (1-λ)*μ0 + λ*e_i(T)
+4. Treat arm uses μ1 as next_mu (and next utility from μ1 with same σ/p10
+   policy as control — freeze: keep control σ and p_10_plus; only μ shifts)
+5. Minutes path MUST NOT read e_i (no Player.ep_next hydrate for role_start /
+   GK ranking / low-ep demotion). Overlay is rates-path only.
+```
+```text
+λ = 0.35     # single frozen blend (same numeric as E042-A; not a retune license)
+direction    higher ep_next → pull μ toward official next-GW expectation
+NO TUNE      do not retune λ; do not add ep_this; do not add strengths
+```
+
+#### Identity cases (frozen)
+| Case | Rule |
+|---|---|
+| No fplcache snap ≤ deadline for GW T | identity GW → control |
+| Player missing / null `ep_next` in snap | identity for that player |
+| Live without ep on Player | identity for that player |
+| Control arm | never read fplcache ep |
+
+#### HARNESS_SPEC amendment (scoped)
+Dated fplcache `ep_next` is **allowed only for `rates_version=v1_ep`**.
+Control `rates=v1` and all other versions keep `ep_next` excluded.
+Vaastav `xP` remains excluded for prediction.
+
+#### Gates (SURVIVE iff all hold — E042-A / E044-A discipline)
+1. XI 0-min: treat ≤ control on **all four** seasons
+2. MAE₆₀₊ (points μ vs actual among minutes≥60): treat ≤ control on **all four**
+3. FAIL mean XI+Cap: treat ≥ control on **each** FAIL season
+4. AGG mean XI+Cap: treat ≥ control
+5. `g_treat` report + season Cap Σ report (required; not auto-pass)
+
+**KILL** if any of (1)–(4) fail; MAE-only with FAIL Cap loss; any use of Vaastav
+`xP`/B0 as treat; any strengths/`ep_this`/fixture-book smuggling; any post-peek λ
+search; any `rates_v2b` / `fixtures_v2d` reopen in the diff.
+
+#### No-tune / implementation
+- Code may add `rates_version=v1_ep` implementing **only** this contract.
+- No production default flip until SURVIVE + explicit promote.
+- Materialize slim per-GW `ep_next` extracts if needed (id → ep_next).
+
+- **Follow-up:** implement `v1_ep` + harness vs production stack → gate → log verdict.
+  No Cap peek until code matches this freeze.
+  → **implemented; KILL** below.
+
+### E045-A gate — rates=v1_ep vs rates=v1 (2026-09-06)
+- **Status:** complete — **KILL**
+- **Code:** `engine/fplcache_ep.py`, `engine/rates_v1_ep.py`;
+  `rates_version=v1_ep`; `python -m engine.harness_v1_ep`
+- **Stack:** both arms `minutes=v2am_fpla` + fixtures `v1`; control `rates=v1`;
+  treat blends dated fplcache `ep_next` into next-GW μ only (λ=0.35);
+  no `Player.ep_next` hydrate; seed=7
+- **Results (mean XI+Cap / XI0% / MAE₆₀₊):**
+
+  | Season | gate | XI0 c→t | MAE60 c→t | Cap c→t | blended | g_treat |
+  |---|---|---|---|---|---|---|
+  | 2022-23 | FAIL | 6.6→**4.2** ✓ | 2.420→**2.383** ✓ | 59.2→**60.0** ✓ | 25574 | 6.29 |
+  | 2023-24 | PASS | 3.6→**4.8** ✗ | 2.361→**2.329** ✓ | 59.8→**58.2** | 29507 | 6.05 |
+  | 2024-25 | PASS | 6.2→**4.3** ✓ | 2.265→**2.255** ✓ | 58.6→**64.9** ✓ | 27479 | 5.85 |
+  | 2025-26 | FAIL | 6.9→**3.8** ✓ | 2.471→**2.448** ✓ | 55.8→**54.1** ✗ | 29645 | 5.09 |
+
+- **AGG Cap:** control mean ≈ 58.3 → treat ≈ 59.3 ✓
+- **Kill reasons:** (1) XI0 regresses on 2023-24 (3.6→4.8); (2) FAIL Cap
+  regresses on 2025-26 (55.8→54.1). MAE improves on all four; AGG Cap clears.
+- **Artifacts:** `records/historical/v1_ep_summary.csv`,
+  `v1_ep_summary_*.csv`, `e045_v1_ep_run.log`, `e045_v1_ep_verdict.txt`;
+  slim extracts `data/fplcache_ep/` (gitignored)
+- **Verdict:** **KILL.** Dated `ep_next` as a μ blend is not a production rates
+  lever under this freeze. Family **CLOSED** for this signal+map (no λ search;
+  no Vaastav xP reopen; no `ep_this` smuggle).
+- **Production:** unchanged — `v2am_fpla` + `rates=v1` + fixtures `v1`.
+- **Parked (unchanged):** mid-season strengths drift (separate card); fixture
+  kickoff book (needs non-fplcache archive).
+  → **E046** Product FH prereg below.
+
+### E046 — Free Hit chip ROI (preregistered)
+- **Date:** 2026-09-06 (after E045-A KILL; Product lane reopen)
+- **Status:** **preregistered** — Product lane active; no evaluator yet;
+  \(g^\star\) / exact \(U\) scalars via dated **E046-A** amendment before run
+- **Track:** Product. TC (E040-A) and BB (E041-A) remain frozen and independent.
+  Upstream parked (E045-A family CLOSED). Research parked.
+- **Primary question:** Under a **sticky held 15 with zero free transfers**, does
+  as-of-T production μ contain enough information to time a single Free Hit
+  (blank-slate reoptimize for one GW, then **revert**) so that season Cap beats
+  both never-FH and a fixed-calendar FH stake?
+- **Hypothesis:** A deterministic FH policy \(t^\star=\arg\max_t U_{\mathrm{FH}}(t)\)
+  produces robust incremental Cap vs never-FH and vs calendar FH — testing
+  **timing of one unconstrained resquad under ownership scarcity**, not a
+  transfer engine and not Wildcard persistence.
+
+#### Degeneracy lock (load-bearing — not a design note)
+The E040/E041 harness pattern of a **fresh `solve_squad` every GW** is
+**forbidden as B0** on this card. Under that design, “FH = unconstrained ILP
+for one week” is identity to the weekly production squad (no counterfactual).
+This experiment exists only because B0 **cannot** freely resquad.
+
+```text
+FORBIDDEN AS B0:  rolling blank-slate solve_squad every GW
+REQUIRED AS B0:   sticky HELD_0 (15 element ids) for all non-FH weeks
+```
+
+#### Ownership model (frozen — minimal scarcity)
+```text
+HELD_0        = solve_squad(snapshot at first available GW in W,
+                            production μ, objective=next,
+                            strategy=balanced, seed=7).players
+HELD_t        = HELD_0 for all t     # sticky; 0 FT; no hits; no price/bank path
+XI_held(t)    = solve_xi among HELD_t ∩ eligible(t); pick_captains as production
+BLANK(t)      = solve_squad(snapshot_t, production μ, objective=next, …)
+XI_blank(t)   = BLANK(t).xi + captains
+FH week       = Cap from XI_blank(t); then REVERT to HELD (FH semantics)
+non-FH weeks  = Cap from XI_held(t)
+```
+No FT counter, no hit cost, no price/bank path. Scarcity = “the 15 is frozen
+except exactly one designated FH event.” **Wildcard is out of scope** (separate
+card; would *replace* HELD, not revert).
+
+#### Arm roles (structurally distinct — B1 ≠ C)
+
+| Arm | Uses \(U_{\mathrm{FH}}\)? | Timing | Squad in chip GW | Purpose |
+|---|---:|---|---|---|
+| **B0** | No | Never FH | Always held | Floor under scarcity |
+| **B1** | No | Fixed calendar \(g^\star\) | Blank once at \(g^\star\), else held | Non-model benchmark |
+| **C** | Yes | \(t^\star=\arg\max_t U_{\mathrm{FH}}(t)\) | Blank once at \(t^\star\), else held | Actual test |
+
+**B1 must not equal C.** B1 timing uses no projection. C timing uses only the
+frozen \(U_{\mathrm{FH}}\). **Resquad rule is shared** by B1 and C once fired
+(same blank-slate ILP); arms differ only in *when*.
+
+#### Signal / map (XI utility — Cap-aligned)
+\[
+U_{\mathrm{FH}}(t)=U_{\mathrm{blank}}(t)-U_{\mathrm{held}}(t)
+\]
+```text
+U_blank(t) = next_xi_utility of BLANK(t)     # XI+capt language; NOT full-15 U
+U_held(t)  = next_xi_utility of XI_held(t)
+tie-break  = lowest GW if U_FH tied
+FORBIDDEN  = full-15 weighted squad utility for U_FH (bench terms Cap never pays)
+```
+Direction: fire FH when blank-slate XI lift over the trapped held XI is largest.
+(Exact scalar field names freeze in E046-A.)
+
+#### Estimand
+\[
+R(\pi)=\sum_{t\in W}\mathrm{Cap}_t(\pi)
+\]
+```text
+Cap_normal(t) = sum(Y in XI_held) + Y_capt_held
+Cap_FH(t)     = sum(Y in XI_blank) + Y_capt_blank
+```
+Arm \(\pi\) uses \(\mathrm{Cap}_{FH}\) on its single chip GW (if any), else
+\(\mathrm{Cap}_{normal}\). Incremental: \(\Delta R(\pi)=R(\pi)-R(\mathrm{B0})\).
+Primary comparisons: C vs B0 and C vs B1.
+
+#### Scope lock
+```text
+stack:     v2am_fpla + rates=v1 + fixtures v1 (current production)
+chip:      Free Hit only; one use per season; revert after chip GW
+W:         {1,...,38} unless HARNESS_SPEC excludes a GW for integrity
+B0:        never FH; sticky HELD_0 all season
+B1:        FH exactly once at g* (g* in E046-A; no U in timing)
+C:         t* = argmax U_FH(t); FH once at t*; elsewhere held
+forbidden: WC; FT/hits/bank/price path; TC/BB in this peek; joint chip calendar;
+           new μ; threshold-on-U_FH variants; B1 redefined as argmax-U_FH;
+           redefining B0 as weekly blank-slate (degeneracy reopen);
+           post-peek g*/U_FH retune; live FH UI before gate
+```
+
+#### Leakage boundary
+```text
+ALLOWED at T: HARNESS_SPEC as-of-T snapshot; production projections; held ids;
+              blank-slate solve at T
+FORBIDDEN:    GW-T+ actuals in policy; using FH-week actuals to pick t*;
+              outcome-motivated U_FH or g* changes; WC-as-FH smuggling
+```
+Integrity (exact rule in E046-A): if `|HELD ∩ eligible(t)| < 11`, exclude that
+GW from \(W\) with cite — do not invent a fallback after peek.
+
+#### Primary gate (mirror E040-A / E041-A; exact text in E046-A)
+```text
+AGG:  sum_4 R(C) > sum R(B0)  AND  sum_4 R(C) > sum R(B1)
+FAIL: sum_FAIL R(C) >= sum_FAIL R(B0)  AND  sum_FAIL R(C) >= sum_FAIL R(B1)
+Survive only if both hold. Else KILL E046-FH.
+No g* retune. No U_FH reshape. No WC in same peek.
+```
+
+#### Forbidden after peek
+Retune \(g^\star\) / \(W\) / \(U_{\mathrm{FH}}\) definition; open WC in same peek;
+joint TC/BB/FH calendar; restore weekly blank-slate B0; new μ; FT/hit model
+creep; promote on Cap without beating B1.
+
+#### Stop rule
+Fail → kill/park E046-FH (not all chips). TC/BB product surfaces stay. Wildcard
+requires a **new** prereg (sticky *replace*, not revert). Return to Phase-0 fork
+if Product stops.
+
+#### Implementation sequence
+```text
+this prereg
+  → E046-A amendment (g*, exact U_blank/U_held scalars, HELD_0 freeze GW,
+                      integrity if held shrinks, stack pin)
+  → historical evaluator (B0/B1/C season Cap)
+  → gate → only then FH product wiring (independent of TC/BB)
+```
+No live UI. No optimizer modifications. No new projections. No Cap peek before
+the amendment freezes constants.
+
+- **Method (planned):** `python scripts/e046_free_hit_roi.py` (not written yet)
+- **Charter:** `docs/DECISION_CHARTER.md` §30
+- **Follow-up:** → **E046-A** amendment freezing \(g^\star\) and gate before run.
+  → **E046-A** below.
+
+### E046-A — Policy freeze (amendment before historical run)
+- **Date:** 2026-09-06 (dated amendment to E046; **before** evaluator run)
+- **Status:** **policy frozen** — then historical gate
+- **Stack pin:** current production (`v2am_fpla` + `rates=v1` + fixtures `v1`),
+  not the E040/E041-era `v2am_s` pin.
+
+- **Frozen constants:**
+  ```text
+  g*              = 20
+  W               = {1,...,38}
+  OBJECTIVE       = next
+  STRATEGY        = balanced
+  SEED            = 7
+  minutes/rates   = v2am_fpla / v1 / fixtures v1
+  HELD_0          = solve_squad at first GW in W with a usable as-of-T snap
+                    (usually GW1); 15 element ids sticky all season
+  U_blank(t)      = SquadSolution.next_xi_utility of blank-slate solve_squad
+                    at t (sum next_utility over XI + captain next_utility)
+  U_held(t)       = same next_xi_utility formula after solve_xi + pick_captains
+                    on HELD_0 ∩ present(t)
+  U_FH(t)         = U_blank(t) - U_held(t)
+  C tie-break     = if U_FH tied → lowest GW
+  B1              = FH once at GW 20 (blank XI that GW; no U in timing)
+  ```
+
+- **Integrity (frozen):**
+  ```text
+  present(t)     = players in snapshot_t with id in HELD_0
+  eligible_xi(t) = present(t) players that appear in projections at t
+  If |eligible_xi(t)| < 11 OR solve_xi fails → exclude GW t from W
+                 (cite in gw CSV as excluded=1; do not invent replacements)
+  If g* excluded → B1 uses nearest lower included GW; if none, nearest higher
+                 (report g_star_effective; still no U in timing)
+  ```
+
+- **Cap definition:**
+  \[
+  \mathrm{Cap}_t^{\mathrm{normal}}
+  =\sum_{i\in\mathrm{XI}_{\mathrm{held}}(t)} Y_i + Y_{\mathrm{capt,held}}
+  \]
+  \[
+  \mathrm{Cap}_t^{\mathrm{FH}}
+  =\sum_{i\in\mathrm{XI}_{\mathrm{blank}}(t)} Y_i + Y_{\mathrm{capt,blank}}
+  \]
+  FH arms use \(\mathrm{Cap}^{FH}\) on the single chip GW, else \(\mathrm{Cap}^{normal}\).
+  After FH week, HELD unchanged (revert).
+
+- **Aggregate gate (identical structure to E040-A / E041-A):**
+  ```text
+  Let R(π) = sum_t Cap_t(π) over included GWs in W for that season.
+  AGG:   sum_4 R(C) > sum R(B0)  AND  sum_4 R(C) > sum R(B1)
+  FAIL:  sum_FAIL R(C) >= sum_FAIL R(B0)  AND  sum_FAIL R(C) >= sum_FAIL R(B1)
+  Survive only if AGG and FAIL both hold.
+  Else KILL E046-FH. No g* retune. No U_FH reshape. No WC in same peek.
+  ```
+
+- **Degeneracy lock (reaffirmed):** B0 Cap is always from held XI — never from
+  weekly blank-slate. Implementing B0 as rolling `solve_squad` voids the card.
+
+- **Method:** `python scripts/e046_free_hit_roi.py`;
+  shared policy module `engine/e046_fh_policy.py`
+- **Forbidden:** product FH wiring before SURVIVE; TC/BB joint planner; WC.
+
+- **Follow-up:** run evaluator → log SURVIVE/KILL below.
+  → **SURVIVES** below.
+
+### E046-A gate — Free Hit ROI (2026-09-06)
+- **Status:** complete — **SURVIVES**
+- **Code:** `engine/e046_fh_policy.py`; `python scripts/e046_free_hit_roi.py`
+- **Stack:** `v2am_fpla` + `rates=v1` + fixtures `v1`; sticky HELD_0 / 0 FT;
+  \(U_{\mathrm{FH}}\) = next_xi_utility(blank) − next_xi_utility(held); seed=7; \(g^\star=20\)
+- **Results (season Cap Σ / \(t^\star\)):**
+
+  | Season | gate | \(t^\star\) | R(B0) | R(B1) | R(C) | C−B0 | C−B1 |
+  |---|---|---:|---:|---:|---:|---:|---:|
+  | 2022-23 | FAIL | 37 | 1573 | 1605 | 1581 | +8 | **−24** |
+  | 2023-24 | PASS | 25 | 1660 | 1700 | 1668 | +8 | **−32** |
+  | 2024-25 | PASS | 32 | 1754 | 1788 | 1810 | +56 | +22 |
+  | 2025-26 | FAIL | 36 | 1499 | 1513 | 1549 | +50 | +36 |
+
+- **AGG:** ΣR(B0)=6486, ΣR(B1)=6606, ΣR(C)=**6608** → C>B0 and C>B1
+  (C beats B1 by **+2** season points across four seasons — razor-thin).
+- **FAIL:** ΣR(C)=3130 ≥ B0 3072 and ≥ B1 3118.
+- **Note:** C loses to B1 on 2022-23 and 2023-24 alone; gate uses **sums**, not
+  per-season unanimity (same discipline as E040-A). HELD_0 freeze GW=1 all
+  seasons; 0 GWs excluded for held integrity.
+- **Artifacts:** `records/historical/e046_free_hit_roi_season.csv`,
+  `e046_free_hit_roi_summary.txt`, `e046_fh_verdict.txt`, `e046_free_hit_run.log`
+- **Verdict:** **SURVIVES.** As-of-T \(\arg\max U_{\mathrm{FH}}\) beats never-FH
+  and fixed-GW20 calendar stake on AGG and FAIL. Degeneracy lock held (B0 =
+  sticky held, not weekly blank-slate).
+- **Not auto-promote:** FH product wiring requires a **separate** surface prereg
+  (mirror E040-A / E041-A wiring), with independence vs TC/BB stated.
+- **Follow-up:** optional E046-A product wiring; WC remains a **new** card
+  (sticky replace, not revert).
+  → **E047** Upstream strengths-drift below.
+
+### E047 — Dated fplcache team-strength hydrate (preregistered)
+- **Date:** 2026-09-06 (after E046-A SURVIVE; Upstream reopen on E045 secondary)
+- **Status:** **preregistered** — then **E047-A** freeze below (before code)
+- **Lane:** Upstream. Not a reopen of `fixtures_v2d` / packaging / `rates_v2b`.
+  Not E045-A `ep_next` retune. Product FH stays unwired.
+- **Primary question:** Does replacing static harness `teams.csv`
+  `strength_overall_home/away` with **dated** fplcache bootstrap `teams[]`
+  values (same E044 deadline clock) improve decision Cap under frozen
+  production minutes+rates, using the **existing** `fixtures=v1` ATK/CONCEDE
+  maps?
+- **Hypothesis:** Mid-season official strength drift is real information the
+  harness blanks via end-state/static Vaastav `teams.csv`. Restoring
+  decision-time overall strengths (provenance parity with live API teams)
+  can improve XI+Cap without inventing a new fixture model.
+
+#### Explicit non-identity
+| | E021 `fixtures_v2d` | E045-A `v1_ep` | E047 |
+|---|---|---|---|
+| Signal | learned ATK/CONCEDE from goals | dated `ep_next` → μ blend | dated `strength_overall_*` |
+| Map | replace hand tables | λ-blend into next_mu | **replace** Team strengths; **keep** ATK/CONCEDE |
+| Claim | new fixture model | rates μ lift | harness blanking of official strengths |
+
+#### Scope / arms
+```text
+CONTROL   minutes=v2am_fpla, rates=v1, fixtures=v1
+TREAT     minutes=v2am_fpla, rates=v1, fixtures=v1_fpls
+SIGNAL    teams[].strength_overall_home + strength_overall_away only
+SELECT    last fplcache snap path-UTC ≤ GW deadline (E044 rule; 152/152)
+MAP       REPLACE Team.strength_home/away from overlay; identity if missing
+          then expected_goals via EXISTING ATK/CONCEDE (no new tables)
+FORBIDDEN blend static×dated; attack/defence strength fields; FDR invent;
+          fixtures_v2d; packaging q; ep_next; λ/dose fishing; new μ elsewhere
+```
+
+- **Follow-up:** → **E047-A** amendment freezing constants + gates.
+
+### E047-A — Policy freeze (amendment before implement)
+- **Date:** 2026-09-06 (dated amendment to E047; **before any fixtures code**)
+- **Status:** **frozen contract** — implement only this; no knob search after peek
+
+```text
+NAME          dated official team overall strengths (fplcache) — NOT v2d
+fixtures=     v1_fpls
+FIELDS        strength_overall_home, strength_overall_away  (teams[].id join)
+MAP           replace Team.strength_home / strength_away; clamp via existing _str
+ATK/CONCEDE   UNCHANGED (fixtures.py v1 tables)
+IDENTITY      no overlay / missing team id → keep harness static strength
+LIVE          API snapshot already has live teams[] → identity (no dual apply)
+CONTROL       fixtures=v1 (minutes=v2am_fpla, rates=v1)
+TREAT         fixtures=v1_fpls
+FAIL          {2022-23, 2025-26}
+GATES         XI0 4/4 non-worse; MAE_60+ 4/4 non-worse;
+              FAIL Cap each non-neg; AGG Cap non-worse; g_treat report
+KILL          any gate miss; v2d/packaging/ep_next smuggle; field expansion;
+              post-peek blend λ or ATK/CONCEDE retune
+NO PROMOTE    until SURVIVE + explicit promote
+```
+
+- **HARNESS_SPEC:** dated fplcache team overall strengths allowed **only** for
+  `fixtures_version=v1_fpls`. Control `v1` keeps static `teams.csv`.
+- **Method (planned):** `engine/fplcache_strength.py`;
+  `python -m engine.harness_v1_fpls`
+- **Follow-up:** implement → gate → log SURVIVE/KILL. No Cap peek before code
+  matches this freeze.
+  → **implemented; SURVIVES (identity-null)** below.
+
+### E047-A gate — fixtures=v1_fpls vs v1 (2026-09-06)
+- **Status:** complete — **SURVIVES (identity-null; do not promote)**
+- **Code:** `engine/fplcache_strength.py`; `fixtures_version=v1_fpls`;
+  `python -m engine.harness_v1_fpls`
+- **Stack:** both arms `minutes=v2am_fpla` + `rates=v1`; control `fixtures=v1`;
+  treat replaces `Team.strength_*` from dated fplcache; ATK/CONCEDE unchanged
+- **Results (mean XI+Cap / XI0% / MAE₆₀₊):**
+
+  | Season | gate | XI0 c→t | MAE60 c→t | Cap c→t | n_replaced |
+  |---|---|---|---|---|---:|
+  | 2022-23 | FAIL | 6.6→6.6 ✓ | 2.420→2.420 ✓ | 59.2→59.2 ✓ | 440 |
+  | 2023-24 | PASS | 3.6→3.6 ✓ | 2.361→2.361 ✓ | 59.8→59.8 ✓ | 526 |
+  | 2024-25 | PASS | 6.2→6.2 ✓ | 2.265→2.265 ✓ | 58.6→58.6 ✓ | 660 |
+  | 2025-26 | FAIL | 6.9→6.9 ✓ | 2.471→2.471 ✓ | 55.8→55.8 ✓ | 675 |
+
+- **AGG Cap:** identical (58.34→58.34) ✓
+- **Smoke:** at 2024-25 GW20, **20/20** teams differ raw overall vs static dump,
+  but **0/804** players change `next_mu`. Cause: `fixtures._str` clamps every
+  modern overall strength (~975–1370) to **5**, so ATK/CONCEDE buckets never
+  move. Dated hydrate is inert under the frozen v1 maps.
+- **Artifacts:** `records/historical/v1_fpls_summary.csv`,
+  `e047_v1_fpls_run.log`, `e047_v1_fpls_verdict.txt`;
+  slim extracts `data/fplcache_strength/` (gitignored)
+- **Verdict:** Gate **SURVIVES** by equality. **Do not promote.** This is a
+  **null experiment** under the frozen map — provenance restore cannot affect
+  decisions while `_str`+ATK/CONCEDE ignore fine-grained overall strength.
+- **Family CLOSED** for “replace `strength_overall_*` into existing `_str`/ATK/CONCEDE”.
+  Reopen only with a **new** prereg that redesigns the strength→xg map (not a
+  silent `_str` fix inside this card; not `fixtures_v2d` reopen).
+- **Production:** unchanged — fixtures `v1`.
+- **Side finding (logged, not a silent production change):** production
+  `fixtures=v1` currently treats all teams as strength-bucket 5 on modern
+  Vaastav/API overall scales. Any fix is a separate fixtures-model card.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-06 (E044 **preregistered**):
+As of 2026-09-06 (E047-A **SURVIVES identity-null**; production unchanged):
 
-1. **Production μ.** `v2am_s` + `rates=v1` + fixtures `v1`. **Unchanged.**
-2. **TC / BB.** Frozen with independence disclaimer.
-3. **Closed.** E042-A share; E043-A lagged turnaround-gap.
-4. **Active lane.** **E044** — historical decision-time availability-source feasibility
-   (provenance only; no projection/optimizer).
-5. **Not next.** Another Vaastav minutes proxy; Cap peeking; E044-A signal map before
-   source PASS.
+1. **Production μ.** `v2am_fpla` + `rates=v1` + fixtures `v1`.
+2. **TC / BB.** Wired; FH SURVIVES but **unwired** (fragile).
+3. **Closed.** E042-A; E043-A; E045-A; E047-A strength-replace-into-v1-maps;
+   rates_v2b; fixtures_v2d promote path.
+4. **Active lane.** None forced. Optional: FH wire (fragile); WC card; fixtures
+   strength→xg redesign prereg (distinct from E047-A); Research if new structure.
+5. **Not next.** Promote `v1_fpls`; silent `_str` patch; v2d reopen; blend λ.
 
 ---
 
@@ -2525,6 +3300,15 @@ python -m engine.harness_v2d    # E021: fixtures_v2d vs v1 under v2am_s + rates=
 python -m engine.harness_pack_v2d  # E022: packaged U vs raw v2d
 python -m engine.harness_v2am_share  # E042-A: v2am_share vs v2am_s (KILL)
 python scripts/e043_schedule_provenance.py  # E043: PL kickoff provenance
+python scripts/e044_availability_source_survey.py  # E044: availability archive survey
+python scripts/e044_materialize_fplcache_avail.py  # E044-A: slim fplcache extracts
+python scripts/e045_rates_fixtures_source_survey.py  # E045: rates/fixtures archive survey
+python scripts/e045_materialize_fplcache_ep.py  # E045-A: slim ep_next extracts
+python -m engine.harness_v1_ep  # E045-A: rates=v1_ep vs rates=v1 (KILL)
+python scripts/e046_free_hit_roi.py  # E046-A: FH ROI (SURVIVES; unwired)
+python scripts/e047_materialize_fplcache_strength.py  # E047-A: slim strength extracts
+python -m engine.harness_v1_fpls  # E047-A: fixtures=v1_fpls vs v1
+python -m engine.harness_v2am_fpla  # E044-A: v2am_fpla vs v2am_s (SURVIVES)
 python -m engine.harness_v2am_sched  # E043-A: v2am_sched vs v2am_s (KILL)
 python -m engine.harness_pack_vs_v1  # E023: packaged v2d vs production v1
 python -m unittest tests.test_e012_integrity -v  # E012: evaluation integrity

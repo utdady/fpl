@@ -1,0 +1,23 @@
+E046-A: Free Hit ROI (sticky HELD_0 / 0 FT; production stack)
+B0=never FH (held XI); B1=FH@GW20; C=argmax U_FH (tie=lowest GW)
+U_FH = next_xi_utility(blank) - next_xi_utility(held)
+Gates: AGG sum4 C>B0 and C>B1; FAIL sum_FAIL C>=B0 and C>=B1
+Degeneracy lock: B0 never weekly blank-slate.
+
+  2022-23 [FAIL] n=37 t*=37 g*_eff=20 | R0=1573.0 R1=1605.0 Rc=1581.0 | C-B0=8.0 C-B1=-24.0
+  2023-24 [PASS] n=38 t*=25 g*_eff=20 | R0=1660.0 R1=1700.0 Rc=1668.0 | C-B0=8.0 C-B1=-32.0
+  2024-25 [PASS] n=38 t*=32 g*_eff=20 | R0=1754.0 R1=1788.0 Rc=1810.0 | C-B0=56.0 C-B1=22.0
+  2025-26 [FAIL] n=38 t*=36 g*_eff=20 | R0=1499.0 R1=1513.0 Rc=1549.0 | C-B0=50.0 C-B1=36.0
+
+=== AGGREGATE (4 seasons) ===
+  sum R(B0)=6486.0  sum R(B1)=6606.0  sum R(C)=6608.0
+  AGG C>B0: True  AGG C>B1: True
+
+=== FAIL seasons ===
+  sum R(B0)=3072.0  sum R(B1)=3118.0  sum R(C)=3130.0
+  FAIL C>=B0: True  FAIL C>=B1: True
+
+=== PRIMARY GATE ===
+  AGG: True
+  FAIL robustness: True
+  CALL: E046-FH SURVIVES

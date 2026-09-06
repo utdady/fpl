@@ -20,7 +20,7 @@ It does **not** replace the living experiment log. Numbers and verdicts live in
 | [`V2_SPEC.md`](V2_SPEC.md) | How a successor model earns a version number |
 | [`FORMAL.md`](FORMAL.md) | What Lean could prove vs what statistics prove (post-GW1) |
 | [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer history, failure modes, E030–E036 |
-| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; E039-A KILL; E040/E041 wired; E042 upstream prereg |
+| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; E039–E046; production = `v2am_fpla` |
 | [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | Candidate \(V(S)\); E037 results; E039 prereg |
 | `ROADMAP.md` | Version ladder (may lag E013; do not treat it as the experiment log) |
 
@@ -428,7 +428,8 @@ XI+Cap scores **actual FPL points** of the ILP eleven with captain doubled.
 
 ## 7. Hypotheses and gates
 
-Status as of 2026-08-26 (V2A-M frozen = `v2am_s`; V1 permanent historical control). Full board:
+Status as of 2026-09-06 (production minutes = `v2am_fpla`; `v2am_s` = pre-fpla
+control; V1 permanent historical control). Full board:
 [`LAB_LOG.md`](LAB_LOG.md#hypothesis-board).
 
 | ID | Claim | Status |
@@ -461,7 +462,8 @@ not be computed from V1 scores.
 ### V2A-M gates (completed — E015 PASS; frozen as `v2am_s`)
 
 Historical control for that experiment was V1. Treatment: revised minutes only.
-E015 passed all four seasons; production default is now `v2am_s`. Do not retune.
+E015 passed all four seasons; then E044-A promoted `v2am_fpla` over `v2am_s`.
+Do not retune `availability()` or invent undated Vaastav status.
 
 Canonical statement (E013): V1's repeatable weakness was **upper-tail
 playing-time overconfidence propagating into XI blank selections**.
@@ -487,13 +489,23 @@ E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when
 
 E040-TC and E041-BB both **SURVIVE** and are product-wired (`fpl.py tc` / `fpl.py bb`).
 Outputs state **independence** (not a combined chip calendar). Policies frozen;
-do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged. Chip lane paused.
+do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged.
 
-### Upstream (E044 preregistered; E042/E043 families CLOSED)
+**E046-A SURVIVES.** Sticky held / 0 FT; \(U_{\mathrm{FH}}\) = XI utility lift;
+ΣC beats never-FH and calendar FH (AGG C−B1 = **+2**). FH product wiring is a
+**separate** step (not auto). WC out of scope. See LAB_LOG E046-A gate.
 
-Share + lagged-turnaround families closed. **E044:** find a dated pre-deadline
-availability archive (provenance only). No minutes heuristic until source PASSes.
-See LAB_LOG E044.
+### Upstream (E047-A identity-null CLOSED)
+
+**E047-A SURVIVES by equality but is a null.** Dated `strength_overall_*`
+hydrate cannot move μ while `fixtures._str` maps every modern overall strength
+to bucket 5. Family CLOSED for this map. No promote. Optional future:
+strength→xg redesign as a **new** card. E045-A ep_next remains KILL.
+
+### Upstream archive note (E045)
+
+E045 survey PASS; ep_next path killed in E045-A; strength path closed as
+identity-null in E047-A; fixture kickoff book still needs non-fplcache archive.
 
 ---
 
@@ -558,7 +570,13 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E042-A** | Freeze \(W=4\), \(\lambda=0.35\); gate vs `v2am_s` | **KILL** + **family CLOSED** |
 | **E043** | PL schedule features → minutes | **prereg** + provenance **PASS_WITH_CAVEAT** |
 | **E043-A** | Lagged short-turnaround \(d_{\mathrm{prev\_gap}}\); `v2am_sched` | **KILL** + **family CLOSED** |
-| **E044** | Historical decision-time availability-source feasibility | **preregistered** — provenance only |
+| **E044** | Historical decision-time availability-source feasibility | **PASS** (fplcache survey) |
+| **E044-A** | `v2am_fpla`: fplcache hydrate → existing `availability()` | **SURVIVES** + **promoted** |
+| **E045** | Rates/fixtures archival-source feasibility | **PASS** (fplcache `ep_next` survey) |
+| **E045-A** | `rates=v1_ep`: dated fplcache `ep_next` blend λ=0.35 | **KILL** (XI0✗ 2023-24; FAIL Cap✗ 2025-26) |
+| **E046** | Free Hit ROI under sticky-held / 0 FT (XI-utility \(U_{\mathrm{FH}}\)) | **SURVIVES** (AGG C−B1=+2; wire optional) |
+| **E047** | Dated fplcache team `strength_overall_*` feasibility lineage | **prereg** (from E045 secondary) |
+| **E047-A** | `fixtures=v1_fpls`: replace Team strengths; ATK/CONCEDE unchanged | **SURVIVES identity-null** + **CLOSED** (`_str`→5) |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

@@ -1,0 +1,13 @@
+verdict=PASS
+primary_source=Randdalf/fplcache
+fplcache_snapshots=7838
+fplcache_first=2021-04-18T16:41:00+00:00
+fplcache_last=2026-09-06T04:11:00+00:00
+panel_gw_ok=152/152
+lag_hours_mean=3.6172368421052634
+lag_hours_max=6.15
+lookback_hours=168
+timezone_assumption=filename_HHMM_as_UTC
+note=Randdalf/fplcache clears all six E044 criteria at survey depth. E044-A may freeze exactly one availability signal+map; no minutes code in this card.
+survey_csv=C:/Users/addyb/fpl/records/historical/e044_availability_source_survey.csv
+coverage_csv=C:/Users/addyb/fpl/records/historical/e044_fplcache_deadline_coverage.csv

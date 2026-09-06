@@ -231,11 +231,11 @@ then** optimizer integration.
 
 | Bucket | Contents |
 |---|---|
-| **Production** | `v2am_s` + `rates=v1` + fixtures `v1` |
+| **Production** | `v2am_fpla` + `rates=v1` + fixtures `v1` (`v2am_s` = pre-fpla minutes control) |
 | **Closed research** | `rates_v2b` promote path; packaging/stability/displacement/MC-under-same-U arcs (E022–E038) |
 | **Research candidates** | Structural \(V_C\) / non-separable portfolio value (E039+); gated until prereg |
-| **Upstream candidates** | Role-transition / availability dynamics (new hyp, E038 discipline) |
-| **Product candidates** | Chips → price → transfers → season agent |
+| **Upstream candidates** | Optional fixtures strength→xg redesign (new prereg; not E047-A reopen) |
+| **Product candidates** | FH unwired (fragile SURVIVE); WC separate; price → transfers |
 
 ---
 
@@ -245,13 +245,16 @@ then** optimizer integration.
 CHARTER        Landing A (E038 concentrated)
 CLOSED         rates_v2b promote; E039-A V_ns λ=0.5;
                E042-A club–position recent-minutes-share family;
-               E043-A lagged PL short-turnaround-gap demotion family
-UPSTREAM       E044 prereg — decision-time availability-source feasibility
-               (provenance only; no projection)
+               E043-A lagged PL short-turnaround-gap demotion family;
+               E045-A rates=v1_ep dated fplcache ep_next blend family;
+               E047-A fixtures=v1_fpls strength-replace-into-v1-maps (identity-null)
+UPSTREAM       none forced; optional fixtures strength→xg redesign (new prereg)
 TC PRODUCT     E040-A wired (fpl.py tc)
 BB PRODUCT     E041-A wired (fpl.py bb)
-PRODUCTION     v2am_s + rates=v1 + fixtures v1
-NOT NEXT       Vaastav minutes proxies; Cap peek in E044; E042/E043 retunes
+FH PRODUCT     E046-A SURVIVES — unwired (fragile +2 vs B1)
+PRODUCTION     v2am_fpla + rates=v1 + fixtures v1
+NOT NEXT       promote v1_fpls; silent _str patch; v2d reopen; ep_next λ fishing
+NEXT HINT      optional FH wire / WC / strength→xg redesign card
 ```
 
 ---
@@ -480,7 +483,8 @@ CHECKLIST (do not change without new prereg)
 FORBIDDEN            joint chip calendar; FH/WC in these surfaces; g* retune
 ```
 
-Chip lane **paused** after E041. Next product chip requires a new prereg.
+Chip lane **paused** after E041 until a new prereg. **E046** (FH-only) is that
+prereg — see §30. TC/BB surfaces unchanged; no joint calendar.
 
 ---
 
@@ -547,18 +551,167 @@ See `LAB_LOG.md` § E043-A gate + family closure.
 
 ---
 
-## 26. E044 — Decision-time availability-source feasibility (prereg 2026-09-06)
+## 26. E044 — Decision-time availability-source feasibility (PASS 2026-09-06)
 
-**Lane:** Upstream **infrastructure**. One implement lane. **No projection / optimizer.**
+**Lane:** Upstream **infrastructure**. Provenance only (no projection / optimizer).
 
-**Question:** Can we obtain a dated, pre-deadline archive across enough of the panel
-to support existing gates, carrying an availability observable absent from the
-current harness?
+**Survey PASS:** [Randdalf/fplcache](https://github.com/Randdalf/fplcache) —
+pre-deadline `bootstrap-static` snaps for **152/152** panel GW×season cells;
+fields `status` / `chance_*` / `news`; join on `id`/`code`. Artifacts:
+`records/historical/e044_availability_source_survey.*`,
+`e044_fplcache_deadline_coverage.csv`.
 
-**Pass (all):** pre-deadline timestamps; panel coverage; new observable; stable joins;
-reproducible retrieval; provenance-only (no Cap/MAE/XI peek).
+See `LAB_LOG.md` § E044 survey.
 
-**PASS →** E044-A freezes exactly one availability signal + map.  
-**FAIL →** keep `v2am_s`; no third Vaastav minutes proxy; pivot to state/provenance.
+---
 
-See `LAB_LOG.md` § E044.
+## 27. E044-A — FPL decision-time availability minutes (freeze 2026-09-06)
+
+**Lane:** Upstream. One implement lane. **Frozen before code.**
+
+```text
+NAME          decision-time FPL availability (fplcache hydrate)
+SIGNAL        status, chance_this, chance_next, can_select from last
+              fplcache snap with path-UTC ≤ GW deadline
+MAP           b0 = v2am_s; p_start = min(0.97, b0 * availability(player, 0))
+              (EXISTING availability(); no new λ/caps)
+FORBIDDEN     Vaastav players_raw status/chance; news NLP; E042/E043 signals;
+              editing availability() after peek
+ELIGIBLE      all players; join-miss → identity row; missing snap → identity GW
+TREAT         minutes_version=v2am_fpla
+CONTROL       minutes_version=v2am_s
+FAIL          {2022-23, 2025-26}
+GATES         XI0 4/4; MAE_60+ 4/4; FAIL Cap each; AGG Cap; g_treat report
+NO TUNE       availability() branches; alternate chance→p_start maps
+HARNESS       chance_*/dated status allowed ONLY for v2am_fpla via fplcache rule
+RESULT        SURVIVES (2026-09-06) — XI0/MAE/FAIL-Cap/AGG all clear
+PROMOTE       v2am_fpla production default (2026-09-06)
+```
+
+**Production:** `v2am_fpla` + `rates=v1` + fixtures `v1`.
+
+See `LAB_LOG.md` § E044-A gate + promote.
+
+---
+
+## 28. E045 — Rates/fixtures archival-source feasibility (PASS 2026-09-06)
+
+**Lane:** Upstream **infrastructure**. Provenance only.
+
+**Survey PASS:** Randdalf/fplcache pre-deadline bootstrap carries official
+`ep_this`/`ep_next` (152/152 panel via E044 selection; 36/36 sample full).
+Harness currently blanks `ep_next`. Mid-season `teams[]` strengths also drift
+(PASS_CANDIDATE — **not** in E045-A). Fixture kickoff book **not** in
+bootstrap-static → REJECT from fplcache alone.
+
+See `LAB_LOG.md` § E045 survey.
+
+---
+
+## 29. E045-A — Dated fplcache `ep_next` rates blend (freeze 2026-09-06)
+
+**Lane:** Upstream. One implement lane. **Frozen before code.**
+
+```text
+NAME          dated official ep_next (fplcache) — NOT Vaastav xP / B0
+SIGNAL        elements[].ep_next from last fplcache snap ≤ GW deadline
+MAP           μ1=(1-λ)μ0+λ·e; μ0=production next_mu (v2am_fpla+rates=v1+fx=v1)
+λ             0.35 (single frozen blend)
+FORBIDDEN     Vaastav xP; B0; ep_this; teams[] strengths; fixture book;
+              hydrating Player.ep_next into minutes/role_start; rates_v2b;
+              fixtures_v2d; λ retune after peek
+TREAT         rates_version=v1_ep
+CONTROL       rates=v1 (minutes=v2am_fpla, fixtures=v1)
+FAIL          {2022-23, 2025-26}
+GATES         XI0 4/4; MAE_60+ 4/4; FAIL Cap each; AGG Cap; g_treat report
+HARNESS       dated fplcache ep_next allowed ONLY for rates=v1_ep
+```
+
+**Next:** implement `v1_ep` + harness vs production. No promote until SURVIVE.
+
+**Gate (2026-09-06):** **KILL.** XI0 regresses on 2023-24 (3.6→4.8); FAIL Cap
+regresses on 2025-26 (55.8→54.1). MAE 4/4 and AGG Cap clear. Family **CLOSED**
+for this signal+map (no λ search). Production stays `rates=v1`.
+
+See `LAB_LOG.md` § E045-A gate.
+
+---
+
+## 30. E046 — Free Hit chip ROI (prereg 2026-09-06)
+
+**Lane:** Product. TC/BB frozen independent. **FH only** (WC = separate card).
+
+**Degeneracy lock:** B0 must **not** be weekly blank-slate `solve_squad` (that
+makes FH ≡ no chip). B0 = sticky `HELD_0`, 0 FT, no hits/bank/price path.
+
+```text
+CHIP          Free Hit (one use); Cap from blank-slate XI that GW; then REVERT
+STACK         v2am_fpla + rates=v1 + fixtures v1
+HELD_0        solve_squad at first available GW in W (objective=next)
+U_FH(t)       next_xi_utility(BLANK(t)) - next_xi_utility(XI_held(t))
+              # XI utility only — NOT full-15 weighted squad U
+B0            never FH; Cap from XI_held every GW
+B1            FH once at g* (no U in timing; g* in E046-A)
+C             t* = argmax_t U_FH(t); tie → lowest GW
+GATES         AGG: Σ4 R(C)>Σ R(B0) AND Σ4 R(C)>Σ R(B1)
+              FAIL: Σ_FAIL R(C)>=Σ_FAIL R(B0) AND Σ_FAIL R(C)>=Σ_FAIL R(B1)
+FORBIDDEN     WC; FT/hits; TC/BB in peek; joint calendar; B1:=argmax-U_FH;
+              weekly blank-slate B0; U_FH = full-15 squad utility; new μ;
+              g*/U_FH retune after peek
+NEXT          E046-A amendment → evaluator → gate → only then FH wiring
+```
+
+**E046-A freeze (2026-09-06, before run):**
+
+```text
+g*            = 20
+U_blank/U_held = SquadSolution.next_xi_utility (XI + capt next_utility)
+U_FH          = U_blank - U_held; tie → lowest GW
+HELD_0        = solve_squad at first usable GW in W
+INTEGRITY     |eligible_xi|<11 or solve_xi fail → exclude GW
+              g* excluded → nearest lower included GW (else higher)
+STACK         v2am_fpla / v1 / fixtures v1
+GATES         AGG+FAIL identical to E040-A / E041-A
+NO WIRE       FH product surface only after SURVIVE
+```
+
+See `LAB_LOG.md` § E046-A.
+
+---
+
+## 31. E046-A — FH policy freeze + gate (2026-09-06)
+
+**Frozen then gated. RESULT: SURVIVES.**
+
+```text
+AGG    ΣR(C)=6608 > ΣR(B0)=6486 and > ΣR(B1)=6606   # +2 vs B1
+FAIL   ΣR(C)=3130 >= B0 3072 and >= B1 3118
+NOTE   C loses to B1 on 2022-23 / 2023-24 alone; sums gate (E040 discipline)
+WIRE   FH product surface NOT automatic — needs separate wiring prereg
+```
+
+See `LAB_LOG.md` § E046-A gate.
+
+---
+
+## 32. E047-A — Dated fplcache team overall strengths (freeze 2026-09-06)
+
+**Lane:** Upstream. Provenance hydrate — **not** `fixtures_v2d`.
+
+```text
+NAME          dated strength_overall_home/away (fplcache teams[])
+MAP           REPLACE Team.strength_*; keep fixtures=v1 ATK/CONCEDE
+TREAT         fixtures_version=v1_fpls
+CONTROL       fixtures=v1 (minutes=v2am_fpla, rates=v1)
+FORBIDDEN     blend; attack/defence strength fields; v2d; packaging; ep_next;
+              ATK/CONCEDE retune; post-peek fishing
+GATES         XI0 4/4; MAE_60+ 4/4; FAIL Cap each; AGG Cap; g_treat report
+NEXT          implement + harness_v1_fpls → gate → promote only if SURVIVE
+```
+
+**Gate (2026-09-06):** **SURVIVES (identity-null).** All metrics equal control.
+Raw strengths differ, but `fixtures._str` clamps modern overall (~1000+) to 5,
+so ATK/CONCEDE never move. **Do not promote.** Family **CLOSED** for this map.
+Side finding: production `fixtures=v1` is already strength-blind on modern scales.
+
+See `LAB_LOG.md` § E047-A gate.
