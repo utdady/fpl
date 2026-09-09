@@ -81,8 +81,9 @@ python -m engine.obs --season 2025-26
 Formal integrity (optional; not a V2 gate):
 
 ```bash
-python -m unittest tests.test_e012_integrity -v   # regression on real artifacts
-cd formal && lake build                            # Lean 4 spec (requires elan)
+python -m unittest tests.test_e012_integrity tests.test_certificate -v
+cd formal && lake build                            # Lean 4 (requires elan)
+python -m engine.certificate path/to/cert.json     # verify emitted certificate
 ```
 
 See [`formal/README.md`](formal/README.md) and [`docs/FORMAL.md`](docs/FORMAL.md).

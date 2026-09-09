@@ -1,36 +1,39 @@
 # Formal integrity (Lean 4)
 
-Executable specification for evaluation invariants documented in [`docs/FORMAL.md`](../docs/FORMAL.md).
+Executable specification for evaluation invariants and squad certificates.
+Philosophy and inventory: [`docs/FORMAL.md`](../docs/FORMAL.md).
 
-Python property tests in [`tests/test_e012_integrity.py`](../tests/test_e012_integrity.py) remain the regression harness on real artifacts. Lean makes the definitions and algebraic identities explicit.
+Python property tests remain the regression harness on real artifacts:
 
-**Implementation inventory** (what each module formalizes, Python cross-refs, queued work):
-[`docs/FORMAL.md` § Implementation inventory](../docs/FORMAL.md#implementation-inventory).
+- [`tests/test_e012_integrity.py`](../tests/test_e012_integrity.py)
+- [`tests/test_certificate.py`](../tests/test_certificate.py)
 
-## Modules (summary)
+## Locked shape
 
-| File | Matches |
+```text
+Regret        → real telescoping theorem
+Evaluation    → classifyWeek + typed EvalFlag
+Leakage       → dependency contract (Spearman opaque)
+Snapshot      → type-level cutoff (not provenance)
+Squad/Lineup  → legality predicates
+Certificate   → verify returned decision (not CBC)
+```
+
+Python emits `SquadCertificate` JSON (`engine/certificate.py`); Lean
+`verifyCertificate` checks legality under `rulesVersion` / declared rules.
+**Do not expand conceptually** beyond this — sit quietly in the repo.
+
+## Modules
+
+| File | Role |
 |---|---|
-| `FPL/Regret.lean` | `engine.harness_decomp` nested regret columns |
-| `FPL/Evaluation.lean` | `engine.harness_decomp.classify_week` |
-| `FPL/Leakage.lean` | `engine.obs.LEAKAGE_SPEARMAN` / E008 flag |
-| `FPL/Snapshot.lean` | `engine.models.Snapshot` cutoff types |
-
-Not yet formalized: squad/XI legality certificate checker (`engine.optimize`).
-
-## Prerequisites
-
-Install [elan](https://github.com/leanprover/elan) (Lean version manager):
-
-```powershell
-# Windows (review script before running)
-irm https://raw.githubusercontent.com/leanprover/elan/master/elan-init.ps1 | iex
-```
-
-```bash
-# macOS / Linux
-curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
-```
+| `FPL/Regret.lean` | Nested regret identity |
+| `FPL/Evaluation.lean` | `classifyWeek` + `EvalFlag` |
+| `FPL/Leakage.lean` | Leakage dependency contract |
+| `FPL/Snapshot.lean` | Type-level snapshot cutoff |
+| `FPL/Squad.lean` | Legal 15 predicates |
+| `FPL/Lineup.lean` | Legal XI predicates |
+| `FPL/Certificate.lean` | Certificate checker |
 
 ## Build
 
@@ -40,16 +43,11 @@ lake update
 lake build
 ```
 
-`lean-toolchain` pins Lean `v4.14.0`.
+`lean-toolchain` pins Lean `v4.14.0`. CI: `.github/workflows/formal.yml`.
 
-## Verify Python invariants (no Lean required)
+## Verify without Lean
 
 ```bash
-python -m unittest tests.test_e012_integrity -v
+python -m unittest tests.test_e012_integrity tests.test_certificate -v
+python -m engine.certificate path/to/cert.json
 ```
-
-## Philosophy
-
-> Python tells us what happened. Statistics tell us whether it is reproducible. Lean tells us whether we accidentally changed the question while measuring it.
-
-Lean is **not** a V2 gate and does not prove calibration, solver optimality, or data provenance.

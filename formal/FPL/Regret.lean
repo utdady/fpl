@@ -38,11 +38,27 @@ def rTotal (r : NestedRegret α) : α := rSquad r + rXi r + rCap r
 
 end NestedRegret
 
-/-- Additive decomposition of nested hindsight regret (integer points). -/
-theorem regret_identity_int (r : NestedRegret Int) :
+/-- Telescoping law needed for the regret identity (any additive structure). -/
+def Telescopes (α : Type) [Add α] [Sub α] : Prop :=
+  ∀ a b c d : α, (a - b) + (b - c) + (c - d) = a - d
+
+/-- Additive decomposition given telescoping cancellation. -/
+theorem regret_identity
+    {α : Type} [Add α] [Sub α]
+    (telescope : Telescopes α)
+    (r : NestedRegret α) :
     NestedRegret.rTotal r = r.pOracle - r.pV1Realized := by
-  dsimp [NestedRegret.rTotal, NestedRegret.rSquad, NestedRegret.rXi, NestedRegret.rCap]
+  simpa [NestedRegret.rTotal, NestedRegret.rSquad, NestedRegret.rXi, NestedRegret.rCap]
+    using telescope r.pOracle r.pV1SquadOracleXi r.pV1XiOracleCap r.pV1Realized
+
+theorem regret_telescopes_int : Telescopes Int := by
+  intro a b c d
   omega
+
+/-- Instantiation for integer GW points (recorded artifacts). -/
+theorem regret_identity_int (r : NestedRegret Int) :
+    NestedRegret.rTotal r = r.pOracle - r.pV1Realized :=
+  regret_identity regret_telescopes_int r
 
 /-- B0 gap is a separate quantity; do not confuse with nested regret. -/
 structure B0Gap (α : Type) [Sub α] where

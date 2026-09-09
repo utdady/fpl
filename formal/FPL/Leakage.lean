@@ -1,9 +1,15 @@
 /-!
-# B0 leakage flag (FORMAL.md / E008)
+# B0 leakage dependency contract (FORMAL.md / E008)
+
+This module is a **dependency contract**, not a full formalization of Spearman.
 
 Pre-registered rule: `LeakFlag = (Spearman(xP, actual) > 0.70)`.
 
-Evaluation-time only — may depend on actuals. Must not depend on V1/V2 scores.
+- Evaluation-time only — may depend on actuals.
+- Must not depend on V1/V2 scores: those fields are absent from `LeakInput`.
+- Spearman itself is `opaque`; Python (`engine.metrics.spearman`) remains the
+  implementation authority. Lean only records the input boundary and threshold.
+
 Python constant: `engine.obs.LEAKAGE_SPEARMAN = 0.70`.
 -/
 
@@ -25,11 +31,7 @@ def leakFlag (inp : LeakInput) : Bool :=
   | some ρ => ρ > leakageSpearmanThreshold
   | none => false
 
-/-- `LeakInput` has no V1 field; mutating unused challenger scores cannot change the flag. -/
-theorem leakFlag_independent_of_unused_v1 (inp : LeakInput) (_v1 _v1' : List Float) :
-    leakFlag inp = leakFlag inp := rfl
-
-/-- Alias for the pre-registered constant (documentation / cross-ref with Python). -/
+/-- Threshold cross-ref with Python (must stay 0.70). -/
 theorem leakage_threshold_value : leakageSpearmanThreshold = 0.70 := rfl
 
 end FPL
