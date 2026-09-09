@@ -1,11 +1,11 @@
+import FPL.Squad
+
 /-!
 # XI / lineup legality (FORMAL.md)
 
 Formation windows from `SquadRules.min_play` / `max_play`.
 Matches `engine.optimize.solve_xi` constraints.
 -/
-
-import FPL.Squad
 
 namespace FPL
 

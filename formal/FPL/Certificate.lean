@@ -1,3 +1,6 @@
+import FPL.Squad
+import FPL.Lineup
+
 /-!
 # Squad decision certificate (FORMAL.md)
 
@@ -11,9 +14,6 @@ Python / CBC → SquadCertificate → verifyCertificate → legal / reject
 `rulesVersion` / `snapshotId` bind the check to a declared rule set and snapshot,
 not "some" legal squad in the abstract.
 -/
-
-import FPL.Squad
-import FPL.Lineup
 
 namespace FPL
 
