@@ -2,6 +2,9 @@
 
 Vaastav under data/vaastav/ is gitignored. Historical parity tests may skip
 only when this helper reports unavailability — never on bare Exception.
+
+Full-season `recommend_historical` recomputes are also gated by
+`tests.slow.skip_unless_slow` (`FPL_RUN_SLOW=1`).
 """
 from __future__ import annotations
 

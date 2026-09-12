@@ -86,6 +86,22 @@ cd formal && lake build                            # Lean 4 (requires elan)
 python -m engine.certificate path/to/cert.json     # verify emitted certificate
 ```
 
+## Tests
+
+Ordinary runs stay fast. Full-season historical recomputes are opt-in.
+
+```bash
+# Fast: policy / wiring / formal (skips recommend_historical recomputes)
+python -m unittest tests.test_e040_tc_policy tests.test_e041_bb_policy `
+  tests.test_e046_fh_wiring tests.test_e050_wc_policy tests.test_e050_wc_wiring `
+  tests.test_e051_chip_conflict tests.test_e012_integrity tests.test_certificate -v
+
+# Slow: full as-of-T parity for one season per chip (minutes each)
+$env:FPL_RUN_SLOW=1
+python -m unittest tests.test_e040_tc_policy tests.test_e041_bb_policy `
+  tests.test_e046_fh_wiring tests.test_e050_wc_wiring -v
+```
+
 See [`formal/README.md`](formal/README.md) and [`docs/FORMAL.md`](docs/FORMAL.md).
 
 ## Documentation

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from engine.e041_bb_policy import BenchRow, recommend_historical, select_t_star
 from tests.historical_data import unavailable_reason
+from tests.slow import skip_unless_slow
 
 ROOT = Path(__file__).resolve().parents[1]
 SEASON_CSV = ROOT / "records" / "historical" / "e041_bench_boost_roi_season.csv"
@@ -76,8 +77,9 @@ class TestE041BbPolicy(unittest.TestCase):
                 msg=f"{season}: U_bench mismatch",
             )
 
+    @skip_unless_slow()
     def test_recommend_historical_one_season_matches_csv(self) -> None:
-        """Full as-of-t recompute for one season (slow).
+        """Full as-of-t recompute for one season (slow; FPL_RUN_SLOW=1).
 
         Skip only when optional Vaastav/GW records are explicitly missing.
         Projection/optimizer regressions must fail, not skip.
