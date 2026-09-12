@@ -235,7 +235,7 @@ then** optimizer integration.
 | **SHIPPED (Product)** | TC/BB/FH/WC independent wired surfaces (E040/E041/E046/E050); μ/squad ILP unchanged |
 | **Closed research** | `rates_v2b` promote; packaging/stability/displacement/MC arcs (E022–E038); E021 v2d; E048/E049 remap; continuous relative-strength → xG (E052-A + E053-A); E045-A; E047-A |
 | **Parked** | E051 joint inventory (E051-A skipped); fixture-book bootstrap rejected |
-| **Research candidates** | **E055** cascade (Phase-1 SURVIVE; Phase-2 next); structural \(V_C\) gated |
+| **Research candidates** | **E055** BRANCH → valuation/opp-cost (new prereg); structural \(V_C\) gated |
 | **Upstream candidates** | new strength→xG only via fresh prereg (continuous relative family CLOSED) |
 | **Product candidates** | price → transfers (chips complete; joint inventory parked) |
 
@@ -252,13 +252,13 @@ CLOSED         rates_v2b promote; E039-A V_ns λ=0.5; E021 v2d promote;
                continuous relative-strength → xG CLOSED
                (E052-A overall + E053-A ATK/DEF; Phase-1✓ Phase-2 XI0✗)
 PARKED         E051 joint inventory (skip E051-A); fixture-book bootstrap rejected
-RESEARCH NEXT  E055 Phase-1 SURVIVE (companion_blank_share=60.7%);
-               Phase-2 CF_PAIR / CF_HOLD next (no promote)
+RESEARCH NEXT  E055 Phase-2 BRANCH → valuation/opportunity-cost family
+               (new prereg; no CF promote / no new objective)
 UPSTREAM       continuous relative-strength → xG CLOSED; no adxg/sxg retune
 PRODUCT        chips complete; joint inventory parked
 PRODUCTION     v2am_fpla + rates=v1 + fixtures v1  # known _str→5 blindness
-NOT NEXT       new objective; FLEX penalty; E039-A λ retune; near-tie
-               protection; strength→xG; promote adxg; silent _str patch
+NOT NEXT       promote CF as policy; new objective; FLEX penalty; E039-A λ;
+               near-tie; strength→xG; promote adxg; silent _str patch
 ```
 
 ---
@@ -989,7 +989,9 @@ NON-IDENTITY  not E034c rates path; not E035 proxy; not E036 MC;
 FORBIDDEN     new objective; FLEX penalty; retune 0.50/pairing after peek;
               Phase-2 before SURVIVE; promote; production change
 PHASE-1       SURVIVE (companion_blank_share=60.7% AGG; M=28)
-NEXT          Phase-2 CF_PAIR / CF_HOLD only (no promote)
+PHASE-2       BRANCH: CF_PAIR+CF_HOLD recover XI0 43→27 on xi0_worse;
+              Cap +~100 (report). No promote.
+NEXT          new prereg: valuation / opportunity-cost family
 ```
 
 **E055-A freeze:** pairing, mover/companion, FLEX/budget fields, concentration

@@ -257,7 +257,7 @@ Closed research:   rates_v2b; E021/E048/E049 fixture remap families; …
 Parked:            E051 joint inventory (E051-A skipped); fixture-book rejected
 Research candidates: structural V_C / non-separable portfolio value (E039+)
 Upstream NEXT:       continuous relative-strength → xG CLOSED (E052+E053)
-Research NEXT:       E055 cascade Phase-1 SURVIVE → Phase-2 CF_PAIR/HOLD
+Research NEXT:       E055 BRANCH → valuation/opportunity-cost (new prereg)
 Product SHIPPED:     TC/BB/FH/WC independent wired surfaces
 ```
 
@@ -417,8 +417,11 @@ companions=other enters; companion_blank_share≥0.50 AGG; CF_PAIR / CF_HOLD
 recipes frozen for gated Phase-2.
 
 **E055 Phase-1 (2026-09-12):** **SURVIVE** — companion_blank_share **60.7%**
-(17/28 on M). All four seasons ≥50%. Next: Phase-2 CF_PAIR / CF_HOLD only.
-See `docs/LAB_LOG.md` E055-A Phase-1; charter §40.
+(17/28 on M). All four seasons ≥50%.
+
+**E055 Phase-2 (2026-09-12):** **BRANCH** — CF_PAIR and CF_HOLD both recover
+AGG XI0 on xi0_worse (43→27); Cap +~100. Next: valuation/opportunity-cost
+prereg. **No CF promote.** See `docs/LAB_LOG.md` E055-A Phase-2; charter §40.
 
 ---
 
@@ -638,8 +641,9 @@ POST-GW1 (research)
   E055 preregistered: constraint-induced portfolio cascade under frozen adxg
   E055-A freeze: mover=max ΔU_cand pair; companions; share≥0.50; CF_PAIR/HOLD
   E055 Phase-1 SURVIVE: companion_blank_share=60.7% (17/28); all seasons ≥50%
-  NEXT: Phase-2 CF_PAIR / CF_HOLD only — no promote
-  NOT NEXT: new objective; FLEX penalty; E039 λ; strength→xG; promote adxg
+  E055 Phase-2 BRANCH: CF_PAIR+HOLD XI0 43→27 on worse; Cap +~100; no promote
+  NEXT: new prereg valuation/opportunity-cost family
+  NOT NEXT: promote CF; new objective; FLEX penalty; strength→xG
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

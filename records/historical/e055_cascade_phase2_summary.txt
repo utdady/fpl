@@ -1,0 +1,29 @@
+E055-A Phase-2 CF: v1_adxg vs fixtures=v1
+Frozen: CF_PAIR = primary E<->L on ctrl XI; CF_HOLD = replace blank companions from ctrl XI; BRANCH if either recovers XI0 vs full cand (AGG zeros on feasible xi0_worse)
+
+n_xi_diff_gw=139 n_xi0_worse_gw=23
+
+=== ALL XI-diff GWs (report) n=139 ===
+  CF_PAIR feasible=135/139 sum_xi0 cand=90 pair=89 gw_better=15 recovers=True
+  CF_PAIR Cap sum cand=7925.0 pair=7940.0 delta=+15.0
+  CF_PAIR skip: unpaired=4 formation_illegal=0
+  CF_HOLD sum_xi0 cand=91 hold=75 gw_better=15 n_swaps=18 recovers=True
+  CF_HOLD Cap sum cand=8216.0 hold=8315.0 delta=+99.0
+
+=== PRIMARY: xi0_worse GWs (branch universe) n=23 ===
+  CF_PAIR feasible=23/23 sum_xi0 cand=43 pair=27 gw_better=15 recovers=True
+  CF_PAIR Cap sum cand=1308.0 pair=1408.0 delta=+100.0
+  CF_PAIR skip: unpaired=0 formation_illegal=0
+  CF_HOLD sum_xi0 cand=43 hold=27 gw_better=15 n_swaps=17 recovers=True
+  CF_HOLD Cap sum cand=1308.0 hold=1407.0 delta=+99.0
+
+=== xi0_worse by season (CF_HOLD xi0 / CF_PAIR if feasible) ===
+  2022-23 n=6 cand_xi0=11 hold_xi0=7 pair=7 pair_feas=6
+  2023-24 n=6 cand_xi0=9 hold_xi0=5 pair=5 pair_feas=6
+  2024-25 n=6 cand_xi0=11 hold_xi0=8 pair=8 pair_feas=6
+  2025-26 n=5 cand_xi0=12 hold_xi0=7 pair=7 pair_feas=5
+
+=== VERDICT (frozen Phase-2 rule) ===
+BRANCH -> valuation/opportunity-cost family (CF_PAIR + CF_HOLD recovers XI0 vs cand on xi0_worse AGG)
+NEXT: open new prereg for valuation/opportunity-cost (no promote here).
+No promote / no new objective on this card.

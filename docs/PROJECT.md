@@ -503,8 +503,8 @@ giant scheduler. See LAB_LOG E051 diagnostic; charter §36.
 
 **PARKED:** E051 joint inventory; fixture-book bootstrap rejected.
 
-**OPEN:** **E055** cascade — Phase-1 **SURVIVE** (companion_blank_share=60.7%);
-Phase-2 CF_PAIR / CF_HOLD next. No promote. Charter §40.
+**OPEN:** **E055 BRANCH** → valuation / opportunity-cost family (new prereg).
+No CF promote. Charter §40.
 
 ---
 
@@ -589,8 +589,8 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E053-A** | `v1_adxg`: \(e=1.35\cdot(I_{\mathrm{atk}}/I_{\mathrm{def}})\cdot\{1.10,0.88\}\) | **KILL** (XI0✗ 3/4; FAIL Cap✓) + family CLOSED |
 | **E054** | μ→XI decision-boundary mechanism diagnostic (near-tie / FLEX / blank) | **preregistered** |
 | **E054-A** | classify XI diffs under frozen `v1_adxg` vs `v1` | **BRANCH=BUDGET_FLEX** (92.9%) |
-| **E055** | Constraint-induced portfolio cascade under frozen `v1_adxg` | Phase-1 **SURVIVE** (60.7%) |
-| **E055-A** | mover/companion/CF freeze (ΔU_cand pair; share≥0.50; CF_PAIR/HOLD) | **frozen** — Phase-1 done; Phase-2 next |
+| **E055** | Constraint-induced portfolio cascade under frozen `v1_adxg` | Phase-1 SURVIVE; Phase-2 **BRANCH** |
+| **E055-A** | mover/companion/CF freeze (ΔU_cand pair; share≥0.50; CF_PAIR/HOLD) | **BRANCH** → valuation/opp-cost prereg |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

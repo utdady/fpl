@@ -16,12 +16,12 @@ CLOSED    E021 v2d; E048 discrete remap; E049 piecewise remap;
           E045-A; E047-A; …
 PARKED    E051 joint inventory (sparse conflicts; E051-A skipped);
           fixture-book bootstrap rejected
-OPEN      E055 cascade — Phase-1 SURVIVE (companion_blank_share=60.7%);
-          Phase-2 CF_PAIR/CF_HOLD next (no promote)
+OPEN      E055 cascade Phase-2 BRANCH → valuation/opportunity-cost family
+          (new prereg next; no promote / no new objective here)
 ```
-**Active research question:** **E055 Phase-1 SURVIVES** — companions carry
-60.7% of xi0_worse blank enters under `v1_adxg`. **Next: Phase-2 μ-fixed CFs
-only.** No new objective / no promote. Production unchanged.
+**Active research question:** **E055 Phase-2 BRANCH** — CF_PAIR and CF_HOLD
+both recover AGG XI0 vs full `v1_adxg` cand on xi0_worse GWs. **Next: new
+prereg** (valuation / opportunity-cost). No promote. Production unchanged.
 
 
 ---
@@ -4953,21 +4953,44 @@ this freeze (done)
 - **Follow-up:** → **Phase-2** CF_PAIR / CF_HOLD only (μ-fixed; no promote).
   Do not invent a new objective from this share alone.
 
+### E055-A Phase-2 — CF_PAIR / CF_HOLD (2026-09-12)
+- **Status:** complete — **BRANCH** → valuation / opportunity-cost family
+- **Code:** `python scripts/e055_cascade_phase2.py` (venv; frozen E055-A recipes)
+- **Stack:** same as Phase-1; μ fixed; no new objective
+- **Universe:** n_xi_diff=139; **xi0_worse=23** (branch universe)
+
+  | CF | feasible (worse) | sum XI0 cand→CF | recovers? | Cap Δ (worse) |
+  |---|---:|---:|---|---:|
+  | CF_PAIR | 23/23 | 43 → **27** | **yes** | +100 |
+  | CF_HOLD | 23/23 | 43 → **27** | **yes** | +99 |
+
+- **Per-season (worse, hold XI0):** 2022-23 11→7; 2023-24 9→5; 2024-25 11→8;
+  2025-26 12→7 — recovery every season
+- **Verdict:** both CFs recover AGG XI0 vs full cand without changing μ →
+  **BRANCH** to valuation/opportunity-cost research (new prereg). **Not** a
+  promote of CF as production policy.
+- **Forbidden still:** new objective; FLEX penalty; promote adxg; CF fishing
+- **Artifacts:** `records/historical/e055_cascade_phase2_events.csv`,
+  `e055_cascade_phase2_summary.txt`, `e055_cascade_phase2_verdict.txt`,
+  `e055_cascade_phase2_run.log`
+- **Follow-up:** → **new prereg** (valuation / opportunity-cost under frozen
+  μ). E055 cascade card closes as BRANCH, not promote.
+
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-12 (**E055 Phase-1 SURVIVES**; E055-A frozen; four chips SHIPPED):
+As of 2026-09-12 (**E055 Phase-2 BRANCH**; four chips SHIPPED):
 
 1. **Production μ.** `v2am_fpla` + `rates=v1` + fixtures `v1` (still `_str`→5).
 2. **SHIPPED.** TC/BB/FH/WC wired independent; μ/squad ILP unchanged.
 3. **CLOSED.** E021; E048/E049 remap; E052-A+E053-A continuous relative xG;
    E039-A \(V_{ns}\); …
 4. **PARKED.** E051 joint inventory; fixture-book bootstrap rejected.
-5. **OPEN.** **E055** Phase-1 **SURVIVE** (companion_blank_share=60.7%) —
-   **Phase-2 CF_PAIR / CF_HOLD next** (no promote).
-6. **Not next.** New objective; FLEX penalty; near-tie protection; strength→xG;
-   adxg/E039 λ retune; silent `_str` patch; promote adxg.
+5. **OPEN.** **E055 BRANCH** → next family = **valuation / opportunity-cost**
+   (new prereg). No CF promote.
+6. **Not next.** Promote CF_PAIR/HOLD; new objective; FLEX penalty; near-tie
+   shield; strength→xG; adxg/E039 λ retune; silent `_str` patch.
 
 ---
 
@@ -5014,6 +5037,7 @@ python -m unittest tests.test_e052_v1_sxg -v
 python -m unittest tests.test_e053_v1_adxg -v
 python scripts/e054_xi_boundary_diagnostic.py  # E054-A: BRANCH=BUDGET_FLEX
 python scripts/e055_cascade_phase1.py  # E055-A Phase-1: SURVIVE (companion 60.7%)
+python scripts/e055_cascade_phase2.py  # E055-A Phase-2: BRANCH (CF recovers XI0)
 python scripts/e051_chip_conflict_diagnostic.py  # E051: CONFLICTS_PRESENT sparse
 python -m unittest tests.test_e051_chip_conflict -v
 python -m engine.e050_wc_recommend  # E050-A product: WC recommendation
