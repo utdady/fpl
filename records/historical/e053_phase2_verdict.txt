@@ -1,0 +1,8 @@
+E053-A Phase-2 verdict: fixtures=v1_adxg vs v1
+seasons=4 total_n_mu_delta=87831
+AGG Cap mean ctrl=58.3368 treat=59.5512 ok=True
+VERDICT=KILL Phase-2
+  2022-23 gate=FAIL XI0 6.6->7.4 ok=False Cap 59.2->60.8 ok=True g_treat=0.196 delta=20792
+  2023-24 gate=PASS XI0 3.6->4.5 ok=False Cap 59.8->60.6 ok=True g_treat=0.374 delta=22130
+  2024-25 gate=PASS XI0 6.2->5.7 ok=True Cap 58.6->60.6 ok=True g_treat=0.390 delta=22545
+  2025-26 gate=FAIL XI0 6.9->7.2 ok=False Cap 55.8->56.2 ok=True g_treat=0.311 delta=22364

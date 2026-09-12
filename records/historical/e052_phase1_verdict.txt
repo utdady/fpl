@@ -1,0 +1,9 @@
+E052-A Phase-1 verdict: fixtures=v1_sxg vs v1
+seasons=4 mae60_all_ok=True total_n_mu_delta=87873 any_season_identity_null=False
+Spearman AGG mean ctrl=0.2080 treat=0.2274 soft_ok=True
+VERDICT=SURVIVES Phase-1
+Phase-2 Cap/XI0 NOT opened (forbidden until Phase-1 SURVIVES).
+  2022-23 gate=FAIL MAE 2.4198->2.4098 ok=True Sp 0.223->0.240 delta=20785 null=False
+  2023-24 gate=PASS MAE 2.3612->2.3453 ok=True Sp 0.234->0.256 delta=22104 null=False
+  2024-25 gate=PASS MAE 2.2649->2.2508 ok=True Sp 0.235->0.256 delta=22563 null=False
+  2025-26 gate=FAIL MAE 2.4706->2.4612 ok=True Sp 0.140->0.158 delta=22421 null=False

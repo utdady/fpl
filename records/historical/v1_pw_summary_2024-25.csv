@@ -1,0 +1,2 @@
+season,e024_gate,ctrl_mae60,treat_mae60,ctrl_xicap_mean,treat_xicap_mean,ctrl_season_cap,treat_season_cap,ctrl_xi0,treat_xi0,ctrl_xi0_n,treat_xi0_n,g_treat_mean,n_mu_delta,n_proj,n_gw,xi0_ok,mae60_ok,xicap_ok
+2024-25,PASS,2.264852,2.229645,58.578947,63.921053,2226.0,2429.0,6.220096,6.220096,418,418,3.199119,22528,30552,38,True,True,True

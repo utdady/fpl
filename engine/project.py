@@ -208,6 +208,7 @@ def project_player_gw(
     recent_minutes: dict[int, int] | None = None,
     fixtures_version: str = "v1",
     fixture_strengths: dict | None = None,
+    adxg_strengths: dict | None = None,
 ) -> GWProjection:
     scoring = snapshot.scoring
     pos = player.position
@@ -237,6 +238,7 @@ def project_player_gw(
             fx,
             fixtures_version=fixtures_version,
             fixture_strengths=fixture_strengths,
+            adxg_strengths=adxg_strengths,
         )
         attack_mult = ctx["attack_mult"]
         lam_g = rates["xg90"] * attack_mult
@@ -321,8 +323,13 @@ def project_all(
         )
     if rates_version not in {"v1", "v1_ep", "v2b", "v2b_d", "v2b_e"}:
         raise ValueError("rates_version must be 'v1', 'v1_ep', 'v2b', 'v2b_d', or 'v2b_e'")
-    if fixtures_version not in {"v1", "v1_fpls", "v2d"}:
-        raise ValueError("fixtures_version must be 'v1', 'v1_fpls', or 'v2d'")
+    if fixtures_version not in {
+        "v1", "v1_fpls", "v1_sfix", "v1_pw", "v1_sxg", "v1_adxg", "v2d"
+    }:
+        raise ValueError(
+            "fixtures_version must be 'v1', 'v1_fpls', 'v1_sfix', 'v1_pw', "
+            "'v1_sxg', 'v1_adxg', or 'v2d'"
+        )
     if minutes_version == "v2am" and p_start_map is None:
         raise ValueError("v2am requires a leave-one-season-out p_start_map")
     if minutes_version != "v2am":
@@ -330,6 +337,9 @@ def project_all(
     # v1_ep uses v1 event rates internally; ep blend applied after projections.
     rates_for_sim = "v1" if rates_version == "v1_ep" else rates_version
     # v1_fpls uses v1 ATK/CONCEDE after hydrating Team.strength_* from fplcache.
+    # v1_sxg hydrates then uses continuous relative xG (no ATK/CONCEDE).
+    # v1_adxg loads dated ATK/DEF overlay (does not mutate Team.strength_*).
+    # v1_sfix / v1_pw keep teams as-is and remap inside fixtures.py.
     fixtures_for_sim = "v1" if fixtures_version == "v1_fpls" else fixtures_version
     next_e = snapshot.next_event()
     gw_ids = []
@@ -339,6 +349,7 @@ def project_all(
 
     rates_priors: dict[int, tuple[float, float]] | None = None
     fixture_strengths = None
+    adxg_strengths = None
     if rates_for_sim in {"v2b", "v2b_d", "v2b_e"} or fixtures_for_sim == "v2d":
         from engine.harness import SEASON_LABEL
 
@@ -360,7 +371,9 @@ def project_all(
     season_key: str | None = None
     if minutes_version in {
         "v2am_s", "v2am_share", "v2am_sched", "v2am_fpla", "v2c", "v2c_e"
-    } or rates_for_sim == "v2b_e" or rates_version == "v1_ep" or fixtures_version == "v1_fpls":
+    } or rates_for_sim == "v2b_e" or rates_version == "v1_ep" or fixtures_version in {
+        "v1_fpls", "v1_sxg", "v1_adxg"
+    }:
         from engine.harness import SEASON_LABEL, recent_minutes_by_element
 
         label_to_season = {v: k for k, v in SEASON_LABEL.items()}
@@ -372,7 +385,7 @@ def project_all(
             }
 
     fpls_diags: list = []
-    if fixtures_version == "v1_fpls":
+    if fixtures_version in {"v1_fpls", "v1_sxg"}:
         from engine.fplcache_strength import hydrate_snapshot_teams
 
         if not season_key:
@@ -385,6 +398,18 @@ def project_all(
         )
         if fpls_diags_out is not None:
             fpls_diags_out.extend(fpls_diags)
+    if fixtures_version == "v1_adxg":
+        from engine.fplcache_strength_ad import load_adxg
+
+        if not season_key:
+            from engine.harness import SEASON_LABEL
+
+            label_to_season = {v: k for k, v in SEASON_LABEL.items()}
+            season_key = label_to_season.get(snapshot.season_label)
+        if season_key:
+            adxg_strengths = load_adxg(season_key, as_of_gw) or {}
+        else:
+            adxg_strengths = {}
     if minutes_version in {"v2c", "v2c_e"}:
         from engine.minutes_v2c import build_role_start_v2c, build_role_start_v2c_e
 
@@ -491,6 +516,7 @@ def project_all(
                 recent_minutes=recent,
                 fixtures_version=fixtures_for_sim,
                 fixture_strengths=fixture_strengths,
+                adxg_strengths=adxg_strengths,
             )
             by_gw[gw] = pred
             w = DECAY ** offset

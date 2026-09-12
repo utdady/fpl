@@ -1,0 +1,3 @@
+VERDICT: KILL
+n_mu_delta=87892
+XI0_all=False MAE_all=True FAIL_Cap=True AGG_ok=True
