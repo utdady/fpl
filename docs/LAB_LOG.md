@@ -7,8 +7,22 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 **Production (post E044-A promote):** `minutes_version=v2am_fpla` + `rates=v1` +
 fixtures `v1`. Pre-fpla minutes control: `v2am_s`. Permanent historical control: V1
 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.
-**Active research question:** none forced. E047-A closed as identity-null
-(strength hydrate inert under `_str`→5). FH unwired. Production unchanged.
+
+**Standing map (2026-09-12):**
+```text
+SHIPPED   TC/BB/FH/WC independent surfaces (E040/E041/E046/E050) — μ/squad ILP unchanged
+CLOSED    E021 v2d; E048 discrete remap; E049 piecewise remap;
+          continuous relative-strength → xG (E052-A overall + E053-A ATK/DEF);
+          E045-A; E047-A; …
+PARKED    E051 joint inventory (sparse conflicts; E051-A skipped);
+          fixture-book bootstrap rejected
+OPEN      E055 cascade — Phase-1 SURVIVE (companion_blank_share=60.7%);
+          Phase-2 CF_PAIR/CF_HOLD next (no promote)
+```
+**Active research question:** **E055 Phase-1 SURVIVES** — companions carry
+60.7% of xi0_worse blank enters under `v1_adxg`. **Next: Phase-2 μ-fixed CFs
+only.** No new objective / no promote. Production unchanged.
+
 
 ---
 
@@ -1015,6 +1029,20 @@ H2 (from E007): **weak / not the primary lever.** Evidence is that blow-up weeks
 - **Verdict:** Spec landed. Python E012 verdict unchanged. Lean is not a version gate.
 - **Artifacts:** `formal/`; `docs/FORMAL.md`; `.github/workflows/formal.yml`
 - **Follow-up:** extend inventory when new modules land; do not log CI fixes in docs
+
+### E012-cert — Squad certificate bridge
+- **Date:** 2026-09-09
+- **Status:** completed (cleanup + certificate); formal track **stops expanding conceptually**
+- **Hypothesis:** verifying a returned decision against declared rules is the high-value Lean use; abstract independence lemmas are enough as contracts
+- **Question:** Can Python emit a boring certificate and Lean/Python verify legality without re-solving CBC?
+- **Method:**
+  - Cleanup: generalized `regret_identity`; typed `EvalFlag`; Leakage as dependency contract; Snapshot comments = type cutoff not provenance
+  - `Squad.lean` / `Lineup.lean` predicates; `Certificate.lean` `verifyCertificate`
+  - `engine/certificate.py` JSON emit + mirror verify; `tests/test_certificate.py`
+- **Results:** Python certificate tests PASS; Lean modules include decide examples for legal/illegal toy certs. `rules_version=fpl-default-v1` + `snapshot_id` bind the check.
+- **Verdict:** Certificate verifies the **answer**, not CBC. Formal track mature enough to sit quietly — no further conceptual Lean modules unless legality bugs recur.
+- **Artifacts:** `formal/FPL/{Squad,Lineup,Certificate}.lean`; `engine/certificate.py`; `docs/FORMAL.md` locked diagnosis
+- **Follow-up:** optional hook to write cert JSON after live `solve_squad`; do not formalize chips/MC/Spearman body
 
 ### E024 - Packaged rates=v2b vs production rates=v1
 - **Date:** 2026-08-27 (after E012 PASS)
@@ -3157,15 +3185,31 @@ the amendment freezes constants.
   sticky held, not weekly blank-slate).
 - **Not auto-promote:** FH product wiring requires a **separate** surface prereg
   (mirror E040-A / E041-A wiring), with independence vs TC/BB stated.
-- **Follow-up:** optional E046-A product wiring; WC remains a **new** card
+- **Follow-up:** → **E046-A product wiring** below. WC remains a **new** card
   (sticky replace, not revert).
-  → **E047** Upstream strengths-drift below.
+
+### E046-A wiring — product surface (2026-09-06)
+- **Status:** **wired** — frozen E046-A policy exposed; not a new experiment
+- **Module:** `engine/e046_fh_policy.py` (shared with historical evaluator)
+- **CLI:** `python fpl.py fh` (live remaining GWs under \(I_N\); optional
+  `--squad` sticky held); `python fpl.py fh --season 2024-25` (as-of-t HELD_0)
+- **Claim:** Under the frozen E046-A policy, recommend FH in the GW where
+  blank-slate XI utility lift over sticky held XI is highest.
+- **Live semantics:** Past as-of-t when rebuildable; current+future under \(I_N\)
+  only with sticky held (blank freeze on live snap, or `--squad` owned 15).
+- **Engineering gate:** `tests/test_e046_fh_wiring.py` — \(t^*\)/\(U_{\mathrm{FH}}\)
+  must match E046 season CSV artifacts.
+- **Forbidden:** policy retune; \(g^\star\)/\(U_{\mathrm{FH}}\) reshape; joint
+  TC/BB/FH calendar; WC in this surface; restore weekly blank-slate B0.
+- **Note:** SURVIVE was razor-thin (+2 AGG vs B1). Wiring does not re-litigate
+  the gate.
+- **Follow-up:** → **E050** Wildcard prereg (sticky replace; see LAB_LOG E050).
 
 ### E047 — Dated fplcache team-strength hydrate (preregistered)
 - **Date:** 2026-09-06 (after E046-A SURVIVE; Upstream reopen on E045 secondary)
 - **Status:** **preregistered** — then **E047-A** freeze below (before code)
 - **Lane:** Upstream. Not a reopen of `fixtures_v2d` / packaging / `rates_v2b`.
-  Not E045-A `ep_next` retune. Product FH stays unwired.
+  Not E045-A `ep_next` retune. (Product FH later wired separately.)
 - **Primary question:** Does replacing static harness `teams.csv`
   `strength_overall_home/away` with **dated** fplcache bootstrap `teams[]`
   values (same E044 deadline clock) improve decision Cap under frozen
@@ -3260,20 +3304,1670 @@ NO PROMOTE    until SURVIVE + explicit promote
 - **Side finding (logged, not a silent production change):** production
   `fixtures=v1` currently treats all teams as strength-bucket 5 on modern
   Vaastav/API overall scales. Any fix is a separate fixtures-model card.
+  → **E048** below (contract freeze only; no implement/run yet).
+
+### E048 — Production fixtures strength→xg map defect (preregistered)
+- **Date:** 2026-09-06 (after E047-A identity-null)
+- **Status:** **preregistered** — then **E048-A** freeze below (**before code / Cap**)
+- **Lane:** Upstream fixtures-model. Touches production payoff path. Higher
+  stakes than chip/hydrate cards — still no silent patch; gate required.
+- **Primary question:** Does replacing the inert production `_str` clamp
+  (modern overall → bucket 5 for everyone) with a **single frozen** linear
+  remap of overall strength into the existing ATK/CONCEDE bucket keys
+  improve decision Cap under frozen `v2am_fpla` + `rates=v1`?
+- **Hypothesis:** The fixture pathway still has useful structure once overall
+  strength is mapped into the 2–5 ATK/CONCEDE keys it was written for.
+  Restoring that map (without new ATK/CONCEDE tables, without fplcache
+  hydrate, without learned v2d strengths) can clear decision gates vs the
+  literal current bug.
+
+#### Explicit non-identity
+| | E021 `v2d` | E047-A `v1_fpls` | E048 |
+|---|---|---|---|
+| Signal | learned match-goal strengths | dated fplcache `teams[]` | **same** harness/live `Team.strength_*` as control |
+| Map | new expected_goals path | replace Team fields; **keep** broken `_str` | **only** change bucket map `_str` → `_str_sfix` |
+| Claim | new fixture model | provenance hydrate | fix inert production clamp |
+
+#### Why not “just patch `_str`”
+Production change without treat-vs-control = forbidden. E047 already showed
+hydrate-without-map-fix is identity-null. This card isolates the map.
+
+- **Follow-up:** → **E048-A** locks the exact formula + gates. **No implement
+  until ready to run the full gate.** No Cap peek while drafting.
+
+### E048-A — Policy freeze (amendment before implement / Cap)
+- **Date:** 2026-09-06 (dated amendment to E048; **before any fixtures code
+  change and before any Cap/MAE/XI0 peek**)
+- **Status:** **frozen contract** — implement only this; no endpoint/retune
+  after peek
+
+#### Frozen remap (ONE formula — no alternatives after this line)
+Panel GW1 raw overall ranges (control-only scale describe; not a Cap peek):
+~975–1370 across 2022-23…2025-26. Freeze round endpoints near that envelope:
+
+```text
+STR_LO = 1000
+STR_HI = 1350
+ATK / CONCEDE tables = UNCHANGED (fixtures.py v1 dicts)
+
+def _str_sfix(val: int | None) -> int:
+    if val is None or val <= 0:
+        return 3                    # same missing default as production intent
+    if 2 <= int(val) <= 5:
+        return int(val)             # legacy 2–5 scale identity (if ever present)
+    x = max(STR_LO, min(STR_HI, int(val)))
+    t = (x - STR_LO) / (STR_HI - STR_LO)   # 0..1
+    b = 2 + int(round(3 * t))             # → {2,3,4,5}
+    return max(2, min(5, b))
+```
+
+Examples (frozen, not tuned): 1000→2, 1117→3, 1175→4, 1233→4, 1350→5;
+values &lt;1000 clamp as 1000; values &gt;1350 clamp as 1350.
+
+**Production control `_str` (literal bug — do not “fix” in control arm):**
+```text
+def _str(val):
+    if val is None or val <= 0: return 3
+    return int(max(2, min(5, val)))   # modern ~1000+ → always 5
+```
+
+#### Arms / stack
+```text
+CONTROL   minutes=v2am_fpla, rates=v1, fixtures=v1
+          # expected_goals uses _str (inert on modern overall)
+TREAT     minutes=v2am_fpla, rates=v1, fixtures=v1_sfix
+          # same Team.strength_* as control; expected_goals uses _str_sfix
+TEAMS     harness static teams.csv / live API as today — NO fplcache hydrate
+FAIL      {2022-23, 2025-26}
+SEED      7; strategy=balanced; objective=next for gate harness
+```
+
+#### Gates (no leniency because this is a “bugfix”)
+```text
+XI0        treat ≤ control on all four seasons
+MAE_60+    treat ≤ control on all four seasons
+FAIL Cap   treat ≥ control on each FAIL season
+AGG Cap    treat ≥ control (mean XI+Cap across four)
+g_treat    report required
+```
+Survive only if all hold. Else **KILL**. No STR_LO/HI retune. No ATK/CONCEDE
+rewrite. No percentile remap swap. No v2d/packaging reopen.
+
+#### Identity-null sanity (required before calling SURVIVE)
+```text
+Report n_players with |next_mu_treat - next_mu_ctrl| > 1e-9 on a mid-season
+smoke GW (e.g. 2024-25 GW20) AND across the gate run.
+If n_mu_delta == 0 → classify as identity-null (do not promote), even if
+gate equalities formally pass — same vocabulary as E047-A.
+```
+
+#### Forbidden
+Silent production `_str` patch; post-peek LO/HI fishing; percentile or
+spline alternatives; ATK/CONCEDE coefficient changes; fplcache strength
+hydrate in this card; `fixtures_v2d`; packaging q; Cap peek before code
+matches this freeze; promoting on MAE-only or “looks more sensible.”
+
+#### Implementation sequence (when run is wanted)
+```text
+this freeze (done)
+  → implement fixtures_version=v1_sfix + harness_v1_sfix
+  → identity-null smoke
+  → four-season gate
+  → SURVIVE/KILL log
+  → promote only if SURVIVE and not identity-null
+```
+
+- **Method:** `engine/fixtures.py` (`_str_sfix`); `python -m engine.harness_v1_sfix`
+- **Charter:** `docs/DECISION_CHARTER.md` §33
+- **Follow-up:** hold until ready to implement+gate. **Do not eyeball `_str`
+  or hand-tune STR_LO/HI in the meantime.**
+  → **implemented; KILL** below.
+
+### E048-A gate — fixtures=v1_sfix vs v1 (2026-09-06)
+- **Status:** complete — **KILL**
+- **Code:** `engine/fixtures.py` (`_str_sfix`, STR_LO=1000, STR_HI=1350);
+  `fixtures_version=v1_sfix`; `python -m engine.harness_v1_sfix`
+- **Stack:** both arms `minutes=v2am_fpla` + `rates=v1`; same harness teams;
+  control `_str`; treat `_str_sfix`; ATK/CONCEDE unchanged
+- **Identity-null sanity:** smoke 2024-25 GW20 → **602/804** μ deltas; gate
+  total **n_mu_delta=87804** — treatment reached payoff (not E047-null).
+- **Results (mean XI+Cap / XI0% / MAE₆₀₊):**
+
+  | Season | gate | XI0 c→t | MAE60 c→t | Cap c→t | mu_delta |
+  |---|---|---|---|---|---:|
+  | 2022-23 | FAIL | 6.6→**7.9** ✗ | 2.420→**2.407** ✓ | 59.2→**61.2** ✓ | 20859 |
+  | 2023-24 | PASS | 3.6→**4.5** ✗ | 2.361→**2.337** ✓ | 59.8→**62.2** | 21968 |
+  | 2024-25 | PASS | 6.2→**6.7** ✗ | 2.265→**2.236** ✓ | 58.6→**64.9** | 22509 |
+  | 2025-26 | FAIL | 6.9→**6.0** ✓ | 2.471→**2.465** ✓ | 55.8→**55.3** ✗ | 22468 |
+
+- **AGG Cap:** control mean ≈ 58.3 → treat ≈ 60.9 ✓
+- **Kill reasons:** (1) XI0 regresses on 3/4 seasons; (2) FAIL Cap regresses
+  on 2025-26. MAE improves on all four; AGG Cap clears. Classic E021-shaped
+  pattern: better conditional accuracy, worse / mixed blanks + toxic FAIL Cap.
+- **Artifacts:** `records/historical/v1_sfix_summary.csv`,
+  `e048_v1_sfix_run.log`, `e048_v1_sfix_verdict.txt`
+- **Verdict:** **KILL.** Restoring overall→bucket differentiation moves μ and
+  Cap in aggregate, but does not clear XI0 or FAIL-Cap gates. **Do not promote.**
+  **Do not retune** STR_LO/HI or ATK/CONCEDE after peek.
+- **Family CLOSED** for this linear 1000..1350→{2..5} remap into existing
+  ATK/CONCEDE. Reopen only with a **distinct** strength→xg structure (not
+  endpoint fishing; not silent production `_str` patch; not v2d reopen).
+- **Production:** unchanged — fixtures `v1` (still strength-blind via `_str`→5).
+- **Pattern note (institutional):** E048-A joins E021 (learned fixtures) and the
+  rates packaging arc as another case where restoring / improving
+  fixture-difficulty *accuracy* clears MAE (and often AGG Cap) while failing
+  XI0 and/or FAIL Cap under the current ILP — a reinforced signal-selection /
+  decision-safety gap, not an isolated kill.
+  → **E049** below (distinct continuous piecewise map; freeze only).
+
+### E049 — Fixtures strength piecewise through ATK/CONCEDE knots (preregistered)
+- **Date:** 2026-09-06 (after E048-A KILL)
+- **Status:** **preregistered** — then **E049-A** freeze + **KILL** (gate below)
+- **Lane:** Upstream fixtures-model. Narrow defect-fix successor to E048-A.
+  Humble prior: E048-A / E021 already show differentiation often hurts XI0/FAIL Cap.
+- **Primary question:** Does making the designed ATK/CONCEDE curve **continuous**
+  (piecewise-linear through all four original knots) while mapping modern overall
+  strength onto \([2,5]\) clear decision gates vs literal production `_str`→5 —
+  without inventing a new ATK shape?
+- **Hypothesis:** E048-A’s discrete round-to-bin was a coarser restoration of the
+  same designed curve. Continuous piecewise through the **same** knots is the
+  minimal “unscrew `_str`” that preserves designed mid-bucket multipliers
+  (`ATK[3]=1.32`, `ATK[4]=1.95`, etc.) rather than endpoint-only linear (which
+  would invent a new curve).
+
+#### Explicit non-identity
+| | E021 `v2d` | E048-A `v1_sfix` | E049 |
+|---|---|---|---|
+| Map | learned strengths / new xG path | linear raw→**round** bucket → ATK[b] | raw→continuous \(u\in[2,5]\) → **piecewise** ATK/CONCEDE through all 4 knots |
+| Curve | new | stepped designed table | **same** designed knots, continuous |
+| Forbidden here | — | LO/HI retune of `v1_sfix` | endpoint-only linear (discards mid knots) |
+
+Also not E047-A (hydrate into broken `_str`).
+
+#### Why not endpoint-only continuous
+Linear interp only between `ATK[2]` and `ATK[5]` puts mid-scale ≈1.47 / ≈1.88,
+not the designed 1.32 / 1.95. That is a new hypothesis, not a scale unscrew.
+
+- **Follow-up:** → **E049-A** locks formula + gates. **No implement until ready
+  to run the full gate.** No Cap peek while drafting.
+
+### E049-A — Policy freeze + gate
+- **Date:** 2026-09-06 (dated amendment to E049; **before any fixtures code
+  change and before any Cap/MAE/XI0 peek** — freeze first; gate after)
+- **Status:** **KILL** + family **CLOSED** (piecewise map)
+
+#### Frozen anchors (a) — fixed global, reuse E048-A describe
+```text
+STR_LO = 1000
+STR_HI = 1350
+# Same control-only panel-scale anchors as E048-A (not Cap-derived; not (b)
+# expanding-window). Not a license to retune after peek.
+```
+
+#### Frozen map (ONE formula)
+```text
+ATK knots:     (2, 1.05), (3, 1.32), (4, 1.95), (5, 2.30)   # unchanged dict
+CONCEDE knots: (2, 1.70), (3, 1.38), (4, 1.05), (5, 0.78)
+
+def raw_to_u(val) -> float:          # position on designed [2,5] axis
+    if val is None or val <= 0:
+        return 3.0                   # midpoint; same spirit as _str default 3
+    iv = int(val)
+    if 2 <= iv <= 5:
+        return float(iv)             # legacy scale identity
+    x = max(STR_LO, min(STR_HI, iv))
+    t = (x - STR_LO) / (STR_HI - STR_LO)   # 0..1
+    return 2.0 + 3.0 * t             # continuous in [2,5]
+
+def pw_lerp(u: float, knots: list[tuple[float,float]]) -> float:
+    # piecewise-linear between adjacent knots; u clipped to [2,5]
+    u = max(2.0, min(5.0, u))
+    for (u0, y0), (u1, y1) in zip(knots, knots[1:]):
+        if u <= u1:
+            if u1 == u0: return y0
+            w = (u - u0) / (u1 - u0)
+            return y0 + w * (y1 - y0)
+    return knots[-1][1]
+
+atk(val)     = pw_lerp(raw_to_u(val), ATK knots)
+concede(val) = pw_lerp(raw_to_u(val), CONCEDE knots)
+```
+
+Then `expected_goals` uses `atk`/`concede` in place of `ATK[_str(...)]` /
+`CONCEDE[_str(...)]`. **Unchanged:** `LEAGUE_AVG=1.35`, home/away ×1.10/0.88,
+output clamp `[0.45, 3.4]`.
+
+**Not this card:** endpoint-only `ATK[2]+n*(ATK[5]-ATK[2])`; discrete
+`round` to bin (E048-A); new ATK/CONCEDE numbers; fplcache hydrate; v2d.
+
+#### Arms / stack
+```text
+CONTROL   minutes=v2am_fpla, rates=v1, fixtures=v1   # literal _str
+TREAT     minutes=v2am_fpla, rates=v1, fixtures=v1_pw
+TEAMS     same harness/live Team.strength_* as control (no fplcache)
+FAIL      {2022-23, 2025-26}
+SEED      7; strategy=balanced; objective=next for gate harness
+```
+
+#### Gates (no leniency)
+```text
+XI0        treat ≤ control on all four seasons
+MAE_60+    treat ≤ control on all four seasons
+FAIL Cap   treat ≥ control on each FAIL season
+AGG Cap    treat ≥ control
+g_treat    report required
+SANITY     n_mu_delta > 0 or identity-null (no promote)
+```
+Survive only if all hold **and** not identity-null. Else **KILL**.
+No STR_LO/HI retune. No knot rewrite. No endpoint-only swap after peek.
+
+#### Forbidden
+Silent production `_str` patch; E048-A LO/HI fishing; endpoint-only continuous;
+percentile / spline alternatives; ATK/CONCEDE coefficient changes; fplcache
+hydrate; `fixtures_v2d`; Cap peek before code matches this freeze.
+
+#### Implementation sequence (when run is wanted)
+```text
+this freeze (done)
+  → implement fixtures_version=v1_pw + harness_v1_pw
+  → identity-null smoke
+  → four-season gate
+  → SURVIVE/KILL log
+  → promote only if SURVIVE and not identity-null
+```
+
+- **Method:** `engine/fixtures.py` (`raw_to_u`, `pw_lerp`, `expected_goals_pw`);
+  `python -m engine.harness_v1_pw`; `scripts/e049_merge_verdict.py`
+- **Charter:** `docs/DECISION_CHARTER.md` §34
+
+#### Gate (2026-09-06)
+- **Smoke:** 2024-25 GW20 → **604/804** μ deltas (not identity-null).
+- **n_mu_delta total:** **87892** across four seasons.
+- **XI0:** ✗ — treat worse on **2022-23** (6.6→8.4) and **2023-24** (3.6→4.5);
+  OK 2024-25 (tie) and 2025-26 (improve).
+- **MAE₆₀₊:** ✓ all four (treat ≤ control).
+- **FAIL Cap:** ✓ both FAIL seasons (treat ≥ control).
+- **AGG Cap:** ✓ 58.34 → 61.63.
+- **Verdict:** **KILL.** Cap/MAE improve; XI0 safety fails (E021/E048-shaped).
+- **Family:** **CLOSED** for this piecewise map. No STR_LO/HI retune. No knot
+  rewrite. No endpoint-only swap. No silent `_str` patch. Production stays
+  `fixtures=v1`.
+- **Artifacts:** `records/historical/v1_pw_summary.csv`,
+  `e049_v1_pw_verdict.txt`, `e049_v1_pw_run.log`
+- **Follow-up:** new prereg only for a **different** strength→xG design (not
+  fishing this card).
+  → **E050** Product WC prereg below.
+
+### E050 — Wildcard chip ROI (preregistered)
+- **Date:** 2026-09-06 (after E046-A FH wired; Product order #2)
+- **Status:** **preregistered** — then **E050-A** freeze below (**before code / Cap**)
+- **Track:** Product. TC/BB/FH surfaces remain frozen and **independent**.
+  Upstream/Research parked.
+- **Primary question:** Under a **sticky held 15 with zero free transfers**, does
+  as-of-T production μ contain enough information to time a single Wildcard
+  (blank-slate reoptimize, then **REPLACE** held — not FH revert) so that season
+  Cap beats both never-WC and a fixed-calendar WC stake?
+- **Hypothesis:** A deterministic WC policy \(t^\star=\arg\max_t U_{\mathrm{WC}}(t)\)
+  produces robust incremental Cap vs never-WC and vs calendar WC — testing
+  **timing of one persistent squad replacement under ownership scarcity**, not
+  FH revert and not a multi-transfer / second-WC engine.
+
+#### Explicit non-identity vs E046-A FH
+
+| | E046-A FH | E050 WC |
+|---|---|---|
+| Chip GW Cap | blank-slate XI | blank-slate XI (same ILP) |
+| After chip | **REVERT** to `HELD_0` | **REPLACE** `HELD ←` blank 15 |
+| Timing \(U\) | myopic \(U_{\mathrm{blank}}-U_{\mathrm{held}}\) at \(t\) | **forward** sum of remaining XI-utility lifts under \(I_t\) |
+| Claim | one-week unconstrained escape | permanent resquad under scarcity |
+
+#### Degeneracy lock (load-bearing)
+```text
+FORBIDDEN AS B0:  rolling blank-slate solve_squad every GW
+REQUIRED AS B0:   sticky HELD_0 (15 element ids) until WC fires (if ever)
+```
+Weekly blank-slate B0 would make “WC = unconstrained ILP” identity to production
+rolling squad for Cap after any early fire — voids the scarcity estimand.
+
+#### Ownership model (frozen — minimal scarcity + replace)
+```text
+HELD_0        = solve_squad at first usable GW in W (objective=next, …)
+HELD_t        = HELD_0 for t < t_chip; after WC at t_chip,
+                HELD_t = BLANK(t_chip).players for all τ >= t_chip
+XI_held(t)    = solve_xi among HELD_t ∩ eligible(t); pick_captains as production
+BLANK(t)      = solve_squad(snapshot_t, production μ, objective=next, …)
+WC week       = Cap from XI_blank(t); then REPLACE held with blank 15
+non-WC weeks  = Cap from XI_held(t) under current sticky HELD
+```
+No FT counter, no hit cost, no price/bank path. **One WC per season** on this
+card (second Wildcard out of scope). FH / TC / BB out of scope (no joint calendar).
+
+#### Arm roles (structurally distinct — B1 ≠ C)
+
+| Arm | Uses \(U_{\mathrm{WC}}\)? | Timing | After chip | Purpose |
+|---|---:|---|---|---|
+| **B0** | No | Never WC | — | Floor under scarcity |
+| **B1** | No | Fixed \(g^\star\) | Replace held | Non-model benchmark |
+| **C** | Yes | \(t^\star=\arg\max_t U_{\mathrm{WC}}(t)\) | Replace held | Actual test |
+
+**B1 must not equal C.** Resquad ILP is shared once fired; arms differ only in
+*when*. Replace semantics are shared by B1 and C.
+
+#### Signal / map (forward XI utility under \(I_t\))
+At candidate fire week \(t\), under as-of-\(t\) snapshot + projections covering
+remaining GWs \(\{t,\ldots,38\}\cap W\):
+\[
+U_{\mathrm{WC}}(t)
+=\sum_{\tau \ge t}
+\Bigl(
+U_{\mathrm{xi}}(\mathrm{BLANK}(t).\mathrm{players},\tau)
+-
+U_{\mathrm{xi}}(\mathrm{HELD}_0,\tau)
+\Bigr)
+\]
+```text
+U_xi(ids, τ) = next_xi_utility after solve_xi + pick_captains on ids
+               with next_* rebound to event τ under I_t
+tie-break    = lowest GW if U_WC tied
+FORBIDDEN    = myopic-only U_FH as the WC timing signal (that is E046);
+               full-15 weighted squad U; Cap peek into U; second WC
+```
+Direction: fire WC when the **persistent** blank-slate 15 lifts remaining
+XI-utility most vs trapped `HELD_0`, scored only under information at \(t\).
+
+#### Estimand
+\[
+R(\pi)=\sum_{t\in W}\mathrm{Cap}_t(\pi)
+\]
+```text
+Cap_normal(t) = sum(Y in XI_held) + Y_capt_held   # held = current sticky
+Cap_WC(t)     = sum(Y in XI_blank) + Y_capt_blank # chip GW only
+```
+Arm \(\pi\) uses \(\mathrm{Cap}_{WC}\) on its single chip GW; before chip uses
+`HELD_0`; after chip uses replaced held. Primary: C vs B0 and C vs B1.
+
+#### Scope lock
+```text
+stack:     v2am_fpla + rates=v1 + fixtures v1
+chip:      Wildcard only; ONE use per season; REPLACE held (not revert)
+W:         {1,...,38} unless integrity excludes a GW
+B0:        never WC; sticky HELD_0 all season
+B1:        WC exactly once at g* (g* in E050-A; no U in timing)
+C:         t* = argmax U_WC(t); WC once at t*; replace thereafter
+forbidden: FH (revert) smuggling; second WC; FT/hits/bank/price;
+           TC/BB/FH in this peek; joint chip calendar; new μ;
+           B1:=argmax-U_WC; weekly blank-slate B0; myopic U_FH as U_WC;
+           post-peek g*/U_WC retune; live WC UI before gate
+```
+
+#### Leakage boundary
+```text
+ALLOWED at T: HARNESS_SPEC as-of-T snap; production projections; held ids;
+              blank-slate solve at T; forward U_WC under I_T only
+FORBIDDEN:    GW-T+ actuals in policy; using post-T actuals to pick t*;
+              outcome-motivated U_WC or g* changes; FH-as-WC smuggling
+```
+
+#### Primary gate (mirror E040/E041/E046)
+```text
+AGG:  sum_4 R(C) > sum R(B0)  AND  sum_4 R(C) > sum R(B1)
+FAIL: sum_FAIL R(C) >= sum_FAIL R(B0)  AND  sum_FAIL R(C) >= sum_FAIL R(B1)
+Survive only if both hold. Else KILL E050-WC.
+No g* retune. No U_WC reshape. No second WC / FH in same peek.
+```
+
+#### Forbidden after peek
+Retune \(g^\star\) / \(W\) / \(U_{\mathrm{WC}}\); open FH or second WC in same peek;
+joint chip calendar; restore weekly blank-slate B0; new μ; FT/hit creep;
+promote on Cap without beating B1.
+
+#### Stop rule
+Fail → kill/park E050-WC (not all chips). TC/BB/FH product surfaces stay.
+Return to Phase-0 fork if Product stops. Second WC / FT engine = **new** cards.
+
+#### Implementation sequence
+```text
+this prereg
+  → E050-A amendment (g*, exact U_WC scalars, integrity, stack pin)
+  → historical evaluator (B0/B1/C season Cap)
+  → gate → only then WC product wiring (independent of TC/BB/FH)
+```
+No live UI. No optimizer modifications. No new projections. No Cap peek before
+the amendment freezes constants.
+
+- **Method (planned):** `python scripts/e050_wildcard_roi.py`;
+  `engine/e050_wc_policy.py` (not written yet)
+- **Charter:** `docs/DECISION_CHARTER.md` §35
+- **Follow-up:** → **E050-A** freeze below. **No implement / Cap peek until ready.**
+
+### E050-A — Policy freeze (amendment before implement / Cap)
+- **Date:** 2026-09-06 (dated amendment to E050; **before any WC code / Cap peek**)
+- **Status:** **frozen contract** — implement only this; no retune after peek
+- **Stack pin:** current production (`v2am_fpla` + `rates=v1` + fixtures `v1`)
+
+- **Frozen constants:**
+  ```text
+  g*              = 20
+  W               = {1,...,38}
+  OBJECTIVE       = next
+  STRATEGY        = balanced
+  SEED            = 7
+  minutes/rates   = v2am_fpla / v1 / fixtures v1
+  HELD_0          = solve_squad at first GW in W with usable as-of-T snap
+  U_xi(ids, τ)    = next_xi_utility(XI, capt) after solve_xi + pick_captains
+                    on ids ∩ present(τ), with next_* bound to event τ
+  U_WC(t)         = sum_{τ>=t, τ in W_t} [U_xi(BLANK(t).players, τ)
+                                         - U_xi(HELD_0, τ)]
+                    under single as-of-t information set I_t
+  W_t             = remaining GWs >= t that are scoreable under I_t
+                    (exclude τ if |eligible|<11 or solve_xi fails — cite)
+  C tie-break     = if U_WC tied → lowest GW
+  B1              = WC once at GW 20 (replace held; no U in timing)
+  N_WC            = 1   # second Wildcard out of scope
+  ```
+
+- **Integrity (frozen):**
+  ```text
+  Before WC: same as E046-A held integrity on HELD_0
+  After WC:  apply same |eligible_xi|<11 / solve_xi-fail exclude on NEW held
+  If g* excluded → B1 uses nearest lower included GW; else nearest higher
+                 (report g_star_effective; still no U in timing)
+  If BLANK(t) fails → exclude t from W for C timing (cite)
+  ```
+
+- **Cap definition:**
+  ```text
+  pre-chip:   Cap from XI(HELD_0)
+  chip GW:    Cap from XI(BLANK)
+  post-chip:  Cap from XI(NEW_HELD) where NEW_HELD = BLANK(t_chip).players
+  ```
+
+- **Aggregate gate:** identical AGG+FAIL structure to E046-A / E040-A.
+  Survive only if both hold. Else **KILL**. No \(g^\star\)/\(U_{\mathrm{WC}}\) retune.
+
+- **Degeneracy lock (reaffirmed):** B0 Cap always from `HELD_0` XI — never weekly
+  blank-slate. Implementing B0 as rolling `solve_squad` voids the card.
+
+- **Forbidden:** Cap peek before code matches this freeze; myopic \(U_{\mathrm{FH}}\)
+  as \(U_{\mathrm{WC}}\); FH revert semantics; second WC; joint chips; silent
+  production changes.
+
+- **Method (when run wanted):** `engine/e050_wc_policy.py`;
+  `python scripts/e050_wildcard_roi.py`
+- **Follow-up:** → **gate** below.
+
+### E050-A gate — Wildcard ROI (2026-09-06)
+- **Status:** complete — **SURVIVES**
+- **Code:** `engine/e050_wc_policy.py`; `python scripts/e050_wildcard_roi.py`
+- **Stack:** `v2am_fpla` + `rates=v1` + fixtures `v1`; sticky HELD_0 / 0 FT;
+  **REPLACE** after chip (not FH revert); forward \(U_{\mathrm{WC}}\) under \(I_t\);
+  seed=7; \(g^\star=20\); one WC
+- **Results (season Cap Σ / \(t^\star\)):**
+
+  | Season | gate | \(t^\star\) | R(B0) | R(B1) | R(C) | C−B0 | C−B1 |
+  |---|---|---:|---:|---:|---:|---:|---:|
+  | 2022-23 | FAIL | 8 | 1573 | 1807 | 1633 | +60 | **−174** |
+  | 2023-24 | PASS | 7 | 1660 | 1697 | 1832 | +172 | +135 |
+  | 2024-25 | PASS | 10 | 1754 | 2049 | 2039 | +285 | **−10** |
+  | 2025-26 | FAIL | 7 | 1499 | 1630 | 1926 | +427 | +296 |
+
+- **AGG:** ΣR(B0)=6486, ΣR(B1)=7183, ΣR(C)=**7430** → C>B0 and C>B1
+  (C beats B1 by **+247** season points — much clearer than E046-A FH +2).
+- **FAIL:** ΣR(C)=3559 ≥ B0 3072 and ≥ B1 3437.
+- **Note:** C loses to B1 on 2022-23 and 2024-25 alone; gate uses **sums**, not
+  per-season unanimity (E040/E046 discipline). Early \(t^\star\) (GW7–10) —
+  forward \(U_{\mathrm{WC}}\) favors persistent replace sooner than FH myopic peaks.
+  HELD_0 freeze GW=1 all seasons; 0 Cap GWs excluded for held integrity.
+- **Artifacts:** `records/historical/e050_wildcard_roi_season.csv`,
+  `e050_wildcard_roi_summary.txt`, `e050_wc_verdict.txt`, `e050_wildcard_run.log`
+- **Verdict:** **SURVIVES.** As-of-T \(\arg\max U_{\mathrm{WC}}\) beats never-WC
+  and fixed-GW20 calendar WC on AGG and FAIL. Degeneracy lock held (B0 = sticky
+  held, not weekly blank-slate). Replace semantics distinct from E046-A FH.
+- **Not auto-promote:** WC product wiring requires a **separate** surface step
+  (mirror E046-A FH wiring), with independence vs TC/BB/FH stated.
+- **Follow-up:** → **E050-A product wiring** below. Second WC / FT engine remain
+  **new** cards. No \(g^\star\)/\(U_{\mathrm{WC}}\) retune.
+
+### E050-A wiring — product surface (2026-09-09)
+- **Status:** **wired** — frozen E050-A policy exposed; not a new experiment
+- **Module:** `engine/e050_wc_policy.py` (shared with historical evaluator)
+- **CLI:** `python fpl.py wc` (live remaining GWs under \(I_N\); optional
+  `--squad` sticky held); `python fpl.py wc --season 2024-25` (as-of-t HELD_0)
+- **Claim:** Under the frozen E050-A policy, recommend WC in the GW where
+  forward blank-slate XI utility lift over sticky held is highest; after fire,
+  **REPLACE** held (not FH revert).
+- **Live semantics:** Past as-of-t when rebuildable; current+future under \(I_N\)
+  only with sticky held (blank freeze on live snap, or `--squad` owned 15).
+- **Engineering gate:** `tests/test_e050_wc_wiring.py` — \(t^*\)/\(U_{\mathrm{WC}}\)
+  must match E050 season CSV artifacts.
+- **Forbidden:** policy retune; \(g^\star\)/\(U_{\mathrm{WC}}\) reshape; joint
+  TC/BB/FH/WC calendar; second WC; FH revert semantics in this surface.
+- **Asterisks (visible in CLI):** C loses to B1 on 2022-23 (−174) and 2024-25
+  (−10) alone; AGG C−B1 = +247 via four-season sums.
+- **Follow-up:** → **E051** joint-chip conflict diagnostic (measurement only).
+  Second WC / FT engine remain new cards. Upstream strength→xG stays slow /
+  optional (new prereg only — not E049 cleanup).
+
+### E051 — Joint chip conflict diagnostic (preregistered)
+- **Date:** 2026-09-09 (after E050-A WC wired; Product individual-chip milestone)
+- **Status:** **preregistered** — measurement only; **no Cap peek / no scheduler**
+  until this card’s report exists; resolution policy = separate **E051-A** only
+  if conflicts are material
+- **Lane:** Product (decision-layer). Consumes frozen single-chip policies as
+  **inputs**. Research \(V\) / Upstream μ parked.
+- **Primary question:** Given the four frozen single-chip recommenders
+  \(\{TC,BB,FH,WC\}_{\mathrm{frozen}}\), how often do independently recommended
+  chip dates **conflict**, what is the structure of those conflicts, and is the
+  realizable value loss large enough to justify a joint inventory / resolution
+  policy?
+- **Hypothesis:** Independent argmax policies will sometimes nominate the same
+  GW or otherwise incompatible calendars; measuring collision rate and
+  Cap-opportunity cost under a frozen exclusive-use rule will show whether a
+  joint scheduler is earned — or whether conflicts are rare enough to leave
+  the four surfaces independent.
+
+#### Explicit non-goals (load-bearing)
+```text
+NOT this card:  joint optimizer / ILP over chip calendars
+NOT this card:  retuning U_capt / U_bench / U_FH / U_WC / g*
+NOT this card:  making the four policies "cooperate" by changing them
+NOT this card:  second WC, FT/hits, price path, squad-ILP changes
+E051-A only if: diagnostic shows material conflict cost (dated amendment)
+```
+
+#### Inputs (frozen — do not modify)
+```text
+TC  E040-A  t*_TC  = argmax U_capt     (fpl.py tc / e040_tc_policy)
+BB  E041-A  t*_BB  = argmax U_bench    (fpl.py bb / e041_bb_policy)
+FH  E046-A  t*_FH  = argmax U_FH       (sticky held / revert)
+WC  E050-A  t*_WC  = argmax U_WC       (sticky held / REPLACE; forward U)
+STACK       v2am_fpla + rates=v1 + fixtures v1; seed=7; balanced; objective=next
+```
+
+#### Conflict definitions (freeze in report; no post-hoc redefinition)
+```text
+SAME_GW(i,j)     = 1 if t*_i = t*_j for chips i≠j
+MULTI            = 1 if ≥3 chips share the same t*
+PAIRWISE_COUNT   = number of unordered pairs with SAME_GW
+# Chronological / exclusivity notes (report only on this card):
+# FPL allows at most one of each chip type per season in this lab's scope;
+# FH and WC both resquad — SAME_GW(FH,WC) is always a hard conflict.
+# TC and BB can share a GW in real FPL; still report SAME_GW(TC,BB) as a
+# soft collision for inventory awareness (do not silently treat as free).
+```
+
+#### Estimand (diagnostic — not a promote gate)
+```text
+Per season s in {2022-23,…,2025-26}:
+  record (t*_TC, t*_BB, t*_FH, t*_WC) from frozen recommend_historical(s)
+  report SAME_GW matrix, PAIRWISE_COUNT, MULTI
+
+Across 4 seasons:
+  collision rate = fraction of seasons with ≥1 SAME_GW pair
+  pair frequencies for each chip pair
+
+Optional Cap opportunity (report-only; not a kill/survive gate on E051):
+  Under a preregistered exclusive rule "at most one chip action per GW"
+  and "each chip used at most once", compare:
+    R_indep_naive = sum of single-chip C-arm Caps if all four fire at their t*
+                    (infeasible if collisions) — cite infeasibility
+    R_priority    = apply ONE frozen priority order (see below) to drop
+                    colliding chips; season Cap under remaining fires
+  Priority order (frozen for optional Cap column only; not a policy claim):
+    WC > FH > TC > BB
+    # Rationale cite: WC REPLACE has largest validated AGG margin vs B1;
+    # not a license to promote this order — E051-A may choose differently.
+```
+
+#### Stop / branch rule
+```text
+If collision rate = 0 across 4 seasons:
+  → E051 concentrated: conflicts negligible; DO NOT open E051-A scheduler
+If collisions exist but optional Cap delta vs "drop all but priority" is small
+  (pre-registered threshold in E051-A amendment — not invented after peek):
+  → park joint inventory
+If collisions are frequent OR Cap opportunity looks material:
+  → E051-A amendment freezes ONE resolution policy class + gates before run
+```
+
+#### Forbidden after peek
+Retune any chip \(U\) or \(g^\star\); reopen E048/E049; change production μ or
+squad ILP; build a joint optimizer on this card; promote the WC>FH>TC>BB
+priority as product without E051-A; silent “make recommendations cooperate.”
+
+#### Implementation sequence
+```text
+this prereg (docs)
+  → script: collect frozen t* per season + conflict matrix
+  → write diagnostic report (records/historical/e051_*)
+  → concentrated verdict: negligible vs material
+  → only then E051-A if material
+```
+
+- **Method:** `python scripts/e051_chip_conflict_diagnostic.py`
+  (reads frozen gate season CSVs for t*; optional `--recompute SEASON`)
+- **Charter:** `docs/DECISION_CHARTER.md` §36
+- **Follow-up:** → **diagnostic result** below.
+
+### E051 diagnostic — joint chip conflicts (2026-09-09)
+- **Status:** complete — **concentrated: CONFLICTS_PRESENT** (sparse)
+- **Code:** `scripts/e051_chip_conflict_diagnostic.py`;
+  `tests/test_e051_chip_conflict.py`
+- **Source:** frozen gate season CSVs (E040/E041/E046/E050 t*) — no chip
+  \(U\)/\(g^\star\) retune
+- **Per-season \(t^\star\):**
+
+  | Season | TC | BB | FH | WC | SAME_GW pairs |
+  |---|---:|---:|---:|---:|---|
+  | 2022-23 | 34 | 29 | 37 | 8 | — |
+  | 2023-24 | 35 | 34 | 25 | 7 | — |
+  | 2024-25 | 25 | 33 | 32 | 10 | — |
+  | 2025-26 | 36 | 33 | 36 | 7 | **TC–FH @36** |
+
+- **Aggregate:** collision rate **1/4** (0.25). Hard FH–WC: **0/4**. Soft TC–BB:
+  **0/4**. Multi (≥3): **0/4**.
+- **Priority report-only (WC>FH>TC>BB):** on 2025-26 drops TC, keeps FH
+  (and WC/BB). Not a product claim.
+- **Cap opportunity:** not computed — single-chip ROI Caps are not additive
+  across ownership models (rolling blank vs sticky held). Unified Cap only in
+  E051-A if pursued.
+- **Artifacts:** `records/historical/e051_chip_conflict_season.csv`,
+  `e051_chip_conflict_summary.txt`, `e051_chip_conflict_verdict.txt`
+- **Verdict:** **CONFLICTS_PRESENT** — sparse (one soft-ish inventory collision
+  TC∩FH in one FAIL season; no hard FH∩WC). Branch:
+  **E051-A earned for a narrow resolution class** if we want an explicit rule
+  for rare SAME_GW; **not** earned for a giant joint scheduler. Do not retune
+  chip policies. Do not promote WC>FH>TC>BB without E051-A.
+- **Follow-up:** **PARK joint inventory.** Skip E051-A (shared Cap not trivial;
+  collision already documented). Giant scheduler not earned. → **E052** Upstream
+  strength→xG prereg below.
+
+### E052 — New strength→xG (continuous relative; preregistered)
+- **Date:** 2026-09-09 (after E051 park; Upstream reopen on a **new** design class)
+- **Status:** **preregistered** — evaluation contract locked; **exact algebra** via
+  dated **E052-A** amendment **before any fixtures code / Cap / MAE peek**
+- **Lane:** Upstream. Product chips remain frozen SHIPPED. Formal/Lean independent.
+- **Primary question:** Does a **genuinely new**, decision-time-valid team-strength
+  → expected-goals map improve **player expected-points projections** vs frozen
+  production, without reopening closed remap / v2d families?
+- **Hypothesis:** Dated fplcache `strength_overall_*` carry real mid-season
+  information (E045 survey). Feeding them through ATK/CONCEDE buckets fails
+  (E047 identity-null; E048/E049 XI0). A **direct continuous relative xG** map
+  (no ATK/CONCEDE tables) can move μ honestly and may improve projection metrics
+  before any decision-layer test.
+
+#### Explicit non-identity (load-bearing)
+| | E021 `v2d` | E047 `v1_fpls` | E048 `v1_sfix` | E049 `v1_pw` | **E052** |
+|---|---|---|---|---|---|
+| Signal | learned goals ATK/CONCEDE | dated overall | dated overall | dated overall | dated overall |
+| Map | replace tables | hydrate → `_str` → ATK/CONCEDE | round→bucket→ATK | pw_lerp→ATK | **relative continuous xG; no ATK/CONCEDE** |
+| Claim | new learned fixture model | harness blanking | discrete remap | piecewise remap | **bypass hand tables** |
+
+#### Control / treat stack (attribution lock)
+```text
+CONTROL   minutes=v2am_fpla, rates=v1, fixtures=v1
+          # production; NOT v2am_s
+TREAT     minutes=v2am_fpla, rates=v1, fixtures=v1_sxg   # name frozen in E052-A
+CHANGED   expected_goals path ONLY (player_match_context team_xg / opp_xg / …)
+FIXED     minutes, rates, utility, horizon, ILP, chips, seed=7, strategy=balanced
+```
+
+#### Signal / selection (class freeze; constants in E052-A)
+```text
+SIGNAL    fplcache teams[].strength_overall_home + strength_overall_away
+SELECT    last snap path-UTC ≤ GW deadline (E044/E047 rule; proven coverage)
+MAP CLASS continuous relative intensity → (e_home, e_away)
+          using league-mean normalization of dated overalls at as-of-T
+          then same LEAGUE_AVG / home·1.10 / away·0.88 / output clamp as v1
+          UNLESS E052-A explicitly freezes different clamp (one choice only)
+FORBIDDEN ATK/CONCEDE lookups; _str / _str_sfix / pw_lerp knot maps;
+          attack/defence strength fields (separate card if ever);
+          fixtures_v2d; packaging q; ep_next; LO/HI/knot fishing;
+          multi-design bake-off; target-GW outcomes in μ
+```
+
+#### Phase-1 estimand (projection-only — primary)
+```text
+Compare treat vs control player next_mu among players with actual minutes ≥ 60
+on each GW with records, seasons {2022-23,…,2025-26}:
+
+MAE_60+     treat ≤ control on all four seasons     (primary hard)
+Spearman_60+ treat ≥ control on AGG mean             (primary soft; report per season)
+RMSE_60+    report; bias report required
+n_mu_delta  > 0 or classify identity-null (no promote / no Phase-2)
+
+Survive Phase-1 only if MAE_60+ hard gate holds AND not identity-null.
+Else KILL / park E052 — do not open decision Cap.
+```
+
+#### Phase-2 (only if Phase-1 SURVIVES — separate gate log)
+```text
+Same decision gates as E048/E049 under frozen stack:
+XI0 4/4 non-worse; FAIL Cap each non-neg; AGG Cap non-worse; g_treat report
+Survive Phase-2 only if all hold. Else KILL for promote; Phase-1 result stands
+as concentrated projection evidence only.
+```
+
+#### Forbidden after peek
+Five-design fishing; reopening E021/E048/E049; LO/HI/knot retune; silent `_str`
+patch; changing minutes/rates/ILP/chips on this card; Cap peek before E052-A
+algebra freeze; promoting on Spearman-only.
+
+#### Implementation sequence
+```text
+this prereg (evaluation + design CLASS)
+  → E052-A amendment (exact relative-xG algebra + fixtures_version name +
+                      Phase-1/2 gate text confirmation)
+  → implement treat path only
+  → identity-null smoke
+  → Phase-1 projection gate
+  → SURVIVE/KILL Phase-1
+  → Phase-2 decision gate ONLY if Phase-1 SURVIVES
+  → promote only if Phase-2 SURVIVES + explicit promote
+```
+
+- **Method (planned):** extend `engine/fixtures.py` + fplcache strength overlay;
+  harness for μ compare (not written yet)
+- **Charter:** `docs/DECISION_CHARTER.md` §37
+- **Follow-up:** → **E052-A** freezes the exact formula before any code. **No
+  implement / Cap / MAE peek until then.** Humble prior: XI0 wall may recur even
+  if MAE improves (E021/E048/E049 pattern).
+
+### E052-A — Policy freeze (amendment before implement / Cap / MAE)
+- **Date:** 2026-09-09 (dated amendment to E052; **before any fixtures code
+  change and before any Cap / MAE / XI0 / Spearman peek**)
+- **Status:** **frozen contract** — implement only this; no retune after peek
+- **Lane:** Upstream. Not E047 hydrate-through-`_str`; not E048/E049 remap.
+
+#### Frozen name
+```text
+fixtures_version = v1_sxg
+```
+
+#### Frozen signal / selection (reuse E047 machinery; do not re-survey)
+```text
+SIGNAL    strength_overall_home, strength_overall_away only
+SOURCE    data/fplcache_strength/{season}/gwNN.json  (engine/fplcache_strength.py)
+SELECT    last snap path-UTC ≤ GW deadline (E044/E047 rule)
+TREAT     hydrate Team.strength_home / strength_away from overlay at as-of-GW
+CONTROL   NO hydrate; production Team.strength_* + fixtures=v1 (_str as today)
+MISSING   team absent from overlay OR S<=0 → intensity I = 1.0 (league-mean)
+EMPTY     no overlay file → treat arm uses I=1.0 for all teams that GW
+          (still call expected_goals_sxg — report; do not silently switch to v1)
+```
+
+#### Frozen algebra (ONE formula — no alternatives after this line)
+League means at as-of-T over **teams present in the overlay** with \(S>0\)
+(typically 20). If a mean is undefined or ≤0, set every \(I=1.0\).
+
+```text
+LEAGUE_AVG = 1.35          # unchanged
+HOME_ADV   = 1.10          # unchanged
+AWAY_ADV   = 0.88          # unchanged
+_clamp     = [0.45, 3.4]   # unchanged; same _clamp as fixtures.py v1
+
+# Overlay teams with S_h > 0 / S_a > 0:
+m_h = mean_t S_h(t)
+m_a = mean_t S_a(t)
+
+def I_h(t):
+    S = strength_home(t)      # after treat hydrate
+    if S is None or S <= 0 or m_h <= 0: return 1.0
+    return float(S) / m_h
+
+def I_a(t):
+    S = strength_away(t)
+    if S is None or S <= 0 or m_a <= 0: return 1.0
+    return float(S) / m_a
+
+def expected_goals_sxg(home, away) -> (e_home, e_away):
+    # NO ATK / CONCEDE / _str / _str_sfix / pw_lerp / STR_LO / STR_HI
+    ih = I_h(home)
+    ia = I_a(away)
+    # opponent overall intensity as defence proxy (inverse)
+    e_home = LEAGUE_AVG * (ih / ia) * HOME_ADV
+    e_away = LEAGUE_AVG * (ia / ih) * AWAY_ADV
+    return _clamp(e_home), _clamp(e_away)
+```
+
+**Equal-league sanity (frozen check, not a tune):** if \(I_h=I_a=1\), then
+\(e_{\mathrm{home}}=1.485\), \(e_{\mathrm{away}}=1.188\) before any other path —
+same order as v1 mid-pack bucket-3, without reading ATK/CONCEDE.
+
+**Not this card:** attack/defence FPL fields; STR_LO/HI; ATK/CONCEDE knots;
+Dixon–Coles ρ; separate home-attack vs away-defence means; log-odds maps;
+percentile ranks; any second formula “for comparison.”
+
+#### Arms / stack
+```text
+CONTROL   minutes=v2am_fpla, rates=v1, fixtures=v1
+TREAT     minutes=v2am_fpla, rates=v1, fixtures=v1_sxg + dated strength hydrate
+CHANGED   expected_goals path ONLY (+ treat hydrate required for dated signal)
+FIXED     minutes, rates, utility, horizon, ILP, chips, seed=7, strategy=balanced
+FAIL      {2022-23, 2025-26}   # Phase-2 only
+SEASONS   {2022-23, 2023-24, 2024-25, 2025-26}
+```
+
+#### Phase-1 gates (projection-only — primary; run first)
+Among players with actual minutes ≥ 60 on GWs with records:
+
+```text
+MAE_60+      treat ≤ control on all four seasons     (HARD)
+n_mu_delta   > 0 or identity-null (no Phase-2 / no promote)
+Spearman_60+ treat ≥ control on AGG mean             (SOFT; report per season)
+RMSE_60+     report
+bias_60+     report (mean treat_μ − actual and control_μ − actual)
+```
+
+**SURVIVE Phase-1** only if MAE hard gate holds **and** not identity-null.
+Else **KILL / park E052** — do **not** open Phase-2 Cap.
+
+#### Phase-2 gates (decision — only if Phase-1 SURVIVES; separate log)
+```text
+XI0        treat ≤ control on all four seasons
+FAIL Cap   treat ≥ control on each FAIL season
+AGG Cap    treat ≥ control
+g_treat    report required
+```
+**SURVIVE Phase-2** only if all hold. Else **KILL for promote**; Phase-1
+result remains concentrated projection evidence only.
+
+#### Forbidden after peek
+ATK/CONCEDE reopen; `_str` / sfix / pw fishing; STR_LO/HI retune; silent
+production `_str` patch; changing HOME_ADV/AWAY_ADV/LEAGUE_AVG/clamp;
+swap to attack/defence fields; Cap peek before Phase-1; MAE fishing via
+second map; minutes/rates/ILP/chip changes; E021/E048/E049 reopen;
+promoting on Spearman-only or “looks more sensible.”
+
+#### Implementation sequence
+```text
+this freeze (done)
+  → implement expected_goals_sxg + fixtures_version=v1_sxg + treat hydrate
+  → identity-null smoke (e.g. 2024-25 GW20)
+  → Phase-1 projection gate (four seasons)
+  → SURVIVE/KILL Phase-1 log
+  → Phase-2 decision gate ONLY if Phase-1 SURVIVES
+  → promote only if Phase-2 SURVIVES + explicit promote
+```
+
+- **Method (implemented):** `engine/fixtures.py` (`expected_goals_sxg`);
+  `engine/fplcache_strength.hydrate_snapshot_teams` on treat;
+  `python -m engine.harness_v1_sxg`
+- **Charter:** `docs/DECISION_CHARTER.md` §37 (amended)
+- **Follow-up:** implemented below. Humble prior: XI0 wall may still appear in
+  Phase-2.
+
+### E052-A implement + Phase-1 gate (2026-09-09)
+- **Status:** **SURVIVES Phase-1** — Cap/XI0 **not** opened on this card step
+- **Code:** `engine/fixtures.py` (`expected_goals_sxg`, `intensity_means`);
+  `fixtures_version=v1_sxg` in `player_match_context` / `project_all` (+ dated
+  hydrate via `fplcache_strength`); `python -m engine.harness_v1_sxg`;
+  `tests/test_e052_v1_sxg.py`
+- **Stack:** both arms `minutes=v2am_fpla` + `rates=v1`; control `fixtures=v1`
+  (no hydrate); treat `v1_sxg` + dated strength hydrate; no ATK/CONCEDE
+- **Smoke:** 2024-25 GW20 → **600/804** μ deltas (not identity-null)
+- **Phase-1 results (60+ players):**
+
+  | Season | gate | MAE60 c→t | Sp c→t | RMSE c→t | bias c→t | n_mu_delta |
+  |---|---|---|---|---|---|---:|
+  | 2022-23 | FAIL | 2.420→2.410 ✓ | 0.223→0.240 | 3.671→3.655 | −1.726→−1.722 | 20785 |
+  | 2023-24 | PASS | 2.361→2.345 ✓ | 0.234→0.256 | 3.613→3.588 | −1.401→−1.390 | 22104 |
+  | 2024-25 | PASS | 2.265→2.251 ✓ | 0.235→0.256 | 3.443→3.421 | −1.392→−1.381 | 22563 |
+  | 2025-26 | FAIL | 2.471→2.461 ✓ | 0.140→0.158 | 3.628→3.612 | −1.615→−1.607 | 22421 |
+
+- **AGG Spearman soft:** 0.208→0.227 ✓
+- **Identity-null:** total n_mu_delta=**87873** — treatment reached payoff
+- **Verdict:** **SURVIVES Phase-1** (MAE hard 4/4; not identity-null; Spearman
+  soft ok). Projection evidence concentrated. **Do not promote.** **Do not
+  retune** 1.10/0.88/1.35/clamp. Phase-2 Cap/XI0 is now **earned** but is a
+  **separate** gate — open only on explicit run.
+- **Artifacts:** `records/historical/v1_sxg_phase1_summary.csv`,
+  `e052_phase1_verdict.txt`, `e052_phase1_run.log`
+- **Follow-up:** → **Phase-2** decision gate (XI0 / FAIL Cap / AGG Cap /
+  g_treat) when ready. Humble prior: E048/E049 XI0 wall may still appear.
+
+### E052-A Phase-2 gate (2026-09-09)
+- **Status:** complete — **KILL for promote**
+- **Code:** `python -m engine.harness_v1_sxg_phase2`
+- **Stack:** same Phase-1 stack; control `fixtures=v1`; treat `fixtures=v1_sxg`
+  + dated hydrate; decision gate only
+- **Phase-2 results:**
+
+  | Season | gate | XI0 c→t | Cap c→t | g_treat | Verdict |
+  |---|---|---|---|---:|---|
+  | 2022-23 | FAIL | 6.6→7.4 ✗ | 59.2→61.6 ✓ | 0.198 | XI0 fail |
+  | 2023-24 | PASS | 3.6→4.3 ✗ | 59.8→61.4 | 0.361 | XI0 fail |
+  | 2024-25 | PASS | 6.2→6.7 ✗ | 58.6→61.6 | 0.349 | XI0 fail |
+  | 2025-26 | FAIL | 6.9→7.2 ✗ | 55.8→54.5 ✗ | 0.275 | XI0 + FAIL Cap fail |
+
+- **AGG Cap:** 58.34→59.78 ✓
+- **Identity-null:** total n_mu_delta=**87873** — treatment reached payoff
+- **Verdict:** **KILL Phase-2**. Projection metrics improved, but decision gate
+  fails exactly where prior remap cards warned: **XI0 worsens in 4/4 seasons**,
+  and **2025-26 FAIL Cap** also misses. Therefore **do not promote** `v1_sxg`.
+  Keep production at fixtures `v1`. **Do not retune** sxg constants after peek.
+- **Disposition:** **CLOSED** for this exact `v1_sxg` formula. Do not reopen
+  E052-A as cleanup. → **E053** uses a **new signal class** (attack/defence),
+  not an sxg retune.
+- **Artifacts:** `records/historical/v1_sxg_phase2_summary.csv`,
+  `records/historical/e052_phase2_verdict.txt`,
+  `records/historical/e052_phase2_run.log`
+
+### E053 — Dated attack/defence → continuous relative xG (preregistered)
+- **Date:** 2026-09-09 (after E052-A Phase-2 KILL; Upstream reopen on a **new**
+  signal class deferred by E052)
+- **Status:** **preregistered** — evaluation contract locked; **exact algebra**
+  + slim-field extract via dated **E053-A** amendment **before any fixtures
+  code / Cap / MAE peek**
+- **Lane:** Upstream. Product chips remain frozen SHIPPED. Formal/Lean independent.
+- **Assumption (explicit):** E052 forbade attack/defence fields on that card and
+  pointed them to a separate card. This is that card — **not** an overall→xG
+  retune, blend with `v1_sxg`, or ATK/CONCEDE reopen.
+- **Primary question:** Does dated FPL **attack/defence** team strength, mapped
+  via continuous relative intensity (no hand ATK/CONCEDE tables), improve
+  player μ vs production **and** survive the decision layer — where overall→xG
+  (E052) improved μ but failed XI0?
+- **Hypothesis:** Overall strength forced attack and defence through one scalar
+  (E052). Separate `strength_attack_*` / `strength_defence_*` (E045 survey
+  PASS_CANDIDATE; same deadline selection) can assign scoring power and concede
+  intensity independently, which may reduce blank-chasing XI rotations even if
+  MAE gains are similar.
+
+#### Explicit non-identity (load-bearing)
+| | E021 `v2d` | E052 `v1_sxg` | **E053** |
+|---|---|---|---|
+| Signal | learned goals ATK/CONCEDE | dated **overall** | dated **attack + defence** |
+| Map | replace tables | \(I\) from overall only | \(I_{\mathrm{atk}}, I_{\mathrm{def}}\) continuous relative |
+| Claim | new learned fixture model | bypass hand tables via overall | **split roles; still no hand ATK/CONCEDE** |
+
+#### Control / treat stack (attribution lock)
+```text
+CONTROL   minutes=v2am_fpla, rates=v1, fixtures=v1
+          # production; NOT v2am_s; NOT fixtures=v1_sxg
+TREAT     minutes=v2am_fpla, rates=v1, fixtures=v1_adxg  # name frozen in E053-A
+CHANGED   expected_goals path ONLY (+ dated ATK/DEF hydrate on treat)
+FIXED     minutes, rates, utility, horizon, ILP, chips, seed=7, strategy=balanced
+```
+
+#### Signal / selection (class freeze; constants in E053-A)
+```text
+SIGNAL    strength_attack_home, strength_attack_away,
+          strength_defence_home, strength_defence_away
+          # NOT strength_overall_* (that was E052)
+SELECT    last snap path-UTC ≤ GW deadline (E044/E047 rule)
+MAP CLASS continuous relative intensities → (e_home, e_away):
+          I_atk_h, I_atk_a, I_def_h, I_def_a = S / league-mean at as-of-T
+          e_home ∝ I_atk_h(home) / I_def_a(away)
+          e_away ∝ I_atk_a(away) / I_def_h(home)
+          then same LEAGUE_AVG / home·1.10 / away·0.88 / output clamp as v1
+          UNLESS E053-A explicitly freezes different clamp (one choice only)
+          Higher defence strength = stronger defence = lower opponent xG
+          (FPL convention; freeze polarity in E053-A if survey contradicts)
+FORBIDDEN overall-only maps (E052 reopen); ATK/CONCEDE hand tables;
+          _str / sfix / pw_lerp; STR_LO/HI fishing; fixtures_v2d;
+          packaging q; ep_next; blend treat×control μ; sxg coefficient retune;
+          multi-design bake-off; target-GW outcomes in μ
+```
+
+#### Phase-1 estimand (projection-only — primary)
+```text
+Same as E052 Phase-1 among players with actual minutes ≥ 60,
+seasons {2022-23,…,2025-26}:
+
+MAE_60+     treat ≤ control on all four seasons     (primary hard)
+Spearman_60+ treat ≥ control on AGG mean             (primary soft; report per season)
+RMSE_60+    report; bias report required
+n_mu_delta  > 0 or classify identity-null (no promote / no Phase-2)
+
+Survive Phase-1 only if MAE_60+ hard gate holds AND not identity-null.
+Else KILL / park E053 — do not open decision Cap.
+```
+
+#### Phase-2 (only if Phase-1 SURVIVES — separate gate log)
+```text
+Same decision gates as E048/E049/E052 Phase-2:
+XI0 4/4 non-worse; FAIL Cap each non-neg; AGG Cap non-worse; g_treat report
+Survive Phase-2 only if all hold. Else KILL for promote; Phase-1 result stands
+as concentrated projection evidence only.
+```
+
+#### Forbidden after peek
+E052 sxg retune; overall↔ATK/DEF swap after peek; LO/HI/knot fishing;
+silent `_str` patch; changing minutes/rates/ILP/chips on this card;
+Cap peek before E053-A algebra freeze; promoting on Spearman-only;
+claiming “E052 almost worked.”
+
+#### Implementation sequence
+```text
+this prereg (evaluation + design CLASS)
+  → E053-A amendment (exact I_atk/I_def algebra + fixtures_version name +
+                      slim extract fields + defence polarity confirmation)
+  → materialize dated ATK/DEF slim extracts
+  → implement treat path only
+  → identity-null smoke
+  → Phase-1 projection gate
+  → SURVIVE/KILL Phase-1
+  → Phase-2 decision gate ONLY if Phase-1 SURVIVES
+  → promote only if Phase-2 SURVIVES + explicit promote
+```
+
+- **Method (planned):** new slim strength ATK/DEF overlay (parallel to
+  `fplcache_strength` overall); extend fixtures expected-goals path; Phase-1
+  harness (not written yet)
+- **Charter:** `docs/DECISION_CHARTER.md` §38
+- **Follow-up:** → **E053-A** freezes the exact formula before any code. **No
+  implement / Cap / MAE peek until then.** Humble prior: XI0 wall may still
+  recur (E048/E049/E052 pattern) even if MAE improves.
+
+### E053-A — Policy freeze (amendment before implement / Cap / MAE)
+- **Date:** 2026-09-09 (dated amendment to E053; **before any fixtures code
+  change and before any Cap / MAE / XI0 / Spearman peek**)
+- **Status:** **frozen contract** — implement only this; no retune after peek
+- **Lane:** Upstream. Not E052 overall→sxg; not E048/E049 remap; not E021 v2d.
+
+#### Frozen name
+```text
+fixtures_version = v1_adxg
+```
+
+#### Frozen signal / selection
+```text
+SIGNAL    strength_attack_home, strength_attack_away,
+          strength_defence_home, strength_defence_away
+SOURCE    data/fplcache_strength_ad/{season}/gwNN.json
+          (engine/fplcache_strength_ad.py; E044/E047 deadline selection)
+TREAT     load dated ATK/DEF overlay at as-of-GW; do NOT write into Team.strength_*
+CONTROL   NO overlay; fixtures=v1
+MISSING   team absent OR S<=0 → intensity I = 1.0
+EMPTY     no overlay file → all I = 1.0 that GW (still call expected_goals_adxg;
+          do not silently switch to v1)
+POLARITY  higher defence strength = stronger defence = lower opponent xG
+          (confirmed on 2024-25 GW1/GW20 panel: ATK/DEF ~1050–1390, same
+          direction as overall; not inverted)
+```
+
+#### Frozen algebra (ONE formula — no alternatives after this line)
+League means at as-of-T over overlay teams with \(S>0\) for each field.
+If a mean is undefined or ≤0, set every corresponding \(I=1.0\).
+
+```text
+LEAGUE_AVG = 1.35
+HOME_ADV   = 1.10
+AWAY_ADV   = 0.88
+_clamp     = [0.45, 3.4]
+
+# Means over overlay teams with positive field:
+m_atk_h, m_atk_a, m_def_h, m_def_a
+
+def I(val, mean):
+    if val is None or val <= 0 or mean <= 0: return 1.0
+    return float(val) / mean
+
+def expected_goals_adxg(home_id, away_id, overlay) -> (e_home, e_away):
+    # NO ATK/CONCEDE tables; NO overall; NO _str / sfix / pw / STR_LO/HI
+    h = overlay.get(home_id)   # may be None → all I=1 for that side's fields
+    a = overlay.get(away_id)
+    i_atk_h = I(h.attack_home if h else None, m_atk_h)
+    i_atk_a = I(a.attack_away if a else None, m_atk_a)
+    i_def_h = I(h.defence_home if h else None, m_def_h)
+    i_def_a = I(a.defence_away if a else None, m_def_a)
+    e_home = LEAGUE_AVG * (i_atk_h / i_def_a) * HOME_ADV
+    e_away = LEAGUE_AVG * (i_atk_a / i_def_h) * AWAY_ADV
+    return _clamp(e_home), _clamp(e_away)
+```
+
+**Equal-league sanity:** all \(I=1\) → \(e_h=1.485\), \(e_a=1.188\).
+
+#### Arms / stack
+```text
+CONTROL   minutes=v2am_fpla, rates=v1, fixtures=v1
+TREAT     minutes=v2am_fpla, rates=v1, fixtures=v1_adxg + dated ATK/DEF overlay
+CHANGED   expected_goals path ONLY
+FIXED     minutes, rates, utility, horizon, ILP, chips, seed=7, strategy=balanced
+FAIL      {2022-23, 2025-26}   # Phase-2 only
+SEASONS   {2022-23, 2023-24, 2024-25, 2025-26}
+```
+
+#### Phase-1 / Phase-2 gates
+Same as E053 prereg (MAE_60+ hard 4/4 + not identity-null; then XI0 / FAIL Cap /
+AGG Cap). Survive Phase-1 only before opening Phase-2.
+
+#### Forbidden after peek
+E052 sxg retune; overall fields; ATK/CONCEDE hand tables; invert defence
+polarity after peek; LO/HI fishing; silent `_str` patch; Cap peek before
+Phase-1; promoting on Spearman-only.
+
+#### Implementation sequence
+```text
+this freeze (done)
+  → materialize slim ATK/DEF extracts
+  → implement expected_goals_adxg + fixtures_version=v1_adxg
+  → identity-null smoke
+  → Phase-1 projection gate
+  → SURVIVE/KILL Phase-1
+  → Phase-2 ONLY if Phase-1 SURVIVES
+```
+
+- **Method (planned):** `engine/fplcache_strength_ad.py`; `engine/fixtures.py`;
+  `python -m engine.harness_v1_adxg`
+- **Charter:** `docs/DECISION_CHARTER.md` §38 (amended)
+- **Follow-up:** implement + Phase-1 when ready. **No Cap peek while coding.**
+
+### E053-A implement + Phase-1 gate (2026-09-09)
+- **Status:** **SURVIVES Phase-1** — Cap/XI0 opened as separate Phase-2 step
+- **Code:** `engine/fplcache_strength_ad.py`; `expected_goals_adxg` in
+  `engine/fixtures.py`; `fixtures_version=v1_adxg` in `project_all`;
+  `python -m engine.harness_v1_adxg`; `tests/test_e053_v1_adxg.py`
+- **Stack:** both arms `minutes=v2am_fpla` + `rates=v1`; control `fixtures=v1`;
+  treat `v1_adxg` + dated ATK/DEF overlay (Team.strength_* unchanged)
+- **Smoke:** 2024-25 GW20 → **599/804** μ deltas (not identity-null)
+- **Phase-1 results (60+ players):**
+
+  | Season | gate | MAE60 c→t | Sp c→t | n_mu_delta |
+  |---|---|---|---|---:|
+  | 2022-23 | FAIL | 2.420→2.411 ✓ | 0.223→0.238 | 20792 |
+  | 2023-24 | PASS | 2.361→2.346 ✓ | 0.234→0.256 | 22130 |
+  | 2024-25 | PASS | 2.265→2.251 ✓ | 0.235→0.255 | 22545 |
+  | 2025-26 | FAIL | 2.471→2.461 ✓ | 0.140→0.157 | 22364 |
+
+- **AGG Spearman soft:** 0.208→0.226 ✓
+- **Identity-null:** total n_mu_delta=**87831**
+- **Verdict:** **SURVIVES Phase-1**. Do not promote on MAE-only. Do not retune.
+- **Artifacts:** `records/historical/v1_adxg_phase1_summary.csv`,
+  `e053_phase1_verdict.txt`, `e053_phase1_run.log`
+- **Follow-up:** → Phase-2 Cap/XI0 gate.
+
+### E053-A Phase-2 gate (2026-09-09)
+- **Status:** complete — **KILL for promote**
+- **Code:** `python -m engine.harness_v1_adxg_phase2`
+- **Phase-2 results:**
+
+  | Season | gate | XI0 c→t | Cap c→t | g_treat |
+  |---|---|---|---|---:|
+  | 2022-23 | FAIL | 6.6→7.4 ✗ | 59.2→60.8 ✓ | 0.196 |
+  | 2023-24 | PASS | 3.6→4.5 ✗ | 59.8→60.6 ✓ | 0.374 |
+  | 2024-25 | PASS | 6.2→5.7 ✓ | 58.6→60.6 ✓ | 0.390 |
+  | 2025-26 | FAIL | 6.9→7.2 ✗ | 55.8→56.2 ✓ | 0.311 |
+
+- **AGG Cap:** 58.34→59.55 ✓; **FAIL Cap:** 2/2 ✓
+- **Verdict:** **KILL Phase-2**. Projection improved and Cap metrics clear,
+  but **XI0 worsens in 3/4 seasons** (only 2024-25 improves). Do not promote
+  `v1_adxg`. Keep production at fixtures `v1`. Do not retune after peek.
+- **Disposition:** **CLOSED** for this exact ATK/DEF relative formula. Note vs
+  E052: FAIL Cap now clears, but XI0 wall remains the promote blocker.
+  **Family close:** continuous relative-strength → xG = **CLOSED** (E052-A +
+  E053-A). Discrete/piecewise remap family remains separately CLOSED (E048/E049).
+  Do not reopen either as coefficient cleanup. → **E054** changes level to the
+  μ→XI decision boundary.
+- **Artifacts:** `records/historical/v1_adxg_phase2_summary.csv`,
+  `e053_phase2_verdict.txt`, `e053_phase2_run.log`
+
+### E054 — μ→XI decision-boundary mechanism diagnostic (preregistered)
+- **Date:** 2026-09-09 (after E053-A Phase-2 KILL; family close of continuous
+  relative-strength → xG)
+- **Status:** **preregistered** — evaluation contract locked; **bin thresholds
+  / blank definitions** via dated **E054-A** amendment **before any pair CSV /
+  Cap / XI0 peek beyond already-logged E052/E053 gates**
+- **Lane:** Research / decision-architecture (not Upstream strength→xG; not
+  Product chips). Formal/Lean independent and non-gating.
+- **Primary question:** When an **honest frozen candidate μ** changes the
+  selected XI vs **production μ**, what kind of decision-boundary transition
+  concentrates the **realized XI0** loss?
+- **Hypothesis:** E052/E053 improved player-level MAE/Spearman but worsened XI0
+  in most seasons. Damage may concentrate in (a) near-tie reordering (E026-class),
+  (b) budget/FLEX forced companions, (c) blank/minutes-risk entrants, or (d) none
+  of the above (diffuse). Identifying the mass chooses the **next research
+  family** — it does not promote any μ or invent a protection rule on this card.
+
+#### Explicit non-identity
+| | E026 | E027 H-PACK1 | E052/E053 | **E054** |
+|---|---|---|---|---|
+| Object | Cap-FAIL mover pairs under rates package | ε-stable ILP promote attempt | new fixtures μ | **classify XI diffs under frozen μ pair** |
+| Changes μ? | no | no | yes (closed) | **no — μ are frozen inputs** |
+| Mechanism? | diagnostic | yes (killed) | promote attempt | **diagnostic only** |
+
+#### Frozen inputs (attribution lock)
+```text
+CONTROL μ   minutes=v2am_fpla, rates=v1, fixtures=v1     # production
+CANDIDATE μ PRIMARY: same + fixtures=v1_adxg             # E053-A (cleaner Cap story)
+            SECONDARY REPORT (optional, same bins): fixtures=v1_sxg  # E052-A replication
+STACK       seed=7, strategy=balanced, objective=next, horizon=1
+FIXED       ILP, chips, minutes, rates — unchanged
+NOT INPUT   any new strength map; any retune of adxg/sxg; packaging q
+```
+
+Candidate projections are **inputs only**. E054 may not modify expected_goals,
+Team strengths, ATK/CONCEDE, or production defaults.
+
+#### Unit of analysis
+```text
+For each season ∈ {2022-23,…,2025-26} and each GW with records:
+  solve XI_ctrl under CONTROL μ
+  solve XI_cand under CANDIDATE μ
+  if XI sets equal → skip (no boundary event)
+  else record enter = XI_cand \ XI_ctrl, exit = XI_ctrl \ XI_cand
+  form same-position swap pairs when |enter|=|exit|=1 at a position;
+  otherwise record multi-change events with forced-companion flags
+```
+
+#### Pre-registered classification (exact cutoffs in E054-A)
+Primary assignment is **one exclusive class per swap/event** (priority order
+frozen in E054-A if multiple apply):
+
+```text
+NEAR_TIE      |μ_ctrl(enter) − μ_ctrl(exit)| in E026-style near bucket
+              # E026 used near |d_ctrl|<0.25; mid [0.25,0.75); large ≥0.75
+              # E054-A freezes whether NEAR_TIE = near only, or near+mid
+BUDGET_FLEX   formation/FLEX/budget forces a second position change when the
+              primary Δμ swap is considered in isolation (report rule in E054-A)
+BLANK_MIN     entrant has low minutes reliability under CONTROL projections
+              (E054-A freezes one of: p_60, p_start, or blank proxy — control arm)
+DIFFUSE       none of the above
+```
+
+#### Primary outputs (report; not promote gates)
+```text
+n_events / n_swaps by season and by class
+share of XI0-worsening player-GWs attributable to each class
+  (entrant actual_minutes==0 vs exit; and net blank count vs control XI)
+realized Δpts on enter/exit among both≥60 and among all
+Δμ magnitude and rank displacement distributions by class
+positional share (GKP/DEF/MID/FWD) and FLEX involvement
+optional Cap report-only — NOT a SURVIVE/KILL promote bar on this card
+```
+
+#### Pre-registered branch (after diagnostic report; no peek-driven invention)
+```text
+NEAR_TIE concentration of XI0 damage
+  → ranking / degeneracy research family (E026 identity check)
+BUDGET_FLEX concentration
+  → portfolio / ILP interaction research family
+BLANK_MIN concentration
+  → minutes / availability research family
+DIFFUSE / no majority class
+  → do not invent a mechanism; park boundary hypothesis
+```
+
+**Concentration rule (freeze in E054-A):** e.g. majority of XI0-worsening
+enter-events in one class across AGG seasons, or FAIL-season mass — one rule only.
+
+#### Forbidden on this card
+Near-tie protection rule; ε-gates; shrinkage; packaging q; new optimizer;
+objective modification; adxg/sxg retune; promoting `v1_adxg`/`v1_sxg`;
+strength→xG reopen; inventing a mechanism before the class report;
+changing production; waiting on Lean / blocking Lean.
+
+#### Implementation sequence
+```text
+this prereg (question + branch + input lock)
+  → E054-A freezes bin cutoffs, blank proxy, exclusive priority, concentration rule
+  → implement diagnostic script only (reuse E052/E053 projection paths as inputs)
+  → four-season class report
+  → branch log → next family prereg OR park
+```
+
+- **Method (planned):** diagnostic script TBD (pairs/events CSV + summary);
+  no harness promote verdict
+- **Charter:** `docs/DECISION_CHARTER.md` §39
+- **Follow-up:** → **E054-A** freezes classification constants before any new
+  pair/event peek. **No mechanism code on this card.**
+
+### E054-A — Classification freeze (amendment before diagnostic peek)
+- **Date:** 2026-09-09 (dated amendment to E054; **before any new XI-diff pair
+  CSV / class-share peek**)
+- **Status:** **frozen contract** — classify only under these constants
+- **Lane:** Research / decision-architecture. Mechanism still forbidden.
+
+#### Frozen candidate input
+```text
+PRIMARY   fixtures=v1_adxg vs fixtures=v1   # E053-A
+SECONDARY optional replication pass: fixtures=v1_sxg (same bins; report-only)
+```
+
+#### Frozen gap buckets (identity with E026)
+```text
+NEAR  |d_ctrl| < 0.25
+MID   0.25 ≤ |d_ctrl| < 0.75
+LARGE |d_ctrl| ≥ 0.75
+d_ctrl = μ_ctrl(enter) − μ_ctrl(exit)   # production μ only
+```
+
+#### Frozen class definitions (exclusive; one class per enter-event)
+```text
+BUDGET_FLEX  len(enter) > 1 OR n_positions_touched(enter∪exit) > 1
+BLANK_MIN    NOT BUDGET_FLEX AND control next_p_60(enter) < 0.50
+NEAR_TIE     NOT BUDGET_FLEX AND NOT BLANK_MIN AND |d_ctrl| < 0.75
+             # = E026 near + mid (“near or moderate tie”)
+DIFFUSE      otherwise (|d_ctrl| ≥ 0.75 single same-position swap, reliable mins)
+```
+
+**Priority order (if multiple would apply):**  
+`BUDGET_FLEX > BLANK_MIN > NEAR_TIE > DIFFUSE`
+
+**Pairing:** for single-position equal |enter|=|exit|, pair same-position
+players minimizing `|d_ctrl|` (greedy). Multi-change GWs: each entrant is an
+enter-event tagged BUDGET_FLEX; exit match report-only when same-pos unique.
+
+#### Frozen harm definition (for concentration)
+```text
+blank_enter = enter-event with actual_minutes(enter) == 0
+xi0_worse_gw = GW where (#zeros in XI_cand) > (#zeros in XI_ctrl)
+
+Primary concentration mass = blank_enter events on xi0_worse_gw
+Report-all blank_enter and all enter-events as secondary tables
+```
+
+#### Frozen branch rule
+```text
+Let s_c = share of primary mass in class c (AGG over four seasons).
+If max_c s_c ≥ 0.50 → branch to that class’s research family
+Else → DIFFUSE / park (do not invent a mechanism)
+
+Family map:
+  NEAR_TIE    → ranking / degeneracy (E026 identity)
+  BUDGET_FLEX → ILP / portfolio interaction
+  BLANK_MIN   → minutes / availability
+  DIFFUSE     → park boundary hypothesis
+```
+
+#### Forbidden
+Near-tie protection; ε-gates; shrinkage; packaging; optimizer/objective change;
+adxg/sxg retune; promote; strength→xG reopen; retuning 0.25/0.75/0.50 after peek.
+
+#### Implementation sequence
+```text
+this freeze (done)
+  → scripts/e054_xi_boundary_diagnostic.py
+  → four-season primary+secondary reports
+  → branch log
+```
+
+- **Method:** `python scripts/e054_xi_boundary_diagnostic.py`
+- **Charter:** `docs/DECISION_CHARTER.md` §39 (amended)
+- **Follow-up:** run diagnostic; branch only per frozen rule.
+
+### E054-A diagnostic — μ→XI boundary classes (2026-09-09)
+- **Status:** complete — **CONCENTRATED → BUDGET_FLEX**
+- **Code:** `python scripts/e054_xi_boundary_diagnostic.py` (primary `v1_adxg`)
+- **Stack:** control `fixtures=v1`; candidate `fixtures=v1_adxg`; seed=7;
+  objective=next; frozen E054-A bins
+- **Primary mass** (blank_enter on xi0_worse_gw): **n=28**
+
+  | Class | n | share |
+  |---|---:|---:|
+  | BUDGET_FLEX | 26 | **92.9%** |
+  | NEAR_TIE | 2 | 7.1% |
+  | BLANK_MIN | 0 | 0% |
+  | DIFFUSE | 0 | 0% |
+
+- **All seasons** top=BUDGET_FLEX (88–100%).
+- **Secondary (not the branch rule):** among paired enter/exit on primary harm,
+  gap buckets remain near-heavy (near=20, mid=6, large=1) — E026-style small
+  gaps are common *inside* multi-player reshuffles, but exclusive class is
+  BUDGET_FLEX because most XI diffs touch >1 player/position.
+- **Branch (frozen ≥50% rule):** **BUDGET_FLEX** → next research family =
+  **ILP / portfolio interaction** (not near-tie protection; not minutes card;
+  not another strength→xG).
+- **Forbidden still:** inventing a mechanism on this card; promoting adxg;
+  retuning bins after peek.
+- **Artifacts:** `records/historical/e054_boundary_events_adxg.csv`,
+  `e054_boundary_summary_adxg.txt`, `e054_boundary_verdict_adxg.txt`,
+  `e054_boundary_run.log`
+- **Follow-up:** → **E055** constraint-induced portfolio cascade prereg below
+  (ILP/portfolio family; not an ad-hoc fix from E054).
+
+### E055 — Constraint-induced portfolio cascade under frozen μ (preregistered)
+- **Date:** 2026-09-10 (after E054-A BRANCH=BUDGET_FLEX; ILP/portfolio family)
+- **Status:** **preregistered** — evaluation contract locked; **exact cascade
+  counterfactuals** via dated **E055-A** amendment **before any new pair CSV /
+  Cap / XI0 peek beyond already-logged E053/E054 artifacts**
+- **Lane:** Research / decision-architecture. Not Upstream strength→xG. Not
+  Product chips. Formal/Lean independent and non-gating.
+- **Primary question:** When frozen candidate μ changes the legal ILP optimum vs
+  production μ, is realized XI0 loss explained more by the **primary
+  utility-preferred entrant** or by **constraint-induced companion
+  displacement** (budget / position / FLEX)?
+- **Hypothesis:** Separable \(\sum w_i U_i\) under squad/XI constraints can
+  reward a composition jump whose companions — not the primary Δμ mover —
+  carry blank risk. E054 showed BUDGET_FLEX exclusive class dominates; E034c
+  showed tripwire re-equilibration on a different μ path. E055 tests whether
+  that cascade story **explains XI0** under the E053/E054 stack, without
+  inventing a new objective.
+
+#### Explicit non-identity (load-bearing)
+| | E034c | E035 | E036 | E039-A \(V_{ns}\) | **E055** |
+|---|---|---|---|---|---|
+| μ path | rates_v2b package | rates_v2b | rates_v2b | rates path / V | **fixtures=v1_adxg** (frozen) |
+| Object | pair vs full re-solve Δpts | proxy AUROC vs Cap | MC vs U concordance | non-separable V promote | **cascade vs primary blank share under adxg** |
+| Changes V/ILP? | no | no | no | candidate V | **no** |
+| Claim | tripwire on rates | g_treat cluster | MC≡U | V beats U | **companion displacement explains XI0 under adxg** |
+
+**Not a reopen** of E039-A λ fishing, E035 proxy bake-off, E036 MC-in-optimizer,
+or E054 near-tie protection.
+
+#### Frozen inputs / invariant
+```text
+CONTROL μ     minutes=v2am_fpla, rates=v1, fixtures=v1
+CANDIDATE μ   minutes=v2am_fpla, rates=v1, fixtures=v1_adxg   # input only
+SEED/STRAT    7 / balanced; objective=next; horizon=1
+INVARIANT     within each arm: same projections; same feasible set / ILP rules
+FIXED         BENCH_WEIGHT, chips, production defaults — unchanged
+NOT INPUT     new strength map; adxg retune; packaging q; new V formula
+```
+
+#### Phase-1 estimand (descriptive cascade — primary; run first)
+Among GWs where XI_cand ≠ XI_ctrl (reuse E054 event universe where helpful):
+
+```text
+PRIMARY_MOVER   entrant maximizing (U_cand(enter) − U_cand(matched exit))
+                under candidate μ (tie-break: lowest id) — freeze exact in E055-A
+COMPANIONS      other enter-players on the same GW (constraint-induced)
+ACCOUNTING      for each enter-event / GW:
+                blank_primary, blank_companions, n_pos_touched,
+                budget_delta, FLEX involvement (report definitions in E055-A)
+PRIMARY TEST    on xi0_worse_gw blank enters:
+                share attributable to COMPANIONS vs PRIMARY_MOVER
+                Survive Phase-1 concentration if companion share ≥ 0.50 AGG
+                (or park / DIFFUSE if primary dominates or no majority)
+```
+
+Report-only: Cap Δ, g_treat, n_squad_changes (E035 cluster) — **not** a promote bar.
+
+**SURVIVE Phase-1** only if companion-displacement concentration holds under the
+frozen rule. Else **park** cascade hypothesis for this stack — do not open Phase-2
+policy valuation.
+
+#### Phase-2 (only if Phase-1 SURVIVES — separate log)
+Counterfactuals that keep **μ and feasible set fixed** (no new objective):
+
+```text
+CF_PAIR     minimal same-pos primary E↔L swap into control XI (E034c spirit)
+CF_HOLD     full cand XI but replace blank companions with control players
+            where legal (exact construction in E055-A — one recipe only)
+COMPARE     realized XI0 / blank counts vs full cand XI and vs control XI
+BRANCH      if CF_* recovers XI0 vs full cand without changing μ
+            → valuation/opportunity-cost research family (new prereg)
+            if not → variance / irreducible ILP jump; park
+```
+
+**No promote** of any CF as production policy on this card.
+
+#### Forbidden after peek
+New separable/non-separable objective; FLEX penalty; bench-weight tweak;
+near-tie shield; ε-gates; packaging q; adxg/sxg retune; E039-A λ retune;
+MC-in-optimizer; promoting `v1_adxg`; inventing a decision rule before Phase-1
+report; changing production.
+
+#### Implementation sequence
+```text
+this prereg (question + non-identity + phase split)
+  → E055-A freezes primary-mover definition, companion/FLEX/budget fields,
+    concentration rule text, Phase-2 CF recipes
+  → Phase-1 descriptive script only
+  → SURVIVE/KILL-or-park Phase-1
+  → Phase-2 CFs ONLY if Phase-1 SURVIVES
+  → branch to next family prereg OR park
+```
+
+- **Method (planned):** diagnostic script TBD; may reuse
+  `e054_boundary_events_adxg.csv` as GW filter — **not written yet**
+- **Charter:** `docs/DECISION_CHARTER.md` §40
+- **Follow-up:** → **E055-A** freezes cascade accounting constants before any
+  new counterfactual peek. **No objective code on this card.**
+
+### E055-A — Cascade accounting freeze (amendment before Phase-1 peek)
+- **Date:** 2026-09-12 (dated amendment to E055; **before any new cascade CSV /
+  Cap / XI0 / CF peek beyond already-logged E053/E054 artifacts**)
+- **Status:** **frozen contract** — Phase-1 (and later Phase-2) only under these
+  definitions
+- **Lane:** Research / decision-architecture. No new objective. No promote.
+
+#### Frozen stack (identity with E055 / E054 primary)
+```text
+CONTROL μ     minutes=v2am_fpla, rates=v1, fixtures=v1
+CANDIDATE μ   minutes=v2am_fpla, rates=v1, fixtures=v1_adxg
+SEED/STRAT    7 / balanced; objective=next; horizon=1
+U             next_utility under that arm's projections (separable; production ILP)
+EVENT UNIVERSE  GWs with XI_cand ≠ XI_ctrl (same construction as E054)
+```
+
+#### Frozen XI diff + pairing
+```text
+Enter = XI_cand \ XI_ctrl
+Exit  = XI_ctrl \ XI_cand
+n_pos_touched = |positions in Enter ∪ Exit|
+
+PAIRING (same-position greedy):
+  Candidate pairs (E,L) with pos(E)=pos(L).
+  Score ΔU_cand(E,L) = U_cand(E) − U_cand(L).
+  Greedy: repeatedly take max ΔU_cand; ties → lowest enter_id, then lowest exit_id.
+  Unpaired enters/exits remain unpaired (report n_unpaired_enter / n_unpaired_exit).
+```
+
+#### Frozen PRIMARY_MOVER / COMPANIONS (one GW)
+```text
+If ≥1 paired enter:
+  PRIMARY_MOVER = enter E* of the pair with max ΔU_cand;
+                  ties → lowest enter_id
+Else (no same-pos pairs):
+  PRIMARY_MOVER = argmax_{E in Enter} U_cand(E); ties → lowest enter_id
+
+COMPANIONS = Enter \ {PRIMARY_MOVER}
+  # empty iff |Enter|=1
+```
+
+**Role is GW-level:** each enter-event is tagged `role ∈ {primary, companion}`.
+
+#### Frozen accounting fields (report on every enter-event / GW)
+```text
+blank_enter      actual_minutes(enter) == 0
+xi0_worse_gw     (#zeros in XI_cand) > (#zeros in XI_ctrl)   # E054 identity
+FLEX_flag        n_enter > 1 OR n_pos_touched > 1            # E054 BUDGET_FLEX
+budget_delta     Σ now_cost(Enter) − Σ now_cost(Exit)        # snapshot as-of GW
+n_pos_touched    as above
+paired           1 iff this enter has a same-pos matched exit
+ΔU_cand          U_cand(E)−U_cand(L) if paired else ""
+```
+
+#### Frozen Phase-1 concentration (primary estimand)
+```text
+Primary mass M = blank_enter events on xi0_worse_gw   # E054 primary harm identity
+companion_blank_share = |{e ∈ M : role(e)=companion}| / |M|   # AGG over 4 seasons
+
+SURVIVE Phase-1  iff |M|≥1 AND companion_blank_share ≥ 0.50
+PARK Phase-1     otherwise (primary-dominated, empty mass, or no majority)
+
+Report-only (not the gate): Cap Δ, g_treat, n_squad_changes, FLEX_flag share on M,
+  per-season companion_blank_share, blank_primary vs blank_companions GW counts.
+```
+
+#### Frozen Phase-2 CF recipes (run ONLY if Phase-1 SURVIVES — one recipe each)
+μ, feasible set, and separable objective stay fixed. No new V.
+
+```text
+CF_PAIR (E034c spirit; XI-only):
+  Require PRIMARY_MOVER E paired to same-pos exit L ∈ XI_ctrl.
+  XI_pair = (XI_ctrl \ {L}) ∪ {E}
+  Skip GW if formation-illegal (report infeasible).
+  Captain/vice via pick_captains on XI_pair under **candidate** next_utility.
+  Compare realized XI0 / Cap vs XI_cand and XI_ctrl.
+
+CF_HOLD (blank-companion holdback; one recipe):
+  Start XI_hold = XI_cand. Do **not** replace PRIMARY_MOVER even if blank.
+  For each blank companion C in position order (GKP,DEF,MID,FWD) then lowest id:
+    Candidates P ∈ (XI_ctrl \ XI_hold) with pos(P)=pos(C)
+    If empty → leave C
+    Else P* = argmax U_cand(P); ties → lowest id
+    Tentative = (XI_hold \ {C}) ∪ {P*}
+    If formation-legal → accept; else leave C
+  Captain/vice via pick_captains on XI_hold under **candidate** next_utility.
+  Compare realized XI0 / Cap vs XI_cand and XI_ctrl.
+
+BRANCH (Phase-2 report only — no promote):
+  If CF_PAIR or CF_HOLD recovers XI0 vs full cand without changing μ
+    → open valuation/opportunity-cost family (new prereg)
+  Else → variance / irreducible ILP jump; park cascade for this stack
+```
+
+#### Forbidden (unchanged + freeze-specific)
+New objective; FLEX penalty; bench-weight tweak; near-tie shield; ε-gates;
+packaging; adxg/sxg retune; E039-A λ retune; MC-in-optimizer; promote adxg;
+retuning companion_share 0.50 or pairing rule after peek; inventing a second
+CF recipe; running Phase-2 before Phase-1 SURVIVES; production change.
+
+#### Implementation sequence
+```text
+this freeze (done)
+  → Phase-1 descriptive script only (reuse E054 GW filter where helpful)
+  → SURVIVE/PARK Phase-1 under frozen share rule
+  → Phase-2 CFs ONLY if SURVIVES
+  → branch to next family prereg OR park
+```
+
+- **Method (planned):** `scripts/e055_cascade_phase1.py` TBD — **not written yet**
+- **Charter:** `docs/DECISION_CHARTER.md` §40 (amended)
+- **Follow-up:** implement Phase-1 descriptive only. **No Phase-2 / Cap CF peek
+  until Phase-1 SURVIVES.**
+
+### E055-A Phase-1 — companion vs primary blank share (2026-09-12)
+- **Status:** complete — **SURVIVE Phase-1**
+- **Code:** `python scripts/e055_cascade_phase1.py` (venv; frozen E055-A)
+- **Stack:** control `fixtures=v1`; candidate `fixtures=v1_adxg`; seed=7;
+  objective=next; PRIMARY=max dU_cand same-pos pair
+- **Primary mass M** (blank_enter on xi0_worse_gw): **n=28** (matches E054)
+
+  | Role | n | share |
+  |---|---:|---:|
+  | companion | 17 | **60.7%** |
+  | primary | 11 | 39.3% |
+
+- **Gate:** companion_blank_share **60.7% ≥ 0.50** → **SURVIVE**
+- **Per season:** 2022-23 50.0%; 2023-24 66.7%; 2024-25 50.0%; 2025-26 75.0%
+  (all ≥ 0.50)
+- **Report-only:** M FLEX_flag 92.9% (26/28); xi0_worse GWs with blank_primary=11 /
+  blank_companion=15; mean cap_delta on M ≈ −6.3; mean g_treat ≈ 0.43
+- **Forbidden still:** new objective; promote; Phase-2 recipe fishing
+- **Artifacts:** `records/historical/e055_cascade_phase1_events.csv`,
+  `e055_cascade_phase1_summary.txt`, `e055_cascade_phase1_verdict.txt`,
+  `e055_cascade_phase1_run.log`
+- **Follow-up:** → **Phase-2** CF_PAIR / CF_HOLD only (μ-fixed; no promote).
+  Do not invent a new objective from this share alone.
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-06 (E047-A **SURVIVES identity-null**; production unchanged):
+As of 2026-09-12 (**E055 Phase-1 SURVIVES**; E055-A frozen; four chips SHIPPED):
 
-1. **Production μ.** `v2am_fpla` + `rates=v1` + fixtures `v1`.
-2. **TC / BB.** Wired; FH SURVIVES but **unwired** (fragile).
-3. **Closed.** E042-A; E043-A; E045-A; E047-A strength-replace-into-v1-maps;
-   rates_v2b; fixtures_v2d promote path.
-4. **Active lane.** None forced. Optional: FH wire (fragile); WC card; fixtures
-   strength→xg redesign prereg (distinct from E047-A); Research if new structure.
-5. **Not next.** Promote `v1_fpls`; silent `_str` patch; v2d reopen; blend λ.
+1. **Production μ.** `v2am_fpla` + `rates=v1` + fixtures `v1` (still `_str`→5).
+2. **SHIPPED.** TC/BB/FH/WC wired independent; μ/squad ILP unchanged.
+3. **CLOSED.** E021; E048/E049 remap; E052-A+E053-A continuous relative xG;
+   E039-A \(V_{ns}\); …
+4. **PARKED.** E051 joint inventory; fixture-book bootstrap rejected.
+5. **OPEN.** **E055** Phase-1 **SURVIVE** (companion_blank_share=60.7%) —
+   **Phase-2 CF_PAIR / CF_HOLD next** (no promote).
+6. **Not next.** New objective; FLEX penalty; near-tie protection; strength→xG;
+   adxg/E039 λ retune; silent `_str` patch; promote adxg.
 
 ---
 
@@ -3305,9 +4999,28 @@ python scripts/e044_materialize_fplcache_avail.py  # E044-A: slim fplcache extra
 python scripts/e045_rates_fixtures_source_survey.py  # E045: rates/fixtures archive survey
 python scripts/e045_materialize_fplcache_ep.py  # E045-A: slim ep_next extracts
 python -m engine.harness_v1_ep  # E045-A: rates=v1_ep vs rates=v1 (KILL)
-python scripts/e046_free_hit_roi.py  # E046-A: FH ROI (SURVIVES; unwired)
+python scripts/e046_free_hit_roi.py  # E046-A: FH ROI (SURVIVES)
+python -m engine.e046_fh_recommend  # E046-A product: FH recommendation
+python fpl.py fh                    # same
+python -m unittest tests.test_e046_fh_wiring -v
 python scripts/e047_materialize_fplcache_strength.py  # E047-A: slim strength extracts
-python -m engine.harness_v1_fpls  # E047-A: fixtures=v1_fpls vs v1
+python -m engine.harness_v1_fpls  # E047-A: fixtures=v1_fpls vs v1 (identity-null)
+python -m engine.harness_v1_sfix  # E048-A: fixtures=v1_sfix vs v1 (KILL)
+python -m engine.harness_v1_sxg  # E052-A Phase-1: fixtures=v1_sxg vs v1 (proj only)
+python -m engine.harness_v1_sxg_phase2  # E052-A Phase-2: XI0 / Cap / g_treat
+python -m engine.harness_v1_adxg  # E053-A Phase-1: fixtures=v1_adxg vs v1 (proj only)
+python -m engine.harness_v1_adxg_phase2  # E053-A Phase-2: XI0 / Cap / g_treat
+python -m unittest tests.test_e052_v1_sxg -v
+python -m unittest tests.test_e053_v1_adxg -v
+python scripts/e054_xi_boundary_diagnostic.py  # E054-A: BRANCH=BUDGET_FLEX
+python scripts/e055_cascade_phase1.py  # E055-A Phase-1: SURVIVE (companion 60.7%)
+python scripts/e051_chip_conflict_diagnostic.py  # E051: CONFLICTS_PRESENT sparse
+python -m unittest tests.test_e051_chip_conflict -v
+python -m engine.e050_wc_recommend  # E050-A product: WC recommendation
+python fpl.py wc                    # same
+python -m unittest tests.test_e050_wc_wiring -v
+python -m unittest tests.test_e050_wc_policy -v
+python scripts/e049_merge_verdict.py  # E049-A: merge per-season summaries
 python -m engine.harness_v2am_fpla  # E044-A: v2am_fpla vs v2am_s (SURVIVES)
 python -m engine.harness_v2am_sched  # E043-A: v2am_sched vs v2am_s (KILL)
 python -m engine.harness_pack_vs_v1  # E023: packaged v2d vs production v1

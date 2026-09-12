@@ -20,7 +20,7 @@ It does **not** replace the living experiment log. Numbers and verdicts live in
 | [`V2_SPEC.md`](V2_SPEC.md) | How a successor model earns a version number |
 | [`FORMAL.md`](FORMAL.md) | What Lean could prove vs what statistics prove (post-GW1) |
 | [`DECISION_ARCHITECTURE.md`](DECISION_ARCHITECTURE.md) | Decision-layer history, failure modes, E030–E036 |
-| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; E039–E046; production = `v2am_fpla` |
+| [`DECISION_CHARTER.md`](DECISION_CHARTER.md) | Landing A; E039–E049; production = `v2am_fpla` |
 | [`PORTFOLIO_VALUE_SPEC.md`](PORTFOLIO_VALUE_SPEC.md) | Candidate \(V(S)\); E037 results; E039 prereg |
 | `ROADMAP.md` | Version ladder (may lag E013; do not treat it as the experiment log) |
 
@@ -485,27 +485,26 @@ MAE_60+ ✓ 4/4; Cap✗ XI0✗ 4/4. E021b: cold prior_str blank 61%. E021c: that
 E022 PASS vs raw; E023/E024 REJECT vs production. E024b: Cap = wrong-player-when-playing (`q≈1`; blanks similar FAIL/PASS).
 **Reach:** availability risk only — not valuation among reliable players. Do not enlarge q. Do not promote. Production unchanged.
 
-### Valuation / selection (E040-A + E041-A both wired)
+### Valuation / selection (four chips SHIPPED)
 
-E040-TC and E041-BB both **SURVIVE** and are product-wired (`fpl.py tc` / `fpl.py bb`).
-Outputs state **independence** (not a combined chip calendar). Policies frozen;
-do not bake \(U_{\mathrm{bench}}\) into squad ILP. Production μ unchanged.
+E040-TC, E041-BB, E046-FH, E050-WC all **SURVIVE** and are product-wired
+(`fpl.py tc|bb|fh|wc`). Each surface states **independence** (not a combined
+chip calendar). Policies frozen; do not bake chip \(U\) into squad ILP.
+Production μ unchanged.
 
-**E046-A SURVIVES.** Sticky held / 0 FT; \(U_{\mathrm{FH}}\) = XI utility lift;
-ΣC beats never-FH and calendar FH (AGG C−B1 = **+2**). FH product wiring is a
-**separate** step (not auto). WC out of scope. See LAB_LOG E046-A gate.
+**E051 (done → PARK):** joint-chip conflict diagnostic — **CONFLICTS_PRESENT
+(sparse)** (1/4: TC∩FH @ GW36 in 2025-26; hard FH∩WC = 0). Skip E051-A; no
+giant scheduler. See LAB_LOG E051 diagnostic; charter §36.
 
-### Upstream (E047-A identity-null CLOSED)
+### Upstream / Research (strength→xG closed; boundary OPEN)
 
-**E047-A SURVIVES by equality but is a null.** Dated `strength_overall_*`
-hydrate cannot move μ while `fixtures._str` maps every modern overall strength
-to bucket 5. Family CLOSED for this map. No promote. Optional future:
-strength→xg redesign as a **new** card. E045-A ep_next remains KILL.
+**CLOSED:** E021 v2d; E048-A; E049-A; continuous relative-strength → xG
+(E052-A overall + E053-A ATK/DEF). No coefficient fishing as “cleanup.”
 
-### Upstream archive note (E045)
+**PARKED:** E051 joint inventory; fixture-book bootstrap rejected.
 
-E045 survey PASS; ep_next path killed in E045-A; strength path closed as
-identity-null in E047-A; fixture kickoff book still needs non-fplcache archive.
+**OPEN:** **E055** cascade — Phase-1 **SURVIVE** (companion_blank_share=60.7%);
+Phase-2 CF_PAIR / CF_HOLD next. No promote. Charter §40.
 
 ---
 
@@ -574,9 +573,24 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E044-A** | `v2am_fpla`: fplcache hydrate → existing `availability()` | **SURVIVES** + **promoted** |
 | **E045** | Rates/fixtures archival-source feasibility | **PASS** (fplcache `ep_next` survey) |
 | **E045-A** | `rates=v1_ep`: dated fplcache `ep_next` blend λ=0.35 | **KILL** (XI0✗ 2023-24; FAIL Cap✗ 2025-26) |
-| **E046** | Free Hit ROI under sticky-held / 0 FT (XI-utility \(U_{\mathrm{FH}}\)) | **SURVIVES** (AGG C−B1=+2; wire optional) |
+| **E046** | Free Hit ROI under sticky-held / 0 FT (XI-utility \(U_{\mathrm{FH}}\)) | **SURVIVES** + **wired** (`fpl.py fh`) |
 | **E047** | Dated fplcache team `strength_overall_*` feasibility lineage | **prereg** (from E045 secondary) |
 | **E047-A** | `fixtures=v1_fpls`: replace Team strengths; ATK/CONCEDE unchanged | **SURVIVES identity-null** + **CLOSED** (`_str`→5) |
+| **E048** | Production fixtures `_str` defect → strength→bucket remap | **preregistered** |
+| **E048-A** | `v1_sfix`: linear 1000..1350→{2..5}; control=`_str`→5 | **KILL** (XI0✗ 3/4; FAIL Cap✗ 2025-26) + **CLOSED** |
+| **E049** | Fixtures continuous piecewise through ATK/CONCEDE knots | **preregistered** |
+| **E049-A** | `v1_pw`: pw_lerp all 4 knots; STR_LO/HI=1000/1350 | **KILL** (XI0✗ 2/4) + **CLOSED** |
+| **E050** | Wildcard ROI under sticky-held / 0 FT (replace, not revert) | **preregistered** |
+| **E050-A** | forward \(U_{\mathrm{WC}}\); \(g^\star=20\); one WC; AGG+FAIL gates | **SURVIVES** + **wired** (`fpl.py wc`) |
+| **E051** | Joint chip conflict diagnostic (frozen TC/BB/FH/WC inputs) | **CONFLICTS_PRESENT (sparse)** → **PARK** (skip E051-A) |
+| **E052** | Continuous relative strength→xG (no ATK/CONCEDE; Phase-1 MAE first) | **preregistered** |
+| **E052-A** | `v1_sxg`: \(e=1.35\cdot(I_{\mathrm{rel}})\cdot\{1.10,0.88\}\); dated hydrate | **KILL** (XI0✗ 4/4; FAIL Cap✗ 2025-26) |
+| **E053** | Dated attack/defence → continuous relative xG (no overall proxy) | **preregistered** |
+| **E053-A** | `v1_adxg`: \(e=1.35\cdot(I_{\mathrm{atk}}/I_{\mathrm{def}})\cdot\{1.10,0.88\}\) | **KILL** (XI0✗ 3/4; FAIL Cap✓) + family CLOSED |
+| **E054** | μ→XI decision-boundary mechanism diagnostic (near-tie / FLEX / blank) | **preregistered** |
+| **E054-A** | classify XI diffs under frozen `v1_adxg` vs `v1` | **BRANCH=BUDGET_FLEX** (92.9%) |
+| **E055** | Constraint-induced portfolio cascade under frozen `v1_adxg` | Phase-1 **SURVIVE** (60.7%) |
+| **E055-A** | mover/companion/CF freeze (ΔU_cand pair; share≥0.50; CF_PAIR/HOLD) | **frozen** — Phase-1 done; Phase-2 next |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

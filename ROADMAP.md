@@ -253,10 +253,12 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 ```text
 Production:        v2am_fpla + rates=v1 + fixtures v1
                    (v2am_s = pre-fpla minutes control; V1 = permanent historical)
-Closed research:   rates_v2b (decision/season promote CLOSED; reopen = new prereg)
+Closed research:   rates_v2b; E021/E048/E049 fixture remap families; …
+Parked:            E051 joint inventory (E051-A skipped); fixture-book rejected
 Research candidates: structural V_C / non-separable portfolio value (E039+)
-Upstream candidates: role/minutes (new hyp; E038 gates; not E017 reopen)
-Product candidates:  chips → price → transfers → season agent
+Upstream NEXT:       continuous relative-strength → xG CLOSED (E052+E053)
+Research NEXT:       E055 cascade Phase-1 SURVIVE → Phase-2 CF_PAIR/HOLD
+Product SHIPPED:     TC/BB/FH/WC independent wired surfaces
 ```
 
 ```text
@@ -353,10 +355,70 @@ if target-fixture timing).
 `v2am_fpla` + `rates=v1`. Strengths-drift and fixture-book remain separate
 parked cards. See `docs/LAB_LOG.md` E045-A gate; charter §29.
 
-**E047-A SURVIVES identity-null + family CLOSED (2026-09-06):** Dated
-`strength_overall_*` replace into v1 ATK/CONCEDE is inert (`_str`→5). No promote.
-Strength→xg redesign needs a **new** prereg. See `docs/LAB_LOG.md` E047-A gate;
-charter §32.
+**E049-A KILL + family CLOSED (2026-09-06):** Piecewise continuous through all
+four ATK/CONCEDE knots (`v1_pw`) killed — XI0 regress on 2022-23 and 2023-24
+despite MAE/FAIL Cap/AGG improves. Not identity-null. No LO/HI or knot fishing.
+Production stays `fixtures=v1`. See `docs/LAB_LOG.md` E049-A gate; charter §34.
+
+**E050-A SURVIVES + wired (2026-09-09):** Wildcard ROI — sticky **replace**; forward
+\(U_{\mathrm{WC}}\); AGG C−B1 = **+247**. Product surface: `fpl.py wc`. See
+`docs/LAB_LOG.md` E050-A gate/wiring; charter §35.
+
+**Product milestone (2026-09-09):** All four individual chip policies SHIPPED
+(TC/BB/FH/WC), independent, μ/squad ILP unchanged. Continuous-remap family
+CLOSED (E048/E049). Mid-season strength drift PARKED (E045).
+
+**E051 preregistered (2026-09-09):** Joint-chip **conflict diagnostic**
+(measurement only; frozen chip recommenders as inputs). No joint scheduler
+until conflicts prove material → optional E051-A. See `docs/LAB_LOG.md` E051;
+charter §36.
+
+**E051 diagnostic (2026-09-09):** **CONFLICTS_PRESENT (sparse)** — 1/4 seasons
+(TC∩FH @36 in 2025-26); hard FH∩WC = 0. **PARK joint inventory**; skip E051-A.
+See `docs/LAB_LOG.md` E051 diagnostic.
+
+**E052 preregistered (2026-09-09):** Continuous relative strength→xG (bypass
+ATK/CONCEDE; not E047/E048/E049). Control = production `v2am_fpla`+`v1`+`v1`.
+Phase-1 projection (MAE_60+) before any decision Cap.
+
+**E052-A freeze (2026-09-09):** `fixtures=v1_sxg`;
+\(e_h=1.35\cdot(I_h/I_a)\cdot1.10\), \(e_a=1.35\cdot(I_a/I_h)\cdot0.88\);
+dated fplcache hydrate on treat; clamp unchanged.
+
+**E052-A Phase-1 (2026-09-09):** **SURVIVES** — MAE_60+ 4/4; Spearman AGG
+0.208→0.227; n_mu_delta=87873.
+
+**E052-A Phase-2 (2026-09-09):** **KILL** — XI0 worsens 4/4; 2025-26 FAIL Cap
+also misses, despite AGG Cap improving. Do not promote `v1_sxg`; keep
+production at fixtures `v1`.
+
+**E053 preregistered (2026-09-09):** Dated **attack/defence** strengths →
+continuous relative xG (`v1_adxg`).
+
+**E053-A Phase-1 (2026-09-09):** **SURVIVES** — MAE_60+ 4/4; Spearman AGG↑.
+
+**E053-A Phase-2 (2026-09-09):** **KILL** — XI0 worsens 3/4; FAIL Cap and AGG
+Cap clear. Do not promote `v1_adxg`. **Family close:** continuous
+relative-strength → xG = CLOSED (E052-A + E053-A). Discrete/piecewise remap
+remains separately CLOSED (E048/E049).
+
+**E054 preregistered (2026-09-09):** μ→XI decision-boundary mechanism diagnostic.
+
+**E054-A (2026-09-09):** **CONCENTRATED → BUDGET_FLEX** (92.9% of primary
+XI0-harm blank enters).
+
+**E055 preregistered (2026-09-10):** Constraint-induced **portfolio cascade**
+under frozen `v1_adxg` vs production. Phase-1: companions vs primary mover blank
+share. Phase-2: μ-fixed counterfactuals only if Phase-1 concentrates. Hard
+non-identity vs E034c/E035/E036/E039-A. **No new objective.**
+
+**E055-A (2026-09-12):** Freeze locked — primary=max ΔU_cand same-pos pair;
+companions=other enters; companion_blank_share≥0.50 AGG; CF_PAIR / CF_HOLD
+recipes frozen for gated Phase-2.
+
+**E055 Phase-1 (2026-09-12):** **SURVIVE** — companion_blank_share **60.7%**
+(17/28 on M). All four seasons ≥50%. Next: Phase-2 CF_PAIR / CF_HOLD only.
+See `docs/LAB_LOG.md` E055-A Phase-1; charter §40.
 
 ---
 
@@ -546,9 +608,38 @@ POST-GW1 (research)
   E046 preregistered: FH-only; sticky-held/0-FT; U_FH=XI lift; WC out; degeneracy lock
   E046-A freeze: g*=20; U_FH=next_xi_utility blank-held; evaluator next
   E046-A SURVIVES: AGG+FAIL clear (C beats B1 by +2 AGG); FH unwired (fragile)
+  E046-A wired: fpl.py fh / e046_fh_recommend; WC next in product order
   E047-A freeze: fixtures=v1_fpls = dated strength_overall replace; not v2d; gate next
   E047-A SURVIVES identity-null + CLOSED: _str clamps all overall to 5; no promote
-  NEXT: optional FH wire / WC / strength→xg redesign prereg; no silent _str patch
+  E048-A freeze: v1_sfix = linear 1000..1350→{2..5}; control=_str→5; no Cap peek
+  E048-A KILL + CLOSED: XI0✗ 3/4; FAIL Cap✗ 2025-26; not identity-null; no LO/HI retune
+  E049-A freeze: v1_pw = piecewise through 4 ATK/CONCEDE knots; no Cap peek
+  E049-A KILL + CLOSED: XI0✗ 2/4; MAE/FAIL Cap/AGG✓; not identity-null; no knot fishing
+  E050 preregistered: WC-only; sticky replace (not FH revert); forward U_WC
+  E050-A freeze: g*=20; U_WC=sum remaining XI lifts under I_t; no Cap peek
+  E050-A SURVIVES: AGG C−B1=+247; FAIL clear; WC unwired (optional wire)
+  E050-A wired: fpl.py wc / e050_wc_recommend; per-season B1 asterisks in CLI
+  Product milestone: TC/BB/FH/WC all SHIPPED independent; μ/ILP unchanged
+  E051 preregistered: joint-chip conflict diagnostic (measurement; no scheduler)
+  E051 diagnostic: CONFLICTS_PRESENT sparse (1/4; TC-FH@36 2025-26; hard FH-WC=0)
+  E051 PARKED: skip E051-A; joint inventory closed for now
+  E052 preregistered: continuous relative strength→xG; Phase-1 MAE before Cap
+  E052-A freeze: v1_sxg; e=1.35*(I_rel)*{1.10,0.88}; dated hydrate; no ATK
+  E052-A Phase-1 SURVIVES: MAE60 4/4; Sp AGG↑; n_mu_delta=87873
+  E052-A Phase-2 KILL: XI0 worsens 4/4; FAIL Cap✗ 2025-26; AGG Cap✓
+  E053 preregistered: dated attack/defence → continuous relative xG
+  E053-A freeze: v1_adxg; I_atk/I_def relative; dated overlay; no overall
+  E053-A Phase-1 SURVIVES: MAE60 4/4; Sp AGG↑; n_mu_delta=87831
+  E053-A Phase-2 KILL: XI0✗ 3/4; FAIL Cap✓; AGG Cap✓
+  FAMILY CLOSE: continuous relative-strength → xG (E052-A + E053-A)
+  E054 preregistered: μ→XI decision-boundary diagnostic (mechanism forbidden)
+  E054-A freeze: E026 gaps; BLANK_P60=0.50; BUDGET_FLEX>BLANK>NEAR>DIFFUSE
+  E054-A BRANCH=BUDGET_FLEX (92.9% primary harm) → ILP/portfolio family
+  E055 preregistered: constraint-induced portfolio cascade under frozen adxg
+  E055-A freeze: mover=max ΔU_cand pair; companions; share≥0.50; CF_PAIR/HOLD
+  E055 Phase-1 SURVIVE: companion_blank_share=60.7% (17/28); all seasons ≥50%
+  NEXT: Phase-2 CF_PAIR / CF_HOLD only — no promote
+  NOT NEXT: new objective; FLEX penalty; E039 λ; strength→xG; promote adxg
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels
