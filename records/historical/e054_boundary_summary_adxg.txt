@@ -1,0 +1,36 @@
+E054-A decision-boundary diagnostic: v1_adxg vs fixtures=v1
+Frozen: NEAR/MID=0.25/0.75; BLANK_P60=0.5; priority BUDGET_FLEX>BLANK_MIN>NEAR_TIE>DIFFUSE; concentration>=0.5
+
+n_enter_events=383 blank_enter=33 primary_harm(blanknxi0_worse_gw)=28
+
+=== ALL enter-events n=383 ===
+  BUDGET_FLEX  n= 366 share=95.6%
+  BLANK_MIN    n=   1 share=0.3%
+  NEAR_TIE     n=  16 share=4.2%
+  DIFFUSE      n=   0 share=0.0%
+  gap_buckets(paired): near=237, mid=98, large=10
+
+=== blank_enter n=33 ===
+  BUDGET_FLEX  n=  30 share=90.9%
+  BLANK_MIN    n=   0 share=0.0%
+  NEAR_TIE     n=   3 share=9.1%
+  DIFFUSE      n=   0 share=0.0%
+  gap_buckets(paired): near=24, mid=6, large=2
+
+=== PRIMARY harm (blank_enter on xi0_worse_gw) n=28 ===
+  BUDGET_FLEX  n=  26 share=92.9%
+  BLANK_MIN    n=   0 share=0.0%
+  NEAR_TIE     n=   2 share=7.1%
+  DIFFUSE      n=   0 share=0.0%
+  gap_buckets(paired): near=20, mid=6, large=1
+
+=== PRIMARY harm by season ===
+  2022-23 n=8 BUD=88% BLA=0% NEA=12% DIF=0% top=BUDGET_FLEX
+  2023-24 n=6 BUD=100% BLA=0% NEA=0% DIF=0% top=BUDGET_FLEX
+  2024-25 n=6 BUD=100% BLA=0% NEA=0% DIF=0% top=BUDGET_FLEX
+  2025-26 n=8 BUD=88% BLA=0% NEA=12% DIF=0% top=BUDGET_FLEX
+
+=== BRANCH (frozen rule) ===
+CONCENTRATED -> branch BUDGET_FLEX (share=92.9%)
+NEXT_FAMILY: ILP/portfolio interaction research
+No mechanism / no promote on this card.

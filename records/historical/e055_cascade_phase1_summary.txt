@@ -1,0 +1,25 @@
+E055-A Phase-1 cascade: v1_adxg vs fixtures=v1
+Frozen: PRIMARY=max dU_cand same-pos pair (else max U_cand); COMPANIONS=Enter minus PRIMARY; M=blank_enter on xi0_worse_gw; SURVIVE iff companion_blank_share>=0.50
+
+n_enter_events=383 blank_enter=33 primary_mass M (blank_enter on xi0_worse_gw)=28
+M role: primary=11 companion=17 companion_blank_share=60.7%
+M FLEX_flag share=92.9% (26/28)
+
+=== PRIMARY mass M by season ===
+  2022-23 n=8 companion=4 companion_blank_share=50.0%
+  2023-24 n=6 companion=4 companion_blank_share=66.7%
+  2024-25 n=6 companion=3 companion_blank_share=50.0%
+  2025-26 n=8 companion=6 companion_blank_share=75.0%
+
+=== Report-only: xi0_worse GWs with blank by role ===
+  n_xi0_worse_gw=23
+  with blank_primary=11
+  with blank_companion=15
+
+=== Report-only on M (not the gate) ===
+  mean cap_delta=-6.321 mean n_squad_changes=5.32 mean g_treat=0.434
+
+=== VERDICT (frozen rule) ===
+SURVIVE Phase-1 (companion_blank_share=60.7% >= 50%)
+NEXT: Phase-2 CF_PAIR / CF_HOLD only (no promote).
+No new objective / no promote on this card.

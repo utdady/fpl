@@ -1,0 +1,4 @@
+E055-A Phase-1 verdict (v1_adxg vs v1)
+STATUS=SURVIVE
+companion_blank_share=60.7%
+See e055_cascade_phase1_summary.txt
