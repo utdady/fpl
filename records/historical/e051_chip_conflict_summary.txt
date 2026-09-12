@@ -1,0 +1,35 @@
+E051: Joint chip conflict diagnostic (measurement only)
+Source: frozen gate season CSVs (E040/E041/E046/E050)
+Inputs: frozen E040-A / E041-A / E046-A / E050-A t* (no U retune)
+Hard conflict pair: FH-WC (both resquad). Soft report: TC-BB.
+Priority (report-only, not product): WC > FH > TC > BB
+Cap opportunity: NOT computed — single-chip ROI Caps are not
+  additive across ownership models; unified Cap = E051-A if earned.
+
+=== Per season t* ===
+  2022-23: TC=34 BB=29 FH=37 WC=8 | pairs=0 [-] hard_FH_WC=0 soft_TC_BB=0 multi=0
+           priority kept=all naive_feasible=1
+  2023-24: TC=35 BB=34 FH=25 WC=7 | pairs=0 [-] hard_FH_WC=0 soft_TC_BB=0 multi=0
+           priority kept=all naive_feasible=1
+  2024-25: TC=25 BB=33 FH=32 WC=10 | pairs=0 [-] hard_FH_WC=0 soft_TC_BB=0 multi=0
+           priority kept=all naive_feasible=1
+  2025-26: TC=36 BB=33 FH=36 WC=7 | pairs=1 [TC-FH] hard_FH_WC=0 soft_TC_BB=0 multi=0
+           priority kept=[WC|FH|BB] dropped=[TC] naive_feasible=0
+
+=== Pair frequencies (seasons with SAME_GW) ===
+  TC-BB: 0/4 [SOFT]
+  TC-FH: 1/4
+  TC-WC: 0/4
+  BB-FH: 0/4
+  BB-WC: 0/4
+  FH-WC: 0/4 [HARD]
+
+=== Aggregate ===
+  seasons_with_any_collision: 1/4 (rate=0.25)
+  seasons_with_hard_FH_WC: 0/4
+  seasons_with_multi(>=3): 0/4
+
+=== PRIMARY BRANCH ===
+  VERDICT: CONFLICTS_PRESENT
+  BRANCH:  E051A_EARNED_FOR_RESOLUTION
+  CALL: conflicts present — E051-A may freeze ONE resolution class + unified Cap model; do NOT retune chip U/g*; do NOT promote WC>FH>TC>BB without E051-A

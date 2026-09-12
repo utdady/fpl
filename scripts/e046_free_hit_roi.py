@@ -27,6 +27,7 @@ from engine.e046_fh_policy import (
     blank_slate,
     effective_g_star,
     ensure_e046_data,
+    freeze_held_0,
     held_xi,
     next_xi_utility,
     project_e046,
@@ -54,23 +55,6 @@ def _pts(act: dict, pid: int) -> float:
 
 def _cap(xi, capt, act: dict) -> float:
     return sum(_pts(act, p.id) for p in xi) + _pts(act, capt.id)
-
-
-def freeze_held_0(season: str) -> tuple[list[int], int]:
-    """HELD_0 = blank-slate 15 at first usable GW."""
-    for gw in range(1, 39):
-        if not record_path(gw, season=season).exists():
-            continue
-        snap = build_snapshot(season, as_of_gw=gw)
-        if not gw_actuals(season, gw):
-            continue
-        projs = project_e046(snap, horizon=1)
-        try:
-            sol = blank_slate(snap, projs)
-        except RuntimeError:
-            continue
-        return [p.id for p in sol.players], gw
-    raise RuntimeError(f"{season}: no usable GW to freeze HELD_0")
 
 
 def analyze_season(season: str) -> tuple[list[dict], dict]:

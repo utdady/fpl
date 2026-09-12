@@ -1,0 +1,5 @@
+season,t_TC,t_BB,t_FH,t_WC,pairwise_count,pairs,hard_FH_WC,soft_TC_BB,other_pairs,multi,priority_kept,priority_dropped,indep_naive_feasible
+2022-23,34,29,37,8,0,,0,0,,0,WC|FH|TC|BB,,1
+2023-24,35,34,25,7,0,,0,0,,0,WC|FH|TC|BB,,1
+2024-25,25,33,32,10,0,,0,0,,0,WC|FH|TC|BB,,1
+2025-26,36,33,36,7,1,TC-FH,0,0,TC-FH,0,WC|FH|BB,TC,0

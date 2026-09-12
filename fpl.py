@@ -8,6 +8,12 @@ Usage:
     python fpl.py tc --season 2024-25
     python fpl.py bb
     python fpl.py bb --season 2024-25
+    python fpl.py fh
+    python fpl.py fh --season 2024-25
+    python fpl.py fh --squad myteam.json
+    python fpl.py wc
+    python fpl.py wc --season 2024-25
+    python fpl.py wc --squad myteam.json
 """
 from __future__ import annotations
 
@@ -38,6 +44,14 @@ def main() -> int:
         from engine.e041_bb_recommend import main as bb_main
 
         return bb_main(sys.argv[2:])
+    if len(sys.argv) > 1 and sys.argv[1] == "fh":
+        from engine.e046_fh_recommend import main as fh_main
+
+        return fh_main(sys.argv[2:])
+    if len(sys.argv) > 1 and sys.argv[1] == "wc":
+        from engine.e050_wc_recommend import main as wc_main
+
+        return wc_main(sys.argv[2:])
     return _greenfield_cli()
 
 

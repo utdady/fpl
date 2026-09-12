@@ -9,6 +9,7 @@ data/vaastav/
 data/fplcache_avail/
 data/fplcache_ep/
 data/fplcache_strength/
+data/fplcache_strength_ad/
 formal/.lake/
 formal/lake-packages/
 formal/build/

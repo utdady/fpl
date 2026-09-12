@@ -1,0 +1,26 @@
+E050-A: Wildcard ROI (sticky HELD_0 / 0 FT; REPLACE; production stack)
+B0=never WC (held XI); B1=WC@GW20 replace (eff. nearest if excluded); C=argmax U_WC (tie=lowest GW) replace
+U_WC(t)=sum_{tau>=t}[U_xi(BLANK(t),tau)-U_xi(HELD_0,tau)] under I_t
+Gates: AGG sum4 C>B0 and C>B1; FAIL sum_FAIL C>=B0 and C>=B1
+Degeneracy lock: B0 never weekly blank-slate. Not FH revert.
+
+  2022-23 [FAIL] n=37 t*=8 g*_eff=20 | R0=1573.0 R1=1807.0 Rc=1633.0 | C-B0=60.0 C-B1=-174.0
+  2023-24 [PASS] n=38 t*=7 g*_eff=20 | R0=1660.0 R1=1697.0 Rc=1832.0 | C-B0=172.0 C-B1=135.0
+  2024-25 [PASS] n=38 t*=10 g*_eff=20 | R0=1754.0 R1=2049.0 Rc=2039.0 | C-B0=285.0 C-B1=-10.0
+  2025-26 [FAIL] n=38 t*=7 g*_eff=20 | R0=1499.0 R1=1630.0 Rc=1926.0 | C-B0=427.0 C-B1=296.0
+
+=== AGGREGATE (4 seasons) ===
+  sum R(B0)=6486.0  sum R(B1)=7183.0  sum R(C)=7430.0
+  AGG C>B0: True  AGG C>B1: True
+
+=== FAIL seasons ===
+  sum R(B0)=3072.0  sum R(B1)=3437.0  sum R(C)=3559.0
+  FAIL C>=B0: True  FAIL C>=B1: True
+
+=== PASS seasons (report) ===
+  sum R(B0)=3414.0  sum R(B1)=3746.0  sum R(C)=3871.0
+
+=== PRIMARY GATE ===
+  AGG: True
+  FAIL robustness: True
+  CALL: E050-WC SURVIVES

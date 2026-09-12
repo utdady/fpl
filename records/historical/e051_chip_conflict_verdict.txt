@@ -1,0 +1,5 @@
+VERDICT: CONFLICTS_PRESENT
+BRANCH: E051A_EARNED_FOR_RESOLUTION
+collision_rate=0.2500
+seasons_with_collision=1/4
+seasons_with_hard_FH_WC=0/4
