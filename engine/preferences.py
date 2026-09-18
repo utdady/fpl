@@ -18,7 +18,7 @@ from typing import Any
 from engine.candidates import diagnose
 from engine.model_config import PRODUCTION
 from engine.models import PlayerProjection, Snapshot, SquadSolution
-from engine.optimize import solve_squad
+from engine.optimize import SquadInfeasibleError, SquadSolverError, solve_squad
 from engine.stability_selection import squad_objective_value
 
 OBJECTIVE = "horizon"
@@ -219,10 +219,36 @@ def solve_preference_pair(
             min_bank=prefs.min_bank_tenths(),
             club_limits=dict(prefs.club_max) or None,
         )
-    except (RuntimeError, ValueError) as exc:
+    except SquadInfeasibleError as exc:
         return PreferenceResult(
             feasible=False,
             message=f"No feasible squad under these constraints ({exc})",
+            preferences=prefs,
+            s1=s1,
+            s2=None,
+            delta_u=None,
+            distance=None,
+            enters=[],
+            exits=[],
+            model=model,
+        )
+    except ValueError as exc:
+        return PreferenceResult(
+            feasible=False,
+            message=f"Invalid preferences ({exc})",
+            preferences=prefs,
+            s1=s1,
+            s2=None,
+            delta_u=None,
+            distance=None,
+            enters=[],
+            exits=[],
+            model=model,
+        )
+    except SquadSolverError as exc:
+        return PreferenceResult(
+            feasible=False,
+            message=f"Squad solver error — not a preference infeasibility ({exc})",
             preferences=prefs,
             s1=s1,
             s2=None,

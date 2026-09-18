@@ -690,10 +690,9 @@ def _solve_k(
             prob += x[i] == 0, f"excl_{i}"
 
     status = prob.solve(pulp.PULP_CBC_CMD(msg=False, timeLimit=15))
+    status_name = pulp.LpStatus[status]
     chosen_ids = [i for i in ids if x[i].value() and x[i].value() > 0.5]
-    if len(chosen_ids) != rules.squad_size:
+    # Proven optimum only — do not treat timed-out incumbents as "highest".
+    if status_name != "Optimal" or len(chosen_ids) != rules.squad_size:
         return None
-    if pulp.LpStatus[status] not in {"Optimal", "Not Solved"}:
-        if len(chosen_ids) != rules.squad_size:
-            return None
     return [players[i] for i in chosen_ids]

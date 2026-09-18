@@ -701,13 +701,16 @@ POST-GW1 (research)
   PRODUCT prefs v0 (2026-09-13): LOCK/BAN/BANK/CLUB → same U re-solve;
     fpl.py prefs + /me/model-a; Hamming/risk objectives still rejected
 
-LIVE OPS (2026-09-18)
+  LIVE OPS (2026-09-18)
   GW5 freeze pre-deadline (17:30 UTC): records/gw05_v1.0.csv (n=659)
   + gw05_diagnostics.json; export_ui refreshed (2026-27 has GW1+GW5)
   capture.py fix: restore load_snapshot import; drop dead
     include_finished_fixtures kwarg
   Gap: GW2–4 never frozen — do not invent post-hoc freezes
   NEXT ops: capture --gw 5 --score after results; resume weekly freeze cadence
+  PRODUCT hardening (2026-09-18): SquadInfeasibleError vs SquadSolverError;
+    Optimal-only accept in solve_squad / solve_xi / suggest._solve_k;
+    prefs no longer labels solver failure as constraint infeasibility
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

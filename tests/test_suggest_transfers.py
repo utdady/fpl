@@ -290,6 +290,15 @@ class TestSuggestTransfers(unittest.TestCase):
         self.assertEqual(roll.captain_id, 13)
         self.assertAlmostEqual(roll.captain_p_start, 0.2)
 
+    def test_solve_k_requires_proven_optimal(self) -> None:
+        import inspect
+
+        from engine.suggest import _solve_k
+
+        src = inspect.getsource(_solve_k)
+        self.assertIn('status_name != "Optimal"', src)
+        self.assertNotIn('"Not Solved"', src)
+
 
 if __name__ == "__main__":
     unittest.main()

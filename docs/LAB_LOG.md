@@ -5575,6 +5575,25 @@ this freeze (done)
 
 ---
 
+### PRODUCT — ILP / prefs error-semantics hardening (2026-09-18)
+
+- **Lane:** Product engineering. Not an E-card. Architecture unchanged.
+- **Problem:** (1) `preferences.py` mapped every `RuntimeError` from
+  `solve_squad` to “No feasible squad under these constraints,” including
+  CBC timeouts / incomplete solves. (2) `suggest._solve_k` accepted PuLP
+  `Not Solved` incumbents as if they were proven optima under a 15s limit.
+- **Fix:**
+  - `SquadInfeasibleError` vs `SquadSolverError` in `engine/optimize.py`
+  - `solve_squad` / `solve_xi` accept **Optimal** only; Infeasible →
+    infeasibility; timeout/other → solver error (no silent incumbent)
+  - prefs catch infeasibility / invalid input separately; solver errors get
+    an explicit non-constraint message
+  - `_solve_k` returns `None` unless status is Optimal with a full 15
+- **Tests:** `tests.test_preferences`, `tests.test_suggest_transfers`
+- **Not next:** research reopen; μ/objective retune; amber prefs
+
+---
+
 ### LIVE — 2026/27 GW5 prediction freeze (ops, not an E-card)
 
 - **Date:** 2026-09-18

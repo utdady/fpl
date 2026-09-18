@@ -9,6 +9,14 @@ import pulp
 BENCH_WEIGHT = 0.12
 
 
+class SquadInfeasibleError(RuntimeError):
+    """No legal 15 under the given constraints (expected preference failure)."""
+
+
+class SquadSolverError(RuntimeError):
+    """CBC timed out, failed, or returned a non-optimal / incomplete solution."""
+
+
 def _index(projections: list[PlayerProjection]) -> dict[int, PlayerProjection]:
     return {p.player.id: p for p in projections}
 
@@ -30,6 +38,10 @@ def solve_squad(
     min_bank: tenths of £m reserved (spend <= budget - min_bank). Preference cut only.
     club_limits: team_id -> max count (0..team_limit); tightens vs default team_limit.
     Same objective; does not change production weights.
+
+    Only Optimal CBC + a full 15 is accepted. Infeasible constraint sets raise
+    SquadInfeasibleError; timeouts / incomplete solves raise SquadSolverError
+    (incumbents are not treated as optima).
     """
     rules = snapshot.squad
     by_id = _index(projections)
@@ -47,7 +59,7 @@ def solve_squad(
     ids = [p.id for p in eligible]
     missing = include - set(ids)
     if missing:
-        raise RuntimeError(f"must_include not eligible: {sorted(missing)}")
+        raise SquadInfeasibleError(f"must_include not eligible: {sorted(missing)}")
     cost = {p.id: p.now_cost for p in eligible}
     pos = {p.id: p.position for p in eligible}
     team = {p.id: p.team_id for p in eligible}
@@ -64,7 +76,7 @@ def solve_squad(
             raise ValueError("min_bank must be >= 0")
         spend_cap = rules.budget - min_bank
         if spend_cap < 0:
-            raise RuntimeError("min_bank exceeds budget")
+            raise SquadInfeasibleError("min_bank exceeds budget")
 
     for tid, lim in club_cap.items():
         if lim < 0 or lim > rules.team_limit:
@@ -96,7 +108,7 @@ def solve_squad(
         present = [i for i in ids if team[i] == tid]
         if not present:
             if lim < 0:
-                raise RuntimeError(f"club_limits refer to unknown team {tid}")
+                raise ValueError(f"club_limits refer to unknown team {tid}")
             continue
         prob += pulp.lpSum(x[i] for i in present) <= lim, f"club_{tid}"
     for i in include:
@@ -111,10 +123,17 @@ def solve_squad(
         )
 
     status = prob.solve(pulp.PULP_CBC_CMD(msg=False, timeLimit=25))
+    status_name = pulp.LpStatus[status]
     chosen_ids = [i for i in ids if x[i].value() and x[i].value() > 0.5]
-    if len(chosen_ids) != rules.squad_size:
-        raise RuntimeError(
-            f"Squad solver failed ({pulp.LpStatus[status]}); got {len(chosen_ids)} players"
+    if status_name == "Optimal" and len(chosen_ids) == rules.squad_size:
+        pass
+    elif status_name == "Infeasible":
+        raise SquadInfeasibleError(
+            f"Squad ILP infeasible; got {len(chosen_ids)} players"
+        )
+    else:
+        raise SquadSolverError(
+            f"Squad solver failed ({status_name}); got {len(chosen_ids)} players"
         )
 
     squad_players = [next(p for p in eligible if p.id == i) for i in chosen_ids]
@@ -162,9 +181,12 @@ def solve_xi(
         prob += n_pos <= rules.max_play[pcode], f"max_{pcode}"
 
     status = prob.solve(pulp.PULP_CBC_CMD(msg=False, timeLimit=10))
+    status_name = pulp.LpStatus[status]
     start_ids = [i for i in ids if y[i].value() and y[i].value() > 0.5]
-    if len(start_ids) != rules.squad_play:
-        raise RuntimeError(f"XI solver failed ({pulp.LpStatus[status]})")
+    if status_name != "Optimal" or len(start_ids) != rules.squad_play:
+        if status_name == "Infeasible":
+            raise SquadInfeasibleError(f"XI ILP infeasible ({status_name})")
+        raise SquadSolverError(f"XI solver failed ({status_name})")
 
     order = {"GKP": 0, "DEF": 1, "MID": 2, "FWD": 3}
     xi = sorted(

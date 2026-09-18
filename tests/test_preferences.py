@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 from engine.harness import default_scoring, default_squad
 from engine.models import Event, Player, PlayerProjection, Snapshot, Team
-from engine.optimize import solve_squad
+from engine.optimize import SquadInfeasibleError, solve_squad
 from engine.preferences import (
     Preferences,
     preferences_from_payload,
@@ -156,6 +156,34 @@ class TestPreferenceCuts(unittest.TestCase):
         self.assertFalse(result.feasible)
         self.assertIsNone(result.s2)
         self.assertIn("No feasible squad", result.message or "")
+
+    def test_lock_ineligible_is_preference_infeasibility(self) -> None:
+        snap, projs = _toy()
+        with self.assertRaises(SquadInfeasibleError):
+            solve_squad(
+                snap,
+                projs,
+                strategy="balanced",
+                objective="horizon",
+                must_include={999_999},
+            )
+        result = solve_preference_pair(
+            snap,
+            projs,
+            Preferences(lock=frozenset({999_999})),
+            strategy="balanced",
+        )
+        self.assertFalse(result.feasible)
+        self.assertIn("No feasible squad", result.message or "")
+        self.assertNotIn("solver error", (result.message or "").lower())
+
+    def test_solve_squad_requires_proven_optimal(self) -> None:
+        import inspect
+
+        src = inspect.getsource(solve_squad)
+        self.assertIn('status_name == "Optimal"', src)
+        self.assertIn("SquadInfeasibleError", src)
+        self.assertIn("SquadSolverError", src)
 
     def test_empty_prefs_s1_only(self) -> None:
         snap, projs = _toy()
