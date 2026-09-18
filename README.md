@@ -35,12 +35,26 @@ python scripts/product_transfer_replay.py --season 2022-23 --both-conditions --t
 
 ## Live track (2026/27)
 
+Per-player μ (pre-deadline) and actuals (post `data_checked`) live in
+`records/gwNN_v1.0.csv`. Aggregates append to `records/scores.csv`.
+
+**Automated (GitHub Actions):** `.github/workflows/live-capture.yml` runs every
+6h UTC — freeze next GW inside a 48h pre-deadline window if missing; score any
+unscored freeze once FPL marks `data_checked`; export UI and commit artifacts.
+Manual: Actions → live-capture → Run workflow. Never invents post-deadline freezes.
+
+```bash
+python scripts/live_capture_ops.py              # freeze + score as needed
+python scripts/live_capture_ops.py --dry-run
+python -m engine.capture --gw 5 --refresh       # manual freeze
+python -m engine.capture --gw 5 --score         # manual score after results
+python -m engine.capture --gw 5 --diagnostics
+python scripts/export_ui.py
+```
+
 ```bash
 python fpl.py --refresh
 python -m engine.audit --refresh
-python -m engine.capture --gw 1          # freeze before deadline
-python -m engine.capture --gw 1 --score  # score after results
-python -m engine.capture --gw 1 --diagnostics  # sim quantiles, LOO CSV, per-strategy squads
 ```
 
 ## Research viewer (`web/`)

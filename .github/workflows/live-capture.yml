@@ -1,0 +1,71 @@
+name: live-capture
+
+# Measurement only: freeze μ before deadline, fill actuals after data_checked.
+# Does not retune the model. Never invents post-deadline freezes.
+
+on:
+  schedule:
+    # Every 6 hours UTC — covers typical Fri deadline windows.
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "freeze+score | freeze-only | score-only | dry-run"
+        required: true
+        default: "freeze+score"
+        type: choice
+        options:
+          - freeze+score
+          - freeze-only
+          - score-only
+          - dry-run
+
+permissions:
+  contents: write
+
+concurrency:
+  group: live-capture
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Run live capture ops
+        id: ops
+        run: |
+          set -euo pipefail
+          MODE="${{ github.event.inputs.mode || 'freeze+score' }}"
+          case "$MODE" in
+            freeze-only)  EXTRA="--freeze-only" ;;
+            score-only)   EXTRA="--score-only" ;;
+            dry-run)      EXTRA="--dry-run" ;;
+            *)            EXTRA="" ;;
+          esac
+          python scripts/live_capture_ops.py $EXTRA
+
+      - name: Commit artifacts if changed
+        if: ${{ github.event.inputs.mode != 'dry-run' }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add records/ web/public/data/ || true
+          if git diff --staged --quiet; then
+            echo "No artifact changes to commit"
+            exit 0
+          fi
+          git commit -m "chore(live): automated capture ops
+
+          Freeze and/or score via scripts/live_capture_ops.py (measurement only)."
+          git push

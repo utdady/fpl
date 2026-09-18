@@ -19,7 +19,8 @@ PARKED    E051 joint inventory (sparse conflicts; E051-A skipped);
           fixture-book bootstrap rejected
 OPEN      none — Research lane at rest (no active card)
 PRODUCT   Model A freeze; k-best CLOSED; prefs v0 SHIPPED (/me/model-a)
-LIVE      GW5 freeze 2026-09-18 (pre-deadline); GW1 scored; GW2–4 freeze gap
+LIVE      GW5 freeze 2026-09-18 (pre-deadline); GW1 scored; GW2–4 freeze gap;
+          automated freeze/score via live-capture workflow
 ```
 **Active research question:** none. **E057 closed PARK** (FLEX ELIGIBLE Cap✓
 XI0✗). Do not adopt RULE globally; do not silently retune FLEX. Successor only
@@ -27,7 +28,8 @@ via a later fresh prereg with a higher bar. Production unchanged.
 **Product:** preference-conditioned Model A (LOCK/BAN/BANK/CLUB). Amber prefs
 and Hamming generators remain out.
 **Live:** `records/gw05_v1.0.csv` frozen before GW5 deadline (17:30 UTC).
-Do not invent retroactive GW2–4 freezes.
+Do not invent retroactive GW2–4 freezes. Automation:
+`scripts/live_capture_ops.py` + `.github/workflows/live-capture.yml`.
 
 
 ---
@@ -5624,9 +5626,24 @@ this freeze (done)
 
 ---
 
+### LIVE — automated capture ops (2026-09-18)
+
+- **Lane:** Live track engineering. Measurement only. Not an E-card.
+- **Problem:** Freeze/score was manual; GW2–4 were never frozen.
+- **Ship:**
+  - `engine/live_ops.py` — freeze window / score-gate helpers
+  - `scripts/live_capture_ops.py` — idempotent freeze (≤48h pre-deadline,
+    never post-deadline) + score (`data_checked` only) + `export_ui`
+  - `.github/workflows/live-capture.yml` — cron every 6h UTC + workflow_dispatch;
+    commits `records/` + `web/public/data/` when changed
+- **Tests:** `tests.test_live_capture_ops`
+- **Not next:** auto-retune from scores; inventing GW2–4 freezes
+
+---
+
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-18 (**Research at rest**; GW5 freeze landed):
+As of 2026-09-18 (**Research at rest**; GW5 freeze landed; live capture automated):
 
 1. **Production μ.** `v2am_fpla` + `rates=v1` + fixtures `v1` (still `_str`→5).
 2. **SHIPPED.** TC/BB/FH/WC wired independent; μ/squad ILP unchanged;
@@ -5638,11 +5655,12 @@ As of 2026-09-18 (**Research at rest**; GW5 freeze landed):
    ELIGIBLE** (Phase-2 XI0✗); fixture-book bootstrap rejected.
 5. **OPEN.** **None** — Research lane at rest (no active card).
 6. **Product.** Model A freeze; preference-conditioned re-solve v0.
-7. **Live.** GW5 frozen pre-deadline; GW1 scored; GW2–4 freeze gap acknowledged.
+7. **Live.** GW5 frozen pre-deadline; GW1 scored; GW2–4 freeze gap acknowledged;
+   **automated** freeze/score via `live-capture` workflow.
 8. **Not next.** Immediate E058; adopt RULE globally; silent FLEX retune;
    `xi0_worse` live trigger; blank-HOLD live; new ILP objective; touch
    production; Hamming-forced / diversity-penalty generator; amber prefs
-   without freeze; retroactive GW2–4 freezes.
+   without freeze; retroactive GW2–4 freezes; auto-retune from live scores.
 
 ---
 
@@ -5651,6 +5669,8 @@ As of 2026-09-18 (**Research at rest**; GW5 freeze landed):
 
 ```bash
 # Live
+python scripts/live_capture_ops.py
+python scripts/live_capture_ops.py --dry-run
 python fpl.py --refresh
 python -m engine.audit --refresh
 python -m engine.capture --gw 5 --refresh

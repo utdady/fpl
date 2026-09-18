@@ -711,6 +711,9 @@ POST-GW1 (research)
   PRODUCT hardening (2026-09-18): SquadInfeasibleError vs SquadSolverError;
     Optimal-only accept in solve_squad / solve_xi / suggest._solve_k;
     prefs no longer labels solver failure as constraint infeasibility
+  LIVE automation (2026-09-18): scripts/live_capture_ops.py +
+    .github/workflows/live-capture.yml (6h cron); freeze ≤48h pre-deadline;
+    score on data_checked; commit records/ + web/public/data/
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels
