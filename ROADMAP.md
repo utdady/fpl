@@ -254,10 +254,9 @@ E030 concentrated (negative): portfolio alignment poor on FAIL; objective-interf
 Production:        v2am_fpla + rates=v1 + fixtures v1
                    (v2am_s = pre-fpla minutes control; V1 = permanent historical)
 Closed research:   rates_v2b; E021/E048/E049 fixture remap families; …
-Parked:            E051 joint inventory (E051-A skipped); fixture-book rejected
-Research candidates: structural V_C / non-separable portfolio value (E039+)
+Parked:            E051 joint inventory; E057 Cap claim under FLEX (XI0✗); …
 Upstream NEXT:       continuous relative-strength → xG CLOSED (E052+E053)
-Research NEXT:       E055 BRANCH → valuation/opportunity-cost (new prereg)
+Research NEXT:       none — lane at rest (E057 PARK; no immediate successor)
 Product SHIPPED:     TC/BB/FH/WC independent wired surfaces
 ```
 
@@ -420,8 +419,32 @@ recipes frozen for gated Phase-2.
 (17/28 on M). All four seasons ≥50%.
 
 **E055 Phase-2 (2026-09-12):** **BRANCH** — CF_PAIR and CF_HOLD both recover
-AGG XI0 on xi0_worse (43→27); Cap +~100. Next: valuation/opportunity-cost
-prereg. **No CF promote.** See `docs/LAB_LOG.md` E055-A Phase-2; charter §40.
+AGG XI0 on xi0_worse (43→27); Cap +~100. Cascade card closes as BRANCH.
+
+**E056 preregistered (2026-09-12):** Valuation / **opportunity-cost** of full
+ILP cand XI vs μ-fixed CF_PAIR/CF_HOLD; Phase-1 OC descriptive; Phase-2
+ex-ante MENU rule only if material. Hard non-identity vs E034c/E039-A/E055.
+**No new ILP objective / no CF promote.**
+
+**E056-A (2026-09-12):** Freeze locked — OC signs (+ = alt better); MATERIAL =
+mean OC_CAP(HOLD)>0 ∧ OC_XI0(HOLD)>0 on xi0_worse; MENU={ctrl,cand,PAIR,HOLD};
+RULE_UMAX (ties HOLD>PAIR>ctrl>cand); `v1_adxg` = E053 KILL diagnostic
+reference only.
+
+**E056 Phase-1 (2026-09-12):** **SURVIVE MATERIAL** — xi0_worse n=23; mean
+OC_CAP(HOLD)=**+4.30**; mean OC_XI0(HOLD)=**+0.70**; PAIR twin ≈ HOLD.
+
+**E056 Phase-2 (2026-09-12):** **BRANCH** — RULE_UMAX Cap 1360>1308; XI0 36≤43
+on worse (hold=10/pair=4/cand=9). Valuation card closes as BRANCH.
+**No RULE/CF/adxg promote.**
+
+**E057 preregistered (2026-09-12):** Decision-rule / **product-surface** for
+frozen RULE_UMAX. **Guardrail:** `xi0_worse` ≠ live trigger.
+
+**E057-A (2026-09-12):** ELIGIBLE = XI_cand≠XI_ctrl ∧ FLEX_flag; live HOLD
+deferred. Phase-1 **SURVIVE** (n_eligible=122). Phase-2 **PARK** — Cap +40 on
+ELIGIBLE but XI0 81>79. Card closed; Research lane **at rest** (no immediate
+successor). See `docs/LAB_LOG.md` E057-A Phase-2; charter §42.
 
 ---
 
@@ -504,6 +527,22 @@ explainable decisions.
 **Partial today (not V9):** Teams tracker, signed-in **My team**, and live strategy
 re-solve are convenience layers on top of the research viewer. They do not replace
 the V3 calibration gate for advice-shaped features.
+
+**Model A freeze (2026-09-13):** production stack is locked as the product
+baseline — `v2am_fpla` + `rates=v1` + fixtures `v1` + existing `solve_squad`
+horizon objective + XI/C + existing `suggest_transfers`. Do not retune μ or
+the ILP because outputs feel wrong. Not E058.
+
+**k-best closed (2026-09-13):** natural no-good-cut enumeration is
+**insufficient** for a candidate-menu UI (verdict B + C pockets, not A).
+That is a *mechanism* failure, not a product-concept close. Keep
+`engine/candidates.py` (generation → pool → diagnostics).
+
+**Preference-conditioned Model A (v0, 2026-09-13):** decision alternatives
+via hard constraints only — LOCK/BAN (element_id), BANK ∈
+{0,0.5,1.0,1.5,2.0}m, CLUB max ∈ {0,1,2}. Same \(U\); only \(\mathcal F\)
+changes. UI: `/me/model-a`. CLI: `fpl.py prefs`. Not ROBUST/FLEX/UPSIDE.
+Amber (minutes cuts, scenarios, soft prefs) deferred.
 
 Product-specific success metrics (engagement, decision accuracy for real users)
 rather than out-of-sample MAE.
@@ -642,8 +681,25 @@ POST-GW1 (research)
   E055-A freeze: mover=max ΔU_cand pair; companions; share≥0.50; CF_PAIR/HOLD
   E055 Phase-1 SURVIVE: companion_blank_share=60.7% (17/28); all seasons ≥50%
   E055 Phase-2 BRANCH: CF_PAIR+HOLD XI0 43→27 on worse; Cap +~100; no promote
-  NEXT: new prereg valuation/opportunity-cost family
-  NOT NEXT: promote CF; new objective; FLEX penalty; strength→xG
+  E056 preregistered: valuation/opportunity-cost of cand vs CF (ex-ante RULE gated)
+  E056-A freeze: OC+/MATERIAL HOLD; MENU; RULE_UMAX; adxg=diagnostic not reopen
+  E056 Phase-1 SURVIVE: xi0_worse n=23; OC_CAP(HOLD)=+4.30; OC_XI0=+0.70
+  E056 Phase-2 BRANCH: RULE Cap +52 vs cand; XI0 43→36; hold/pair/cand mix
+  E057 preregistered: product-surface RULE_UMAX; xi0_worse ≠ live trigger
+  E057-A freeze: ELIGIBLE=FLEX; live HOLD deferred
+  E057 Phase-1 SURVIVE: n_eligible=122; ∩worse=21/23 report-only
+  E057 Phase-2 PARK: ELIGIBLE Cap+40 but XI0 81>79; ∩worse still Cap+52
+  E057 CLOSED PARK: Research lane at rest — no immediate successor
+  NEXT: none (later return needs fresh prereg with higher bar)
+  NOT NEXT: immediate E058; adopt RULE globally; silent FLEX retune; touch production
+  PRODUCT (2026-09-13): Model A freeze; k-best landscape diagnostic next
+    (squad only; live snapshot then 12 historical; A/B/C honesty gate, not a card)
+  PRODUCT k-best verdict: B with C pockets (not A) — labeled menu not earned;
+    Phase 2 UI parked; no E058
+  PRODUCT k-best CLOSED: natural enumeration insufficient (mechanism, not concept);
+    keep candidates.py; next = design discussion only; no Hamming-force generator
+  PRODUCT prefs v0 (2026-09-13): LOCK/BAN/BANK/CLUB → same U re-solve;
+    fpl.py prefs + /me/model-a; Hamming/risk objectives still rejected
 
 VIEWER (shipped, post-GW1)
   web/ research viewer: Pool, Lab, Audit, Teams, My team, model provenance labels

@@ -1,0 +1,44 @@
+PRODUCT k-best live snapshot (inspect before --historical)
+season=2026/27 gw=5 k=10
+
+INSPECT (before historical):
+- no-good cuts exclude the exact 15 (10 unique squads; S1 does not reappear)
+- all candidates legal: 15 / XI 11 / club<=3 / bank 2-3
+- D is on the 15; S6/S8 vice change (Hornicek -> Foden) is a GK swap side-effect
+- diversity is bench DEF/GKP churn (Fofana/Egan/Khalaili/Mendy/Thomas/Richards/O'Shea/Suzuki)
+- max D=2; XI of S1-S5/S7/S9/S10 identical
+- S6/S8 report higher post-hoc U than S1 because diagnostics use solve_xi XI,
+  not the ILP's internal starter set — not a cut bug
+- live landscape looks like near-duplicates (honesty-lean B) — proceed to historical
+
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    145.64     0.00    0   1.000      2     3    13  Cherki / Horníček  
+   2    145.61     0.03    1   0.875      2     3    13  Cherki / Horníček  Khalaili <- Fofana
+   3    145.59     0.05    1   0.875      2     3    13  Cherki / Horníček  Mendy <- Egan
+   4    145.56     0.08    2   0.765      2     3    13  Cherki / Horníček  Khalaili, Mendy <- Egan, Fofana
+   5    145.56     0.08    1   0.875      3     3    13  Cherki / Horníček  Thomas <- Egan
+   6    146.64    -1.01    1   0.875      2     3    13  Cherki / Foden  Suzuki <- Horníček
+   7    145.53     0.10    2   0.765      3     3    13  Cherki / Horníček  Khalaili, Thomas <- Egan, Fofana
+   8    146.61    -0.98    2   0.765      2     3    13  Cherki / Foden  Khalaili, Suzuki <- Fofana, Horníček
+   9    145.53     0.11    1   0.875      3     3    13  Cherki / Horníček  O'Shea <- Egan
+  10    145.51     0.12    1   0.875      2     3    13  Cherki / Horníček  Richards <- Fofana
+
+S1: C Cherki / VC Horníček | XI Horníček(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Martinez(GKP), Wilson(FWD), Fofana(DEF), Egan(DEF) | cost 998 bank 2
+
+S2: C Cherki / VC Horníček | XI Horníček(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Martinez(GKP), Wilson(FWD), Khalaili(DEF), Egan(DEF) | cost 998 bank 2
+
+S3: C Cherki / VC Horníček | XI Horníček(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Martinez(GKP), Wilson(FWD), Fofana(DEF), Mendy(DEF) | cost 998 bank 2
+
+S4: C Cherki / VC Horníček | XI Horníček(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Martinez(GKP), Wilson(FWD), Khalaili(DEF), Mendy(DEF) | cost 998 bank 2
+
+S5: C Cherki / VC Horníček | XI Horníček(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Martinez(GKP), Wilson(FWD), Fofana(DEF), Thomas(DEF) | cost 997 bank 3
+
+S6: C Cherki / VC Foden | XI Martinez(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Suzuki(GKP), Wilson(FWD), Fofana(DEF), Egan(DEF) | cost 998 bank 2
+
+S7: C Cherki / VC Horníček | XI Horníček(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Martinez(GKP), Wilson(FWD), Khalaili(DEF), Thomas(DEF) | cost 997 bank 3
+
+S8: C Cherki / VC Foden | XI Martinez(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Suzuki(GKP), Wilson(FWD), Khalaili(DEF), Egan(DEF) | cost 998 bank 2
+
+S9: C Cherki / VC Horníček | XI Horníček(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Martinez(GKP), Wilson(FWD), Fofana(DEF), O'Shea(DEF) | cost 997 bank 3
+
+S10: C Cherki / VC Horníček | XI Horníček(GKP), Senesi(DEF), Mukiele(DEF), Lacroix(DEF), Cherki(MID), Foden(MID), Barcola(MID), Rashford(MID), Osorio(MID), Haaland(FWD), Šeško(FWD) | bench Martinez(GKP), Wilson(FWD), Richards(DEF), Egan(DEF) | cost 998 bank 2

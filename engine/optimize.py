@@ -20,12 +20,22 @@ def solve_squad(
     must_include: set[int] | None = None,
     must_exclude: set[int] | None = None,
     objective: str = "horizon",
+    exclude_squads: list[set[int]] | None = None,
+    min_bank: int | None = None,
+    club_limits: dict[int, int] | None = None,
 ) -> SquadSolution:
-    """objective: 'horizon' (production V1) or 'next' (diagnostic GW-myopic squad)."""
+    """objective: 'horizon' (production V1) or 'next' (diagnostic GW-myopic squad).
+
+    exclude_squads: exact 15s forbidden via no-good cuts (sum x_i <= 14).
+    min_bank: tenths of £m reserved (spend <= budget - min_bank). Preference cut only.
+    club_limits: team_id -> max count (0..team_limit); tightens vs default team_limit.
+    Same objective; does not change production weights.
+    """
     rules = snapshot.squad
     by_id = _index(projections)
     include = must_include or set()
     exclude = must_exclude or set()
+    club_cap = club_limits or {}
     eligible = [
         p
         for p in snapshot.players
@@ -48,6 +58,20 @@ def solve_squad(
     else:
         util = {p.id: by_id[p.id].horizon_utility for p in eligible}
 
+    spend_cap = rules.budget
+    if min_bank is not None:
+        if min_bank < 0:
+            raise ValueError("min_bank must be >= 0")
+        spend_cap = rules.budget - min_bank
+        if spend_cap < 0:
+            raise RuntimeError("min_bank exceeds budget")
+
+    for tid, lim in club_cap.items():
+        if lim < 0 or lim > rules.team_limit:
+            raise ValueError(
+                f"club_limits[{tid}]={lim} must be in 0..{rules.team_limit}"
+            )
+
     prob = pulp.LpProblem("fpl_squad", pulp.LpMaximize)
     x = pulp.LpVariable.dicts("x", ids, 0, 1, pulp.LpInteger)
     s = pulp.LpVariable.dicts("s", ids, 0, 1, pulp.LpInteger)
@@ -60,17 +84,31 @@ def solve_squad(
         prob += s[i] <= x[i]
     prob += pulp.lpSum(x[i] for i in ids) == rules.squad_size
     prob += pulp.lpSum(s[i] for i in ids) == rules.squad_play
-    prob += pulp.lpSum(cost[i] * x[i] for i in ids) <= rules.budget
+    prob += pulp.lpSum(cost[i] * x[i] for i in ids) <= spend_cap
     for pcode, n in rules.squad_select.items():
         prob += pulp.lpSum(x[i] for i in ids if pos[i] == pcode) == n, f"squad_{pcode}"
     for pcode in rules.min_play:
         n_start = pulp.lpSum(s[i] for i in ids if pos[i] == pcode)
         prob += n_start >= rules.min_play[pcode], f"min_{pcode}"
         prob += n_start <= rules.max_play[pcode], f"max_{pcode}"
-    for tid in {team[i] for i in ids}:
-        prob += pulp.lpSum(x[i] for i in ids if team[i] == tid) <= rules.team_limit, f"club_{tid}"
+    for tid in {team[i] for i in ids} | set(club_cap):
+        lim = club_cap.get(tid, rules.team_limit)
+        present = [i for i in ids if team[i] == tid]
+        if not present:
+            if lim < 0:
+                raise RuntimeError(f"club_limits refer to unknown team {tid}")
+            continue
+        prob += pulp.lpSum(x[i] for i in present) <= lim, f"club_{tid}"
     for i in include:
         prob += x[i] == 1, f"lock_{i}"
+    for n, banned in enumerate(exclude_squads or []):
+        present = [i for i in banned if i in x]
+        if len(present) != rules.squad_size or len(banned) != rules.squad_size:
+            continue
+        prob += (
+            pulp.lpSum(x[i] for i in present) <= rules.squad_size - 1,
+            f"nogood_{n}",
+        )
 
     status = prob.solve(pulp.PULP_CBC_CMD(msg=False, timeLimit=25))
     chosen_ids = [i for i in ids if x[i].value() and x[i].value() > 0.5]

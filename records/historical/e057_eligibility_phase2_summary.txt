@@ -1,0 +1,28 @@
+E057-A Phase-2 Cap/XI0 on ELIGIBLE: v1_adxg vs fixtures=v1
+Frozen: universe=ELIGIBLE (XI diff AND FLEX); NOT xi0_worse; SURVIVE iff Cap(RULE)>Cap(cand) AND zeros(RULE)<=zeros(cand) AND not identity-to-ctrl on all eligible
+
+n_eligible=122
+
+=== rule_choice on ELIGIBLE ===
+  hold=76 (62.3%)
+  pair=37 (30.3%)
+  cand=9 (7.4%)
+
+=== AGG on ELIGIBLE (primary gate) ===
+  sum_xi0 rule=81 cand=79 ctrl=75 (rule<=cand: False)
+  sum_Cap rule=7254.0 cand=7214.0 ctrl=7006.0 delta_vs_cand=+40.0
+  n_rule_eq_ctrl=0/122
+
+=== per-season ELIGIBLE (asterisk visibility) ===
+  2022-23 n=30 hold=17 pair=12 cand=1 xi0 23->23 Cap 1807->1833 dCap=+26
+  2023-24 n=30 hold=16 pair=11 cand=3 xi0 15->15 Cap 1823->1847 dCap=+24
+  2024-25 n=31 hold=18 pair=10 cand=3 xi0 17->20 Cap 1844->1837 dCap=-7
+  2025-26 n=31 hold=25 pair=4 cand=2 xi0 24->23 Cap 1740->1737 dCap=-3
+
+=== Report-only: ELIGIBLE ∩ xi0_worse (not the gate) ===
+  n=21 xi0 39->32 Cap 1223.0->1275.0 dCap=+52.0
+
+=== VERDICT (frozen Phase-2 on ELIGIBLE) ===
+PARK Phase-2 (XI0(RULE)>XI0(cand))
+NEXT: park product-surface Cap claim; do not adopt RULE globally.
+xi0_worse was not the gate. No promote. Production untouched.

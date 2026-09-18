@@ -1,0 +1,6 @@
+E056-A Phase-1 verdict (v1_adxg vs v1)
+STATUS=SURVIVE
+n_xi0_worse=23
+mean_OC_XI0_HOLD=0.6956521739130435
+mean_OC_CAP_HOLD=4.304347826086956
+See e056_oc_phase1_summary.txt

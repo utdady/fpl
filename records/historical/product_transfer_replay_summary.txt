@@ -1,0 +1,18 @@
+Product transfer replay — confidence/smoke (NOT an E-card)
+stack: minutes=v2am_fpla rates=v1 strategy=balanced seed=7
+selling~=now_cost; FT max=2; GW1=greenfield seed; no significance / no promote
+
+--- FAIL (helper arm) ---
+  2022-23 [hit] n=37 Cap=1711.0 hits=20 xfers=41 Δroll=138.0 Δnaive=-88.0
+  2022-23 [no_hit] n=37 Cap=1749.0 hits=0 xfers=36 Δroll=176.0 Δnaive=-50.0
+  2025-26 [hit] n=38 Cap=1968.0 hits=12 xfers=40 Δroll=469.0 Δnaive=66.0
+  2025-26 [no_hit] n=38 Cap=1948.0 hits=0 xfers=37 Δroll=449.0 Δnaive=46.0
+
+--- PASS (helper arm) ---
+  2023-24 [hit] n=38 Cap=2089.0 hits=20 xfers=42 Δroll=429.0 Δnaive=86.0
+  2023-24 [no_hit] n=38 Cap=2066.0 hits=0 xfers=37 Δroll=406.0 Δnaive=63.0
+  2024-25 [hit] n=38 Cap=2117.0 hits=8 xfers=39 Δroll=363.0 Δnaive=54.0
+  2024-25 [no_hit] n=38 Cap=2074.0 hits=0 xfers=37 Δroll=320.0 Δnaive=11.0
+
+gw csv: records\historical\product_transfer_replay_gw.csv
+season csv: records\historical\product_transfer_replay_season.csv

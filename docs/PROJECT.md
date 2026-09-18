@@ -499,12 +499,15 @@ giant scheduler. See LAB_LOG E051 diagnostic; charter §36.
 ### Upstream / Research (strength→xG closed; boundary OPEN)
 
 **CLOSED:** E021 v2d; E048-A; E049-A; continuous relative-strength → xG
-(E052-A overall + E053-A ATK/DEF). No coefficient fishing as “cleanup.”
+(E052-A overall + E053-A ATK/DEF); E055 cascade BRANCH; E056 valuation BRANCH.
+No coefficient fishing as “cleanup.”
 
-**PARKED:** E051 joint inventory; fixture-book bootstrap rejected.
+**PARKED:** E051 joint inventory; **E057** Cap claim under FLEX ELIGIBLE
+(Phase-2 XI0✗); fixture-book bootstrap rejected.
 
-**OPEN:** **E055 BRANCH** → valuation / opportunity-cost family (new prereg).
-No CF promote. Charter §40.
+**OPEN:** **None** — Research lane at rest (E057 closed PARK; no immediate
+successor). Later return needs a fresh prereg with a higher bar. Production
+untouched. Charter §42.
 
 ---
 
@@ -590,7 +593,11 @@ Details and tables: [`LAB_LOG.md`](LAB_LOG.md). One line each.
 | **E054** | μ→XI decision-boundary mechanism diagnostic (near-tie / FLEX / blank) | **preregistered** |
 | **E054-A** | classify XI diffs under frozen `v1_adxg` vs `v1` | **BRANCH=BUDGET_FLEX** (92.9%) |
 | **E055** | Constraint-induced portfolio cascade under frozen `v1_adxg` | Phase-1 SURVIVE; Phase-2 **BRANCH** |
-| **E055-A** | mover/companion/CF freeze (ΔU_cand pair; share≥0.50; CF_PAIR/HOLD) | **BRANCH** → valuation/opp-cost prereg |
+| **E055-A** | mover/companion/CF freeze (ΔU_cand pair; share≥0.50; CF_PAIR/HOLD) | **BRANCH** (cascade card closed) |
+| **E056** | Valuation / opportunity-cost of cand vs μ-fixed CFs + ex-ante RULE | Phase-1 SURVIVE; Phase-2 **BRANCH** |
+| **E056-A** | OC+/MATERIAL HOLD; MENU; RULE_UMAX; adxg=diagnostic not reopen | **BRANCH** (valuation card closed) |
+| **E057** | Decision-rule / product-surface for RULE_UMAX (ex-ante eligibility) | Phase-1 SURVIVE; Phase-2 **PARK** — card closed |
+| **E057-A** | ELIGIBLE=FLEX; live HOLD deferred; Cap gate on ELIGIBLE only | **PARK** — Research at rest |
 
 E013 sits above E010 in the log because it was run on the research calendar
 before the live deadline. It does not change Friday control.

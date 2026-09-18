@@ -1,13 +1,23 @@
 """Transfer suggestions from an owned 15. Not V5/V7 — myopic next-GW search.
 
+Product helper (not an E-card): Hamming-k ILP on the current squad (selling
 Hamming-k ILP on the current squad (selling prices + bank), then score with
-solve_xi + pick_captains. Rank by next-GW XI+C μ minus hit.
+solve_xi + captain-by-xP (highest next_mu in the XI).
+
+This is a next-GW FT-spending optimizer: it finds the highest projected
+XI+C plan given available free transfers. It does not decide whether banking
+FTs is wiser. Default allow_hit=False; hits are an explicit aggressive option.
+
+Search and ranking use the same scalar: next_utility (strategy-aware).
+Displayed next_xi_mu is informational (points-shaped μ), not the rank key.
+
+Candidate enumeration is diversified (exclude prior ins), not global top-N.
 """
 from __future__ import annotations
 
-import json
 import pickle
 import time
+from collections import defaultdict
 from dataclasses import asdict, dataclass, field, replace
 from typing import Any
 
@@ -16,14 +26,21 @@ import pulp
 from engine.api import CACHE_DIR
 from engine.model_config import PRODUCTION
 from engine.models import Player, PlayerProjection, Snapshot
-from engine.optimize import BENCH_WEIGHT, pick_captains, solve_squad, solve_xi
+from engine.optimize import BENCH_WEIGHT, solve_squad, solve_xi
 from engine.project import project_all
 
 SOURCE = (
     f"minutes={PRODUCTION['minutes_version']} rates={PRODUCTION['rates_version']} "
-    "strategy={strategy} objective=next"
+    "strategy={strategy} objective=next_utility"
 )
 PROJ_TTL_S = 1800
+
+MODE_NORMAL = "NORMAL_TRANSFER"
+MODE_WILDCARD = "WILDCARD"
+MODE_FREE_HIT = "FREE_HIT"
+
+OBJECTIVE_NEXT = "next-GW XI+C next_utility − hits"
+SQUAD_OBJECTIVE_HORIZON = "horizon utility"
 
 
 @dataclass
@@ -35,6 +52,7 @@ class SquadState:
     hit_cost: int
     value: int
     wc_active: bool
+    chip_mode: str | None  # "wildcard" | "freehit" | None
 
 
 @dataclass
@@ -49,19 +67,38 @@ class TransferMove:
 
 
 @dataclass
+class MinutesFlag:
+    id: int
+    name: str
+    pos: str
+    p_start: float
+    mu: float
+    utility: float
+
+
+@dataclass
 class TransferPlan:
     k: int
     hit: int
     next_xi_mu: float
+    next_xi_utility: float
     score: float
-    delta_mu: float
+    delta: float
     bank: int
     captain: str
     vice: str
     captain_id: int
     vice_id: int
+    captain_mu: float
+    captain_utility: float
+    captain_p_start: float
+    captain_pos: str
     moves: list[TransferMove]
     xi_ids: list[int]
+    incoming_ids: list[int]
+    outgoing_ids: list[int]
+    # XI players with low P(start) — premiums can look "uncaptainable" when suppressed.
+    minutes_flags: list[MinutesFlag] = field(default_factory=list)
 
 
 @dataclass
@@ -69,6 +106,12 @@ class SuggestResult:
     source: str
     strategy: str
     next_gw: int
+    mode: str
+    objective: str
+    squad_objective: str | None
+    displayed_payoff: str
+    diversify_n: int
+    roll_utility: float
     roll_mu: float
     plans: list[TransferPlan] = field(default_factory=list)
 
@@ -79,12 +122,15 @@ def parse_my_team(data: dict[str, Any]) -> SquadState:
         raise ValueError(f"squad JSON must have 15 picks; got {len(picks)}")
     tr = data.get("transfers") or {}
     chips = data.get("chips") or []
-    wc_active = any(
-        (c.get("name") in {"wildcard", "freehit"})
-        and c.get("status_for_entry") == "active"
-        for c in chips
-        if isinstance(c, dict)
-    )
+    chip_mode = None
+    for c in chips:
+        if not isinstance(c, dict):
+            continue
+        name = c.get("name")
+        if name in {"wildcard", "freehit"} and c.get("status_for_entry") == "active":
+            chip_mode = name
+            break
+    wc_active = chip_mode is not None
     limit = tr.get("limit")
     made = int(tr.get("made") or 0)
     cap = int(limit) if limit is not None else 1
@@ -97,6 +143,7 @@ def parse_my_team(data: dict[str, Any]) -> SquadState:
         hit_cost=int(tr.get("cost") or 4),
         value=int(tr.get("value") or 0),
         wc_active=wc_active,
+        chip_mode=chip_mode,
     )
 
 
@@ -105,20 +152,46 @@ def result_to_json(result: SuggestResult) -> dict[str, Any]:
         "source": result.source,
         "strategy": result.strategy,
         "next_gw": result.next_gw,
+        "mode": result.mode,
+        "objective": result.objective,
+        "squad_objective": result.squad_objective,
+        "displayed_payoff": result.displayed_payoff,
+        "diversify_n": result.diversify_n,
+        "roll_utility": round(result.roll_utility, 4),
         "roll_mu": round(result.roll_mu, 4),
         "plans": [
             {
                 "k": p.k,
                 "hit": p.hit,
                 "next_xi_mu": round(p.next_xi_mu, 4),
+                "next_xi_utility": round(p.next_xi_utility, 4),
                 "score": round(p.score, 4),
-                "delta_mu": round(p.delta_mu, 4),
+                "delta": round(p.delta, 4),
+                # Compat alias: same as delta (utility − hit vs roll).
+                "delta_mu": round(p.delta, 4),
                 "bank": p.bank,
                 "captain": p.captain,
                 "vice": p.vice,
                 "captain_id": p.captain_id,
                 "vice_id": p.vice_id,
+                "captain_mu": round(p.captain_mu, 4),
+                "captain_utility": round(p.captain_utility, 4),
+                "captain_p_start": round(p.captain_p_start, 4),
+                "captain_pos": p.captain_pos,
                 "xi_ids": p.xi_ids,
+                "incoming_ids": p.incoming_ids,
+                "outgoing_ids": p.outgoing_ids,
+                "minutes_flags": [
+                    {
+                        "id": f.id,
+                        "name": f.name,
+                        "pos": f.pos,
+                        "p_start": round(f.p_start, 4),
+                        "mu": round(f.mu, 4),
+                        "utility": round(f.utility, 4),
+                    }
+                    for f in p.minutes_flags
+                ],
                 "moves": [asdict(m) for m in p.moves],
             }
             for p in result.plans
@@ -207,7 +280,7 @@ def suggest_from_payload(
     seed: int = 7,
     refresh: bool = False,
     allow_hit: bool = False,
-    top_n: int = 3,
+    diversify_n: int = 3,
 ) -> SuggestResult:
     state = parse_my_team(payload)
     projections = cached_project_all(
@@ -219,7 +292,7 @@ def suggest_from_payload(
         state,
         strategy=strategy,
         allow_hit=allow_hit,
-        top_n=top_n,
+        diversify_n=diversify_n,
     )
 
 
@@ -230,53 +303,56 @@ def suggest_transfers(
     *,
     strategy: str = PRODUCTION["strategy"],
     allow_hit: bool = False,
-    top_n: int = 3,
+    diversify_n: int = 3,
+    top_n: int | None = None,
 ) -> SuggestResult:
+    """Rank diversified Hamming-k transfer plans. `top_n` is a deprecated alias for diversify_n."""
+    if top_n is not None:
+        diversify_n = top_n
     by_id = {p.player.id: p for p in projections}
     players = {p.id: p for p in snapshot.players}
-    missing = [i for i in state.owned_ids if i not in players]
-    if missing:
-        raise RuntimeError(f"owned ids not in snapshot: {missing}")
-    for pid in state.owned_ids:
-        if pid not in by_id:
-            p = players[pid]
-            by_id[pid] = PlayerProjection(
-                player=p,
-                by_gw={},
-                horizon_mu=-50.0,
-                horizon_sigma=0.0,
-                horizon_utility=-50.0,
-                next_mu=-50.0,
-                next_sigma=0.0,
-                next_p_start=0.0,
-                next_p_60=0.0,
-                next_p_10=0.0,
-                next_utility=-50.0,
-            )
+    missing_snap = [i for i in state.owned_ids if i not in players]
+    if missing_snap:
+        raise RuntimeError(f"owned ids not in snapshot: {missing_snap}")
+    missing_proj = [i for i in state.owned_ids if i not in by_id]
+    if missing_proj:
+        raise RuntimeError(
+            "owned players missing projections — refusing to invent transfer "
+            f"incentives: {missing_proj}"
+        )
+
     next_gw = snapshot.next_event().id
     source = SOURCE.format(strategy=strategy)
     owned = [players[i] for i in state.owned_ids]
 
     if state.wc_active:
-        plan = _wildcard_plan(snapshot, projections, by_id, state, strategy)
-        roll_mu = plan.next_xi_mu if plan.k == 0 else _score_squad(snapshot, owned, by_id)[0]
-        if plan.k != 0:
-            plan.delta_mu = plan.score - roll_mu
+        mode = MODE_FREE_HIT if state.chip_mode == "freehit" else MODE_WILDCARD
+        plan, chosen = _wildcard_plan(snapshot, projections, by_id, state, strategy)
+        roll_u, roll_mu, _, _, _, _ = _score_squad(snapshot, owned, by_id)
+        plan.delta = plan.score - roll_u
+        _assert_plan_invariants(snapshot, owned, plan, chosen=chosen)
         return SuggestResult(
             source=source,
             strategy=strategy,
             next_gw=next_gw,
+            mode=mode,
+            objective=OBJECTIVE_NEXT,
+            squad_objective=SQUAD_OBJECTIVE_HORIZON,
+            displayed_payoff=OBJECTIVE_NEXT,
+            diversify_n=diversify_n,
+            roll_utility=roll_u,
             roll_mu=roll_mu,
             plans=[plan],
         )
 
     roll = _plan_from_squad(snapshot, owned, by_id, state, k=0, hit=0)
+    _assert_plan_invariants(snapshot, owned, roll, chosen=owned)
     plans = [roll]
     k_max = state.ft + (1 if allow_hit else 0)
     k_max = min(k_max, snapshot.squad.squad_size)
     for k in range(1, k_max + 1):
         excluded: set[int] = set()
-        for _ in range(top_n):
+        for _ in range(diversify_n):
             chosen = _solve_k(
                 snapshot,
                 by_id,
@@ -292,29 +368,146 @@ def suggest_transfers(
                 break
             extra = max(0, k - state.ft)
             hit = extra * state.hit_cost
-            plans.append(_plan_from_squad(snapshot, chosen, by_id, state, k=k, hit=hit))
+            plan = _plan_from_squad(snapshot, chosen, by_id, state, k=k, hit=hit)
+            _assert_plan_invariants(snapshot, owned, plan, chosen=chosen)
+            plans.append(plan)
             excluded |= ins
     for p in plans:
-        p.delta_mu = p.score - roll.score
+        p.delta = p.score - roll.score
     plans.sort(key=lambda p: (-p.score, p.k, p.hit))
     return SuggestResult(
         source=source,
         strategy=strategy,
         next_gw=next_gw,
+        mode=MODE_NORMAL,
+        objective=OBJECTIVE_NEXT,
+        squad_objective=None,
+        displayed_payoff=OBJECTIVE_NEXT,
+        diversify_n=diversify_n,
+        roll_utility=roll.next_xi_utility,
         roll_mu=roll.next_xi_mu,
         plans=plans,
     )
+
+
+def squad_composition_legal(snapshot: Snapshot, squad: list[Player]) -> bool:
+    """Position + club + size. Does not use greenfield £100m / now_cost budget."""
+    rules = snapshot.squad
+    if len(squad) != rules.squad_size:
+        return False
+    if len({p.id for p in squad}) != rules.squad_size:
+        return False
+    pos: dict[str, int] = defaultdict(int)
+    team: dict[int, int] = defaultdict(int)
+    for p in squad:
+        pos[p.position] += 1
+        team[p.team_id] += 1
+    for pcode, n in rules.squad_select.items():
+        if pos.get(pcode, 0) != n:
+            return False
+    for c in team.values():
+        if c > rules.team_limit:
+            return False
+    return True
+
+
+def _assert_plan_invariants(
+    snapshot: Snapshot,
+    owned: list[Player],
+    plan: TransferPlan,
+    *,
+    chosen: list[Player],
+) -> None:
+    old = {p.id for p in owned}
+    new = {p.id for p in chosen}
+
+    incoming = sorted(new - old)
+    outgoing = sorted(old - new)
+    if set(incoming) != set(plan.incoming_ids):
+        raise RuntimeError(
+            f"incoming mismatch: set={incoming} plan={plan.incoming_ids}"
+        )
+    if set(outgoing) != set(plan.outgoing_ids):
+        raise RuntimeError(
+            f"outgoing mismatch: set={outgoing} plan={plan.outgoing_ids}"
+        )
+    if len(incoming) != plan.k or len(outgoing) != plan.k:
+        raise RuntimeError(
+            f"k invariant failed: k={plan.k} |in|={len(incoming)} |out|={len(outgoing)}"
+        )
+    if set(incoming) & set(outgoing):
+        raise RuntimeError(f"player both in and out: {set(incoming) & set(outgoing)}")
+    rebuilt = (old - set(outgoing)) | set(incoming)
+    if rebuilt != new:
+        raise RuntimeError("final squad != old - outgoing + incoming")
+    if not squad_composition_legal(snapshot, chosen):
+        raise RuntimeError("final squad fails composition/club legality")
+    if plan.bank < 0:
+        raise RuntimeError(f"negative bank after transfers: {plan.bank}")
+    if len(plan.moves) != plan.k:
+        raise RuntimeError(
+            f"display moves length {len(plan.moves)} != k={plan.k} "
+            "(pairing is cosmetic but must cover the transfer set)"
+        )
+    move_ins = {m.in_id for m in plan.moves}
+    move_outs = {m.out_id for m in plan.moves}
+    if move_ins != set(incoming) or move_outs != set(outgoing):
+        raise RuntimeError("display moves do not match incoming/outgoing sets")
+
+
+LOW_P_START = 0.50
+
+
+def _pick_captains_by_xp(
+    xi: list[Player],
+    by_id: dict[int, PlayerProjection],
+) -> tuple[Player, Player]:
+    """Suggest captain by highest next_mu (xP) in the XI — product display/score for suggest."""
+    ranked = sorted(xi, key=lambda p: by_id[p.id].next_mu, reverse=True)
+    captain = ranked[0]
+    rest = [p for p in ranked if p.id != captain.id]
+    vice = max(rest, key=lambda p: by_id[p.id].next_p_start * by_id[p.id].next_mu)
+    return captain, vice
+
+
+def _minutes_flags(
+    xi: list[Player],
+    by_id: dict[int, PlayerProjection],
+) -> list[MinutesFlag]:
+    flags: list[MinutesFlag] = []
+    for p in xi:
+        proj = by_id[p.id]
+        if proj.next_p_start >= LOW_P_START:
+            continue
+        flags.append(
+            MinutesFlag(
+                id=p.id,
+                name=p.web_name,
+                pos=p.position,
+                p_start=proj.next_p_start,
+                mu=proj.next_mu,
+                utility=proj.next_utility,
+            )
+        )
+    flags.sort(key=lambda f: (f.p_start, -f.mu))
+    return flags
 
 
 def _score_squad(
     snapshot: Snapshot,
     squad: list[Player],
     by_id: dict[int, PlayerProjection],
-) -> tuple[float, Player, Player, list[int]]:
+) -> tuple[float, float, Player, Player, list[int], list[MinutesFlag]]:
+    """Return (next_xi_utility, next_xi_mu, captain, vice, xi_ids, minutes_flags).
+
+    Captain is chosen by next_mu (xP), matching the product expectation that C = highest
+    projected points in the XI. Score still doubles that captain's utility for ranking.
+    """
     xi, _bench = solve_xi(snapshot, squad, by_id)
-    captain, vice = pick_captains(xi, by_id)
+    captain, vice = _pick_captains_by_xp(xi, by_id)
+    util = sum(by_id[p.id].next_utility for p in xi) + by_id[captain.id].next_utility
     mu = sum(by_id[p.id].next_mu for p in xi) + by_id[captain.id].next_mu
-    return mu, captain, vice, [p.id for p in xi]
+    return util, mu, captain, vice, [p.id for p in xi], _minutes_flags(xi, by_id)
 
 
 def _remaining_bank(state: SquadState, chosen: list[Player]) -> int:
@@ -329,9 +522,9 @@ def _pair_moves(
     chosen: list[Player],
     state: SquadState,
 ) -> list[TransferMove]:
+    """Cosmetic display pairing of the transfer set — not an optimization step."""
     old_ids = {p.id for p in owned}
     new_ids = {p.id for p in chosen}
-    by_new = {p.id: p for p in chosen}
     outs = [p for p in owned if p.id not in new_ids]
     ins = [p for p in chosen if p.id not in old_ids]
     used_in: set[int] = set()
@@ -375,20 +568,33 @@ def _plan_from_squad(
     hit: int,
 ) -> TransferPlan:
     owned = [next(p for p in snapshot.players if p.id == i) for i in state.owned_ids]
-    mu, captain, vice, xi_ids = _score_squad(snapshot, chosen, by_id)
+    util, mu, captain, vice, xi_ids, minutes_flags = _score_squad(snapshot, chosen, by_id)
+    old = {p.id for p in owned}
+    new = {p.id for p in chosen}
+    incoming = sorted(new - old)
+    outgoing = sorted(old - new)
+    cap_proj = by_id[captain.id]
     return TransferPlan(
         k=k,
         hit=hit,
         next_xi_mu=mu,
-        score=mu - hit,
-        delta_mu=0.0,
+        next_xi_utility=util,
+        score=util - hit,
+        delta=0.0,
         bank=_remaining_bank(state, chosen),
         captain=captain.web_name,
         vice=vice.web_name,
         captain_id=captain.id,
         vice_id=vice.id,
+        captain_mu=cap_proj.next_mu,
+        captain_utility=cap_proj.next_utility,
+        captain_p_start=cap_proj.next_p_start,
+        captain_pos=captain.position,
         moves=_pair_moves(owned, chosen, state),
         xi_ids=xi_ids,
+        incoming_ids=incoming,
+        outgoing_ids=outgoing,
+        minutes_flags=minutes_flags,
     )
 
 
@@ -398,12 +604,13 @@ def _wildcard_plan(
     by_id: dict[int, PlayerProjection],
     state: SquadState,
     strategy: str,
-) -> TransferPlan:
+) -> tuple[TransferPlan, list[Player]]:
     budget = max(state.value + state.bank, 1)
     snap = replace(snapshot, squad=replace(snapshot.squad, budget=budget))
     sol = solve_squad(snap, projections, strategy=strategy, objective="horizon")
     k = len({p.id for p in sol.players} - set(state.owned_ids))
-    return _plan_from_squad(snapshot, sol.players, by_id, state, k=k, hit=0)
+    plan = _plan_from_squad(snapshot, sol.players, by_id, state, k=k, hit=0)
+    return plan, sol.players
 
 
 def _eligible(
@@ -457,6 +664,7 @@ def _solve_k(
     prob = pulp.LpProblem(f"fpl_xfer_{k}", pulp.LpMaximize)
     x = pulp.LpVariable.dicts("x", ids, 0, 1, pulp.LpInteger)
     s = pulp.LpVariable.dicts("s", ids, 0, 1, pulp.LpInteger)
+    # Same scalar as ranking: next_utility (strategy-aware).
     prob += pulp.lpSum(
         util[i] * (BENCH_WEIGHT * x[i] + (1.0 - BENCH_WEIGHT) * s[i]) for i in ids
     )
@@ -486,7 +694,6 @@ def _solve_k(
     if len(chosen_ids) != rules.squad_size:
         return None
     if pulp.LpStatus[status] not in {"Optimal", "Not Solved"}:
-        # CBC may return Not Solved with a feasible incumbent; still require size.
         if len(chosen_ids) != rules.squad_size:
             return None
     return [players[i] for i in chosen_ids]

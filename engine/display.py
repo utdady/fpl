@@ -121,29 +121,49 @@ def render(
 def render_suggestions(result: SuggestResult) -> str:
     lines = [
         f"source: {result.source}",
-        f"Next GW {result.next_gw}   roll XI+C μ {result.roll_mu:.2f}",
+        f"mode: {result.mode}",
+        f"objective: {result.objective}",
+    ]
+    if result.squad_objective:
+        lines.append(f"squad objective: {result.squad_objective}")
+    lines += [
+        f"displayed payoff: {result.displayed_payoff}",
+        f"diversified candidates per k: {result.diversify_n}",
+        f"Next GW {result.next_gw}   roll XI+C U {result.roll_utility:.2f}   μ {result.roll_mu:.2f}",
         "",
-        _row(["k", "hit", "Δμ", "XI+C μ", "bank", "moves", "C"], [3, 4, 7, 7, 6, 36, 14]),
+        _row(["k", "hit", "Δ", "score", "XI+C μ", "bank", "moves", "C"], [3, 4, 7, 7, 7, 6, 32, 16]),
     ]
     for plan in result.plans:
         if plan.moves:
             moves = ", ".join(f"{m.out_name}→{m.in_name}" for m in plan.moves)
         else:
             moves = "(roll)"
+        cap = f"{plan.captain} μ{plan.captain_mu:.1f}"
         lines.append(
             _row(
                 [
                     str(plan.k),
                     str(plan.hit),
-                    f"{plan.delta_mu:+.2f}",
+                    f"{plan.delta:+.2f}",
+                    f"{plan.score:.2f}",
                     f"{plan.next_xi_mu:.2f}",
                     _money(plan.bank),
                     moves,
-                    plan.captain,
+                    cap,
                 ],
-                [3, 4, 7, 7, 6, 36, 14],
+                [3, 4, 7, 7, 7, 6, 32, 16],
             )
         )
+        if plan.minutes_flags:
+            flagged = ", ".join(
+                f"{f.name} P{f.p_start:.0%} μ{f.mu:.1f}" for f in plan.minutes_flags
+            )
+            lines.append(f"    minutes risk: {flagged}")
     lines.append("")
-    lines.append("Not advice to hit confirm. Score is next-GW XI+C μ minus hit.")
+    lines.append(
+        "Next-GW FT-spending optimizer — finds the highest projected plan given available "
+        "transfers; does not decide whether to bank. Not advice to hit confirm. "
+        "Captain = highest next_mu (xP) in XI. Score = XI+C next_utility − hit "
+        "(diversified candidates, not global top-N)."
+    )
     return "\n".join(lines)

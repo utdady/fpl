@@ -1,0 +1,5 @@
+E057-A Phase-1 verdict (v1_adxg vs v1)
+STATUS=SURVIVE
+n_eligible=122
+n_overlap_xi0_worse=21
+See e057_eligibility_phase1_summary.txt

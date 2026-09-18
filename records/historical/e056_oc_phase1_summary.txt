@@ -1,0 +1,57 @@
+E056-A Phase-1 OC: v1_adxg vs fixtures=v1
+Frozen: OC_XI0=z_cand-z_arm; OC_CAP=Cap_arm-Cap_cand (+ = alt better); MATERIAL iff mean OC_CAP(HOLD)>0 AND mean OC_XI0(HOLD)>0 on xi0_worse; RULE_UMAX locked untested
+Source: e055_cascade_phase2_events (identity CF recipes)
+
+n_xi_diff_gw=139  xi0_worse n=23
+
+--- PRIMARY universe: xi0_worse ---
+=== HOLD (gate) n=23 ===
+  mean OC_XI0=0.6957  mean OC_CAP=4.3043
+  median OC_XI0=1.0000  median OC_CAP=2.0000
+  stdev OC_XI0=0.5588  stdev OC_CAP=6.4838
+  count OC_XI0>0=15/23  OC_CAP>0=15/23  both>0=15/23
+
+=== PAIR (twin) n=23 ===
+  mean OC_XI0=0.6957  mean OC_CAP=4.3478
+  median OC_XI0=1.0000  median OC_CAP=4.0000
+  stdev OC_XI0=0.5588  stdev OC_CAP=9.2717
+  count OC_XI0>0=15/23  OC_CAP>0=15/23  both>0=12/23
+
+=== CTRL (anchor) n=23 ===
+  mean OC_XI0=1.1739  mean OC_CAP=3.5217
+  median OC_XI0=1.0000  median OC_CAP=3.0000
+  stdev OC_XI0=0.3876  stdev OC_CAP=11.7391
+  count OC_XI0>0=23/23  OC_CAP>0=14/23  both>0=14/23
+
+--- HOLD by season (xi0_worse) ---
+  2022-23 n=6 mean_OC_XI0=0.6667 mean_OC_CAP=4.8333 both>0=4/6
+  2023-24 n=6 mean_OC_XI0=0.6667 mean_OC_CAP=3.6667 both>0=4/6
+  2024-25 n=6 mean_OC_XI0=0.5000 mean_OC_CAP=1.0000 both>0=3/6
+  2025-26 n=5 mean_OC_XI0=1.0000 mean_OC_CAP=8.4000 both>0=4/5
+
+--- Report-only: ALL XI-diff GWs ---
+=== HOLD n=139 ===
+  mean OC_XI0=0.1151  mean OC_CAP=0.7122
+  median OC_XI0=0.0000  median OC_CAP=0.0000
+  stdev OC_XI0=0.3422  stdev OC_CAP=3.0461
+  count OC_XI0>0=15/139  OC_CAP>0=15/139  both>0=15/139
+
+=== PAIR n=135 ===
+  mean OC_XI0=0.0074  mean OC_CAP=0.1111
+  median OC_XI0=0.0000  median OC_CAP=0.0000
+  stdev OC_XI0=0.5110  stdev OC_CAP=7.5238
+  count OC_XI0>0=15/135  OC_CAP>0=55/135  both>0=12/135
+
+=== CTRL n=139 ===
+  mean OC_XI0=0.0432  mean OC_CAP=-1.3022
+  median OC_XI0=0.0000  median OC_CAP=-1.0000
+  stdev OC_XI0=0.6468  stdev OC_CAP=9.3821
+  count OC_XI0>0=23/139  OC_CAP>0=56/139  both>0=14/139
+
+--- Report-only: PAIR vs HOLD sign concordance (xi0_worse, pair feas) ---
+  n=23 OC_XI0 same_sign=23/23 OC_CAP same_sign=17/23
+
+=== VERDICT (frozen MATERIAL rule) ===
+SURVIVE Phase-1 MATERIAL (mean OC_CAP(HOLD)=4.3043>0 AND mean OC_XI0(HOLD)=0.6957>0; n_xi0_worse=23)
+NEXT: Phase-2 RULE_UMAX only (no promote / no new ILP objective).
+RULE_UMAX locked untested. No promote. Production untouched.

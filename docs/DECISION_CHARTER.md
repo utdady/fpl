@@ -233,9 +233,9 @@ then** optimizer integration.
 |---|---|
 | **Production** | `v2am_fpla` + `rates=v1` + fixtures `v1` (`v2am_s` = pre-fpla minutes control) |
 | **SHIPPED (Product)** | TC/BB/FH/WC independent wired surfaces (E040/E041/E046/E050); μ/squad ILP unchanged |
-| **Closed research** | `rates_v2b` promote; packaging/stability/displacement/MC arcs (E022–E038); E021 v2d; E048/E049 remap; continuous relative-strength → xG (E052-A + E053-A); E045-A; E047-A |
-| **Parked** | E051 joint inventory (E051-A skipped); fixture-book bootstrap rejected |
-| **Research candidates** | **E055** BRANCH → valuation/opp-cost (new prereg); structural \(V_C\) gated |
+| **Closed research** | `rates_v2b` promote; packaging/stability/displacement/MC arcs (E022–E038); E021 v2d; E048/E049 remap; continuous relative-strength → xG (E052-A + E053-A); E045-A; E047-A; E055 cascade BRANCH; E056 valuation BRANCH |
+| **Parked** | E051 joint inventory (E051-A skipped); E057 Cap claim under FLEX ELIGIBLE (XI0✗); fixture-book bootstrap rejected |
+| **Research candidates** | none active (lane at rest); structural \(V_C\) gated; E057 successor only via later fresh prereg |
 | **Upstream candidates** | new strength→xG only via fresh prereg (continuous relative family CLOSED) |
 | **Product candidates** | price → transfers (chips complete; joint inventory parked) |
 
@@ -251,14 +251,18 @@ CLOSED         rates_v2b promote; E039-A V_ns λ=0.5; E021 v2d promote;
                E048-A v1_sfix; E049-A v1_pw piecewise (XI0✗);
                continuous relative-strength → xG CLOSED
                (E052-A overall + E053-A ATK/DEF; Phase-1✓ Phase-2 XI0✗)
-PARKED         E051 joint inventory (skip E051-A); fixture-book bootstrap rejected
-RESEARCH NEXT  E055 Phase-2 BRANCH → valuation/opportunity-cost family
-               (new prereg; no CF promote / no new objective)
+PARKED         E051 joint inventory (skip E051-A); E057 Cap claim under FLEX
+               ELIGIBLE (XI0✗); fixture-book bootstrap rejected
+RESEARCH NEXT  none — lane at rest (E057 closed PARK; no immediate successor)
 UPSTREAM       continuous relative-strength → xG CLOSED; no adxg/sxg retune
-PRODUCT        chips complete; joint inventory parked
+PRODUCT        Model A freeze; k-best CLOSED; prefs v0 SHIPPED
+               (LOCK/BAN/BANK/CLUB → same U; /me/model-a)
+               chips complete; RULE_UMAX Cap claim under FLEX parked
 PRODUCTION     v2am_fpla + rates=v1 + fixtures v1  # known _str→5 blindness
-NOT NEXT       promote CF as policy; new objective; FLEX penalty; E039-A λ;
-               near-tie; strength→xG; promote adxg; silent _str patch
+NOT NEXT       immediate E058; adopt RULE globally; silent FLEX retune;
+               xi0_worse trigger; blank-HOLD live; new ILP objective; touch production;
+               Hamming-forced / diversity-penalty generator; soft risk chips;
+               amber prefs (minutes/scenarios) without freeze
 ```
 
 ---
@@ -991,10 +995,118 @@ FORBIDDEN     new objective; FLEX penalty; retune 0.50/pairing after peek;
 PHASE-1       SURVIVE (companion_blank_share=60.7% AGG; M=28)
 PHASE-2       BRANCH: CF_PAIR+CF_HOLD recover XI0 43→27 on xi0_worse;
               Cap +~100 (report). No promote.
-NEXT          new prereg: valuation / opportunity-cost family
+NEXT          E056 valuation/opportunity-cost (preregistered)
 ```
 
 **E055-A freeze:** pairing, mover/companion, FLEX/budget fields, concentration
 rule, CF_PAIR / CF_HOLD recipes locked in `LAB_LOG.md` § E055-A.
 
 See `LAB_LOG.md` § E055 / E055-A.
+
+---
+
+## 41. E056 — Valuation / opportunity-cost (prereg 2026-09-12; E056-A 2026-09-12)
+
+**Lane:** Research / decision-architecture. Not Upstream strength→xG. Not Product.
+
+```text
+QUESTION      Cap/XI0 OC of full ILP cand vs μ-fixed CF MENU; can RULE_UMAX
+              capture it ex-ante without a new ILP objective?
+STACK         ctrl fixtures=v1; cand v1_adxg = E053-A KILL diagnostic reference
+              (not Upstream reopen; E053→E054→E055 inheritance)
+OC SIGNS      OC_XI0=zeros(cand)−zeros(arm); OC_CAP=Cap(arm)−Cap(cand)
+              (+ = alt better). Report HOLD/PAIR/CTRL separately; gate=HOLD
+PHASE-1       MATERIAL on xi0_worse AGG: mean OC_CAP(HOLD)>0 AND mean OC_XI0(HOLD)>0
+PHASE-2       only if SURVIVES: RULE_UMAX = argmax SCORE(U_cand XI+capt);
+              ties HOLD>PAIR>ctrl>cand; Cap(RULE)>Cap(cand) & XI0≤cand;
+              not identity-to-ctrl — no promote
+NON-IDENTITY  not E034c; not E039-A V_ns; not E055 diagnosis; not CF/adxg promote
+FORBIDDEN     new ILP objective; FLEX penalty; invert OC; collapse arms;
+              Phase-2 before SURVIVE; recipe/RULE fishing; production change
+PHASE-1       SURVIVE MATERIAL: mean OC_CAP(HOLD)=+4.30; OC_XI0(HOLD)=+0.70
+PHASE-2       BRANCH: RULE Cap 1360>1308; XI0 36≤43; not identity-ctrl;
+              choice hold=10/pair=4/cand=9 on worse. No promote.
+NEXT          E057 decision-rule / product-surface (preregistered)
+```
+
+**E056-A freeze:** OC algebra, MATERIAL, MENU, RULE_UMAX locked in `LAB_LOG.md` § E056-A.
+
+See `LAB_LOG.md` § E056 / E056-A.
+
+---
+
+## 42. E057 — Decision-rule / product-surface (prereg 2026-09-12)
+
+**Lane:** Research → Product-surface candidate. Not Upstream. Not new ILP objective.
+
+```text
+QUESTION      Can frozen RULE_UMAX become a product menu selector under an
+              ex-ante eligibility condition (not retrospective xi0_worse)?
+EVIDENCE      E056 Phase-2 on xi0_worse n=23: Cap 1360>1308; XI0 36≤43;
+              HOLD 10 / PAIR 4 / cand 9; not identity-ctrl; 2023-24 Cap asterisk
+GUARDRAIL     xi0_worse = diagnostic only — MUST NOT be the live trigger
+RULE          MENU={ctrl,cand,PAIR,HOLD}; RULE_UMAX; ties HOLD>PAIR>ctrl>cand
+ELIGIBILITY   one frozen as-of-T predicate (exact in E057-A) — no actuals/Cap/OC
+PHASE-1       wiring / coverage diagnostic after E057-A (no Cap promote)
+PHASE-2       Cap/XI0 on ELIGIBLE GWs only (gate ≠ E056 xi0_worse)
+NON-IDENTITY  not E053 reopen; not adxg promote; not global always-RULE;
+              not chip/transfer-ROI claim; not new ILP objective
+FORBIDDEN     xi0_worse live trigger; wiring before E057-A; ILP rewrite;
+              promote; production change without explicit adopt
+PHASE-1       SURVIVE wiring (n_eligible=122 FLEX)
+PHASE-2       PARK: Cap RULE 7254>7214 (+40) but XI0 81>79 ✗ on ELIGIBLE;
+              report-only ∩worse still Cap+52 / XI0 39→32 (E056 shape)
+NEXT          none — Research at rest; later return needs fresh prereg
+              (higher bar; not silent FLEX retune)
+```
+
+**E057-A freeze:** ELIGIBLE = XI diff ∧ FLEX_flag; live HOLD deferred; Phase-1/2
+gates locked in `LAB_LOG.md` § E057-A.
+
+See `LAB_LOG.md` § E057 / E057-A.
+
+---
+
+## 43. PRODUCT — Model A freeze + k-best landscape (2026-09-13)
+
+Not an E-card. Not a promote path. Engineering reconnaissance for whether a
+candidate menu is an honest product premise.
+
+```text
+MODEL A       v2am_fpla + rates=v1 + fixtures v1
+              + solve_squad horizon + XI/C + suggest_transfers (untouched)
+QUESTION      Does the frozen squad ILP contain meaningfully different
+              near-optima (k=10 no-good cuts on the exact 15)?
+ORDER         live snapshot first → inspect → 12 historical snapshots
+GATE          A / B / C narrative (product honesty), not a statistical threshold
+LABELS        candidates stay S1…Sk — no ROBUST/FLEX/UPSIDE
+OUT           UI / overrides / research only after the landscape verdict
+FORBIDDEN     E058; new ILP objective; silent FLEX; touch production μ
+VERDICT       B with C pockets (not A) — 2026-09-13 live+12 historical
+              natural k-best CLOSED as insufficient for a candidate menu
+CLOSE         mechanism failure, not product-concept failure
+KEEP          Model A; production; transfers; E057 parked; candidates.py
+NEXT          design discussion only — structurally different 15, same U,
+              no secret second objective. Do not implement yet.
+```
+
+See `LAB_LOG.md` § PRODUCT — k-best landscape.
+
+---
+
+## 44. PRODUCT — preference-conditioned Model A v0 (2026-09-13)
+
+Decision alternatives under Model A. Not an E-card. Not a second objective.
+
+```text
+CONTRACT      S1 = argmax U on F; S2 = argmax U on F_prefs (same U)
+PRIMITIVES    LOCK / BAN (element_id); BANK ∈ {0,0.5,1,1.5,2}m;
+              CLUB team_id → max ∈ {0,1,2}
+BEHAVIOR      empty→S1; valid→S2; multi cuts AND; infeasible→explicit message
+DIAGNOSTICS   descriptive only (never pick winner)
+REJECTED      Hamming, diversity ε, soft risk, ROBUST/FLEX/UPSIDE chips
+DEFERRED      minutes eligibility, premium routes, transfer-aware, scenarios
+CODE          engine/preferences.py; fpl.py prefs; /api/account/prefs; /me/model-a
+```
+
+See `LAB_LOG.md` § PRODUCT — prefs v0.

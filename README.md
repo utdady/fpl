@@ -19,7 +19,19 @@ python fpl.py suggest --squad myteam.json
 python fpl.py suggest --squad myteam.json --allow-hit --json
 ```
 
-Strategies: `safe`, `balanced`, `aggressive`. `suggest` ranks transfers from an owned 15 (current production projections; not V5/V7). My team Transfers can run the same command locally.
+Strategies: `safe`, `balanced`, `aggressive`. `suggest` is a **next-GW FT-spending
+optimizer** (highest projected XI+C given available free transfers) — not a selective
+“should you transfer?” advisor, and not V5/V7. Default is free transfers only; pass
+`--allow-hit` for the aggressive FT+1 / −4 option. My team Transfers uses the same
+command locally (`allow_hit` off unless you opt in).
+
+Product confidence replay (not an E-card):
+
+```bash
+python scripts/product_transfer_replay.py --season 2022-23 --to-gw 8
+python scripts/product_transfer_replay.py --all-seasons --to-gw 38
+python scripts/product_transfer_replay.py --season 2022-23 --both-conditions --to-gw 8
+```
 
 ## Live track (2026/27)
 

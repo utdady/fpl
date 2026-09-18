@@ -1,0 +1,26 @@
+E057-A Phase-1 eligibility coverage: v1_adxg vs fixtures=v1
+Frozen: ELIGIBLE <=> XI_cand!=XI_ctrl AND FLEX_flag (n_enter>1 OR n_pos_touched>1); xi0_worse NOT a trigger; no Cap promote gate
+Sources: e055_cascade_phase1_events.csv (flex) + e056_oc_phase2_events.csv (RULE_UMAX)
+
+n_xi_diff_gw=139  n_eligible=122  missing_flex_join=0
+n_xi0_worse=23  eligible∩xi0_worse=21 (report-only overlap)
+  coverage of worse by ELIGIBLE: 91.3% (21/23)
+
+=== selected_arm on ELIGIBLE ===
+  hold=76 (62.3%)
+  pair=37 (30.3%)
+  cand=9 (7.4%)
+
+=== ELIGIBLE by season ===
+  2022-23 n_elig=30 ∩worse=5 hold=17 pair=12 cand=1
+  2023-24 n_elig=30 ∩worse=6 hold=16 pair=11 cand=3
+  2024-25 n_elig=31 ∩worse=6 hold=18 pair=10 cand=3
+  2025-26 n_elig=31 ∩worse=4 hold=25 pair=4 cand=2
+
+=== Report-only: ELIGIBLE ∩ xi0_worse arm mix ===
+  hold=8, pair=4, cand=9
+
+=== VERDICT (frozen Phase-1 wiring rule) ===
+SURVIVE Phase-1 wiring (n_eligible=122; wire_ok on all eligible; ELIGIBLE uses FLEX only — not xi0_worse)
+NEXT: Phase-2 Cap/XI0 on ELIGIBLE GWs only (no promote).
+xi0_worse remains diagnostic only. No Cap promote. Production untouched.

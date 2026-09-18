@@ -4,8 +4,6 @@ import path from "node:path";
 
 import { NextResponse } from "next/server";
 
-import { fplAuthed, readSession } from "@/lib/fpl-authed";
-
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 180;
@@ -39,14 +37,12 @@ function lastJsonObject(text: string): unknown {
   return JSON.parse(text.trim());
 }
 
-function runSuggest(
+function runPrefs(
   root: string,
-  squadJson: string,
-  allowHit: boolean,
+  prefsJson: string,
 ): Promise<{ ok: true; data: unknown } | { ok: false; error: string }> {
   return new Promise((resolve) => {
-    const args = ["fpl.py", "suggest", "--squad", "-", "--json"];
-    if (allowHit) args.push("--allow-hit");
+    const args = ["fpl.py", "prefs", "--json", "--prefs", "-"];
     const child = spawn(pythonBin(root), args, {
       cwd: root,
       windowsHide: true,
@@ -55,7 +51,7 @@ function runSuggest(
     let stderr = "";
     const timer = setTimeout(() => {
       child.kill();
-      resolve({ ok: false, error: "Suggestor timed out" });
+      resolve({ ok: false, error: "Preference solver timed out" });
     }, TIMEOUT_MS);
     child.stdout.on("data", (chunk: Buffer) => {
       stdout += chunk.toString();
@@ -67,7 +63,7 @@ function runSuggest(
       clearTimeout(timer);
       resolve({
         ok: false,
-        error: `Python suggestor unavailable — run locally (${err.message})`,
+        error: `Preference solver unavailable — run locally (${err.message})`,
       });
     });
     child.on("close", (code) => {
@@ -77,50 +73,52 @@ function runSuggest(
         resolve({
           ok: false,
           error: tail
-            ? `Python suggestor unavailable — run locally: ${tail}`
-            : "Python suggestor unavailable — run locally",
+            ? `Preference solver failed: ${tail}`
+            : "Preference solver unavailable — run locally",
         });
         return;
       }
       try {
         resolve({ ok: true, data: lastJsonObject(stdout) });
       } catch {
-        resolve({ ok: false, error: "Suggestor returned non-JSON" });
+        resolve({ ok: false, error: "Preference solver returned non-JSON" });
       }
     });
-    child.stdin.write(squadJson);
+    child.stdin.write(prefsJson);
     child.stdin.end();
   });
 }
 
-export async function GET(request: Request) {
-  const session = await readSession();
-  if (!session) {
-    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
-  }
-  const team = await fplAuthed(`my-team/${session.entryId}`);
-  if (!team.ok) {
-    return NextResponse.json({ error: team.error }, { status: team.status });
-  }
-
-  const url = new URL(request.url);
-  // Conservative default: free transfers only. Hits require explicit allow_hit=1.
-  const allowHit = url.searchParams.get("allow_hit") === "1";
+export async function POST(request: Request) {
   const root = repoRoot();
   if (!fs.existsSync(path.join(root, "fpl.py"))) {
     return NextResponse.json(
-      { error: "Python suggestor unavailable — run locally" },
+      { error: "Preference solver unavailable — run locally" },
       { status: 503 },
     );
   }
-
-  const result = await runSuggest(root, JSON.stringify(team.data), allowHit);
+  let body: unknown = {};
+  try {
+    body = await request.json();
+  } catch {
+    body = {};
+  }
+  if (body == null || typeof body !== "object") {
+    return NextResponse.json({ error: "prefs body must be an object" }, { status: 400 });
+  }
+  const result = await runPrefs(root, JSON.stringify(body));
   if (!result.ok) {
-    return NextResponse.json({ error: result.error }, { status: 503 });
+    const status = result.error.includes("must be") ? 400 : 503;
+    return NextResponse.json({ error: result.error }, { status });
   }
   return NextResponse.json(result.data);
 }
 
-export async function POST(request: Request) {
-  return GET(request);
+export async function GET() {
+  return NextResponse.json({
+    bank_menu_m: [0, 0.5, 1, 1.5, 2],
+    club_max_allowed: [0, 1, 2],
+    primitives: ["lock", "ban", "min_bank_m", "club_max"],
+    copy: "Best squad given your constraints (same Model A objective).",
+  });
 }

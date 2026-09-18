@@ -1,0 +1,27 @@
+E056-A Phase-2 RULE_UMAX: v1_adxg vs fixtures=v1
+Frozen: SCORE=sum U_cand(XI)+U_cand(capt); RULE=argmax SCORE; ties HOLD>PAIR>ctrl>cand; SURVIVE iff Cap(RULE)>Cap(cand) AND zeros(RULE)<=zeros(cand) AND not identity-to-ctrl on all xi0_worse
+
+n_xi_diff_gw=139 n_xi0_worse_gw=23
+
+=== ALL XI-diff GWs (report) n=139 ===
+  rule_choice: hold=92, pair=37, ctrl=1, cand=9
+  sum_xi0 rule=93 cand=91 ctrl=85 (rule<=cand: False)
+  sum_Cap rule=8251.0 cand=8216.0 ctrl=8035.0 delta_vs_cand=+35.0
+  n_rule_eq_ctrl=1/139
+
+=== PRIMARY: xi0_worse GWs (SURVIVE universe) n=23 ===
+  rule_choice: hold=10, pair=4, cand=9
+  sum_xi0 rule=36 cand=43 ctrl=16 (rule<=cand: True)
+  sum_Cap rule=1360.0 cand=1308.0 ctrl=1389.0 delta_vs_cand=+52.0
+  n_rule_eq_ctrl=0/23
+
+=== RULE choice by season (xi0_worse) ===
+  2022-23 n=6 hold=5 cand=1 xi0 11->8 Cap 355->382
+  2023-24 n=6 hold=1 pair=2 cand=3 xi0 9->8 Cap 371->355
+  2024-25 n=6 hold=1 pair=2 cand=3 xi0 11->11 Cap 385->391
+  2025-26 n=5 hold=3 cand=2 xi0 12->9 Cap 197->232
+
+=== VERDICT (frozen Phase-2 RULE_UMAX) ===
+BRANCH -> decision-rule / product-surface family (Cap RULE 1360.0 > cand 1308.0; XI0 RULE 36 <= cand 43; not identity-to-ctrl)
+NEXT: new prereg for decision-rule / product-surface (no ILP rewrite / no promote here).
+No promote / no new ILP objective / production untouched.

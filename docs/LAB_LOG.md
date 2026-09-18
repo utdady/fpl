@@ -13,15 +13,18 @@ fixtures `v1`. Pre-fpla minutes control: `v2am_s`. Permanent historical control:
 SHIPPED   TC/BB/FH/WC independent surfaces (E040/E041/E046/E050) — μ/squad ILP unchanged
 CLOSED    E021 v2d; E048 discrete remap; E049 piecewise remap;
           continuous relative-strength → xG (E052-A overall + E053-A ATK/DEF);
-          E045-A; E047-A; …
+          E045-A; E047-A; E055 cascade BRANCH; E056 valuation BRANCH; …
 PARKED    E051 joint inventory (sparse conflicts; E051-A skipped);
+          E057 product Cap claim under FLEX ELIGIBLE (Phase-2 XI0✗);
           fixture-book bootstrap rejected
-OPEN      E055 cascade Phase-2 BRANCH → valuation/opportunity-cost family
-          (new prereg next; no promote / no new objective here)
+OPEN      none — Research lane at rest (no active card)
+PRODUCT   Model A freeze; k-best CLOSED; prefs v0 SHIPPED (/me/model-a)
 ```
-**Active research question:** **E055 Phase-2 BRANCH** — CF_PAIR and CF_HOLD
-both recover AGG XI0 vs full `v1_adxg` cand on xi0_worse GWs. **Next: new
-prereg** (valuation / opportunity-cost). No promote. Production unchanged.
+**Active research question:** none. **E057 closed PARK** (FLEX ELIGIBLE Cap✓
+XI0✗). Do not adopt RULE globally; do not silently retune FLEX. Successor only
+via a later fresh prereg with a higher bar. Production unchanged.
+**Product:** preference-conditioned Model A (LOCK/BAN/BANK/CLUB). Amber prefs
+and Hamming generators remain out.
 
 
 ---
@@ -4973,24 +4976,620 @@ this freeze (done)
 - **Artifacts:** `records/historical/e055_cascade_phase2_events.csv`,
   `e055_cascade_phase2_summary.txt`, `e055_cascade_phase2_verdict.txt`,
   `e055_cascade_phase2_run.log`
-- **Follow-up:** → **new prereg** (valuation / opportunity-cost under frozen
-  μ). E055 cascade card closes as BRANCH, not promote.
+- **Follow-up:** → **E056** valuation / opportunity-cost prereg below.
+  E055 cascade card closes as BRANCH, not promote.
+
+### E056 — Valuation / opportunity-cost of cascade jumps (preregistered)
+- **Date:** 2026-09-12 (after E055-A Phase-2 BRANCH; valuation family)
+- **Status:** **preregistered** — evaluation contract locked; **exact OC /
+  ex-ante rule** via dated **E056-A** amendment **before any new Cap/XI0 /
+  selection-rule peek beyond already-logged E055 Phase-2 artifacts**
+- **Lane:** Research / decision-architecture. Not Upstream strength→xG. Not
+  Product chips. Formal/Lean independent and non-gating.
+- **Primary question:** Under frozen `v1_adxg` vs production μ, what is the
+  realized **opportunity cost** of accepting the full ILP candidate XI versus
+  the μ-fixed E055 CF portfolios (CF_PAIR / CF_HOLD), and can a **decision-time
+  (ex-ante)** selection among {ctrl XI, cand XI, CF_PAIR, CF_HOLD} capture that
+  value **without** changing μ or inventing a new ILP objective?
+- **Hypothesis:** E055 showed ex-post that constraint-induced companions drive
+  blank share and that CF reconstructions recover XI0/Cap on xi0_worse GWs.
+  The residual damage of the full cand jump is therefore partly an
+  **accept/reject valuation** problem (opportunity cost of the cascade), not
+  only a μ-calibration problem — and not automatically a new \(V\) or FLEX
+  penalty.
+
+#### Explicit non-identity (load-bearing)
+| | E034c | E039-A \(V_{ns}\) | E055 | **E056** |
+|---|---|---|---|---|
+| μ path | rates_v2b package | rates / V | **fixtures=v1_adxg** | **same frozen adxg stack** |
+| Object | pair vs full re-solve Δpts | non-separable V promote | cascade blank share + CF recoverability | **OC of cand vs CF + ex-ante selection** |
+| Changes V/ILP? | no | candidate V | no | **no** (selection over frozen XIs only) |
+| Claim | tripwire on rates | V beats U | companions explain XI0; CF recovers | **OC is material AND ex-ante rule captures it** |
+
+**Not a reopen** of E039-A λ fishing, E055 recipe fishing, E054 near-tie
+protection, or promoting CF_PAIR/HOLD as the production solver.
+
+#### Frozen inputs / invariant
+```text
+CONTROL μ     minutes=v2am_fpla, rates=v1, fixtures=v1
+CANDIDATE μ   minutes=v2am_fpla, rates=v1, fixtures=v1_adxg   # input only
+CF RECIPES    E055-A CF_PAIR / CF_HOLD exactly (no retune)
+SEED/STRAT    7 / balanced; objective=next; horizon=1
+INVARIANT     same projections within arm; same feasible set / ILP rules
+FIXED         BENCH_WEIGHT, chips, production defaults — unchanged
+NOT INPUT     new strength map; adxg retune; packaging q; new V / λ; FLEX penalty
+```
+
+#### Phase-1 estimand (descriptive opportunity cost — primary; run first)
+Reuse E055 Phase-2 GW universe (XI_cand ≠ XI_ctrl; report xi0_worse separately):
+
+```text
+OC_XI0(arm)   zeros(XI_cand) − zeros(XI_arm)     # arm ∈ {PAIR, HOLD, CTRL}
+OC_CAP(arm)   Cap(XI_arm) − Cap(XI_cand)         # positive = CF/ctrl better
+PRIMARY TEST  on xi0_worse GWs (AGG four seasons):
+              material if mean OC_CAP(HOLD) > 0 AND mean OC_XI0(HOLD) > 0
+              (HOLD is the companion-holdback reference; PAIR report-only twin)
+              Survive Phase-1 if material under frozen thresholds in E056-A
+              Else park valuation family for this stack
+```
+
+Report-only: OC on all XI-diff GWs; PAIR vs HOLD concordance; g_treat —
+**not** a promote bar.
+
+**SURVIVE Phase-1** only if opportunity cost is material under the frozen rule.
+Else **park** — do not open Phase-2 ex-ante selection.
+
+#### Phase-2 (only if Phase-1 SURVIVES — separate log)
+Ex-ante selection among frozen XI candidates (μ fixed; no new objective):
+
+```text
+MENU        {XI_ctrl, XI_cand, XI_PAIR if feasible, XI_HOLD}
+            constructed at decision time from E055-A recipes + U_cand only
+RULE        one frozen scoring rule over MENU (exact in E056-A) —
+            e.g. max predicted XI utility under cand μ, or max U with an
+            OC-aware penalty that uses only pre-realization fields
+            (forbidden: actuals, Cap peek, blank labels)
+COMPARE     realized Cap / XI0 of RULE vs always-cand vs always-ctrl
+SURVIVE     RULE beats always-cand on AGG Cap among xi0_worse (or frozen
+            primary gate in E056-A) without beating via identity-to-ctrl alone
+BRANCH      if SURVIVES → decision-rule / product-surface prereg (not ILP rewrite)
+            if not → park; OC is ex-post only under this menu
+```
+
+**No promote** of RULE, CF, or adxg to production on this card.
+
+#### Forbidden after peek
+New separable/non-separable ILP objective; FLEX penalty as silent production
+patch; near-tie shield; ε-gates; packaging q; adxg/sxg retune; E039-A λ retune;
+MC-in-optimizer; promoting `v1_adxg`; promoting CF as solver; retuning E055-A
+CF recipes; inventing Phase-2 rule before Phase-1 report; changing production.
+
+#### Implementation sequence
+```text
+this prereg (question + non-identity + phase split)
+  → E056-A freezes OC thresholds, HOLD-primary vs PAIR, MENU fields,
+    Phase-2 scoring rule (one only)
+  → Phase-1 descriptive OC script only
+  → SURVIVE/PARK Phase-1
+  → Phase-2 ex-ante RULE only if Phase-1 SURVIVES
+  → branch to next family prereg OR park
+```
+
+- **Method (planned):** diagnostic script TBD — **not written yet**; may reuse
+  `e055_cascade_phase2_events.csv` columns where helpful
+- **Charter:** `docs/DECISION_CHARTER.md` §41
+- **Follow-up:** → **E056-A** freezes OC/rule constants before any new Cap
+  selection peek. **No ILP objective code on this card.**
+
+### E056-A — OC / MENU / RULE freeze (amendment before Phase-1 peek)
+- **Date:** 2026-09-12 (dated amendment to E056; **before any new Cap/XI0 /
+  RULE peek beyond already-logged E055 Phase-2 artifacts**)
+- **Status:** **frozen contract** — Phase-1 (and later Phase-2) only under these
+  definitions
+- **Lane:** Research / decision-architecture. No new ILP objective. No promote.
+
+#### Why this μ stack (diagnostic reference — not Upstream reopen)
+```text
+v1_adxg = E053-A ATK/DEF continuous relative → xG
+          Phase-1 SURVIVE; Phase-2 KILL (XI0✗ 3/4); family CLOSED with E052-A
+ROLE HERE = fixed diagnostic candidate that induced the E054 BUDGET_FLEX /
+            E055 cascade harm population (E053→E054→E055 inheritance)
+NOT       = quiet reconsideration of promoting adxg/sxg
+CONTROL   = fixtures=v1 remains production μ and OC baseline anchor
+```
+
+#### Frozen stack / recipes
+```text
+CONTROL μ     minutes=v2am_fpla, rates=v1, fixtures=v1
+CANDIDATE μ   minutes=v2am_fpla, rates=v1, fixtures=v1_adxg   # diagnostic input only
+CF RECIPES    E055-A CF_PAIR / CF_HOLD exactly (no retune)
+SEED/STRAT    7 / balanced; objective=next; horizon=1
+U             next_utility under that arm's projections
+EVENT UNIVERSE  GWs with XI_cand ≠ XI_ctrl (E055 Phase-2 identity)
+BRANCH UNIVERSE xi0_worse_gw: zeros(XI_cand) > zeros(XI_ctrl)
+```
+
+#### Frozen OC algebra (realized only — Phase-1 estimand)
+Positive = alternative better than full cand. **Do not invert after peek.**
+
+```text
+OC_XI0(arm) = zeros(XI_cand) − zeros(XI_arm)     # arm ∈ {HOLD, PAIR, CTRL}
+OC_CAP(arm) = Cap(XI_arm) − Cap(XI_cand)         # Cap = XI pts + captain pts
+
+NOT OC:     projected μ-gaps, U-gaps, or blank labels as Cap substitutes
+REPORT:     HOLD, PAIR, CTRL separately — never collapse into one “alt”
+GATE REF:   HOLD (companion-holdback); PAIR/CTRL are report twins / anchors
+```
+
+#### Frozen Phase-1 materiality (SURVIVE / PARK)
+```text
+On xi0_worse GWs, AGG over four seasons:
+  MATERIAL iff n_xi0_worse ≥ 1
+           AND mean OC_CAP(HOLD) > 0
+           AND mean OC_XI0(HOLD) > 0
+
+SURVIVE Phase-1  iff MATERIAL
+PARK Phase-1     otherwise
+
+No ε / no “almost material.” Positive AGG OC alone ≠ promote.
+Report-only: all-XI-diff OC; per-season means; PAIR vs HOLD concordance;
+  share of worse GWs with OC_*>0; Cap/XI0 levels for {ctrl, cand, PAIR, HOLD}.
+```
+
+#### Frozen MENU (decision-time XI set)
+```text
+MENU = {XI_ctrl, XI_cand, XI_PAIR if formation-feasible, XI_HOLD}
+  XI_PAIR / XI_HOLD constructed exactly as E055-A (μ fixed; no re-solve)
+  If PAIR infeasible → MENU omits PAIR that GW (report n_pair_skip)
+```
+
+#### Frozen Phase-2 RULE (one only — freeze before any RULE outcome peek)
+Ex-ante quantities only. Forbidden inputs: actuals, Cap, blank labels, OC_*.
+
+```text
+SCORE(m) = Σ_{i ∈ XI_m} U_cand(i) + U_cand(captain_m)
+           captain_m = pick_captains(XI_m) under candidate next_utility
+
+RULE_UMAX = argmax_{m ∈ MENU} SCORE(m)
+            ties → HOLD > PAIR > ctrl > cand
+
+COMPARE (xi0_worse AGG): Cap/XI0 of RULE vs always-cand vs always-ctrl
+SURVIVE Phase-2 iff
+  Cap(RULE) > Cap(always-cand)
+  AND zeros(RULE) ≤ zeros(always-cand)
+  AND RULE is not identical to always-ctrl on every xi0_worse GW
+BRANCH if SURVIVES → decision-rule / product-surface prereg (not ILP rewrite)
+PARK if not → OC is ex-post only under this MENU/RULE
+```
+
+**No promote** of RULE, CF, MENU, or `v1_adxg` on this card — including when AGG
+OC or Cap(RULE) looks large.
+
+#### Explicit non-identity (load-bearing)
+| | E034c | E039-A \(V_{ns}\) | E055 | **E056-A** |
+|---|---|---|---|---|
+| Claim | pair vs full re-solve tripwire | non-separable V beats U | cascade blank share; CF recovers | **price OC; ex-ante RULE_UMAX** |
+| Changes ILP/V? | no | candidate V | no | **no** (MENU selection only) |
+| μ | rates_v2b | rates / V | adxg diagnostic | **same diagnostic adxg** |
+
+**Not** pairwise-swap superiority; **not** E039 λ reopen; **not** re-running E055
+diagnosis; **not** promoting CF as production solver; **not** reopening
+continuous relative-strength → xG.
+
+#### Forbidden
+New ILP objective; FLEX penalty; near-tie shield; ε-gates; packaging; adxg/sxg
+retune; E039-A λ; CF recipe fishing; second RULE after peek; inverting OC signs;
+collapsing HOLD/PAIR/CTRL; Phase-2 before Phase-1 SURVIVES; promote; production
+change.
+
+#### Implementation sequence
+```text
+this freeze (done)
+  → Phase-1 descriptive OC script only
+  → SURVIVE/PARK Phase-1 under MATERIAL
+  → Phase-2 RULE_UMAX ONLY if SURVIVES
+  → branch to next family prereg OR park
+```
+
+- **Method (planned):** `scripts/e056_opportunity_cost_phase1.py` TBD —
+  **not written yet**; may reuse `e055_cascade_phase2_events.csv`
+- **Charter:** `docs/DECISION_CHARTER.md` §41 (amended)
+- **Follow-up:** implement Phase-1 OC descriptive only. **No RULE / Cap-selection
+  peek until Phase-1 SURVIVES.**
+
+### E056-A Phase-1 — opportunity-cost descriptive (2026-09-12)
+- **Status:** complete — **SURVIVE Phase-1 (MATERIAL)**
+- **Code:** `python scripts/e056_opportunity_cost_phase1.py` (reads frozen
+  `e055_cascade_phase2_events.csv`; identity CF recipes)
+- **Universe:** xi0_worse **n=23** (branch universe)
+
+  | Arm | mean OC_XI0 | mean OC_CAP | both>0 |
+  |---|---:|---:|---:|
+  | **HOLD (gate)** | **+0.696** | **+4.304** | 15/23 |
+  | PAIR (twin) | +0.696 | +4.348 | 12/23 |
+  | CTRL (anchor) | +1.174 | +3.522 | 14/23 |
+
+- **Gate:** mean OC_CAP(HOLD)>0 ∧ mean OC_XI0(HOLD)>0 → **SURVIVE**
+- **Per-season HOLD:** all four seasons mean OC_XI0>0 and mean OC_CAP>0
+- **PAIR≈HOLD** on XI0 means (identical AGG); Cap twin close (+4.35 vs +4.30)
+- **Forbidden still:** RULE_UMAX peek interpretation as promote; new ILP
+  objective; collapsing arms; promoting adxg
+- **Artifacts:** `records/historical/e056_oc_phase1_events.csv`,
+  `e056_oc_phase1_summary.txt`, `e056_oc_phase1_verdict.txt`,
+  `e056_oc_phase1_run.log`
+- **Follow-up:** → **Phase-2 RULE_UMAX only** (no promote). Do not touch
+  production optimizer.
+
+### E056-A Phase-2 — RULE_UMAX (2026-09-12)
+- **Status:** complete — **BRANCH** → decision-rule / product-surface family
+- **Code:** `python scripts/e056_opportunity_cost_phase2.py` (venv; frozen E056-A)
+- **Universe:** xi0_worse **n=23**
+
+  | | Cap sum | XI0 sum | rule_choice |
+  |---|---:|---:|---|
+  | RULE_UMAX | **1360** | **36** | hold=10, pair=4, cand=9 |
+  | always-cand | 1308 | 43 | — |
+  | always-ctrl | 1389 | 16 | — |
+
+- **Gate:** Cap(RULE)>Cap(cand) ✓ (+52); XI0(RULE)≤XI0(cand) ✓ (36≤43);
+  not identity-to-ctrl ✓ (0/23) → **BRANCH**
+- **Per-season (worse):** mixed Cap (2023-24 Cap dips; others rise); XI0 never
+  worsens AGG within season except flat 2024-25 (11→11)
+- **Note:** HOLD on MENU uses E055-A blank-companion recipe (Phase-1 Cap
+  identity); SCORE/RULE use only U_cand. Not a production solver promote.
+- **Forbidden still:** promote RULE/CF/adxg; new ILP objective; touch production
+- **Artifacts:** `records/historical/e056_oc_phase2_events.csv`,
+  `e056_oc_phase2_summary.txt`, `e056_oc_phase2_verdict.txt`,
+  `e056_oc_phase2_run.log`
+- **Follow-up:** → **E057** decision-rule / product-surface prereg below.
+  E056 valuation card closes as BRANCH, not promote.
+
+### E057 — Decision-rule / product-surface (preregistered)
+- **Date:** 2026-09-12 (after E056-A Phase-2 BRANCH; product-surface family)
+- **Status:** **preregistered** — evaluation contract locked; **exact ex-ante
+  eligibility predicate** via dated **E057-A** amendment **before any CLI/UI
+  wiring, eligible-GW Cap peek, or implementation beyond already-logged E056
+  artifacts**
+- **Lane:** Research → Product-surface candidate. Not Upstream strength→xG.
+  Not a new ILP objective. Formal/Lean independent and non-gating.
+- **Primary question:** Can frozen `RULE_UMAX` over MENU `{ctrl, cand, PAIR, HOLD}`
+  become a **product-layer decision rule** under an **ex-ante observable
+  eligibility condition**, without using retrospective `xi0_worse` as a live
+  trigger and without changing the production optimizer / projection μ?
+- **Hypothesis:** E056 showed RULE_UMAX clears Cap/XI0 vs always-cand on the
+  retrospective `xi0_worse` diagnostic population (n=23; Cap 1360 vs 1308;
+  XI0 36 vs 43; choices HOLD 10 / PAIR 4 / cand 9; not identity-to-ctrl;
+  **asterisk:** 2023-24 Cap dips while AGG clears). That earns a **product-rule
+  candidate**, not a blanket replacement for always-cand and **not** a license
+  to deploy `xi0_worse` as the trigger.
+
+#### Load-bearing guardrail (do not weaken)
+```text
+xi0_worse  = retrospective diagnostic population (E054/E055/E056 research)
+             MUST NOT be used as a live product trigger
+ELIGIBILITY = one frozen ex-ante predicate (E057-A) using only as-of-T fields
+FORBIDDEN   actuals, blank labels, Cap, OC_*, xi0_worse, post-deadline leak
+```
+
+#### Explicit non-identity (load-bearing)
+| | E040/E046 chips | E056 valuation | **E057** |
+|---|---|---|---|
+| Object | chip ROI / recommend surface | OC + RULE on diagnostic pop | **product MENU selector + ex-ante eligibility** |
+| Changes ILP/μ? | no | no | **no** |
+| Trigger | chip policy | n/a (research gate) | **ex-ante only (not xi0_worse)** |
+| Claim | chip product earns | RULE clears diagnostic gate | **eligible GWs: RULE beats always-cand without leakage** |
+
+**Not a reopen** of E053 / `v1_adxg` promote; E039-A λ; E055 cascade diagnosis;
+promoting RULE globally to all transfer recs; inventing a new ILP objective.
+
+#### Frozen research result (evidence only — not the live population)
+On retrospective `xi0_worse` n=23 (E056-A Phase-2):
+
+| Arm | Cap | XI0 |
+|---|---:|---:|
+| RULE_UMAX | 1360 | 36 |
+| always-cand | 1308 | 43 |
+
+Choices: HOLD 10 / PAIR 4 / cand 9. Not identity-to-ctrl. Season Cap mixed
+(2023-24 dips; keep asterisk visible).
+
+#### Frozen decision rule (identity with E056-A — not retunable here)
+```text
+MENU        {XI_ctrl, XI_cand, XI_PAIR if feasible, XI_HOLD}
+            constructions identity with E055-A / E056-A
+SCORE(m)    Σ U_cand(XI_m) + U_cand(captain_m)
+RULE_UMAX   argmax SCORE; ties HOLD > PAIR > ctrl > cand
+```
+
+Diagnostic stack for historical tests remains ctrl `fixtures=v1` vs cand
+`fixtures=v1_adxg` (**E053 KILL diagnostic reference only** — not Upstream reopen).
+Production μ for live surface remains `v2am_fpla` + `rates=v1` + `fixtures=v1`
+unless a later explicit adopt says otherwise.
+
+#### Ex-ante eligibility (requirement now; exact predicate in E057-A)
+```text
+ELIGIBLE(gw)  frozen boolean from as-of-T fields only
+              (projections, prices, squad/XI state, formation legality,
+               enter/exit counts under ctrl vs cand solves, U gaps, …)
+NOT INPUT     actuals; blank labels; Cap; OC_*; xi0_worse; any post-GW leak
+E057-A        freezes exactly one predicate + MENU build under eligibility
+              before wiring or Cap peek on “eligible” GWs
+```
+
+Candidate families for E057-A (illustrative — **do not choose after peek**):
+FLEX / multi-enter under cand≠ctrl; score-gap thresholds; n_enter>1 — **one only**.
+
+#### Product semantics (if eligibility satisfied)
+```text
+1. Construct MENU arms under frozen recipes
+2. SCORE each with predicted next-GW XI + captain utility (cand μ path as frozen)
+3. Apply RULE_UMAX
+4. Return selected plan + labels:
+     decision_rule = RULE_UMAX
+     selected_arm  ∈ {HOLD, PAIR, ctrl, cand}
+```
+
+Does **not** change: projection model, squad constraints, transfer/hit accounting,
+chip policies, or ILP objective. Surface must keep **optimizer** vs **menu selector**
+visibly distinct.
+
+#### Phase split
+```text
+Phase-1 (after E057-A): wiring / eligibility coverage diagnostic only
+  — n_eligible, overlap with retrospective xi0_worse (report-only),
+    selected_arm distribution; no Cap promote gate
+Phase-2 (only if Phase-1 wiring SURVIVES): on ELIGIBLE GWs only,
+  Cap/XI0 of RULE vs always-cand (and vs always-ctrl report-only)
+  — separate gate from E056 xi0_worse; exact thresholds in E057-A
+```
+
+**No promote** of RULE, MENU, adxg, or eligibility to production on this card.
+Production untouched until a separate explicit adopt.
+
+#### Forbidden after peek
+Using `xi0_worse` as live trigger; new ILP objective; FLEX penalty as silent
+production patch; adxg/sxg retune; E039-A λ; CF recipe fishing; second
+eligibility predicate after peek; wiring before E057-A; silent global apply of
+RULE to all transfer recommendations; claiming multi-GW transfer ROI / chip
+timing / superiority outside declared populations; changing production.
+
+#### Implementation sequence
+```text
+this prereg (question + guardrail + phase split)
+  → E057-A freezes ex-ante ELIGIBLE predicate + Phase-2 gate text
+  → Phase-1 wiring / coverage diagnostic only
+  → SURVIVE/PARK Phase-1
+  → Phase-2 Cap/XI0 on ELIGIBLE only if Phase-1 SURVIVES
+  → adopt prereg OR park (production still untouched until adopt)
+```
+
+- **Method (planned):** TBD after E057-A — **not written yet**
+- **Charter:** `docs/DECISION_CHARTER.md` §42
+- **Follow-up:** → **E057-A** freezes ex-ante eligibility before any product
+  wiring. **xi0_worse remains diagnostic only.**
+
+### E057-A — Ex-ante eligibility / wiring freeze (amendment before Phase-1)
+- **Date:** 2026-09-12 (dated amendment to E057; **before Cap promote peek on
+  eligible GWs / CLI wiring**)
+- **Status:** **frozen contract** — Phase-1 (and later Phase-2) only under these
+  definitions
+- **Lane:** Research → Product-surface candidate. No new ILP objective. No promote.
+
+#### Guardrail (unchanged, load-bearing)
+```text
+xi0_worse = retrospective diagnostic only — MUST NOT be the live trigger
+```
+
+#### Frozen stack
+```text
+CONTROL μ     minutes=v2am_fpla, rates=v1, fixtures=v1
+CANDIDATE μ   minutes=v2am_fpla, rates=v1, fixtures=v1_adxg  # diagnostic reference
+SEED/STRAT    7 / balanced; objective=next; horizon=1
+RULE          E056-A RULE_UMAX (ties HOLD>PAIR>ctrl>cand) — not retuned
+```
+
+#### Frozen ex-ante ELIGIBLE (one predicate only)
+```text
+ELIGIBLE(gw) ⇔  XI_cand ≠ XI_ctrl
+             AND FLEX_flag
+FLEX_flag     ⇔  n_enter > 1  OR  n_pos_touched > 1
+                # identity with E054 BUDGET_FLEX definition
+                # computed from ctrl/cand XI diffs only — no actuals
+
+NOT ELIGIBLE inputs: actuals, blank labels, Cap, OC_*, xi0_worse
+```
+
+#### Frozen MENU scope (historical vs live)
+```text
+HISTORICAL MENU  {ctrl, cand, PAIR if feasible, HOLD}
+                 E055-A / E056-A constructions (HOLD blank recipe for Cap
+                 continuity with E056 — research eval only)
+LIVE MENU        {ctrl, cand, PAIR if feasible}
+                 HOLD omitted from live product until a later amendment freezes
+                 an ex-ante HOLD (no blank labels). Do not ship HOLD-dependent
+                 product surface on this card.
+```
+
+#### Frozen Phase-1 (wiring / coverage — run first; no Cap promote)
+```text
+Universe: all GWs with record + actuals under diagnostic stack
+Report:   n_xi_diff, n_eligible, selected_arm dist on eligible,
+          overlap eligible ∩ xi0_worse (report-only; not a gate)
+
+SURVIVE Phase-1 iff
+  n_eligible ≥ 1 AGG
+  AND every eligible GW yields selected_arm ∈ {hold, pair, ctrl, cand}
+  AND wiring uses only ELIGIBLE + RULE_UMAX (no xi0_worse filter)
+
+PARK if wiring fails or n_eligible = 0
+```
+
+#### Frozen Phase-2 (only if Phase-1 SURVIVES — Cap/XI0 on ELIGIBLE)
+```text
+Universe: ELIGIBLE GWs only (NOT xi0_worse)
+SURVIVE Phase-2 iff AGG
+  Cap(RULE) > Cap(always-cand)
+  AND zeros(RULE) ≤ zeros(always-cand)
+  AND RULE is not identical to always-ctrl on every eligible GW
+
+Asterisk: report per-season Cap (E056-style 2023-24 dip visibility)
+No promote / production untouched until explicit adopt
+```
+
+#### Forbidden
+`xi0_worse` live trigger; second eligibility after peek; score-gap fishing;
+new ILP objective; adxg promote; shipping live HOLD with blank labels;
+Phase-2 Cap gate before Phase-1 SURVIVES; silent global RULE; production change.
+
+#### Implementation sequence
+```text
+this freeze (done)
+  → Phase-1 coverage script (reuse E055 flex_flag + E056 rule_choice where identity)
+  → SURVIVE/PARK Phase-1
+  → Phase-2 Cap/XI0 on ELIGIBLE only if SURVIVES
+```
+
+- **Method:** `scripts/e057_eligibility_phase1.py`
+- **Charter:** `docs/DECISION_CHARTER.md` §42 (amended)
+- **Follow-up:** run Phase-1 coverage only.
+
+### E057-A Phase-1 — eligibility coverage / wiring (2026-09-12)
+- **Status:** complete — **SURVIVE Phase-1**
+- **Code:** `python scripts/e057_eligibility_phase1.py`
+- **ELIGIBLE:** XI_cand≠XI_ctrl ∧ FLEX_flag (ex-ante; not xi0_worse)
+
+  | | n |
+  |---|---:|
+  | XI-diff GWs | 139 |
+  | **ELIGIBLE** | **122** |
+  | xi0_worse (diagnostic) | 23 |
+  | ELIGIBLE ∩ xi0_worse (report-only) | 21 (91.3% of worse) |
+
+- **selected_arm on ELIGIBLE:** hold 76 (62.3%) / pair 37 (30.3%) / cand 9 (7.4%)
+- **Gate:** n_eligible≥1 ∧ wire_ok all eligible → **SURVIVE**
+- **Forbidden still:** Cap promote on this card; xi0_worse trigger; live blank-HOLD
+- **Artifacts:** `records/historical/e057_eligibility_phase1_events.csv`,
+  `e057_eligibility_phase1_summary.txt`, `e057_eligibility_phase1_verdict.txt`,
+  `e057_eligibility_phase1_run.log`
+- **Follow-up:** → **Phase-2** Cap/XI0 on **ELIGIBLE** GWs only (no promote).
+
+### E057-A Phase-2 — Cap/XI0 on ELIGIBLE (2026-09-12)
+- **Status:** complete — **PARK Phase-2**
+- **Code:** `python scripts/e057_eligibility_phase2.py`
+- **Universe:** ELIGIBLE n=122 (FLEX; **not** xi0_worse)
+
+  | | Cap sum | XI0 sum |
+  |---|---:|---:|
+  | RULE_UMAX | **7254** (+40) | **81** |
+  | always-cand | 7214 | **79** |
+  | always-ctrl | 7006 | 75 |
+
+- **Gate:** Cap(RULE)>Cap(cand) ✓; XI0(RULE)≤XI0(cand) **✗** (81>79);
+  not identity-to-ctrl ✓ → **PARK**
+- **Per-season Cap asterisk:** 2022-23 +26; 2023-24 +24; **2024-25 −7**;
+  **2025-26 −3**. XI0 flat or worse in PASS seasons (2024-25 17→20).
+- **Report-only:** ELIGIBLE ∩ xi0_worse n=21 still Cap +52 / XI0 39→32
+  (E056 shape) — confirms diagnostic population ≠ FLEX-eligible live universe
+- **Verdict:** Expanding from retrospective `xi0_worse` to ex-ante FLEX
+  **does not** clear the frozen XI0 gate. Do **not** adopt RULE globally.
+  Product Cap claim parked for this eligibility. No promote.
+- **Artifacts:** `records/historical/e057_eligibility_phase2_events.csv`,
+  `e057_eligibility_phase2_summary.txt`, `e057_eligibility_phase2_verdict.txt`,
+  `e057_eligibility_phase2_run.log`
+- **Follow-up:** **E057 closed PARK.** Research lane **at rest** — no immediate
+  successor. Any later return needs a **fresh** prereg with a higher bar (not
+  silent FLEX retune / not global RULE). Production untouched.
+
+---
+
+### PRODUCT — k-best landscape (not an E-card)
+
+- **Date:** 2026-09-13
+- **Lane:** Product / engineering reconnaissance. **Not** E058. **Not** a
+  promote bar. Research lane stays at rest.
+- **Model A (frozen):** `minutes=v2am_fpla` + `rates=v1` + `fixtures=v1` +
+  existing `solve_squad` **horizon** objective + XI/C. `suggest_transfers`
+  stays Model A — do not touch.
+- **Question:** Does the frozen squad ILP naturally contain multiple
+  meaningfully different near-optimal 15s?
+- **Mechanism:** \(S_1=\arg\max U(S)\); no-good cut \(\sum_{i\in S_1}x_i\le 14\);
+  repeat to \(k=10\). Same objective every time. Candidates stay **S1…Sk**.
+- **Order:** one **live** snapshot first (inspect squads by name) → then 12
+  historical snapshots (FAIL `2022-23`,`2025-26` × PASS `2023-24`,`2024-25` ×
+  GW 4/18/32).
+- **Diagnostics (not labels):** weighted ILP \(U\), \(\Delta U\) vs S1,
+  \(D=15-|S_i\cap S_1|\), Jaccard, bank, club max, `# p_start<0.75`,
+  captain/vice, enters/exits vs S1. No ROBUST/FLEX/UPSIDE.
+- **Honesty gate (diagnostic, not statistical):**
+  - **A** — several near-optima with real structure (small ΔU, D≥3, manager-relevant diffs)
+  - **B** — near-duplicates (D≤2, cosmetic swaps)
+  - **C** — tripwire (tiny local steps, then a cliff)
+- **Forbidden:** new ILP objective; alternate weighted solves per label;
+  transfer-menu work; UI; override logger; E058.
+- **Code:** `engine/candidates.py`; `python scripts/kbest_landscape.py --live`
+  then `--historical`.
+- **Follow-up:** A/B/C narrative after the live inspect + historical table.
+  Phase 2 UI only if A or honest C.
+
+#### PRODUCT k-best — live inspect + historical verdict (2026-09-13)
+
+- **Live:** 2026/27 GW5, k=10. Cuts legal (10 unique 15s). Max D=2.
+  XI identical on 8/10; remaining two are GK (Suzuki/Horníček) with vice
+  side-effect. Diversity = bench DEF/GKP. S6/S8 report higher post-hoc U
+  than S1 because diagnostics use `solve_xi` XI, not the ILP starter set.
+- **Historical:** 12 snapshots (FAIL 2022-23/2025-26 × PASS 2023-24/2024-25 ×
+  GW 4/18/32). Same Model A stack.
+- **Verdict: B, with C pockets. Not A.** Most candidates are near-duplicates
+  (D=1–2, bench/one-DEF). Cliffs appear at small Hamming distance
+  (2022-23 GW18 ~3.4 U; GW32 ~3.5–5.4 U; 2023-24 GW32 GK −3.12). The only
+  manager-relevant D=3 at tiny dU is 2022-23 GW4 (Haaland in vs
+  Mahrez/Perišić/Watkins, dU=0.03).
+- **Product implication:** natural k-best does **not** earn ROBUST/FLEX/UPSIDE
+  labels or a Phase 2 candidate-menu UI. **Closed as a generation mechanism**
+  (insufficient). Decision-support as a *concept* is not dead — E056/E057
+  still show alternatives can matter in identifiable boundary regimes.
+- **Keep:** `engine/candidates.py` (generation → pool → diagnostics).
+- **Artifacts:** `records/historical/kbest_live_candidates.csv`,
+  `kbest_live_summary.txt`, `kbest_landscape_gw.csv`,
+  `kbest_landscape_summary.txt`
+- **Next:** design discussion only — cheapest principled way to generate a
+  structurally different 15 without secretly creating another objective.
+- **Not next:** Phase 2 UI; E058; new ILP objective; Hamming-forced /
+  diversity-penalty generator; `suggest_transfers` rewrite.
+
+#### PRODUCT — prefs v0 preference-conditioned Model A (2026-09-13)
+
+- **Lane:** Product. Not an E-card. Same Model A \(U\); feasible set only.
+- **Primitives (frozen):** LOCK / BAN by `element_id`; BANK ∈
+  {0.0, 0.5, 1.0, 1.5, 2.0}m; CLUB `team_id → max ∈ {0,1,2}`.
+- **Behavior:** no prefs → S1; valid prefs → S2; all cuts AND; infeasible →
+  explicit message. Diagnostics descriptive only.
+- **Code:** `engine/preferences.py`; `engine/optimize.py` (`min_bank`,
+  `club_limits`); `fpl.py prefs`; `POST /api/account/prefs`; `/me/model-a`.
+- **Out of v0:** minutes cuts, premium routes, transfer-aware, scenarios,
+  soft risk, ROBUST/FLEX/UPSIDE chips.
+- **Tests:** `python -m unittest tests.test_preferences -v`
 
 ---
 
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-12 (**E055 Phase-2 BRANCH**; four chips SHIPPED):
+As of 2026-09-13 (**Research at rest**; prefs v0 shipped):
 
 1. **Production μ.** `v2am_fpla` + `rates=v1` + fixtures `v1` (still `_str`→5).
-2. **SHIPPED.** TC/BB/FH/WC wired independent; μ/squad ILP unchanged.
+2. **SHIPPED.** TC/BB/FH/WC wired independent; μ/squad ILP unchanged;
+   **prefs v0** (LOCK/BAN/BANK/CLUB → `/me/model-a`).
 3. **CLOSED.** E021; E048/E049 remap; E052-A+E053-A continuous relative xG;
-   E039-A \(V_{ns}\); …
-4. **PARKED.** E051 joint inventory; fixture-book bootstrap rejected.
-5. **OPEN.** **E055 BRANCH** → next family = **valuation / opportunity-cost**
-   (new prereg). No CF promote.
-6. **Not next.** Promote CF_PAIR/HOLD; new objective; FLEX penalty; near-tie
-   shield; strength→xG; adxg/E039 λ retune; silent `_str` patch.
+   E039-A \(V_{ns}\); E055 cascade BRANCH; E056 valuation BRANCH; …
+   natural k-best as candidate generator.
+4. **PARKED.** E051 joint inventory; **E057 product Cap claim under FLEX
+   ELIGIBLE** (Phase-2 XI0✗); fixture-book bootstrap rejected.
+5. **OPEN.** **None** — Research lane at rest (no active card).
+6. **Product.** Model A freeze; preference-conditioned re-solve v0.
+7. **Not next.** Immediate E058; adopt RULE globally; silent FLEX retune;
+   `xi0_worse` live trigger; blank-HOLD live; new ILP objective; touch
+   production; Hamming-forced / diversity-penalty generator; amber prefs
+   without freeze.
 
 ---
 
@@ -5038,6 +5637,14 @@ python -m unittest tests.test_e053_v1_adxg -v
 python scripts/e054_xi_boundary_diagnostic.py  # E054-A: BRANCH=BUDGET_FLEX
 python scripts/e055_cascade_phase1.py  # E055-A Phase-1: SURVIVE (companion 60.7%)
 python scripts/e055_cascade_phase2.py  # E055-A Phase-2: BRANCH (CF recovers XI0)
+python scripts/e056_opportunity_cost_phase1.py  # E056-A Phase-1: SURVIVE MATERIAL
+python scripts/e056_opportunity_cost_phase2.py  # E056-A Phase-2: BRANCH RULE_UMAX
+python scripts/e057_eligibility_phase1.py  # E057-A Phase-1: SURVIVE (n_elig=122)
+python scripts/e057_eligibility_phase2.py  # E057-A Phase-2: PARK (XI0✗ on ELIGIBLE)
+python scripts/kbest_landscape.py --live        # PRODUCT: k-best live inspect
+python scripts/kbest_landscape.py --historical  # PRODUCT: 12-snapshot landscape
+python fpl.py prefs --json                      # PRODUCT: Model A vs prefs
+python -m unittest tests.test_preferences -v
 python scripts/e051_chip_conflict_diagnostic.py  # E051: CONFLICTS_PRESENT sparse
 python -m unittest tests.test_e051_chip_conflict -v
 python -m engine.e050_wc_recommend  # E050-A product: WC recommendation

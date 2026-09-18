@@ -1,0 +1,199 @@
+PRODUCT k-best historical landscape (Model A, not an E-card)
+k=10 objective=horizon snapshots=4x3
+
+=== 2022-23 GW4 FAIL  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    132.00     0.00    0   1.000      0     3    11  Dennis / Raya  
+   2    131.97     0.03    3   0.667      1     2    11  Dennis / Raya  Gilmour, Haaland, Ogbonna <- Mahrez, Perišić, Watkins
+   3    131.96     0.05    3   0.667      1     2    11  Dennis / Raya  Haaland, Ogbonna, Soumaré <- Mahrez, Perišić, Watkins
+   4    131.96     0.05    1   0.875      1     3    11  Dennis / Raya  Holding <- Keane
+   5    131.95     0.06    1   0.875      1     3    11  Dennis / Raya  Cédric <- Keane
+   6    131.94     0.06    1   0.875      0     3    11  Dennis / Raya  Diop <- Keane
+   7    131.94     0.07    3   0.667      3     2    11  Dennis / Raya  Gilmour, Haaland, Holding <- Mahrez, Perišić, Watkins
+   8    131.93     0.08    3   0.667      3     2    11  Dennis / Raya  Cédric, Gilmour, Haaland <- Mahrez, Perišić, Watkins
+   9    131.92     0.08    3   0.667      3     2    11  Dennis / Raya  Haaland, Holding, Soumaré <- Mahrez, Perišić, Watkins
+  10    131.92     0.08    3   0.667      2     2    11  Dennis / Raya  Diop, Gilmour, Haaland <- Mahrez, Perišić, Watkins
+what changed (D>=3):
+  S2 dU=0.03 D=3 in=Gilmour, Haaland, Ogbonna out=Mahrez, Perišić, Watkins
+  S3 dU=0.05 D=3 in=Haaland, Ogbonna, Soumaré out=Mahrez, Perišić, Watkins
+  S7 dU=0.07 D=3 in=Gilmour, Haaland, Holding out=Mahrez, Perišić, Watkins
+  S8 dU=0.08 D=3 in=Cédric, Gilmour, Haaland out=Mahrez, Perišić, Watkins
+  S9 dU=0.08 D=3 in=Haaland, Holding, Soumaré out=Mahrez, Perišić, Watkins
+  S10 dU=0.08 D=3 in=Diop, Gilmour, Haaland out=Mahrez, Perišić, Watkins
+
+=== 2022-23 GW18 FAIL  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    177.28     0.00    0   1.000      3     3    13  Leno / De Bruyne  
+   2    173.91     3.36    2   0.765      0     3    13  Leno / De Bruyne  Collins, Guaita <- Olsen, White
+   3    173.90     3.38    2   0.765      0     3    13  Leno / De Bruyne  Botman, Guaita <- Olsen, White
+   4    177.24     0.03    2   0.765      1     3    13  Leno / De Bruyne  Amartey, Guaita <- Olsen, White
+   5    173.90     3.37    2   0.765      0     3    13  Leno / De Bruyne  Collins, Meslier <- Olsen, White
+   6    173.89     3.39    2   0.765      0     3    13  Leno / De Bruyne  Botman, Meslier <- Olsen, White
+   7    177.23     0.04    2   0.765      1     3    13  Leno / De Bruyne  Amartey, Meslier <- Olsen, White
+   8    177.22     0.06    1   0.875      1     3    13  Leno / De Bruyne  Ward <- Olsen
+   9    177.21     0.06    2   0.765      0     3    13  Leno / De Bruyne  Cooper, Guaita <- Olsen, White
+  10    177.21     0.06    2   0.765      0     3    13  Leno / De Bruyne  Amartey, Raya <- Olsen, White
+
+=== 2022-23 GW32 FAIL  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    202.95     0.00    0   1.000      1     3     4  Salah / Johnstone  
+   2    198.63     4.32    2   0.765      0     3     3  Salah / Johnstone  Keane, Schär <- Dalot, Zouma
+   3    205.35    -2.41    1   0.875      0     3     4  Salah / Leno  Neto <- Johnstone
+   4    201.68     1.27    1   0.875      0     3     4  Salah / Johnstone  Botman <- Zouma
+   5    197.81     5.14    2   0.765      0     3     3  Salah / Johnstone  Schär, Tarkowski <- Dalot, Zouma
+   6    201.44     1.50    1   0.875      0     3     4  Salah / Johnstone  Burn <- Zouma
+   7    197.57     5.37    2   0.765      1     3     4  Salah / Johnstone  Cunha, Schär <- Dalot, Solanke
+   8    197.52     5.42    2   0.765      0     3     4  Salah / Raya  Pinnock, Raya <- Dalot, Johnstone
+   9    197.51     5.43    2   0.765      2     3     4  Salah / Raya  Keane, Raya <- Dalot, Johnstone
+  10    199.40     3.55    2   0.765      0     3     4  Salah / Leno  Fabianski, Pinnock <- Dalot, Johnstone
+
+=== 2025-26 GW4 FAIL  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    167.76     0.00    0   1.000     11     3    10  Isak / Gvardiol  
+   2    167.74     0.01    1   0.875     12     3    10  Isak / Gvardiol  Robertson <- Virgil
+   3    167.74     0.02    1   0.875     12     3    10  Isak / Gvardiol  Frimpong <- Virgil
+   4    167.71     0.04    1   0.875     25     3    10  Isak / Gvardiol  Senesi <- Virgil
+   5    168.05    -0.30    1   0.875     11     3    10  Isak / Gvardiol  Kolo Muani <- Woltemade
+   6    167.70     0.05    1   0.875      7     3    10  Isak / Gvardiol  Robertson <- James
+   7    167.70     0.06    1   0.875      7     3    10  Isak / Gvardiol  Frimpong <- James
+   8    168.04    -0.28    2   0.765     12     3    10  Isak / Gvardiol  Kolo Muani, Robertson <- Virgil, Woltemade
+   9    167.70     0.06    1   0.875     16     3    10  Isak / Gvardiol  Tarkowski <- Virgil
+  10    168.03    -0.28    2   0.765     12     3    10  Isak / Gvardiol  Frimpong, Kolo Muani <- Virgil, Woltemade
+
+=== 2025-26 GW18 FAIL  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    196.87     0.00    0   1.000      2     3    13  Haaland / Roefs  
+   2    195.40     1.47    1   0.875      4     3    13  Haaland / Roefs  Fofana <- Andersen
+   3    196.84     0.03    1   0.875      5     3    13  Haaland / Roefs  Anderson <- Tavernier
+   4    195.51     1.36    2   0.765      2     3    13  Haaland / Roefs  Anderson, Collins <- Andersen, Tavernier
+   5    195.24     1.63    1   0.875      4     3    13  Haaland / Roefs  Mavropanos <- Andersen
+   6    195.23     1.63    1   0.875      8     3    13  Haaland / Roefs  Alderete <- Andersen
+   7    195.37     1.50    2   0.765      7     3    13  Haaland / Roefs  Anderson, Fofana <- Andersen, Tavernier
+   8    195.49     1.38    1   0.875      0     3    13  Haaland / Roefs  Collins <- Keane
+   9    196.81     0.06    1   0.875      5     3    13  Haaland / Roefs  Dúbravka <- Areola
+  10    195.48     1.39    2   0.765      2     3    13  Haaland / Roefs  Collins, Dúbravka <- Andersen, Areola
+
+=== 2025-26 GW32 FAIL  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    233.05     0.00    0   1.000      0     3     0  B.Fernandes / Haaland  
+   2    232.73     0.32    2   0.765      1     3     0  B.Fernandes / Haaland  Dúbravka, Garner <- Anderson, Kinsky
+   3    232.95     0.10    1   0.875      0     3     0  B.Fernandes / Haaland  Scott <- Wharton
+   4    232.38     0.67    2   0.765      0     3     0  B.Fernandes / Haaland  Dúbravka, E.Le Fée <- Kinsky, Wharton
+   5    232.68     0.37    2   0.765      4     3     0  B.Fernandes / Haaland  Dúbravka, Scott <- Anderson, Kinsky
+   6    233.22    -0.17    1   0.875      2     3     0  B.Fernandes / Haaland  Garner <- Anderson
+   7    233.41    -0.35    2   0.765      0     3     0  B.Fernandes / Haaland  Scott, Thiaw <- Anderson, Keane
+   8    232.84     0.21    3   0.667      0     3     0  B.Fernandes / Haaland  Dúbravka, E.Le Fée, Thiaw <- Anderson, Keane, Kinsky
+   9    232.63     0.42    3   0.667      1     3     0  B.Fernandes / Haaland  Dúbravka, Garner, Scott <- Anderson, Kinsky, Wharton
+  10    232.88     0.18    1   0.875      1     3     0  B.Fernandes / Haaland  E.Le Fée <- Wharton
+what changed (D>=3):
+  S8 dU=0.21 D=3 in=Dúbravka, E.Le Fée, Thiaw out=Anderson, Keane, Kinsky
+  S9 dU=0.42 D=3 in=Dúbravka, Garner, Scott out=Anderson, Kinsky, Wharton
+
+=== 2023-24 GW4 PASS  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    128.90     0.00    0   1.000     23     3    13  Kaminski / Diogo J.  
+   2    128.87     0.04    1   0.875     23     3    13  Kaminski / Diogo J.  Robertson <- Trippier
+   3    128.86     0.04    1   0.875     37     3    13  Kaminski / Diogo J.  Robertson <- Alexander-Arnold
+   4    128.85     0.05    1   0.875     33     3    13  Kaminski / Diogo J.  White <- Trippier
+   5    128.84     0.06    1   0.875     47     3    13  Kaminski / Diogo J.  White <- Alexander-Arnold
+   6    128.83     0.07    1   0.875     42     3    13  Kaminski / Diogo J.  Romero <- Trippier
+   7    128.83     0.07    1   0.875     37     3    13  Kaminski / Diogo J.  Disasi <- Trippier
+   8    128.82     0.08    1   0.875     56     3    13  Kaminski / Diogo J.  Romero <- Alexander-Arnold
+   9    128.82     0.08    1   0.875     51     3    13  Kaminski / Diogo J.  Disasi <- Alexander-Arnold
+  10    128.82     0.08    1   0.875     43     3    13  Kaminski / Diogo J.  Hall <- Trippier
+
+=== 2023-24 GW18 PASS  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    192.88     0.00    0   1.000      0     2    13  Salah / Leno  
+   2    192.82     0.05    2   0.765      1     2    13  Salah / Leno  Branthwaite, Turner <- Dubravka, Trusty
+   3    192.80     0.08    3   0.667      0     2    13  Salah / Leno  Branthwaite, Taylor, Turner <- C.Richards, Dubravka, Trusty
+   4    192.79     0.08    2   0.765      1     2    13  Salah / Leno  Branthwaite, Turner <- C.Richards, Dubravka
+   5    192.79     0.09    1   0.875      0     2    13  Salah / Leno  Areola <- Dubravka
+   6    192.72     0.16    2   0.765      0     2    13  Salah / Leno  Branthwaite, Whitworth <- Dubravka, Trusty
+   7    192.69     0.19    2   0.765      0     2    13  Salah / Leno  Branthwaite, Whitworth <- C.Richards, Dubravka
+   8    192.67     0.21    2   0.765      2     2    13  Salah / Leno  Taylor, Turner <- Dubravka, Trusty
+   9    192.66     0.21    1   0.875      3     2    13  Salah / Leno  Turner <- Dubravka
+  10    192.64     0.24    2   0.765      2     2    13  Salah / Leno  Taylor, Turner <- C.Richards, Dubravka
+what changed (D>=3):
+  S3 dU=0.08 D=3 in=Branthwaite, Taylor, Turner out=C.Richards, Dubravka, Trusty
+
+=== 2023-24 GW32 PASS  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    250.29     0.00    0   1.000      0     2     5  Haaland / Son  
+   2    250.68    -0.39    2   0.765      1     2     5  Haaland / Son  Andersen, Ortega Moreno <- Doughty, Kelleher
+   3    247.17     3.12    1   0.875      0     2     5  Haaland / Son  Olsen <- Kelleher
+   4    248.63     1.67    1   0.875      0     2     5  Haaland / Son  Castagne <- Doughty
+   5    250.08     0.21    2   0.765      1     2     6  Haaland / Son  Aït-Nouri, Ortega Moreno <- Doughty, Kelleher
+   6    250.08     0.22    1   0.875      2     2     5  Haaland / Son  Ortega Moreno <- Kelleher
+   7    248.44     1.85    1   0.875      0     2     5  Haaland / Son  Robinson <- Doughty
+   8    251.28    -0.98    1   0.875      1     2     6  Haaland / Son  Mitchell <- Doughty
+   9    251.27    -0.97    1   0.875      1     2     6  Haaland / Son  Kilman <- Doughty
+  10    250.03     0.26    1   0.875      0     2     5  Haaland / Son  Tosin <- Branthwaite
+
+=== 2024-25 GW4 PASS  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    142.25     0.00    0   1.000     81     3    11  Willian / Rodrigo  
+   2    142.24     0.01    1   0.875     83     3    11  Willian / Rodrigo  Zirkzee <- Darwin
+   3    142.24     0.01    1   0.875     81     3    11  Willian / Rodrigo  Gakpo <- Darwin
+   4    141.62     0.63    1   0.875     81     3    11  Willian / Olsen  Olsen <- Foderingham
+   5    141.62     0.63    2   0.765     83     3    11  Willian / Olsen  Olsen, Zirkzee <- Darwin, Foderingham
+   6    141.61     0.64    2   0.765     81     3    11  Willian / Olsen  Gakpo, Olsen <- Darwin, Foderingham
+   7    142.22     0.03    2   0.765     71     3    11  Willian / Rodrigo  Alexander-Arnold, Zirkzee <- Calafiori, Darwin
+   8    141.59     0.66    3   0.667     71     3    11  Willian / Olsen  Alexander-Arnold, Olsen, Zirkzee <- Calafiori, Darwin, Foderingham
+   9    142.14     0.11    1   0.875     84     3    11  Willian / Rodrigo  Pedro Porro <- Calafiori
+  10    142.14     0.11    2   0.765     81     3    11  Willian / Rodrigo  Robertson, Zirkzee <- Calafiori, Darwin
+what changed (D>=3):
+  S8 dU=0.66 D=3 in=Alexander-Arnold, Olsen, Zirkzee out=Calafiori, Darwin, Foderingham
+
+=== 2024-25 GW18 PASS  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    194.86     0.00    0   1.000      0     2    13  M.Salah / Palmer  
+   2    194.79     0.07    1   0.875      0     2    13  M.Salah / Palmer  Coady <- Wood
+   3    194.71     0.15    1   0.875      0     2    13  M.Salah / Palmer  Vestergaard <- Wood
+   4    194.71     0.15    1   0.875      0     2    13  M.Salah / Palmer  Strand Larsen <- Vardy
+   5    194.71     0.15    1   0.875      0     2    13  M.Salah / Palmer  Coady <- Burgess
+   6    194.69     0.17    3   0.667      0     2    13  M.Salah / Palmer  Archer, Mykolenko, Wissa <- Evanilson, Vardy, Wood
+   7    194.91    -0.05    3   0.667      0     2    13  M.Salah / Palmer  João Pedro, Ramsdale, Ward <- Foderingham, Forster, Vardy
+   8    194.91    -0.05    2   0.765      0     2    13  M.Salah / Palmer  Ward, Wissa <- Evanilson, Foderingham
+   9    193.22     1.64    3   0.667      0     2    13  M.Salah / Palmer  Archer, Doherty, Wissa <- Evanilson, Vardy, Wood
+  10    194.91    -0.05    4   0.579      1     3    13  M.Salah / Palmer  Archer, O'Shea, Ramsdale, Wissa <- Evanilson, Foderingham, Vardy, Wood
+what changed (D>=3):
+  S6 dU=0.17 D=3 in=Archer, Mykolenko, Wissa out=Evanilson, Vardy, Wood
+  S7 dU=-0.05 D=3 in=João Pedro, Ramsdale, Ward out=Foderingham, Forster, Vardy
+  S9 dU=1.64 D=3 in=Archer, Doherty, Wissa out=Evanilson, Vardy, Wood
+  S10 dU=-0.05 D=4 in=Archer, O'Shea, Ramsdale, Wissa out=Evanilson, Foderingham, Vardy, Wood
+
+=== 2024-25 GW32 PASS  n=10 ===
+rank         U       dU    D     Jac   bank  club  risk  C / VC  enters -> exits
+   1    244.67     0.00    0   1.000      2     3     1  Isak / Mateta  
+   2    244.66     0.01    1   0.875      2     3     1  Isak / Mateta  Rusk <- Van Nistelrooy
+   3    244.66     0.01    1   0.875      2     3     1  Isak / Mateta  Moyes <- Van Nistelrooy
+   4    244.66     0.01    1   0.875      2     3     1  Isak / Mateta  McKenna <- Van Nistelrooy
+   5    244.66     0.02    1   0.875      2     3     1  Isak / Mateta  Potter <- Van Nistelrooy
+   6    244.62     0.05    1   0.875      2     3     1  Isak / Mateta  Ramsdale <- Flekken
+   7    244.61     0.06    2   0.765      2     3     1  Isak / Mateta  Ramsdale, Rusk <- Flekken, Van Nistelrooy
+   8    244.61     0.06    2   0.765      2     3     1  Isak / Mateta  Moyes, Ramsdale <- Flekken, Van Nistelrooy
+   9    244.61     0.06    1   0.875      0     3     1  Isak / Mateta  Robinson <- Murillo
+   10    244.61     0.06    2   0.765      2     3     1  Isak / Mateta  McKenna, Ramsdale <- Flekken, Van Nistelrooy
+
+VERDICT (product honesty, not a statistical gate): B, with C pockets. Not A.
+
+Live GW5 and most of the 12 historical snapshots are near-duplicates:
+D typically 1-2, XI identical, swaps are bench DEF/GKP (or one starting DEF).
+Labeled ROBUST/FLEX/UPSIDE would be dishonest on this generation mechanism.
+
+C pockets (local cliffs at small Hamming distance):
+- 2022-23 GW18: several D=2 candidates drop ~3.4 U (Olsen/White)
+- 2022-23 GW32: D=1-2 drops of 3.5-5.4 U (Dalot/Zouma/Johnstone);
+  S3 is a post-hoc U inversion (Neto vs Johnstone), not a second optimum
+- 2023-24 GW32: Olsen<-Kelleher D=1 costs 3.12 U
+
+Rare D>=3 at tiny dU (inspect what changed):
+- 2022-23 GW4: D=3 / dU=0.03 Haaland in, Mahrez+Perisic+Watkins out —
+  the only manager-relevant structure shift in the set
+- 2025-26 GW32: D=3 / dU=0.21-0.42 GK/mid/def depth
+- 2023-24 GW18, 2024-25 GW4/GW18: D=3-4 still bench/FWD depth, not a new XI
+
+Implication: natural k-best does not earn a labeled candidate menu.
+Phase 2 UI stays parked. Another generation mechanism would be needed
+if we want structurally different alternatives. No E058.
