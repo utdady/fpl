@@ -8,7 +8,7 @@ Related specs: `ROADMAP.md`, `docs/HARNESS_SPEC.md`, `docs/V2_INVESTIGATION.md`,
 fixtures `v1`. Pre-fpla minutes control: `v2am_s`. Permanent historical control: V1
 (`v1.0-gw1-baseline`) — harnesses pin `minutes_version=v1`.
 
-**Standing map (2026-09-12):**
+**Standing map (2026-09-18):**
 ```text
 SHIPPED   TC/BB/FH/WC independent surfaces (E040/E041/E046/E050) — μ/squad ILP unchanged
 CLOSED    E021 v2d; E048 discrete remap; E049 piecewise remap;
@@ -19,12 +19,15 @@ PARKED    E051 joint inventory (sparse conflicts; E051-A skipped);
           fixture-book bootstrap rejected
 OPEN      none — Research lane at rest (no active card)
 PRODUCT   Model A freeze; k-best CLOSED; prefs v0 SHIPPED (/me/model-a)
+LIVE      GW5 freeze 2026-09-18 (pre-deadline); GW1 scored; GW2–4 freeze gap
 ```
 **Active research question:** none. **E057 closed PARK** (FLEX ELIGIBLE Cap✓
 XI0✗). Do not adopt RULE globally; do not silently retune FLEX. Successor only
 via a later fresh prereg with a higher bar. Production unchanged.
 **Product:** preference-conditioned Model A (LOCK/BAN/BANK/CLUB). Amber prefs
 and Hamming generators remain out.
+**Live:** `records/gw05_v1.0.csv` frozen before GW5 deadline (17:30 UTC).
+Do not invent retroactive GW2–4 freezes.
 
 
 ---
@@ -5572,9 +5575,39 @@ this freeze (done)
 
 ---
 
+### LIVE — 2026/27 GW5 prediction freeze (ops, not an E-card)
+
+- **Date:** 2026-09-18
+- **Lane:** Live track (V1.5 capture). Research lane stays at rest. Production
+  stack unchanged (`v2am_fpla` + `rates=v1` + fixtures `v1`).
+- **Context:** FPL state at freeze: GW4 finished / current; GW5 next
+  (deadline `2026-09-18T17:30:00Z`). Prior live freezes on disk: **GW1 only**
+  (scored E010). **GW2–4 were never frozen** — do not invent post-deadline
+  freezes; score only after a pre-deadline capture exists.
+- **Method:**
+  1. Fix `engine/capture.py`: restore missing `load_snapshot` import; drop
+     obsolete `include_finished_fixtures=` kwarg on `project_player_gw`
+     (signature no longer accepts it).
+  2. `python -m engine.capture --gw 5 --refresh` → freeze CSV
+  3. `python -m engine.capture --gw 5 --diagnostics` → diagnostics + audit CSVs
+  4. `python scripts/export_ui.py` → `web/public/data/` (live 2026-27 now
+     includes GW1 + GW5 rows)
+- **Results:** Froze **659** player projections at
+  `2026-09-18T12:45:59+00:00` (before deadline). Diagnostics OK
+  (`avail_monitor`: status_not_a=196 / 29.7%).
+- **Verdict:** GW5 control measurement is now capturable. No model change.
+  Next ops: after GW5 results, `python -m engine.capture --gw 5 --score`.
+- **Artifacts:** `records/gw05_v1.0.csv`, `records/gw05_diagnostics.json`,
+  refreshed `records/audit_loo.csv` / `audit_counterfactual.csv`,
+  `web/public/data/` export
+- **Follow-up:** score GW5 post-results; keep weekly freeze cadence so GW6+
+  are not missed. Research NEXT remains none.
+
+---
+
 ## Current call (do not skip this when adding tests)
 
-As of 2026-09-13 (**Research at rest**; prefs v0 shipped):
+As of 2026-09-18 (**Research at rest**; GW5 freeze landed):
 
 1. **Production μ.** `v2am_fpla` + `rates=v1` + fixtures `v1` (still `_str`→5).
 2. **SHIPPED.** TC/BB/FH/WC wired independent; μ/squad ILP unchanged;
@@ -5586,10 +5619,11 @@ As of 2026-09-13 (**Research at rest**; prefs v0 shipped):
    ELIGIBLE** (Phase-2 XI0✗); fixture-book bootstrap rejected.
 5. **OPEN.** **None** — Research lane at rest (no active card).
 6. **Product.** Model A freeze; preference-conditioned re-solve v0.
-7. **Not next.** Immediate E058; adopt RULE globally; silent FLEX retune;
+7. **Live.** GW5 frozen pre-deadline; GW1 scored; GW2–4 freeze gap acknowledged.
+8. **Not next.** Immediate E058; adopt RULE globally; silent FLEX retune;
    `xi0_worse` live trigger; blank-HOLD live; new ILP objective; touch
    production; Hamming-forced / diversity-penalty generator; amber prefs
-   without freeze.
+   without freeze; retroactive GW2–4 freezes.
 
 ---
 
@@ -5600,8 +5634,10 @@ As of 2026-09-13 (**Research at rest**; prefs v0 shipped):
 # Live
 python fpl.py --refresh
 python -m engine.audit --refresh
-python -m engine.capture --gw 1
-python -m engine.capture --gw 1 --score
+python -m engine.capture --gw 5 --refresh
+python -m engine.capture --gw 5 --diagnostics
+python -m engine.capture --gw 5 --score
+python scripts/export_ui.py
 
 # Harness
 python -m engine.harness_validate --season 2025-26 --gw 1

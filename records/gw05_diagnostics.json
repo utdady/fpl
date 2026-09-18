@@ -1,0 +1,9122 @@
+{
+  "gw": 5,
+  "captured_at": "2026-09-18T12:51:48.503641+00:00",
+  "model_config": {
+    "minutes_version": "v2am_fpla",
+    "rates_version": "v1",
+    "strategy": "balanced",
+    "horizon_resolv": 6,
+    "horizon_capture": 1,
+    "role": "live_resolv",
+    "horizon": 6
+  },
+  "availability_monitor": {
+    "ok": true,
+    "n_players": 659,
+    "n_status_not_a": 196,
+    "share_status_not_a": 0.29742,
+    "n_avail_lt1": 196,
+    "share_avail_lt1": 0.29742,
+    "n_chance_fields_set": 274,
+    "status_counts": {
+      "a": 463,
+      "d": 18,
+      "i": 69,
+      "s": 4,
+      "u": 105
+    },
+    "warnings": [],
+    "note": "Live soft-fail monitor: non-trivial availability application on snapshot Player fields via availability(player, 0). Not fplcache."
+  },
+  "note": "Quantiles and mu_components come from 2500 Monte Carlo draws per player. Not a fitted Normal. P(0) is P(total <= 0), distinct from 1 - p_start. availability_monitor checks non-trivial live API availability application.",
+  "players": {
+    "1": {
+      "name": "Raya",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "2": {
+      "name": "Arrizabalaga",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "3": {
+      "name": "Meslier",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "4": {
+      "name": "Gabriel",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "5": {
+      "name": "J.Timber",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "6": {
+      "name": "Saliba",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "7": {
+      "name": "Lewis-Skelly",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "8": {
+      "name": "Calafiori",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "9": {
+      "name": "Hincapie",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "10": {
+      "name": "White",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "11": {
+      "name": "Mosquera",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "12": {
+      "name": "Saka",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "13": {
+      "name": "Rice",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "14": {
+      "name": "Eze",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "15": {
+      "name": "\u00d8degaard",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "16": {
+      "name": "Madueke",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "17": {
+      "name": "Merino",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "18": {
+      "name": "Martinelli",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "19": {
+      "name": "Zubimendi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "20": {
+      "name": "Dowman",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "22": {
+      "name": "Nwaneri",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "23": {
+      "name": "F\u00e1bio Vieira",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "24": {
+      "name": "Nelson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "25": {
+      "name": "Gy\u00f6keres",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "26": {
+      "name": "Havertz",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "27": {
+      "name": "G.Jesus",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "31": {
+      "name": "Konsa",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "452": {
+      "name": "Bruno G.",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "557": {
+      "name": "Tzolis",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "29": {
+      "name": "M.Bizot",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "30": {
+      "name": "Digne",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "32": {
+      "name": "Cash",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "33": {
+      "name": "Mings",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "34": {
+      "name": "Pau",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "35": {
+      "name": "Bogarde",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "36": {
+      "name": "Maatsen",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "37": {
+      "name": "Lindel\u00f6f",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "38": {
+      "name": "A.Garc\u00eda",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "39": {
+      "name": "Nedeljkovic",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "41": {
+      "name": "Buend\u00eda",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "44": {
+      "name": "Bailey",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "45": {
+      "name": "McGinn",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "46": {
+      "name": "Barkley",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "47": {
+      "name": "Kamara",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "48": {
+      "name": "Onana",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "49": {
+      "name": "Iling Jr",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "50": {
+      "name": "Burrowes",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "51": {
+      "name": "George Hemmings",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "52": {
+      "name": "Alysson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "53": {
+      "name": "Manzambi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "54": {
+      "name": "Gomes",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "55": {
+      "name": "Watkins",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "56": {
+      "name": "Abraham",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "160": {
+      "name": "Garnacho",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "166": {
+      "name": "N.Jackson",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "582": {
+      "name": "Madjo",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "596": {
+      "name": "Ruggeri",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "597": {
+      "name": "Suzuki",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "606": {
+      "name": "Rowe",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "607": {
+      "name": "Lynch",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "611": {
+      "name": "Wan-Bissaka",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "618": {
+      "name": "Goretzka",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "630": {
+      "name": "Harwood-Bellis",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "631": {
+      "name": "Mbaye",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "57": {
+      "name": "Petrovi\u0107",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "58": {
+      "name": "Forster",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "59": {
+      "name": "Dennis",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "60": {
+      "name": "Hill",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "61": {
+      "name": "Truffert",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "62": {
+      "name": "Diakit\u00e9",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "63": {
+      "name": "Milosavljevi\u0107",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "64": {
+      "name": "Smith",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "65": {
+      "name": "J.Araujo",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "66": {
+      "name": "Soler",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "67": {
+      "name": "Rayan",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "68": {
+      "name": "Tavernier",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "69": {
+      "name": "Scott",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "70": {
+      "name": "Kluivert",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "71": {
+      "name": "Cook",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "72": {
+      "name": "Gannon-Doak",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "73": {
+      "name": "Adams",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "74": {
+      "name": "Brooks",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "75": {
+      "name": "Christie",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "76": {
+      "name": "T\u00f3th.A",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "77": {
+      "name": "Adli",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "78": {
+      "name": "Kroupi.Jr",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "79": {
+      "name": "Evanilson",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "80": {
+      "name": "Enes \u00dcnal",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "81": {
+      "name": "Rodr\u00edguez",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "566": {
+      "name": "Silva",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "573": {
+      "name": "Sanchez",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "608": {
+      "name": "Jebbison",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "615": {
+      "name": "Di Gregorio",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "82": {
+      "name": "Kelleher",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "83": {
+      "name": "Valdimarsson",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "84": {
+      "name": "Collins",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "85": {
+      "name": "Van den Berg",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "86": {
+      "name": "Lewis-Potter",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "87": {
+      "name": "Ajer",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "88": {
+      "name": "Kayode",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "89": {
+      "name": "Henry",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "90": {
+      "name": "Hickey",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "92": {
+      "name": "Ji-soo",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "93": {
+      "name": "Schuster",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "94": {
+      "name": "Schade",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "95": {
+      "name": "O.Dango",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "96": {
+      "name": "Damsgaard",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "97": {
+      "name": "Jensen",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "98": {
+      "name": "Janelt",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "99": {
+      "name": "Milambo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "100": {
+      "name": "Carvalho",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "102": {
+      "name": "Yarmoliuk",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "103": {
+      "name": "Dasilva",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "105": {
+      "name": "Anthony",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "106": {
+      "name": "Thiago",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "107": {
+      "name": "Furo",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "108": {
+      "name": "Wilson",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "565": {
+      "name": "M.Sangar\u00e9",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "620": {
+      "name": "Diouf",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "657": {
+      "name": "Nunes",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "109": {
+      "name": "Verbruggen",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "111": {
+      "name": "Steele",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "113": {
+      "name": "F.Kad\u0131o\u011flu",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "114": {
+      "name": "Boscagli",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "115": {
+      "name": "De Cuyper",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "116": {
+      "name": "Dunk",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "117": {
+      "name": "Coppola",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "118": {
+      "name": "Igor",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "119": {
+      "name": "Costinha",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "120": {
+      "name": "Svoboda",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "121": {
+      "name": "Mitoma",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "122": {
+      "name": "Minteh",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "123": {
+      "name": "Hinshelwood",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "124": {
+      "name": "Gro\u00df",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "125": {
+      "name": "Georginio",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "126": {
+      "name": "O'Riley",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "127": {
+      "name": "Gomez",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "128": {
+      "name": "Buonanotte",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "129": {
+      "name": "Ayari",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "130": {
+      "name": "Wieffer",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "132": {
+      "name": "Howell",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "133": {
+      "name": "Watson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "134": {
+      "name": "Oriola",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "135": {
+      "name": "Yohanna",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "137": {
+      "name": "Tzimas",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "138": {
+      "name": "Kostoulas",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "139": {
+      "name": "Ferguson",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "328": {
+      "name": "Struijk",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "504": {
+      "name": "Vuskovic",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "594": {
+      "name": "David",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "600": {
+      "name": "Osman",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "605": {
+      "name": "Yalcouy\u00e9",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "614": {
+      "name": "Hadjam",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "624": {
+      "name": "Cozier-Duberry",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "639": {
+      "name": "Andr\u00e9s",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "652": {
+      "name": "Azeez",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "658": {
+      "name": "Ibrahim",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "28": {
+      "name": "Martinez",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "40": {
+      "name": "Rogers",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "101": {
+      "name": "Henderson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "136": {
+      "name": "Welbeck",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "140": {
+      "name": "S\u00e1nchez",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "141": {
+      "name": "J\u00f6rgensen",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "142": {
+      "name": "James",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "143": {
+      "name": "Chalobah",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "144": {
+      "name": "Gusto",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "145": {
+      "name": "Fofana",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "146": {
+      "name": "B.Badiashile",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "148": {
+      "name": "Hato",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "149": {
+      "name": "Colwill",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "150": {
+      "name": "M.Sarr",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "151": {
+      "name": "Acheampong",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "152": {
+      "name": "Palestra",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "154": {
+      "name": "Palmer",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "156": {
+      "name": "Neto",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "157": {
+      "name": "Est\u00eav\u00e3o",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "158": {
+      "name": "Gittens",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "159": {
+      "name": "Caicedo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "161": {
+      "name": "Lavia",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "163": {
+      "name": "D.Essugo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "164": {
+      "name": "Quenda",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "165": {
+      "name": "Jo\u00e3o Pedro",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "168": {
+      "name": "Marc Guiu",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "169": {
+      "name": "Mheuka",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "170": {
+      "name": "Emegha",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "200": {
+      "name": "Lacroix",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "560": {
+      "name": "Penders",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "561": {
+      "name": "Anselmino",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "568": {
+      "name": "Barco",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "583": {
+      "name": "Chavarria",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "91": {
+      "name": "Pinnock",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "104": {
+      "name": "Onyeka",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "110": {
+      "name": "Rushworth",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "171": {
+      "name": "Dovin",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "172": {
+      "name": "Wilson",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "173": {
+      "name": "Thomas",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "174": {
+      "name": "Kitching",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "175": {
+      "name": "van Ewijk",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "176": {
+      "name": "Dasilva",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "177": {
+      "name": "Kesler-Hayden",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "178": {
+      "name": "Bidwell",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "179": {
+      "name": "Latibeaudiere",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "180": {
+      "name": "Woolfenden",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "181": {
+      "name": "Brau",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "182": {
+      "name": "Amenda",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "183": {
+      "name": "Rudoni",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "184": {
+      "name": "Grimes",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "185": {
+      "name": "Sakamoto",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "186": {
+      "name": "Mason-Clark",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "187": {
+      "name": "Eccles",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "188": {
+      "name": "Torp",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "189": {
+      "name": "Shepherd",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "190": {
+      "name": "Tchaouna",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "191": {
+      "name": "Borges Rodrigues",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "192": {
+      "name": "Andrews",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "193": {
+      "name": "Wright",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "194": {
+      "name": "Thomas-Asante",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "195": {
+      "name": "Simms",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "196": {
+      "name": "Markelo",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "197": {
+      "name": "Bassette",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "492": {
+      "name": "Awoniyi",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "575": {
+      "name": "Yirenkyi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "584": {
+      "name": "Hamer",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "599": {
+      "name": "Cherif",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "623": {
+      "name": "Bentley",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "655": {
+      "name": "Gboho",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "656": {
+      "name": "Mfuni",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "42": {
+      "name": "Guessand",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "153": {
+      "name": "Disasi",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "198": {
+      "name": "Henderson",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "199": {
+      "name": "Benitez",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "202": {
+      "name": "Richards",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "203": {
+      "name": "Canvot",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "204": {
+      "name": "Mitchell",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "205": {
+      "name": "Sosa",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "206": {
+      "name": "Chadi Riad",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "207": {
+      "name": "Mingueza",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "208": {
+      "name": "Sarr",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "210": {
+      "name": "Wharton",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "211": {
+      "name": "Yeremy",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "212": {
+      "name": "Hughes",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "213": {
+      "name": "Lerma",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "214": {
+      "name": "Kamada",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "215": {
+      "name": "Devenny",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "216": {
+      "name": "Esse",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "217": {
+      "name": "M.Fran\u00e7a",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "218": {
+      "name": "Doucour\u00e9",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "219": {
+      "name": "J.Rak-Sakyi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "220": {
+      "name": "Cardines",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "221": {
+      "name": "Drakes-Thomas",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "222": {
+      "name": "Strand Larsen",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "223": {
+      "name": "Mateta",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "224": {
+      "name": "Nketiah",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "225": {
+      "name": "Uche",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "241": {
+      "name": "McNeil",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "555": {
+      "name": "Matthews",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "577": {
+      "name": "Tomiyasu",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "588": {
+      "name": "Khalaili",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "595": {
+      "name": "Gozo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "633": {
+      "name": "Ahanor",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "643": {
+      "name": "Chilwell",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "644": {
+      "name": "Timber",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "647": {
+      "name": "Osorio",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "21": {
+      "name": "N\u00f8rgaard",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "209": {
+      "name": "Johnson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "226": {
+      "name": "Pickford",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "227": {
+      "name": "Travers",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "228": {
+      "name": "King",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "229": {
+      "name": "Tarkowski",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "230": {
+      "name": "Branthwaite",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "231": {
+      "name": "Keane",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "232": {
+      "name": "O'Brien",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "233": {
+      "name": "Mykolenko",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "234": {
+      "name": "Patterson",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "235": {
+      "name": "Aznou",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "236": {
+      "name": "Dewsbury-Hall",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "238": {
+      "name": "Grealish",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "239": {
+      "name": "Garner",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "242": {
+      "name": "George",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "243": {
+      "name": "Alcaraz",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "244": {
+      "name": "Armstrong",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "245": {
+      "name": "Dibling",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "246": {
+      "name": "R\u00f6hl",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "247": {
+      "name": "Hackney",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "248": {
+      "name": "Beto",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "249": {
+      "name": "Barry",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "649": {
+      "name": "Maitland-Niles",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "654": {
+      "name": "Graham",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "250": {
+      "name": "Leno",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "251": {
+      "name": "Lecomte",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "252": {
+      "name": "McNally",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "253": {
+      "name": "Andersen",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "254": {
+      "name": "Robinson",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "255": {
+      "name": "J.Cuenca",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "256": {
+      "name": "Tete",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "257": {
+      "name": "Bassey",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "258": {
+      "name": "Castagne",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "261": {
+      "name": "Iwobi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "262": {
+      "name": "Smith Rowe",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "263": {
+      "name": "Kevin",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "264": {
+      "name": "Bobb",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "265": {
+      "name": "Berge",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "266": {
+      "name": "Cairney",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "268": {
+      "name": "King",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "269": {
+      "name": "Sessegnon",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "270": {
+      "name": "Reed",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "271": {
+      "name": "Muniz",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "272": {
+      "name": "Kusi-Asare",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "569": {
+      "name": "Gonzalo",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "570": {
+      "name": "Palacios",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "580": {
+      "name": "Charles",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "610": {
+      "name": "De Fougerolles",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "626": {
+      "name": "Zepa",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "635": {
+      "name": "Larsson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "636": {
+      "name": "\u00c1ngel",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "650": {
+      "name": "Affengruber",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "240": {
+      "name": "Iroegbunam",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "273": {
+      "name": "Phillips",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "274": {
+      "name": "Butland",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "275": {
+      "name": "Cartwright",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "276": {
+      "name": "Lo-Tutala",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "277": {
+      "name": "Egan",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "278": {
+      "name": "Hughes",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "279": {
+      "name": "Ajayi",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "280": {
+      "name": "Coyle",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "281": {
+      "name": "Drameh",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "282": {
+      "name": "Giles",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "283": {
+      "name": "Jacob",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "284": {
+      "name": "McCarthy",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "285": {
+      "name": "McNair",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "286": {
+      "name": "Belloumi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "287": {
+      "name": "Millar",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "288": {
+      "name": "Dowell",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "289": {
+      "name": "Crooks",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "290": {
+      "name": "Slater",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "291": {
+      "name": "Matazo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "292": {
+      "name": "\u00d6m\u00fcr",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "293": {
+      "name": "Kamara",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "294": {
+      "name": "Zambrano",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "295": {
+      "name": "McBurnie",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "296": {
+      "name": "Akintola",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "297": {
+      "name": "Gyabi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "298": {
+      "name": "Destan",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "299": {
+      "name": "Burstow",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "340": {
+      "name": "Gelhardt",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "556": {
+      "name": "Targett",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "563": {
+      "name": "Morita",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "572": {
+      "name": "Tzolakis",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "574": {
+      "name": "Hjert\u00f8-Dahl",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "576": {
+      "name": "Stroud",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "585": {
+      "name": "Herrington",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "586": {
+      "name": "Mendy",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "589": {
+      "name": "Gourna-Douath",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "617": {
+      "name": "Cho",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "632": {
+      "name": "Ansah",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "637": {
+      "name": "Vaz",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "638": {
+      "name": "Norton-Cuffy",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "642": {
+      "name": "Thomas",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "645": {
+      "name": "Mouzakitis",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "259": {
+      "name": "Diop",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "267": {
+      "name": "Luki\u0107",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "300": {
+      "name": "Walton",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "301": {
+      "name": "Palmer",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "302": {
+      "name": "Button",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "303": {
+      "name": "Kipr\u00e9",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "304": {
+      "name": "O'Shea",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "305": {
+      "name": "Davis",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "306": {
+      "name": "Greaves",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "307": {
+      "name": "Johnson",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "308": {
+      "name": "Furlong",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "309": {
+      "name": "N\u00fa\u00f1ez",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "310": {
+      "name": "Matusiwa",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "311": {
+      "name": "Burns",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "312": {
+      "name": "Taylor",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "313": {
+      "name": "Clarke",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "314": {
+      "name": "Ogbene",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "315": {
+      "name": "Fatawu",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "316": {
+      "name": "Emersonn",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "317": {
+      "name": "Hirst",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "318": {
+      "name": "Philogene",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "319": {
+      "name": "Szmodics",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "320": {
+      "name": "Akpom",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "321": {
+      "name": "Walle Egeli",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "322": {
+      "name": "Al-Hamadi",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "323": {
+      "name": "McAteer",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "324": {
+      "name": "Mehmeti",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "554": {
+      "name": "Van Oevelen",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "562": {
+      "name": "Maeda",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "564": {
+      "name": "Scherpen",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "571": {
+      "name": "Florentino",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "591": {
+      "name": "Enciso",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "592": {
+      "name": "Ouattara",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "602": {
+      "name": "Humphreys",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "619": {
+      "name": "Palacios",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "640": {
+      "name": "Flemming",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "260": {
+      "name": "Wilson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "326": {
+      "name": "Perri",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "327": {
+      "name": "Bijol",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "329": {
+      "name": "Rodon",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "330": {
+      "name": "Bogle",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "331": {
+      "name": "Gudmundsson",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "332": {
+      "name": "Justin",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "333": {
+      "name": "Bornauw",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "334": {
+      "name": "Muharemovi\u0107",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "335": {
+      "name": "Stach",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "336": {
+      "name": "Okafor",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "337": {
+      "name": "Aaronson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "338": {
+      "name": "Ampadu",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "339": {
+      "name": "Longstaff",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "341": {
+      "name": "Gnonto",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "342": {
+      "name": "Harrison",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "343": {
+      "name": "James",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "344": {
+      "name": "Gruev",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "345": {
+      "name": "Tanaka",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "346": {
+      "name": "Calvert-Lewin",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "347": {
+      "name": "Nmecha",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "348": {
+      "name": "Piroe",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "349": {
+      "name": "Mateo Joseph",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "385": {
+      "name": "Trafford",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "598": {
+      "name": "Elvedi",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "603": {
+      "name": "Lienou",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "604": {
+      "name": "Cresswell",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "625": {
+      "name": "Cairns",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "629": {
+      "name": "Zetterer",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "641": {
+      "name": "Bard",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "648": {
+      "name": "Bahoya",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "350": {
+      "name": "A.Becker",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "351": {
+      "name": "Mamardashvili",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "352": {
+      "name": "Woodman",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "353": {
+      "name": "Pecsi",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "354": {
+      "name": "Jaros",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "355": {
+      "name": "Davies",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "356": {
+      "name": "Virgil",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "357": {
+      "name": "Frimpong",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "358": {
+      "name": "Kerkez",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "359": {
+      "name": "Gomez",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "360": {
+      "name": "Bradley",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "361": {
+      "name": "Lucky",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "362": {
+      "name": "Jacquet",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "363": {
+      "name": "Leoni",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "364": {
+      "name": "Tsimikas",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "365": {
+      "name": "Ramsay",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "366": {
+      "name": "Wirtz",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "367": {
+      "name": "Gakpo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "368": {
+      "name": "Szoboszlai",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "369": {
+      "name": "Ngumoha",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "370": {
+      "name": "Chiesa",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "371": {
+      "name": "Gravenberch",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "372": {
+      "name": "Mac Allister",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "373": {
+      "name": "C.Jones",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "374": {
+      "name": "Endo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "375": {
+      "name": "Nyoni",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "376": {
+      "name": "Bajcetic",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "377": {
+      "name": "Munoz",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "378": {
+      "name": "McConnell",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "379": {
+      "name": "Isak",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "380": {
+      "name": "Ekitik\u00e9",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "381": {
+      "name": "Koumas",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "382": {
+      "name": "Danns",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "383": {
+      "name": "Elliott",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "579": {
+      "name": "Araujo",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "627": {
+      "name": "Barcola",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "155": {
+      "name": "Enzo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "237": {
+      "name": "Ndiaye",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "384": {
+      "name": "Donnarumma",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "386": {
+      "name": "Bettinelli",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "387": {
+      "name": "O'Reilly",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "388": {
+      "name": "Gu\u00e9hi",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "389": {
+      "name": "Matheus N.",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "390": {
+      "name": "R\u00faben",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "391": {
+      "name": "Gvardiol",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "392": {
+      "name": "A\u00eft-Nouri",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "393": {
+      "name": "Khusanov",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "394": {
+      "name": "Alleyne",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "395": {
+      "name": "Lewis",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "396": {
+      "name": "Vitor Reis",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "397": {
+      "name": "Semenyo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "398": {
+      "name": "Foden",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "399": {
+      "name": "Cherki",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "400": {
+      "name": "Doku",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "402": {
+      "name": "Rodrigo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "404": {
+      "name": "Reijnders",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "406": {
+      "name": "Kova\u010di\u0107",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "407": {
+      "name": "Echeverri",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "408": {
+      "name": "Phillips",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "409": {
+      "name": "Mukasa",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "410": {
+      "name": "Monga",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "411": {
+      "name": "Haaland",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "481": {
+      "name": "Anderson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "587": {
+      "name": "Rulli",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "616": {
+      "name": "Bouaddi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "621": {
+      "name": "McAidoo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "622": {
+      "name": "Braithwaite",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "628": {
+      "name": "Allan",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "653": {
+      "name": "Samba",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "43": {
+      "name": "Tielemans",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "131": {
+      "name": "Baleba",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "162": {
+      "name": "Andrey Santos",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "325": {
+      "name": "Darlow",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "412": {
+      "name": "Lammens",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "413": {
+      "name": "Bayindir",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "414": {
+      "name": "Heaton",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "415": {
+      "name": "Dorgu",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "416": {
+      "name": "De Ligt",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "417": {
+      "name": "Dalot",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "418": {
+      "name": "Maguire",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "419": {
+      "name": "Martinez",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "420": {
+      "name": "Yoro",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "421": {
+      "name": "Heaven",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "422": {
+      "name": "Mazraoui",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "423": {
+      "name": "Shaw",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "424": {
+      "name": "Amass",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "425": {
+      "name": "Fredricson",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "426": {
+      "name": "B.Fernandes",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "427": {
+      "name": "Mbeumo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "428": {
+      "name": "Cunha",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "429": {
+      "name": "Rashford",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "430": {
+      "name": "Mount",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "431": {
+      "name": "Amad",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "432": {
+      "name": "Mainoo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "433": {
+      "name": "Ugarte",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "434": {
+      "name": "J.Fletcher",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "435": {
+      "name": "Lacey",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "436": {
+      "name": "Collyer",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "437": {
+      "name": "Bendito Mantato",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "438": {
+      "name": "Fletcher",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "439": {
+      "name": "\u0160e\u0161ko",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "440": {
+      "name": "Zirkzee",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "441": {
+      "name": "Obi",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "405": {
+      "name": "N.Gonzalez",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "442": {
+      "name": "Pope",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "443": {
+      "name": "Gillespie",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "444": {
+      "name": "Jaouen",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "445": {
+      "name": "Thiaw",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "446": {
+      "name": "Sch\u00e4r",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "447": {
+      "name": "Botman",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "448": {
+      "name": "Burn",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "449": {
+      "name": "Hall",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "450": {
+      "name": "Livramento",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "451": {
+      "name": "A.Murphy",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "453": {
+      "name": "Barnes",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "454": {
+      "name": "Elanga",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "456": {
+      "name": "J.Ramsey",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "457": {
+      "name": "J.Murphy",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "458": {
+      "name": "Joelinton",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "459": {
+      "name": "L.Miley",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "460": {
+      "name": "Willock",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "461": {
+      "name": "Tour\u00e9",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "462": {
+      "name": "Steur",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "463": {
+      "name": "Woltemade",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "464": {
+      "name": "Wissa",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "465": {
+      "name": "Osula",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "466": {
+      "name": "Neave",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "559": {
+      "name": "Bamba",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "567": {
+      "name": "Horn\u00ed\u010dek",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "593": {
+      "name": "Dedi\u0107",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "609": {
+      "name": "Shahar",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "634": {
+      "name": "Fernandez-Pardo",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "659": {
+      "name": "Miley",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "167": {
+      "name": "Delap",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "201": {
+      "name": "Mu\u00f1oz",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "467": {
+      "name": "Sels",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "468": {
+      "name": "John",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "469": {
+      "name": "N.Williams",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "470": {
+      "name": "Morato",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "471": {
+      "name": "Milenkovi\u0107",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "472": {
+      "name": "Murillo",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "473": {
+      "name": "Aina",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "474": {
+      "name": "Jair Cunha",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "475": {
+      "name": "Savona",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "476": {
+      "name": "O.Richards",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "477": {
+      "name": "Abbott",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "478": {
+      "name": "Netz",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "479": {
+      "name": "Bindon",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "480": {
+      "name": "Gibbs-White",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "482": {
+      "name": "Hudson-Odoi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "483": {
+      "name": "Ndoye",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "484": {
+      "name": "Hutchinson",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "485": {
+      "name": "Bakwa",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "486": {
+      "name": "McAtee",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "487": {
+      "name": "Dominguez",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "488": {
+      "name": "I.Sangar\u00e9",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "489": {
+      "name": "Yates",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "490": {
+      "name": "Wood",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "491": {
+      "name": "Igor Jesus",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "493": {
+      "name": "Kalimuendo",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "558": {
+      "name": "Schlager",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "581": {
+      "name": "Diomande",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "590": {
+      "name": "Benda",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "112": {
+      "name": "Van Hecke",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "147": {
+      "name": "Tosin",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "401": {
+      "name": "Marmoush",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "403": {
+      "name": "S\u00e1vio",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "455": {
+      "name": "Tonali",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "494": {
+      "name": "Vicario",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "495": {
+      "name": "Austin",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "496": {
+      "name": "Kinsky",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "497": {
+      "name": "Dubravka",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "498": {
+      "name": "Senesi",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "499": {
+      "name": "Pedro Porro",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "500": {
+      "name": "Romero",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "502": {
+      "name": "Robertson",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "503": {
+      "name": "Van de Ven",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "505": {
+      "name": "Spence",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "506": {
+      "name": "Udogie",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "507": {
+      "name": "Phillips",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "508": {
+      "name": "Davies",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "509": {
+      "name": "Byfield",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "510": {
+      "name": "Rowswell",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "511": {
+      "name": "Souza",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "512": {
+      "name": "Kudus",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "513": {
+      "name": "Xavi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "514": {
+      "name": "Tel",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "515": {
+      "name": "Maddison",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "516": {
+      "name": "Bentancur",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "517": {
+      "name": "Odobert",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "518": {
+      "name": "P.M.Sarr",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "519": {
+      "name": "Gallagher",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "520": {
+      "name": "Bergvall",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "521": {
+      "name": "Kulusevski",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "522": {
+      "name": "Gray",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "523": {
+      "name": "Moore",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "524": {
+      "name": "Olusesi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "525": {
+      "name": "Fernandes",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "526": {
+      "name": "Solanke",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "527": {
+      "name": "Richarlison",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "528": {
+      "name": "Scarlett",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "578": {
+      "name": "Mudryk",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "601": {
+      "name": "Williams-Barnett",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "501": {
+      "name": "Danso",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "529": {
+      "name": "Roefs",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "530": {
+      "name": "Patterson",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "531": {
+      "name": "Ellborg",
+      "pos": "GKP",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "532": {
+      "name": "Ballard",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "533": {
+      "name": "Mukiele",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "534": {
+      "name": "Hume",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "535": {
+      "name": "Alderete",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "536": {
+      "name": "Reinildo",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "537": {
+      "name": "Seelt",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "538": {
+      "name": "Hjelde",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "539": {
+      "name": "O'Nien",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "540": {
+      "name": "Masuaku",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "541": {
+      "name": "Meunier",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "542": {
+      "name": "E.Le F\u00e9e",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "543": {
+      "name": "Diarra",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "544": {
+      "name": "Xhaka",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "545": {
+      "name": "Sadiki",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "546": {
+      "name": "Adingra",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "547": {
+      "name": "Mundle",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "548": {
+      "name": "Rigg",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "549": {
+      "name": "Talbi",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "550": {
+      "name": "Jocelin.T",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "551": {
+      "name": "N.Angulo",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "552": {
+      "name": "Brobbey",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "553": {
+      "name": "Isidor",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "612": {
+      "name": "Methalie",
+      "pos": "DEF",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "613": {
+      "name": "Ahoka",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "646": {
+      "name": "Fofana",
+      "pos": "MID",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    },
+    "651": {
+      "name": "J.Angulo",
+      "pos": "FWD",
+      "quantiles": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "p_0": 0.0,
+      "mu_components": {}
+    }
+  },
+  "squads": {
+    "safe": {
+      "cost": 929,
+      "bank": 71,
+      "captain": "Raya",
+      "vice": "Barcola",
+      "players": [
+        {
+          "id": 28,
+          "name": "Martinez",
+          "pos": "GKP",
+          "teamCode": "CHE",
+          "cost": 50,
+          "mu": 3.2352,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 1,
+          "name": "Raya",
+          "pos": "GKP",
+          "teamCode": "ARS",
+          "cost": 60,
+          "mu": 3.5876,
+          "xi": true,
+          "captain": true,
+          "vice": false
+        },
+        {
+          "id": 389,
+          "name": "Matheus N.",
+          "pos": "DEF",
+          "teamCode": "MCI",
+          "cost": 59,
+          "mu": 2.186,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 498,
+          "name": "Senesi",
+          "pos": "DEF",
+          "teamCode": "TOT",
+          "cost": 58,
+          "mu": 2.0532,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 387,
+          "name": "O'Reilly",
+          "pos": "DEF",
+          "teamCode": "MCI",
+          "cost": 64,
+          "mu": 1.968,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 4,
+          "name": "Gabriel",
+          "pos": "DEF",
+          "teamCode": "ARS",
+          "cost": 80,
+          "mu": 1.8804,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 200,
+          "name": "Lacroix",
+          "pos": "DEF",
+          "teamCode": "CHE",
+          "cost": 60,
+          "mu": 1.4792,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 627,
+          "name": "Barcola",
+          "pos": "MID",
+          "teamCode": "LIV",
+          "cost": 80,
+          "mu": 3.1436,
+          "xi": true,
+          "captain": false,
+          "vice": true
+        },
+        {
+          "id": 647,
+          "name": "Osorio",
+          "pos": "MID",
+          "teamCode": "CRY",
+          "cost": 55,
+          "mu": 2.7604,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 616,
+          "name": "Bouaddi",
+          "pos": "MID",
+          "teamCode": "MCI",
+          "cost": 55,
+          "mu": 2.6528,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 16,
+          "name": "Madueke",
+          "pos": "MID",
+          "teamCode": "ARS",
+          "cost": 62,
+          "mu": 2.4204,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 95,
+          "name": "O.Dango",
+          "pos": "MID",
+          "teamCode": "BRE",
+          "cost": 63,
+          "mu": 2.206,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 439,
+          "name": "\u0160e\u0161ko",
+          "pos": "FWD",
+          "teamCode": "MUN",
+          "cost": 70,
+          "mu": 2.796,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 108,
+          "name": "Wilson",
+          "pos": "FWD",
+          "teamCode": "BRE",
+          "cost": 55,
+          "mu": 1.94,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 526,
+          "name": "Solanke",
+          "pos": "FWD",
+          "teamCode": "TOT",
+          "cost": 58,
+          "mu": 1.5768,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        }
+      ]
+    },
+    "balanced": {
+      "cost": 1000,
+      "bank": 0,
+      "captain": "Martinez",
+      "vice": "Barcola",
+      "players": [
+        {
+          "id": 28,
+          "name": "Martinez",
+          "pos": "GKP",
+          "teamCode": "CHE",
+          "cost": 50,
+          "mu": 3.2352,
+          "xi": true,
+          "captain": true,
+          "vice": false
+        },
+        {
+          "id": 199,
+          "name": "Benitez",
+          "pos": "GKP",
+          "teamCode": "CRY",
+          "cost": 45,
+          "mu": 3.0112,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 389,
+          "name": "Matheus N.",
+          "pos": "DEF",
+          "teamCode": "MCI",
+          "cost": 59,
+          "mu": 2.186,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 498,
+          "name": "Senesi",
+          "pos": "DEF",
+          "teamCode": "TOT",
+          "cost": 58,
+          "mu": 2.0532,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 200,
+          "name": "Lacroix",
+          "pos": "DEF",
+          "teamCode": "CHE",
+          "cost": 60,
+          "mu": 1.4792,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 145,
+          "name": "Fofana",
+          "pos": "DEF",
+          "teamCode": "CHE",
+          "cost": 50,
+          "mu": 1.4292,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 588,
+          "name": "Khalaili",
+          "pos": "DEF",
+          "teamCode": "CRY",
+          "cost": 50,
+          "mu": 1.526,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 627,
+          "name": "Barcola",
+          "pos": "MID",
+          "teamCode": "LIV",
+          "cost": 80,
+          "mu": 3.1436,
+          "xi": true,
+          "captain": false,
+          "vice": true
+        },
+        {
+          "id": 647,
+          "name": "Osorio",
+          "pos": "MID",
+          "teamCode": "CRY",
+          "cost": 55,
+          "mu": 2.7604,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 616,
+          "name": "Bouaddi",
+          "pos": "MID",
+          "teamCode": "MCI",
+          "cost": 55,
+          "mu": 2.6528,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 12,
+          "name": "Saka",
+          "pos": "MID",
+          "teamCode": "ARS",
+          "cost": 95,
+          "mu": 2.6852,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 16,
+          "name": "Madueke",
+          "pos": "MID",
+          "teamCode": "ARS",
+          "cost": 62,
+          "mu": 2.4204,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "pos": "FWD",
+          "teamCode": "MCI",
+          "cost": 156,
+          "mu": 3.0052,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 439,
+          "name": "\u0160e\u0161ko",
+          "pos": "FWD",
+          "teamCode": "MUN",
+          "cost": 70,
+          "mu": 2.796,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 108,
+          "name": "Wilson",
+          "pos": "FWD",
+          "teamCode": "BRE",
+          "cost": 55,
+          "mu": 1.94,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        }
+      ]
+    },
+    "aggressive": {
+      "cost": 1000,
+      "bank": 0,
+      "captain": "Haaland",
+      "vice": "Martinez",
+      "players": [
+        {
+          "id": 28,
+          "name": "Martinez",
+          "pos": "GKP",
+          "teamCode": "CHE",
+          "cost": 50,
+          "mu": 3.2352,
+          "xi": true,
+          "captain": false,
+          "vice": true
+        },
+        {
+          "id": 199,
+          "name": "Benitez",
+          "pos": "GKP",
+          "teamCode": "CRY",
+          "cost": 45,
+          "mu": 3.0112,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 389,
+          "name": "Matheus N.",
+          "pos": "DEF",
+          "teamCode": "MCI",
+          "cost": 59,
+          "mu": 2.186,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 498,
+          "name": "Senesi",
+          "pos": "DEF",
+          "teamCode": "TOT",
+          "cost": 58,
+          "mu": 2.0532,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 200,
+          "name": "Lacroix",
+          "pos": "DEF",
+          "teamCode": "CHE",
+          "cost": 60,
+          "mu": 1.4792,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 145,
+          "name": "Fofana",
+          "pos": "DEF",
+          "teamCode": "CHE",
+          "cost": 50,
+          "mu": 1.4292,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 588,
+          "name": "Khalaili",
+          "pos": "DEF",
+          "teamCode": "CRY",
+          "cost": 50,
+          "mu": 1.526,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 627,
+          "name": "Barcola",
+          "pos": "MID",
+          "teamCode": "LIV",
+          "cost": 80,
+          "mu": 3.1436,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 647,
+          "name": "Osorio",
+          "pos": "MID",
+          "teamCode": "CRY",
+          "cost": 55,
+          "mu": 2.7604,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 616,
+          "name": "Bouaddi",
+          "pos": "MID",
+          "teamCode": "MCI",
+          "cost": 55,
+          "mu": 2.6528,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 12,
+          "name": "Saka",
+          "pos": "MID",
+          "teamCode": "ARS",
+          "cost": 95,
+          "mu": 2.6852,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 16,
+          "name": "Madueke",
+          "pos": "MID",
+          "teamCode": "ARS",
+          "cost": 62,
+          "mu": 2.4204,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 411,
+          "name": "Haaland",
+          "pos": "FWD",
+          "teamCode": "MCI",
+          "cost": 156,
+          "mu": 3.0052,
+          "xi": true,
+          "captain": true,
+          "vice": false
+        },
+        {
+          "id": 439,
+          "name": "\u0160e\u0161ko",
+          "pos": "FWD",
+          "teamCode": "MUN",
+          "cost": 70,
+          "mu": 2.796,
+          "xi": true,
+          "captain": false,
+          "vice": false
+        },
+        {
+          "id": 108,
+          "name": "Wilson",
+          "pos": "FWD",
+          "teamCode": "BRE",
+          "cost": 55,
+          "mu": 1.94,
+          "xi": false,
+          "captain": false,
+          "vice": false
+        }
+      ]
+    }
+  }
+}

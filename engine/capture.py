@@ -28,6 +28,7 @@ from engine.model_config import PRODUCTION, V1_CONTROL
 from engine.models import GWProjection, PlayerProjection
 from engine.optimize import solve_squad
 from engine.project import STRATEGIES, project_all, project_player_gw
+from engine.api import load_snapshot
 from engine.avail_monitor import (
     availability_application_report,
     format_availability_monitor_line,
@@ -97,7 +98,6 @@ def _player_diagnostics_for_gw(snapshot, gw: int, strategy: str = "balanced") ->
         gw_rng = np.random.default_rng(rng.integers(0, 2**32 - 1) ^ (player.id * 1009 + gw))
         pred = project_player_gw(
             snapshot, player, gw, 0, strategy, gw_rng, role_start,
-            include_finished_fixtures=True,
         )
         players[str(player.id)] = {
             "name": player.web_name,
