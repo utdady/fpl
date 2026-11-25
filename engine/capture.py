@@ -25,7 +25,6 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-from engine.metrics import spearman as spearman_r
 from engine.model_config import PRODUCTION, V1_CONTROL
 from engine.models import GWProjection, PlayerProjection
 from engine.optimize import solve_squad
@@ -335,6 +334,40 @@ def _safe_float(val) -> float | None:
         return None
 
 
+def _spearman(xs: list[float], ys: list[float]) -> float:
+    """Spearman r with average ranks for ties (live scorecard only).
+
+    engine.metrics.spearman keeps ordinal ranks so harness/leakage gates are unchanged.
+    """
+    n = len(xs)
+    if n < 2:
+        return float("nan")
+
+    def ranks(vals):
+        sorted_idx = sorted(range(n), key=lambda i: vals[i])
+        r = [0.0] * n
+        i = 0
+        while i < n:
+            j = i + 1
+            while j < n and vals[sorted_idx[j]] == vals[sorted_idx[i]]:
+                j += 1
+            avg_rank = sum(range(i + 1, j + 1)) / (j - i)
+            for k in range(i, j):
+                r[sorted_idx[k]] = avg_rank
+            i = j
+        return r
+
+    rx, ry = ranks(xs), ranks(ys)
+    mx = statistics.mean(rx)
+    my = statistics.mean(ry)
+    num = sum((rx[i] - mx) * (ry[i] - my) for i in range(n))
+    den = math.sqrt(
+        sum((rx[i] - mx) ** 2 for i in range(n))
+        * sum((ry[i] - my) ** 2 for i in range(n))
+    )
+    return num / den if den else 0.0
+
+
 def _calibration_error(pairs: list[tuple[float, int]], n_bins: int = 5) -> float:
     if not pairs:
         return float("nan")
@@ -388,7 +421,7 @@ def _print_summary(rows: list[dict], gw: int) -> None:
     mae = statistics.mean(abs(e) for e in errors)
     rmse = math.sqrt(statistics.mean(sq_errors))
     bias = statistics.mean(errors)
-    spearman = spearman_r([mu for mu, _ in pairs], [act for _, act in pairs])
+    spearman = _spearman([mu for mu, _ in pairs], [act for _, act in pairs])
     p_start_cal = _calibration_error(p_start_pairs) if p_start_pairs else float("nan")
     p10_cal = _calibration_error(p10_pairs) if p10_pairs else float("nan")
 
@@ -419,7 +452,7 @@ def _append_scores_row(rows: list[dict], gw: int) -> None:
     mae = statistics.mean(abs(e) for e in errors)
     rmse = math.sqrt(statistics.mean(sq_errors))
     bias = statistics.mean(errors)
-    spearman = spearman_r([mu for mu, _ in pairs], [act for _, act in pairs])
+    spearman = _spearman([mu for mu, _ in pairs], [act for _, act in pairs])
     columns = ["gw", "n", "mae", "rmse", "bias", "spearman", "scored_at"]
     header_needed = not SCORES_CSV.exists()
     with SCORES_CSV.open("a", newline="", encoding="utf-8") as f:

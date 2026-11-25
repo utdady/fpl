@@ -1,9 +1,9 @@
-"""Unit tests for engine.metrics.spearman tie handling."""
+"""Unit tests for the live-scorecard Spearman tie handling (engine.capture._spearman)."""
 from __future__ import annotations
 
 import unittest
 
-from engine.metrics import spearman
+from engine.capture import _spearman as spearman
 
 
 class TestSpearmanTies(unittest.TestCase):
