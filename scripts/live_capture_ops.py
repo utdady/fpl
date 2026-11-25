@@ -30,7 +30,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from engine.capture import freeze, score  # noqa: E402
+from engine.capture import CaptureDegradedError, freeze, score  # noqa: E402
 from engine.live_ops import (  # noqa: E402
     DEFAULT_FREEZE_WINDOW_HOURS,
     should_freeze,
@@ -122,6 +122,7 @@ def main() -> int:
     events = boot.get("events") or []
     by_id = events_by_id(events)
     changed = False
+    exit_code = 0
     os.chdir(ROOT)
 
     if do_freeze:
@@ -146,7 +147,14 @@ def main() -> int:
                 if args.dry_run:
                     print("[live_ops] dry-run: would freeze")
                 else:
-                    freeze(gw, refresh=True)
+                    try:
+                        freeze(gw, refresh=True)
+                    except CaptureDegradedError:
+                        print(
+                            "[live_ops] freeze CSV saved but diagnostics failed",
+                            file=sys.stderr,
+                        )
+                        exit_code = 1
                     changed = True
 
     if do_score:
@@ -181,7 +189,7 @@ def main() -> int:
     elif not changed:
         print("[live_ops] nothing to do")
 
-    return 0
+    return exit_code
 
 
 if __name__ == "__main__":
