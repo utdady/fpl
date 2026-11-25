@@ -18,12 +18,14 @@ import argparse
 import csv
 import json
 import math
+import os
 import statistics
 import sys
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from engine.metrics import spearman as spearman_r
 from engine.model_config import PRODUCTION, V1_CONTROL
 from engine.models import GWProjection, PlayerProjection
 from engine.optimize import solve_squad
@@ -36,6 +38,12 @@ from engine.avail_monitor import (
 
 RECORDS_DIR = Path("records")
 RECORDS_DIR.mkdir(exist_ok=True)
+
+DEGRADED_MARKER = RECORDS_DIR / ".capture_degraded"
+
+
+class CaptureDegradedError(RuntimeError):
+    """Freeze CSV was written but post-freeze diagnostics failed."""
 
 SCORES_CSV = RECORDS_DIR / "scores.csv"
 AUDIT_LOO_CSV = RECORDS_DIR / "audit_loo.csv"
@@ -107,6 +115,28 @@ def _player_diagnostics_for_gw(snapshot, gw: int, strategy: str = "balanced") ->
             "mu_components": pred.mu_components or {},
         }
     return players
+
+
+def _emit_degraded(gw: int, exc: Exception, *, phase: str) -> None:
+    msg = (
+        f"[capture] GW{gw} freeze record saved but {phase} failed: "
+        f"{type(exc).__name__}: {exc}"
+    )
+    print(msg, file=sys.stderr)
+    print(f"::warning title=Capture {phase} failed (GW{gw})::{msg}")
+    DEGRADED_MARKER.write_text(
+        f"gw={gw}\nphase={phase}\nerror={type(exc).__name__}: {exc}\n",
+        encoding="utf-8",
+    )
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summary_path:
+        with open(summary_path, "a", encoding="utf-8") as fh:
+            fh.write(f"\n### Capture degraded (GW{gw})\n\n")
+            fh.write(f"- **phase:** `{phase}`\n")
+            fh.write(f"- **error:** `{type(exc).__name__}: {exc}`\n")
+            fh.write(
+                "\nThe freeze CSV was written; fix diagnostics before the next run.\n"
+            )
 
 
 def _write_diagnostics(gw: int, snapshot, strategy: str = "balanced") -> None:
@@ -231,9 +261,20 @@ def freeze(gw: int, refresh: bool = False) -> None:
         writer.writerows(rows)
 
     print(f"[capture] Froze {len(rows)} player projections -> {path}")
+    if DEGRADED_MARKER.exists():
+        DEGRADED_MARKER.unlink()
     audit_projs = project_all(snapshot, horizon=6, strategy="balanced")
-    _write_diagnostics(gw, snapshot, strategy="balanced")
-    _write_audit_exports(snapshot, audit_projs, strategy="balanced")
+    try:
+        _write_diagnostics(gw, snapshot, strategy="balanced")
+        _write_audit_exports(snapshot, audit_projs, strategy="balanced")
+    except Exception as exc:
+        phase = (
+            "diagnostics/solver"
+            if "solve" in type(exc).__name__.lower()
+            else "diagnostics"
+        )
+        _emit_degraded(gw, exc, phase=phase)
+        raise CaptureDegradedError(f"GW{gw} post-freeze {phase} failed") from exc
 
 
 def _fetch_event_live(gw: int) -> dict[int, dict]:
@@ -294,29 +335,6 @@ def _safe_float(val) -> float | None:
         return None
 
 
-def _spearman(xs: list[float], ys: list[float]) -> float:
-    n = len(xs)
-    if n < 2:
-        return float("nan")
-
-    def ranks(vals):
-        sorted_idx = sorted(range(n), key=lambda i: vals[i])
-        r = [0.0] * n
-        for rank, i in enumerate(sorted_idx, 1):
-            r[i] = rank
-        return r
-
-    rx, ry = ranks(xs), ranks(ys)
-    mx = statistics.mean(rx)
-    my = statistics.mean(ry)
-    num = sum((rx[i] - mx) * (ry[i] - my) for i in range(n))
-    den = math.sqrt(
-        sum((rx[i] - mx) ** 2 for i in range(n))
-        * sum((ry[i] - my) ** 2 for i in range(n))
-    )
-    return num / den if den else 0.0
-
-
 def _calibration_error(pairs: list[tuple[float, int]], n_bins: int = 5) -> float:
     if not pairs:
         return float("nan")
@@ -370,7 +388,7 @@ def _print_summary(rows: list[dict], gw: int) -> None:
     mae = statistics.mean(abs(e) for e in errors)
     rmse = math.sqrt(statistics.mean(sq_errors))
     bias = statistics.mean(errors)
-    spearman = _spearman([mu for mu, _ in pairs], [act for _, act in pairs])
+    spearman = spearman_r([mu for mu, _ in pairs], [act for _, act in pairs])
     p_start_cal = _calibration_error(p_start_pairs) if p_start_pairs else float("nan")
     p10_cal = _calibration_error(p10_pairs) if p10_pairs else float("nan")
 
@@ -401,7 +419,7 @@ def _append_scores_row(rows: list[dict], gw: int) -> None:
     mae = statistics.mean(abs(e) for e in errors)
     rmse = math.sqrt(statistics.mean(sq_errors))
     bias = statistics.mean(errors)
-    spearman = _spearman([mu for mu, _ in pairs], [act for _, act in pairs])
+    spearman = spearman_r([mu for mu, _ in pairs], [act for _, act in pairs])
     columns = ["gw", "n", "mae", "rmse", "bias", "spearman", "scored_at"]
     header_needed = not SCORES_CSV.exists()
     with SCORES_CSV.open("a", newline="", encoding="utf-8") as f:
@@ -447,7 +465,10 @@ def main() -> None:
     elif args.score:
         score(args.gw)
     else:
-        freeze(args.gw, refresh=args.refresh)
+        try:
+            freeze(args.gw, refresh=args.refresh)
+        except CaptureDegradedError:
+            sys.exit(1)
 
 
 if __name__ == "__main__":

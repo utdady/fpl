@@ -41,8 +41,15 @@ def spearman(xs: list[float], ys: list[float]) -> float:
     def ranks(vals):
         sorted_idx = sorted(range(n), key=lambda i: vals[i])
         r = [0.0] * n
-        for rank, i in enumerate(sorted_idx, 1):
-            r[i] = rank
+        i = 0
+        while i < n:
+            j = i + 1
+            while j < n and vals[sorted_idx[j]] == vals[sorted_idx[i]]:
+                j += 1
+            avg_rank = sum(range(i + 1, j + 1)) / (j - i)
+            for k in range(i, j):
+                r[sorted_idx[k]] = avg_rank
+            i = j
         return r
 
     rx, ry = ranks(xs), ranks(ys)

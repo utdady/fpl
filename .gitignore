@@ -1,4 +1,6 @@
+.env
 .venv/
+records/.capture_degraded
 .cache/
 .cursor/
 __pycache__/
