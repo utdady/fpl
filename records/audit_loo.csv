@@ -1,16 +1,16 @@
 player_id,web_name,position,cost,next_mu,horizon_u,p_start,delta,tag,incoming,strategy,as_of
-498,Senesi,DEF,58,2.0532,10.2418,0.45,3.9959,essential,"Egan, Horníček, O'Reilly, O.Dango, Thomas",balanced,2026-09-18T12:45:57.935920+00:00
-439,Šeško,FWD,70,2.796,12.6063,0.72,2.9444,essential,"B.Fernandes, Isidor, Thomas",balanced,2026-09-18T12:45:57.935920+00:00
-627,Barcola,MID,80,3.1436,14.0083,0.72,2.731,essential,"B.Fernandes, Egan, O.Dango",balanced,2026-09-18T12:45:57.935920+00:00
-647,Osorio,MID,55,2.7604,12.4754,0.45,1.732,marginal,"Egan, O.Dango",balanced,2026-09-18T12:45:57.935920+00:00
-16,Madueke,MID,62,2.4204,10.6845,0.45,1.2216,marginal,"Egan, Horníček, O.Dango",balanced,2026-09-18T12:45:57.935920+00:00
-200,Lacroix,DEF,60,1.4792,7.4081,0.28,1.1622,marginal,"Egan, Horníček, O'Reilly, O.Dango, Thomas",balanced,2026-09-18T12:45:57.935920+00:00
-616,Bouaddi,MID,55,2.6528,12.1015,0.45,1.1622,marginal,"Egan, Horníček, O'Reilly, O.Dango, Thomas",balanced,2026-09-18T12:45:57.935920+00:00
-108,Wilson,FWD,55,1.94,9.0902,0.45,1.0229,marginal,"Egan, Horníček, Solanke",balanced,2026-09-18T12:45:57.935920+00:00
-199,Benitez,GKP,45,3.0112,13.4451,0.85,0.8511,marginal,"Egan, Horníček",balanced,2026-09-18T12:45:57.935920+00:00
-389,Matheus N.,DEF,59,2.186,10.3152,0.45,0.6707,marginal,"Egan, O'Reilly",balanced,2026-09-18T12:45:57.935920+00:00
-411,Haaland,FWD,156,3.0052,13.1778,0.28,0.5716,marginal,"B.Fernandes, O'Reilly, Raya, Solanke",balanced,2026-09-18T12:45:57.935920+00:00
-28,Martinez,GKP,50,3.2352,15.7847,0.75,0.2859,interchangeable,"Raya, Thomas",balanced,2026-09-18T12:45:57.935920+00:00
-145,Fofana,DEF,50,1.4292,6.9084,0.28,0.1316,interchangeable,Muharemović,balanced,2026-09-18T12:45:57.935920+00:00
-12,Saka,MID,95,2.6852,11.646,0.28,-0.2045,interchangeable,"B.Fernandes, Egan, Tosin",balanced,2026-09-18T12:45:57.935920+00:00
-588,Khalaili,DEF,50,1.526,6.6816,0.28,-0.5862,interchangeable,Richards,balanced,2026-09-18T12:45:57.935920+00:00
+411,Haaland,FWD,158,3.4844,18.4377,0.48,4.3168,essential,"A.Becker, B.Fernandes, Gvardiol, Gyökeres",balanced,2026-11-26T01:17:47.973424+00:00
+115,De Cuyper,DEF,55,3.0288,13.8406,0.48,4.3086,essential,"Bogle, Jacquet, Verbruggen",balanced,2026-11-26T01:17:47.973424+00:00
+78,Kroupi.Jr,MID,73,4.306,18.0825,0.72,4.0054,essential,"Gyökeres, Palacios, Silva",balanced,2026-11-26T01:17:47.973424+00:00
+504,Vuskovic,DEF,53,2.744,12.5925,0.48,3.2181,essential,"Bogle, Mykolenko, Verbruggen",balanced,2026-11-26T01:17:47.973424+00:00
+124,Groß,MID,63,2.9152,13.2939,0.48,2.3314,essential,"Bogle, Gyökeres, Palacios, Penders, Verbruggen",balanced,2026-11-26T01:17:47.973424+00:00
+15,Ødegaard,MID,67,2.3316,13.1886,0.48,2.1822,essential,"Bogle, Gyökeres, Palacios, Penders",balanced,2026-11-26T01:17:47.973424+00:00
+385,Trafford,GKP,51,4.4436,17.613,0.85,1.6903,marginal,"Jacquet, Mykolenko, Verbruggen",balanced,2026-11-26T01:17:47.973424+00:00
+572,Tzolakis,GKP,47,3.6588,16.1125,0.85,1.5416,marginal,"Bogle, Gyökeres, Palacios, Penders",balanced,2026-11-26T01:17:47.973424+00:00
+368,Szoboszlai,MID,67,2.5192,12.5479,0.48,1.5416,marginal,"Bogle, Gyökeres, Palacios, Penders",balanced,2026-11-26T01:17:47.973424+00:00
+249,Barry,FWD,57,2.3668,11.3178,0.48,1.5416,marginal,"Bogle, Gyökeres, Palacios, Penders",balanced,2026-11-26T01:17:47.973424+00:00
+379,Isak,FWD,94,2.898,14.7334,0.48,0.8093,marginal,"Gvardiol, Gyökeres, Wirtz",balanced,2026-11-26T01:17:47.973424+00:00
+31,Konsa,DEF,49,2.0268,11.6813,0.48,0.1783,interchangeable,"Jacquet, Latibeaudiere",balanced,2026-11-26T01:17:47.973424+00:00
+173,Thomas,DEF,40,0.9968,5.168,0.22,0.0561,interchangeable,Latibeaudiere,balanced,2026-11-26T01:17:47.973424+00:00
+68,Tavernier,MID,68,3.3224,13.3543,0.48,-0.9152,interchangeable,"Evanilson, Jacquet, Schlager",balanced,2026-11-26T01:17:47.973424+00:00
+60,Hill,DEF,57,3.042,12.5938,0.48,-1.1233,interchangeable,"Gyökeres, Jacquet, Palacios, Silva",balanced,2026-11-26T01:17:47.973424+00:00
